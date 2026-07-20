@@ -1,6 +1,6 @@
 # Propuesta de recortes — Descripciones (eMerch Toolkit)
 
-> **Estado del documento:** versión final revisada (julio 2026). Sin decisiones tomadas — pendiente de revisión por el equipo de desarrollo para valorar viabilidad y coste real.
+> **Estado del documento:** versión revisada (julio 2026), ampliada con los puntos 7–9 tras revisión completa del prototipo. Sin decisiones tomadas — pendiente de revisión por el equipo de desarrollo.
 
 ## Contexto
 
@@ -75,6 +75,36 @@ Este documento recoge un análisis de funcionalidades del módulo de Descripcion
 
 ---
 
+## 7. Estado "Expirada" + pestaña Expiradas
+
+**Qué es:** las órdenes completadas cuyo CSV ha caducado pasan a un estado "Expirada": fila atenuada y no clicable, badge propio, fecha de expiración visible y una pestaña dedicada en el listado con contador.
+
+**Qué implica técnicamente:** un TTL sobre los ficheros generados, un job (o comprobación) que marque órdenes como expiradas al vencer el plazo, un estado adicional en el ciclo de vida de la orden, y su exposición en UI (pestaña, badge, fila deshabilitada). *Punto a valorar:* la limpieza de ficheros antiguos probablemente exista de todas formas por motivos de almacenamiento — el coste recortable es la exposición del concepto como estado visible, no la limpieza en sí. Convendría que desarrollo lo confirme.
+
+**Si se recorta:** las órdenes antiguas simplemente desaparecen del listado pasado el plazo de retención (o permanecen como completadas sin botón de descarga disponible). No hay estado "Expirada" ni pestaña dedicada.
+
+---
+
+## 8. Indicador "descargada / sin descargar"
+
+**Qué es:** las órdenes completadas distinguen entre "Lista" (sin descargar, badge verde + punto rojo en la fila) y "Descargada" (badge neutro). Además, la pestaña Finalizadas muestra un punto rojo cuando hay órdenes pendientes de descargar.
+
+**Qué implica técnicamente:** persistir el evento de descarga por orden. Con varios usuarios, además, definir la semántica: ¿descargada por cualquier usuario, o por el usuario actual? La segunda opción multiplica el coste (tracking por usuario).
+
+**Si se recorta:** un único estado "Completada" con el botón Descargar siempre disponible. Se pierde el recordatorio visual de "te falta descargar esto".
+
+---
+
+## 9. Ordenación por columnas en las tablas
+
+**Qué es:** en el listado de órdenes, las 6 columnas (orden, modelo, SKUs, estado, fecha, creador) son ordenables con indicador de dirección; en la tabla de SKU's fallidos del detalle de orden, las 4 columnas también.
+
+**Qué implica técnicamente:** con tablas paginadas, la ordenación debe resolverse en el servidor — cada columna ordenable es un criterio más que la API debe soportar e indexar.
+
+**Si se recorta:** orden fijo por fecha descendente (que ya es el comportamiento por defecto), sin cabeceras clicables. Opcionalmente podría conservarse la ordenación en una única columna si desarrollo confirma que el coste marginal es bajo.
+
+---
+
 ## Resumen para revisión
 
 | # | Funcionalidad | Depende de |
@@ -85,9 +115,13 @@ Este documento recoge un análisis de funcionalidades del módulo de Descripcion
 | 4 | Desglose completo de Error (4 cifras) | Registro incremental de progreso |
 | 5 | Filtro por seller + export | Relación SKU–seller |
 | 6 | Chevron + popover de guía | Ninguna (interfaz pura) |
+| 7 | Estado Expirada + pestaña | TTL de ficheros + job de expiración — a confirmar si la limpieza existe igualmente |
+| 8 | Indicador descargada / sin descargar | Persistir evento de descarga (¿global o por usuario?) |
+| 9 | Ordenación por columnas | Sorting server-side por criterio en tablas paginadas |
 
 ---
 
 ## Historial de revisiones
 
-- **v2 (final):** el antiguo punto 6 "Vínculo visible a la orden raíz" se eliminó como candidato independiente y pasó a ser nota de contexto dentro del punto 2 — nunca fue una propuesta de recorte real (ya está implementado y confirmado como coste casi nulo). El chevron + popover pasó a ser el punto 6.
+- **v3:** añadidos los puntos 7 (estado Expirada), 8 (indicador de descarga) y 9 (ordenación por columnas) tras revisión completa del prototipo HTML.
+- **v2:** el antiguo punto 6 "Vínculo visible a la orden raíz" se eliminó como candidato independiente y pasó a ser nota de contexto dentro del punto 2 — nunca fue una propuesta de recorte real (ya está implementado y confirmado como coste casi nulo). El chevron + popover pasó a ser el punto 6.
