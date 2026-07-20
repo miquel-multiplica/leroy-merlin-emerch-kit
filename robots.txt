@@ -1,0 +1,4 @@
+# Sitio de trabajo interno — no indexar en buscadores.
+# Nota: esto solo desincentiva a crawlers que lo respetan; no es control de acceso.
+User-agent: *
+Disallow: /
