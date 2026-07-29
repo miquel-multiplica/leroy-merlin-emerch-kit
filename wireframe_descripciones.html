@@ -2687,7 +2687,7 @@
     if (idx === -1) return null;
     var order = _s9Data[idx];
     var alcance = order.rerun ? ('Solo fallidos · ' + fmtNum(order.errores)) : ('Todos · ' + fmtNum(order.skus));
-    var draft = { modelo: order.modelo, nombre: order.nombre, guia: order.guia, alcance: alcance, edit: 'Ahora mismo', step: 's-skus' };
+    var draft = { modelo: order.modelo, nombre: order.nombre, guia: order.guia, alcance: alcance, edit: 'Ahora mismo', step: 's-skus', creador: order.creador };
     _draftsData.unshift(draft);
     _s9Data.splice(idx, 1);
     return { draft: draft, skus: order.skus };
@@ -2942,11 +2942,11 @@
           <table class="desc-table">
             <thead>
               <tr>
-                <th style="width:28%;">Modelo</th>
-                <th style="width:20%;">SKUs</th>
+                <th style="width:34%;">Modelo</th>
+                <th style="width:12%;">SKUs</th>
                 <th style="width:18%;">Última edición</th>
-                <th style="width:22%;">Guía</th>
-                <th style="width:12%;"></th>
+                <th style="width:16%;">Creador</th>
+                <th style="width:20%;"></th>
               </tr>
             </thead>
             <tbody id="s9-drafts-tbody"></tbody>
@@ -3065,8 +3065,8 @@
 
   // ── Borradores ──
   var _draftsData = [
-    { modelo:'MOD_445120', nombre:'Foco empotrable LED 8W', guia:'Lámparas de techo', alcance:'Todos · 2.480', edit:'Hace 2 h', step:'s6' },
-    { modelo:'MOD_338702', nombre:'Grifo monomando cocina', guia:'Griferías y sanitarios', alcance:'CSV · 512', edit:'Ayer', step:'s-skus' }
+    { modelo:'MOD_445120', nombre:'Foco empotrable LED 8W', guia:'Lámparas de techo', alcance:'Todos · 2.480', edit:'Hace 2 h', step:'s6', creador:'Miquel Soler' },
+    { modelo:'MOD_338702', nombre:'Grifo monomando cocina', guia:'Griferías y sanitarios', alcance:'CSV · 512', edit:'Ayer', step:'s-skus', creador:'Miquel Soler' }
   ];
   var _reuseBannerText = '';
 
@@ -3086,11 +3086,22 @@
     }
     tbody.innerHTML = _draftsData.map(function(d, i) {
       return '<tr>' +
-        '<td><div style="font-size:14px;font-weight:600;color:var(--text-ink);">' + d.nombre + '</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">' + d.modelo + '</div></td>' +
-        '<td style="font-size:13px;color:var(--text-body);">' + d.alcance.split('·').pop().trim() + '</td>' +
+        '<td style="position:relative; overflow:visible;"><div style="display:flex; align-items:center; gap:4px; max-width:100%;"><span style="font-size:13px;color:var(--text-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + d.modelo + ' ' + d.nombre + '">' + d.modelo + ' ' + d.nombre + '</span>' +
+          '<div class="row-menu model-guia-menu" id="draft-guia-menu-' + i + '" style="position:relative; flex-shrink:0;">' +
+            '<button class="model-guia-chevron" onclick="event.stopPropagation();document.getElementById(\'draft-guia-menu-' + i + '\').classList.toggle(\'open\')" style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:2px;display:flex;align-items:center;">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+            '</button>' +
+            '<div class="row-menu-dropdown" style="left:0; right:auto; top:calc(100% + 4px); width:220px; padding:14px; white-space:normal;">' +
+              '<div style="font-size:13px;font-weight:700;color:var(--text-ink);margin-bottom:4px;">' + d.guia + '</div>' +
+              '<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Última actualización: hace 5 días</div>' +
+              '<button onclick="event.stopPropagation();document.getElementById(\'draft-guia-menu-' + i + '\').classList.remove(\'open\');openGuiaModal();" style="width:100%;background:#fff;border:1px solid var(--border-card);border-radius:6px;height:32px;font-size:12px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);">Ver guía</button>' +
+            '</div>' +
+          '</div>' +
+        '</div></td>' +
+        '<td style="white-space:nowrap;"><span style="font-size:13px;color:var(--text-body);">' + d.alcance.split('·').pop().trim() + '</span></td>' +
         '<td style="font-size:13px;color:var(--text-muted);">' + d.edit + '</td>' +
-        '<td style="font-size:13px;color:var(--text-muted);">' + d.guia + '</td>' +
-        '<td style="text-align:right;"><div style="display:flex;gap:8px;justify-content:flex-end;">' +
+        '<td style="font-size:13px;color:var(--text-body);">' + (d.creador || 'Miquel Soler') + '</td>' +
+        '<td style="text-align:right;"><div class="row-cta-overlay" style="display:flex;gap:8px;justify-content:flex-end;">' +
           '<button onclick="resumeDraft(' + i + ')" style="background:var(--green);border:none;border-radius:8px;height:34px;padding:0 14px;font-size:12px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:#fff;">Continuar</button>' +
           '<button onclick="openDeleteDraftModal(' + i + ')" title="Eliminar borrador" style="background:#fff;border:1px solid var(--border-card);border-radius:8px;height:34px;width:42px;cursor:pointer;color:#c61112;display:inline-flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>' +
         '</div></td>' +
@@ -3100,7 +3111,7 @@
 
   function saveDraftAndExit() {
     var alcance = _skuActiveTab === 'csv' ? 'CSV · 640' : (_skuActiveTab === 'failed' ? 'Solo fallidos · ' + fmtNum(_existingErrores) : 'Todos · 2.480');
-    _draftsData.unshift({ modelo:'MOD_000000', nombre:'Aplique de pared industrial', guia:'Lámparas de techo', alcance:alcance, edit:'Ahora mismo', step:'s6' });
+    _draftsData.unshift({ modelo:'MOD_000000', nombre:'Aplique de pared industrial', guia:'Lámparas de techo', alcance:alcance, edit:'Ahora mismo', step:'s6', creador:'Miquel Soler' });
     document.getElementById('exit-modal').classList.remove('open');
     go('s9');
     switchTab('borradores');
