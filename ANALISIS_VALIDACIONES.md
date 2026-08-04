@@ -177,13 +177,6 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 3. **El loop recurrente:** cómo se articulan hub, ejecuciones, histórico y **comparación de periodos** (evolutivo).
 4. **Granularidad y formato del informe:** unidad (categoría/guía), agregación (modelo), y si el entregable es un doc multi-guía o varios.
 
-**Resuelto en la 2ª llamada:**
-- **Estándar de imágenes:** está en la **guía eMerch** (tipo + nº mínimo); hoy **no se envía** a sellers de Marketplace.
-- **Básicos vs. específicos:** **sin distinción** a nivel de dato → se auditan **en conjunto**; el report detecta valores faltantes por seller/proveedor.
-- **Impacto en negocio:** +18/−14 **no son reales** (se sacarían con analítica); el **CSV del seller** = SKU + proveedor/seller + 1P/3P + atributos sin completitud; **no hay PIM** (error de la slide).
-- **Health Score:** es su modelo de **pág. 39** (10 pts: designación+descripción+atributos 3,5 · orphan 1,5 · reviews 3 · imágenes 2; + lectura ponderada por Glance Views). Analítica/tramos → **fase 3**.
-- **Re-auditoría:** **manual** en MVP sobre la auditoría previa (por seller / categoría web / modelo); automática → fase posterior.
-
 ---
 
 ## 6. Fases
