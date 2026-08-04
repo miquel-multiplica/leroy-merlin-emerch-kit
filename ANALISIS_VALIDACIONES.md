@@ -30,6 +30,10 @@ Norte a largo plazo: el "Auditor de Calidad y Gobernanza de Producto" del client
 - **Coherencia (consistencia):** detecta un **desacuerdo** entre componentes (designación ↔ descripción ↔ ficha técnica ↔ —fase 2— premium/imagen). La herramienta dice "no coinciden", **pero no sabe cuál es el correcto** → lo resuelve un humano.
 - **Cumplimiento:** contrasta contra la **guía**, que **sí es la fuente de verdad** → aquí **sí** puede decir qué está mal. *(No es un bloque aparte: es un tipo de error más dentro de la matriz.)*
 
+**Atributos (aclaración):** no hay distinción **básicos vs. específicos** a nivel de dato → se auditan **en conjunto** (los atributos seleccionados por el e-merchandiser). El report detecta, por seller/proveedor, los **valores faltantes** en esos atributos.
+
+**Estándar de imágenes:** vive en la **guía eMerch** (un módulo con el tipo de imagen y el nº mínimo) → el cumplimiento lo lee de ahí (imágenes = **fase 2**). Hoy **no se envía a los sellers de Marketplace** → el export sería la vía para comunicárselo.
+
 **Separación por audiencia (regla dura):** lo que se exporta **para el seller es solo para el seller** (su falta de datos + imágenes, sin guía completa ni estrategia de familia). Lo del **TIP / equipo ecommerce es otro documento distinto** (las incoherencias internas). No se mezclan y **el seller nunca ve la parte interna**. La matriz se parte en esas dos vistas precisamente para generar **dos exports independientes**.
 
 **Principio de agregación (perímetros multi-modelo / multi-guía):**
@@ -39,10 +43,19 @@ Norte a largo plazo: el "Auditor de Calidad y Gobernanza de Producto" del client
 - **El "qué corregir según la guía"** (info de cada fila de cumplimiento + extracto del export del seller) → se **segmenta por guía**.
 - Regla mental: **coherencia y Health Score agregan siempre · cumplimiento agrega como % · el detalle-vs-guía se segmenta por guía.**
 
-**Health Score (por fases, mismo modelo que el suyo — no un score paralelo):**
-- **MVP · Health Score base:** con los criterios ya auditables (completitud de atributos de la guía, descripción, estructura de designación, coherencia), con la **misma lógica y escala que su sistema de pág. 39**. Marcado como *base* para no leerse como número final.
-- **Fase 2 · completo:** se añaden **imágenes** (y reviews si aplican) a la misma fórmula.
-- **Fase 3 · correlación:** tramos del Health Score ↔ KPIs de negocio (Data-to-Revenue).
+**Health Score — es su modelo existente (pág. 39); lo reutilizamos por fases (no un score paralelo).** Su modelo puntúa cada referencia sobre **10 puntos**:
+- **Designación + descripción + atributos** (designación 35–250 car. sin atributos de designación faltantes · descripción ≥30 car. · atributos rellenos) → **3,5 pts**
+- **Orphan status** (que el producto esté ubicado/implementado en una familia) → **1,5 pts**
+- **Reviews** (≥4) → **3 pts**
+- **Imágenes** (entre 2 y 10) → **2 pts**
+
+Además tienen una lectura **ponderada por Glance Views** (tráfico a la ficha) — eso es dimensión analítica.
+
+Qué podemos calcular por fase:
+- **MVP · Health Score base:** la parte que **auditamos** — **Designación + descripción + atributos (3,5)** (+ **Orphan 1,5** si el dato de ubicación en familia está disponible). Misma escala que la suya, marcado como *base*.
+- **Fase 2:** se añaden **imágenes (2)**.
+- **Reviews (3):** requiere fuente de reviews (cuando esté disponible).
+- **Fase 3:** la lectura **ponderada por Glance Views** y su correlación con KPIs (Data-to-Revenue).
 
 **Modelo de ownership (quién corrige):**
 - **Falta de datos / completitud → siempre el seller/proveedor.**
@@ -130,7 +143,7 @@ Lo que ve el **validador de gama**. **Soporta perímetros multi-modelo y multi-g
 
 ### 4 · Generar exports (por audiencia)
 Dos entregables **independientes**, nunca uno compartido:
-- **Export del seller/proveedor** (hacia fuera): **PDF minimalista y defensivo** — solo **lo que no cumple + qué corregir**, de **sus** referencias/familias; **sin** guía completa, **sin** estrategia de familia, **sin** orden de imágenes — **+ CSV/XLSX** de su matriz (para su PIM).
+- **Export del seller/proveedor** (hacia fuera): **PDF minimalista y defensivo** — solo **lo que no cumple + qué corregir**, de **sus** referencias/familias; **sin** guía completa, **sin** estrategia de familia, **sin** orden de imágenes — **+ CSV/XLSX** de su matriz. El **CSV** incluye: **SKU · nombre del proveedor/seller · identificación 1P/3P · atributos sin completitud de dato**. *(No hay "PIM" — era un error de su slide.)*
 - **Export interno TIP / equipo ecommerce**: la vista de trabajo completa (incoherencias/congruencia), con el detalle para corregir o enrutar (1P → TIP, 3P → Marketplace).
 - El formato/estructura de cada documento (un doc multi-guía vs. varios, cómo ordena las referencias) queda **a definir**.
 
@@ -158,18 +171,18 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 
 ## 5. Pendiente de descubrir
 
-**Bloquea diseño / alcance:**
-1. **Acceso a datos:** confirmar BigQuery 1P y **qué campos expone** (ficha técnica/atributos, seller/proveedor, 1P/3P, sección/tipología, básicos vs. específicos) y si existe el **mapeo PLP/categoría-web ↔ referencias**.
+**Sigue bloqueando diseño / alcance:**
+1. **Acceso a datos:** confirmar BigQuery 1P y **qué campos expone** (ficha técnica/atributos, seller/proveedor, 1P/3P, sección/tipología, **orphan/ubicación en familia** para el Health Score) y si existe el **mapeo PLP/categoría-web ↔ referencias**.
 2. **Motor actual:** walkthrough (cómo suben, output, entorno) y **si ya usa LLM** por detrás o el "prompt" son plantillas/instrucciones.
 3. **El loop recurrente:** cómo se articulan hub, ejecuciones, histórico y **comparación de periodos** (evolutivo).
 4. **Granularidad y formato del informe:** unidad (categoría/guía), agregación (modelo), y si el entregable es un doc multi-guía o varios.
 
-**Abierto desde la llamada del 4-ago (se cortó en pág. 32 · Bloque 1):**
-5. **Estándar de imágenes:** ¿está en la guía / se envía a sellers / lo incorporamos?
-6. **Básicos vs. específicos:** ¿modelado a nivel de dato? ¿va en el report?
-7. **Impacto en negocio:** ¿+18/−14 reales?; qué incluye el CSV; ¿la re-auditoría gira en torno a seller/guía/categoría/familia?
-8. **Analítica Data-to-Revenue y tramos del Health Score:** ¿en primera fase? (posición: **no**).
-9. **Sistema de medición de calidad (pág. 39):** detallarlo y conectarlo como base del Health Score.
+**Resuelto en la 2ª llamada:**
+- **Estándar de imágenes:** está en la **guía eMerch** (tipo + nº mínimo); hoy **no se envía** a sellers de Marketplace.
+- **Básicos vs. específicos:** **sin distinción** a nivel de dato → se auditan **en conjunto**; el report detecta valores faltantes por seller/proveedor.
+- **Impacto en negocio:** +18/−14 **no son reales** (se sacarían con analítica); el **CSV del seller** = SKU + proveedor/seller + 1P/3P + atributos sin completitud; **no hay PIM** (error de la slide).
+- **Health Score:** es su modelo de **pág. 39** (10 pts: designación+descripción+atributos 3,5 · orphan 1,5 · reviews 3 · imágenes 2; + lectura ponderada por Glance Views). Analítica/tramos → **fase 3**.
+- **Re-auditoría:** **manual** en MVP sobre la auditoría previa (por seller / categoría web / modelo); automática → fase posterior.
 
 ---
 
@@ -184,7 +197,7 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 - **Revisión de falsos positivos** (En curso → Pendiente de revisión → Revisado → Enviada) con **loop** al motor.
 - **Configuración del motor** (prompt + .md + vocabulario), versionada, por sección/tipología.
 - **Histórico de cambios desde el día 1** (para alimentar la fase 3 y el evolutivo).
-- **Re-auditoría manual.**
+- **Re-auditoría manual** sobre la auditoría previa (mismo perímetro: seller / categoría web / modelo). *(La automática es fase posterior.)*
 
 **Fase 2**
 - **3P** (+ crawling solo si no hay dato directo), **contenido premium** (Contentful, vía API/headless; reto = formato heterogéneo, ~90k refs), **imágenes** (color/medidas), **Health Score completo** (+imágenes/reviews), **evolutivo / comparación de periodos** consolidado, **alerta de cambio de datos → re-auditoría**, comparativa/rankings por sección, pack agregado por seller.
