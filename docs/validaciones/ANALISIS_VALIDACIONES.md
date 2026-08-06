@@ -201,6 +201,12 @@ Dos entregables **independientes**, nunca uno compartido:
 - **Export interno TIP / equipo ecommerce**: la vista de trabajo completa (incoherencias/congruencia), con el detalle para corregir o enrutar (1P → TIP, 3P → Marketplace).
 - El formato/estructura de cada documento (un doc multi-guía vs. varios, cómo ordena las referencias) queda **a definir**.
 
+**Lo que exporta hoy su artefacto (dos formatos, por *granularidad* — no por audiencia; ejemplos en `docs de cliente/`):**
+- **"Exportar resultados CSV"** → **una fila por referencia** (13 col., delimitado por `;`): el catálogo de entrada + `Estado` + `Errores Designación` + `Errores Descripción` (las alertas de cada campo **agregadas** en una celda). = catálogo anotado.
+- **"Exportar (un error por fila)"** → **una fila por alerta** (7 col.): `Ref · Letra de gama · Id modelo · Modelo · Estado · Campo (Designación/Descripción) · Error`. `Estado` se repite por fila; incluye las OK como placeholder (`Campo = —`). = lista plana de trabajo.
+
+**Cómo encaja con lo nuestro:** su **"un error por fila" ≈ nuestra matriz de trabajo**, pero **mínimo**. Nuestro **export interno TIP** = ese formato **enriquecido** con *owner · severidad · categoría · acción correctiva · guía · 1P/3P · seller*, conservando la columna **Campo/ubicación** (designación/descripción/**ficha técnica**) aunque en la UI de la matriz la ocultemos (redundante con el diagnóstico). **La granularidad encaja con la audiencia** (no son dos botones de formato sueltos): el **seller corrige por producto** → su export va **por referencia** (agregado por SKU, como "resultados", filtrado a **sus** refs y solo lo suyo — completitud/atributos, sin coherencia interna). El **TIP trabaja alerta a alerta** (marca FP, enruta, pivota por owner/severidad/tipo) → su export va **por alerta** (la matriz enriquecida). *Opcional:* el export interno puede incluir además un **resumen por referencia**, pero es secundario.
+
 ### 5 · Configuración del motor (admin)
 Gestión del "cerebro" del motor, no solo listas:
 - **Prompt** + **documentos .md** que lo alimentan (criterios, casuísticas, ejemplos), **por sección/tipología**.
@@ -237,6 +243,7 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 9. **Owner de "Estructura de designación":** el dato crudo puede aportarlo el **seller**, pero su **presencia en la designación** (construcción del título) puede ser tarea del **TIP**. Confirmar el owner (propuesta provisional: Seller).
 10. **Normalización del Health Score base (MVP):** en MVP solo son auditables ~**5 de los 10 puntos** (designación/descripción/atributos = 3,5 + orphan = 1,5); faltan reviews (3) e imágenes (2). ¿Cómo se expresa el número que se muestra? Opciones: (a) **% sobre los puntos auditables** (normalizado, comparable), (b) **/10 con los componentes no disponibles a 0** (penaliza y no es comparable con el score completo), (c) mostrarlo explícitamente como **base/parcial**. Afecta al número de la cabecera y a la **tendencia** entre ejecuciones. *(Se presenta como % — ver §2.)*
 11. **¿Health Score calculado o ingerido?** ¿Lo **computa nuestro módulo** (a partir de los componentes que auditamos) o **viene ya calculado como dato de origen** (su sistema actual de medición de calidad / BigQuery expone el campo)? Determina si solo lo **mostramos** vs. lo **recalculamos**, y se relaciona con la normalización (punto 10) y con los campos de origen (§5.8). *(El PDF pág. 39 sugiere que ya tienen el modelo; confirmar si el valor viene dado o se recalcula.)*
+12. **Granularidad de los exports (asunción a validar):** asumimos **seller = por referencia** (agregado por SKU) y **TIP = por alerta** (matriz enriquecida). Confirmar con cliente si es así, o si prefieren otra combinación (ambas granularidades por audiencia, un único formato, o el "resumen por referencia" también en el interno). Ver §4.
 
 ---
 
