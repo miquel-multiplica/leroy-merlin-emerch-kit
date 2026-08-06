@@ -64,9 +64,55 @@ Qué podemos calcular por fase:
 - **3P:** el TIP no actúa → el **equipo de Marketplace** contacta al seller.
 - → La herramienta debe **marcar cada referencia como 1P o 3P** para enrutar el owner.
 
+**Arquitectura en 3 capas (evita el lío de vocabularios):**
+- **Alerta** (un problema concreto en una referencia): *tipo* → *categoría* · *severidad* (Bloqueante/Crítica/Mejora) · owner · 1P/3P.
+- **Referencia** (0..N alertas): su **Estado** por **gravedad** → **Sin errores** (0 alertas) · **Con errores leves** (1–2, ninguna crítica) · **Con errores críticos** (3 o más alertas **o** falta designación/descripción — **basta 1 alerta esencial**). Nota: NO es solo por cantidad; el nivel crítico se dispara también por una única alerta esencial. **Ojo: Estado "Con errores críticos" (por referencia) ≠ Severidad "Crítica" (por alerta, del deck)** → colisión de palabra en capas distintas, etiquetar con cuidado.
+- **Auditoría** (N referencias): Health Score · reparto de referencias por Estado · distribución por tipo · impacto por categoría.
+
+Las **cajitas** del informe tienen **dos lentes**: **Estado/gravedad** (Sin errores / Con errores leves / Con errores críticos — **excluyentes, suman el total**) y **por tipo** (con discrepancias / con faltas de ortografía — **solapan**, no suman).
+
+**Mapa de tipos de error · severidad · prioridad (propuesta — con puntos pendientes, ver §5).** Tres ejes distintos que **no se derivan uno de otro**:
+- **Tipo de error** (qué falla) → se agrupa en **categorías**.
+- **Severidad** (por referencia): **Bloqueante / Crítica / Mejora** (Severity Score, PDF pág. 34).
+- **Prioridad de resolución** (por categoría, motivo de negocio): **Alta / Media / Baja** (PDF Bloque 1). **Fija por categoría** — el volumen (*SKUs afectados / % catálogo*) se muestra aparte y **no altera** la prioridad.
+
+| Categoría | Tipos que agrupa | Familia | Owner | Severidad | Prioridad · motivo |
+|---|---|---|---|---|---|
+| Contenido faltante | sin designación, sin descripción | Cumplimiento | Seller | Bloqueante | **Alta** · impide publicar |
+| Atributos obligatorios faltantes | atributos básicos/específicos de la guía vacíos | Cumplimiento | Seller | **Bloqueante** ⚠️ | **Media** · afecta filtros de búsqueda |
+| Discrepancia interna PDP | medidas/dimensiones, color, material, nº de elementos (desig ↔ desc ↔ ficha técnica) | Coherencia | TIP | Crítica | **Alta** · confunde al usuario / devoluciones |
+| Estructura de designación | designación corta, estructura de título, mayúsculas admin, unidades, coma decimal, dims reordenadas | Cumplimiento | Seller* | Mejora | **Baja** · SEO / legibilidad |
+| Ortografía | faltas en designación o descripción | Calidad | TIP | Mejora | **Baja** · conversión |
+| Imágenes *(fase 2)* | mínimo no alcanzado, obligatorias | Cumplimiento | Seller | — | — |
+
+**Regla de severidad** (por referencia): *Bloqueante* = falta contenido esencial o atributos obligatorios (no publicable) · *Crítica* = contradicción entre componentes (info engañosa) · *Mejora* = formato/estructura/ortografía.
+
+**Jerarquía tipo/categoría:** una **categoría** (nivel alto, 5) agrupa varios **tipos** (checks granulares). Dónde se ve cada eje: la **matriz** muestra *tipo* + *severidad* por fila · **"Impacto por categoría de error"** muestra *prioridad + motivo* por **categoría** (todas) · **"Distribución de errores"** muestra los *tipos granulares* por campo (mismo nivel que la columna "Tipo" de la matriz). Orden en el informe: métricas → distribución (colapsable) → impacto → matriz.
+
+**Tipos granulares → categoría · severidad · origen/motor** (checks reales del artefacto + nuestras adiciones). El **origen** dice de dónde sale la alerta: **Guía de estilo** (cumplimiento) o **Coherencia entre piezas de la ficha** — y si es coherencia, si se resuelve por **comparación de datos** (determinista) o por **LLM** (semántico). Enlaza con el "motor híbrido" de §2.
+
+| Tipo de error (check) | Categoría | Severidad | Origen / motor |
+|---|---|---|---|
+| Sin designación · Sin descripción | Contenido faltante | Bloqueante | Contenido mínimo (determinista) |
+| Discrepancia de medidas · Dimensión extra no recogida · Diferente nº de dimensiones · Medida no encontrada · Unidades distintas · Coma decimal | Discrepancia interna PDP | Crítica | **Coherencia · comparación de datos** (determinista) |
+| Color · Material incoherentes | Discrepancia interna PDP | Crítica | **Coherencia · LLM** (semántico: "gris"≟"antracita", "teca") |
+| **Info en ADM no reflejada** | Discrepancia interna PDP | Crítica | Coherencia · comparación de datos (+ LLM si es semántico) |
+| Dims reordenadas | Estructura de designación | Mejora | Coherencia · comparación de datos (determinista) |
+| Designación corta (<35) · Descripción < 80 car. · Estructura de título (orden/color) · **Posible designación administrativa** | Estructura de designación | Mejora | **Guía de estilo** (cumplimiento · determinista) |
+| Atributos obligatorios · Atributos básicos faltantes | Atributos obligatorios faltantes | Bloqueante ⚠️ | **Guía de estilo** (cumplimiento · determinista) |
+| Ortografía (designación / descripción) | Ortografía | Mejora | Calidad · diccionario / LLM |
+
+**Designación administrativa (ADM) — glosario.** Hay **dos** designaciones: la **administrativa/ADM** (nombre **interno** de back-office, normalmente en MAYÚSCULAS, abreviado) y la **comercial** ("designación cliente larga", la que ve el cliente). De ahí dos checks:
+- **"Posible designación administrativa"**: la designación pública **parece la interna** (la detecta por venir *todo en mayúsculas*) → han puesto el nombre interno en el campo público. → categoría *Estructura de designación* · Mejora.
+- **"Info en ADM no reflejada"**: el ADM tiene **datos que no aparecen** en la ficha comercial/descripción. → categoría *Discrepancia interna PDP* · Crítica.
+
+*Ambos dependen del **campo ADM en origen** → confirmar que BigQuery lo expone (ver §5.8).*
+
+\* *Owner "Estructura de designación": el dato crudo puede aportarlo el seller pero no aparecer en la designación (construcción del título) → owner a confirmar (ver §5).*
+
 **Datos:** acceso directo (BigQuery) es **casi requisito**; el crawling queda casi descartado por eficiencia. **1P: hay acceso directo. 3P: puede que no** → 3P (y crawling) para más adelante. Los filtros de perímetro (incluida la PLP) solo acotan **qué** referencias entran; el **dato siempre se lee de la fuente directa**, no de la página.
 
-**Herramienta actual del cliente (baseline).** Hoy usan un *"Validador de Fichas de Producto"* propio: un motor de **reglas deterministas en el navegador** que audita **designación y descripción** (sin BigQuery ni LLM). Tiene tres módulos: **Validador** (subir el **CSV de una gama** → analizar → tabla de resultados + detalle por referencia → export CSV, normal y "un error por fila"), **Evolutivo semanal** (comparar → **✅ Corregidos · ➖ Persisten · 🆕 Nuevos**) e **Histórico**. Sus checks van tipificados con emoji (📐 medidas/dimensiones, 🎨 color, 🪵 material, 🔤 ortografía, ⚠️ formato, ❌ falta, 🔄 orden) y un **Estado** por SKU (OK / Advertencias / Errores críticos). Nuestro módulo es la **evolución**: motor híbrido, coherencia con **ficha/atributos** (no solo texto), cumplimiento vs guía, Health Score, revisión de FP y exports por audiencia. *(Artefacto y CSV de ejemplo en `docs/validaciones/docs de cliente/`.)*
+**Herramienta actual del cliente (baseline).** Hoy usan un *"Validador de Fichas de Producto"* propio: un motor de **reglas deterministas en el navegador** que audita **designación y descripción** (sin BigQuery ni LLM). Tiene tres módulos: **Validador** (subir el **CSV de una gama** → analizar → tabla de resultados + detalle por referencia → export CSV, normal y "un error por fila"), **Evolutivo semanal** (comparar → **✅ Corregidos · ➖ Persisten · 🆕 Nuevos**) e **Histórico**. Sus checks van tipificados con emoji (📐 medidas/dimensiones, 🎨 color, 🪵 material, 🔤 ortografía, ⚠️ formato, ❌ falta, 🔄 orden) y un **Estado** por SKU (OK / Advertencias / Errores críticos → en nuestro módulo lo renombramos a *Sin errores / Con errores leves / Con errores críticos*). Nuestro módulo es la **evolución**: motor híbrido, coherencia con **ficha/atributos** (no solo texto), cumplimiento vs guía, Health Score, revisión de FP y exports por audiencia. *(Artefacto y CSV de ejemplo en `docs/validaciones/docs de cliente/`.)*
 
 ---
 
@@ -186,6 +232,9 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 4. **Granularidad y formato del informe:** unidad (categoría/guía), agregación (modelo), y si el entregable es un doc multi-guía o varios.
 5. **Formato del perímetro "Listado":** el cliente lo contempla como **lista de URLs de PDPs** (PDF pág. 37); el prototipo lo montó como **CSV de SKUs**. Alinear el formato (URLs de PDP vs. SKUs) y, si es CSV, si las referencias deben validarse contra el catálogo antes de aceptarlas (como en Descripciones). *Relacionado:* el PDF describe la ingesta como URL-based (A: PLP, B: listado de URLs), mientras el análisis asume acceso directo **1P vía BigQuery** con selectores (modelo/gama/proveedor/seller) → confirmar la vía real (ver punto 1).
 6. **Significado de las letras de gama** (A/M/S/C/K/B): qué tier/criterio de surtido representa cada una y si una referencia puede pertenecer a más de una. Necesario para el subtexto del selector de "Gama" y para la lectura del informe.
+7. **Atributos obligatorios faltantes — severidad vs. prioridad:** el PDF los trata como **Bloqueante** (pág. 34) pero prioridad **Media** (Bloque 1). Hipótesis del cliente: si *impide publicar*, al menos no confunde (no está visible); si *está publicada y confunde*, es peor. Confirmar si faltar obligatorios impide publicar o solo degrada. *(Propuesta provisional: Bloqueante + Media, por ser ejes distintos.)*
+8. **Alcance y campos de la consulta a BigQuery:** (a) ¿traerá también las referencias que **hoy no aparecen en la web** (no publicadas)? Determina si las **bloqueantes/no-publicadas** entran en el perímetro, en el conteo y en el Health Score — y condiciona el punto 7. (b) ¿Expone el **campo de designación administrativa (ADM)**? Es necesario para los dos checks de ADM ("posible designación administrativa" e "info en ADM no reflejada").
+9. **Owner de "Estructura de designación":** el dato crudo puede aportarlo el **seller**, pero su **presencia en la designación** (construcción del título) puede ser tarea del **TIP**. Confirmar el owner (propuesta provisional: Seller).
 
 ---
 
