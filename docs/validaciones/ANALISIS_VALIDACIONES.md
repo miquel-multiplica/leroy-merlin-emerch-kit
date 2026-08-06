@@ -100,7 +100,7 @@ Módulo **Validaciones**, espejo estructural de Descripciones.
 
 ### 1 · Hub de auditorías
 La entidad que persiste es el **perímetro/auditoría recurrente**; cada pasada es una **ejecución (snapshot)** con su Health Score y sus alertas.
-- **Columnas:** perímetro auditado (con **chip de tipo** dentro de la celda: Modelo / Gama / Proveedor / Seller / PLP) · nº de referencias · **Health Score (base)** · **tendencia** (↑/↓ vs. ejecución anterior) · nº de alertas · última ejecución · creador · estado.
+- **Columnas:** perímetro auditado (con **chip de tipo** dentro de la celda: Modelo / Gama / Proveedor-Seller / Categoría web (PLP) / Listado) · nº de referencias · **Health Score (base)** · **tendencia** (↑/↓ vs. ejecución anterior) · nº de alertas · última ejecución · creador · estado.
 - **Pestañas:** **Todo · En curso · Por revisar · Con seguimiento (activas)**.
 - **Filtros:** sección/tipología, 1P/3P (este último aplica cuando entre 3P).
 - **Acciones por fila:** Ver informe · Exportar · **Re-auditar** · eliminar.
@@ -109,9 +109,14 @@ La entidad que persiste es el **perímetro/auditoría recurrente**; cada pasada 
 > **Punto de diseño a afinar:** cómo se articula el hub como **loop recurrente** (perímetros con histórico de ejecuciones + comparación de periodos / evolutivo). Es de lo más valioso del módulo y conecta con su evolutivo semanal; lo dejamos abierto.
 
 ### 2 · Nueva auditoría
-Muy ligera (no es un funnel largo):
-- **Perímetro:** acotar **qué referencias auditar** mediante uno o varios filtros — **Modelo · Proveedor · Seller · Gama · PLP/categoría**. Todos resuelven a una lista de referencias cuyos **datos se leen de BigQuery (1P)**. Si el perímetro va ligado a una guía/categoría, se activan los checks de **cumplimiento**.
-- **Lanzar** → progreso **por lotes** → *Pendiente de revisión*.
+Muy ligera (no es un funnel largo). En el prototipo: **modal de tipos (botones anchos, sin radios: clicas y avanzas) → wizard de 2 columnas**. Izquierda: **tipo de perímetro** (card con icono + lápiz para cambiarlo) y su **selector**. Derecha: **"Tu selección"** — cabecera con el perímetro + **SKUs detectados** + caja azul **"¿Qué se validará?"**.
+
+- **Perímetro = un solo tipo por auditoría** (no se combinan varios filtros). Tipos:
+  - **Modelo · Gama · Proveedor/Seller** (**un único selector unificado**, con **tag 1P/3P**) → buscador + lista; al elegir, la selección se confirma en la card derecha (para cambiarla, **lápiz en su esquina superior derecha** → resetea y vuelve al listado).
+  - **Categoría web** → se pega la **URL de la PLP** y se pulsa **Consultar** (validación de formato tolerante: admite sin `http`, con o sin `www`).
+  - **Listado** → subir un listado de referencias con **nombre propio editable** (se edita inline en la card derecha). **Sí está en el PDF del cliente** (pág. 37, "Cómo alimentamos la herramienta" → *B · Listado de URLs de PDPs*, 1P y 3P), pero **con matiz de formato**: el cliente lo describe como **lista de URLs de PDPs**, y el prototipo lo montó como **CSV de SKUs** (por analogía con Descripciones). **Formato a alinear.**
+- Todos resuelven a una lista de referencias cuyos **datos se leen de BigQuery (1P)**. Si el perímetro va ligado a una guía/categoría, se activan los checks de **cumplimiento**.
+- **Empezar auditoría de calidad** → progreso **por lotes** (barra **global**, no reinicia por lote) → *Pendiente de revisión*. La ventana es **cancelable** (con confirmación) y permite **continuar en segundo plano** (la auditoría aparece como *En curso* en el hub). **Sin pausa.**
 
 *(No hay paso de "reglas": todas las familias de comprobación van activas por defecto y se configuran desde Admin.)*
 
@@ -176,13 +181,14 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 2. **Motor actual:** walkthrough (cómo suben, output, entorno) y **si ya usa LLM** por detrás o el "prompt" son plantillas/instrucciones.
 3. **El loop recurrente:** cómo se articulan hub, ejecuciones, histórico y **comparación de periodos** (evolutivo).
 4. **Granularidad y formato del informe:** unidad (categoría/guía), agregación (modelo), y si el entregable es un doc multi-guía o varios.
+5. **Formato del perímetro "Listado":** el cliente lo contempla como **lista de URLs de PDPs** (PDF pág. 37); el prototipo lo montó como **CSV de SKUs**. Alinear el formato (URLs de PDP vs. SKUs) y, si es CSV, si las referencias deben validarse contra el catálogo antes de aceptarlas (como en Descripciones). *Relacionado:* el PDF describe la ingesta como URL-based (A: PLP, B: listado de URLs), mientras el análisis asume acceso directo **1P vía BigQuery** con selectores (modelo/gama/proveedor/seller) → confirmar la vía real (ver punto 1).
 
 ---
 
 ## 6. Fases
 
 **MVP — solo 1P**
-- Entrada: acceso directo **1P (BigQuery)**, perímetro por filtros (**modelo / proveedor / seller / gama / PLP**).
+- Entrada: acceso directo **1P (BigQuery)**, **perímetro por un solo tipo** (**modelo / gama / proveedor-seller unificado / categoría web (PLP) / listado**). *El PDF (pág. 37) describe la ingesta como (A) URL de PLP y (B) listado de URLs de PDPs; el "listado" del prototipo es CSV de SKUs → **formato a alinear**.*
 - Detección: **designación + descripción** (+ **ficha/atributos** si hay dato) + **cumplimiento de guía**.
 - **Health Score base** (criterios auditables, misma escala que pág. 39).
 - Informe interno con **impacto por tipo de error** + **matriz TIP/seller**, con marca 1P/3P y severidad básica.

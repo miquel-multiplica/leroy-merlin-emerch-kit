@@ -10,7 +10,7 @@ Se abren directamente en el navegador. Se sirven además vía GitHub Pages:
 |---|---|---|
 | Descripciones (completo) | [wireframe_descripciones.html](wireframe_descripciones.html) | https://miquel-multiplica.github.io/leroy-merlin-emerch-kit/wireframe_descripciones.html |
 | Descripciones (versión recortada) | [wireframe_descripciones_recortado.html](wireframe_descripciones_recortado.html) | https://miquel-multiplica.github.io/leroy-merlin-emerch-kit/wireframe_descripciones_recortado.html |
-| Validaciones | _(en construcción)_ | — |
+| Validaciones (auditor de calidad) | [wireframe_validaciones.html](wireframe_validaciones.html) | https://miquel-multiplica.github.io/leroy-merlin-emerch-kit/wireframe_validaciones.html |
 
 ## Documentación
 
