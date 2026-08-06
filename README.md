@@ -32,8 +32,10 @@ Se abren directamente en el navegador. Se sirven además vía GitHub Pages:
 ```
 /
 ├─ README.md
+├─ robots.txt                             # evita indexación en buscadores
 ├─ wireframe_descripciones.html           # prototipos (se quedan en raíz → URLs estables)
 ├─ wireframe_descripciones_recortado.html
+├─ wireframe_validaciones.html
 ├─ docs/
 │  ├─ PRODUCT.md
 │  ├─ descripciones/
