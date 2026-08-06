@@ -43,7 +43,7 @@ Norte a largo plazo: el "Auditor de Calidad y Gobernanza de Producto" del client
 - **El "qué corregir según la guía"** (info de cada fila de cumplimiento + extracto del export del seller) → se **segmenta por guía**.
 - Regla mental: **coherencia y Health Score agregan siempre · cumplimiento agrega como % · el detalle-vs-guía se segmenta por guía.**
 
-**Health Score — es su modelo existente (pág. 39); lo reutilizamos por fases (no un score paralelo).** Su modelo puntúa cada referencia sobre **10 puntos**:
+**Health Score — es su modelo existente (pág. 39); lo reutilizamos por fases (no un score paralelo).** Su modelo puntúa cada referencia sobre **10 puntos** y **se presenta como % (0–100)** — el score /10 se lee como porcentaje (la cabecera del deck muestra p. ej. «74%», pág. 29):
 - **Designación + descripción + atributos** (designación 35–250 car. sin atributos de designación faltantes · descripción ≥30 car. · atributos rellenos) → **3,5 pts**
 - **Orphan status** (que el producto esté ubicado/implementado en una familia) → **1,5 pts**
 - **Reviews** (≥4) → **3 pts**
@@ -235,6 +235,8 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 7. **Atributos obligatorios faltantes — severidad vs. prioridad:** el PDF los trata como **Bloqueante** (pág. 34) pero prioridad **Media** (Bloque 1). Hipótesis del cliente: si *impide publicar*, al menos no confunde (no está visible); si *está publicada y confunde*, es peor. Confirmar si faltar obligatorios impide publicar o solo degrada. *(Propuesta provisional: Bloqueante + Media, por ser ejes distintos.)*
 8. **Alcance y campos de la consulta a BigQuery:** (a) ¿traerá también las referencias que **hoy no aparecen en la web** (no publicadas)? Determina si las **bloqueantes/no-publicadas** entran en el perímetro, en el conteo y en el Health Score — y condiciona el punto 7. (b) ¿Expone el **campo de designación administrativa (ADM)**? Es necesario para los dos checks de ADM ("posible designación administrativa" e "info en ADM no reflejada").
 9. **Owner de "Estructura de designación":** el dato crudo puede aportarlo el **seller**, pero su **presencia en la designación** (construcción del título) puede ser tarea del **TIP**. Confirmar el owner (propuesta provisional: Seller).
+10. **Normalización del Health Score base (MVP):** en MVP solo son auditables ~**5 de los 10 puntos** (designación/descripción/atributos = 3,5 + orphan = 1,5); faltan reviews (3) e imágenes (2). ¿Cómo se expresa el número que se muestra? Opciones: (a) **% sobre los puntos auditables** (normalizado, comparable), (b) **/10 con los componentes no disponibles a 0** (penaliza y no es comparable con el score completo), (c) mostrarlo explícitamente como **base/parcial**. Afecta al número de la cabecera y a la **tendencia** entre ejecuciones. *(Se presenta como % — ver §2.)*
+11. **¿Health Score calculado o ingerido?** ¿Lo **computa nuestro módulo** (a partir de los componentes que auditamos) o **viene ya calculado como dato de origen** (su sistema actual de medición de calidad / BigQuery expone el campo)? Determina si solo lo **mostramos** vs. lo **recalculamos**, y se relaciona con la normalización (punto 10) y con los campos de origen (§5.8). *(El PDF pág. 39 sugiere que ya tienen el modelo; confirmar si el valor viene dado o se recalcula.)*
 
 ---
 
