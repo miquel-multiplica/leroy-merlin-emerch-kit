@@ -66,6 +66,8 @@ Qué podemos calcular por fase:
 
 **Datos:** acceso directo (BigQuery) es **casi requisito**; el crawling queda casi descartado por eficiencia. **1P: hay acceso directo. 3P: puede que no** → 3P (y crawling) para más adelante. Los filtros de perímetro (incluida la PLP) solo acotan **qué** referencias entran; el **dato siempre se lee de la fuente directa**, no de la página.
 
+**Herramienta actual del cliente (baseline).** Hoy usan un *"Validador de Fichas de Producto"* propio: un motor de **reglas deterministas en el navegador** que audita **designación y descripción** (sin BigQuery ni LLM). Tiene tres módulos: **Validador** (subir el **CSV de una gama** → analizar → tabla de resultados + detalle por referencia → export CSV, normal y "un error por fila"), **Evolutivo semanal** (comparar → **✅ Corregidos · ➖ Persisten · 🆕 Nuevos**) e **Histórico**. Sus checks van tipificados con emoji (📐 medidas/dimensiones, 🎨 color, 🪵 material, 🔤 ortografía, ⚠️ formato, ❌ falta, 🔄 orden) y un **Estado** por SKU (OK / Advertencias / Errores críticos). Nuestro módulo es la **evolución**: motor híbrido, coherencia con **ficha/atributos** (no solo texto), cumplimiento vs guía, Health Score, revisión de FP y exports por audiencia. *(Artefacto y CSV de ejemplo en `docs/validaciones/docs de cliente/`.)*
+
 ---
 
 ## 3. Usuarios y roles
@@ -113,6 +115,7 @@ Muy ligera (no es un funnel largo). En el prototipo: **modal de tipos (botones a
 
 - **Perímetro = un solo tipo por auditoría** (no se combinan varios filtros). Tipos:
   - **Modelo · Gama · Proveedor/Seller** (**un único selector unificado**, con **tag 1P/3P**) → buscador + lista; al elegir, la selección se confirma en la card derecha (para cambiarla, **lápiz en su esquina superior derecha** → resetea y vuelve al listado).
+    - *Gama = clasificación **transversal** del surtido por **letra** (A/M/S/C/K/B); **no** es una familia de producto — corta todas las secciones. En el prototipo el selector son las letras (con subtexto "descripción pendiente"); **el significado de cada letra está por confirmar** (ver §5).*
   - **Categoría web** → se pega la **URL de la PLP** y se pulsa **Consultar** (validación de formato tolerante: admite sin `http`, con o sin `www`).
   - **Listado** → subir un listado de referencias con **nombre propio editable** (se edita inline en la card derecha). **Sí está en el PDF del cliente** (pág. 37, "Cómo alimentamos la herramienta" → *B · Listado de URLs de PDPs*, 1P y 3P), pero **con matiz de formato**: el cliente lo describe como **lista de URLs de PDPs**, y el prototipo lo montó como **CSV de SKUs** (por analogía con Descripciones). **Formato a alinear.**
 - Todos resuelven a una lista de referencias cuyos **datos se leen de BigQuery (1P)**. Si el perímetro va ligado a una guía/categoría, se activan los checks de **cumplimiento**.
@@ -182,6 +185,7 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 3. **El loop recurrente:** cómo se articulan hub, ejecuciones, histórico y **comparación de periodos** (evolutivo).
 4. **Granularidad y formato del informe:** unidad (categoría/guía), agregación (modelo), y si el entregable es un doc multi-guía o varios.
 5. **Formato del perímetro "Listado":** el cliente lo contempla como **lista de URLs de PDPs** (PDF pág. 37); el prototipo lo montó como **CSV de SKUs**. Alinear el formato (URLs de PDP vs. SKUs) y, si es CSV, si las referencias deben validarse contra el catálogo antes de aceptarlas (como en Descripciones). *Relacionado:* el PDF describe la ingesta como URL-based (A: PLP, B: listado de URLs), mientras el análisis asume acceso directo **1P vía BigQuery** con selectores (modelo/gama/proveedor/seller) → confirmar la vía real (ver punto 1).
+6. **Significado de las letras de gama** (A/M/S/C/K/B): qué tier/criterio de surtido representa cada una y si una referencia puede pertenecer a más de una. Necesario para el subtexto del selector de "Gama" y para la lectura del informe.
 
 ---
 
@@ -196,7 +200,7 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 - **Revisión de falsos positivos** (En curso → Pendiente de revisión → Revisado → Finalizada) con **loop** al motor.
 - **Configuración del motor** (prompt + .md + vocabulario), versionada, por sección/tipología.
 - **Histórico de cambios desde el día 1** (para alimentar la fase 3 y el evolutivo).
-- **Re-auditoría manual** sobre la auditoría previa (mismo perímetro: seller / categoría web / modelo). *(La automática es fase posterior.)*
+- **Re-auditoría bajo demanda** sobre la auditoría previa (mismo perímetro) — **no periódica**: se lanza cuando saben que **se han corregido los datos**. Compara contra la ejecución anterior y muestra **Corregidos / Persisten / Nuevos**. *(La automática/programada es fase posterior.)*
 
 **Fase 2**
 - **3P** (+ crawling solo si no hay dato directo), **contenido premium** (Contentful, vía API/headless; reto = formato heterogéneo, ~90k refs), **imágenes** (color/medidas), **Health Score completo** (+imágenes/reviews), **evolutivo / comparación de periodos** consolidado, **alerta de cambio de datos → re-auditoría**, comparativa/rankings por sección, pack agregado por seller.

@@ -1,0 +1,49 @@
+name: Deploy GitHub Pages
+
+# Publica el sitio (raíz del repo: wireframes + docs) vía GitHub Actions,
+# en lugar del build legacy. Clave: los pushes se ENCOLAN, no se cancelan
+# entre sí (cancel-in-progress: false) → evita deploys atascados por pushes
+# seguidos. workflow_dispatch permite relanzar sin inventar un commit.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inventario del artefacto (para depurar)
+        run: |
+          echo "Ficheros en la raíz que se publican:"
+          ls -la
+          echo "Tamaño de los wireframes:"
+          du -h wireframe_*.html 2>/dev/null || true
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

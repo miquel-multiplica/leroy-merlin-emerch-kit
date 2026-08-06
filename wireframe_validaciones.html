@@ -464,7 +464,7 @@
       <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
         <div style="position:relative; flex-shrink:0;">
           <select id="v-filter-tipo" onchange="renderAudits()" style="height:40px; border:1px solid var(--border-input); border-radius:8px; padding:0 36px 0 12px; font-size:13px; font-family:'Inter',system-ui,sans-serif; color:var(--text-body); background:#fff; cursor:pointer; appearance:none; -webkit-appearance:none;">
-            <option value="">Todos los tipos</option><option value="Modelo">Modelo</option><option value="Gama">Gama</option><option value="Vendor">Proveedor / Seller</option><option value="Categoría">Categoría web</option><option value="Listado">Listado</option>
+            <option value="">Todos los tipos</option><option value="Gama">Gama</option><option value="Vendor">Proveedor / Seller</option><option value="Modelo">Modelo</option><option value="Categoría">Categoría web</option><option value="Listado">Listado</option>
           </select>
           <svg style="position:absolute; right:12px; top:50%; transform:translateY(-50%); pointer-events:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
@@ -474,7 +474,7 @@
         </div>
       </div>
       <div style="background:#fff; border:1px solid var(--border-card); border-radius:8px; overflow:hidden;">
-        <table class="desc-table" style="table-layout:fixed; width:100%;"><thead><tr><th style="width:26%;">Perímetro</th><th style="width:7%;">SKUs</th><th style="width:10%;">Health Score</th><th style="width:8%;">Alertas</th><th style="width:16%;">Estado</th><th style="width:12%;">Última ejecución</th><th style="width:11%;">Creador</th><th style="width:10%;"></th></tr></thead><tbody id="v-hub-tbody"></tbody></table>
+        <table class="desc-table" style="table-layout:fixed; width:100%;"><thead><tr><th style="width:26%;">Perímetro</th><th style="width:7%;">Refs.</th><th style="width:10%;">Health Score</th><th style="width:8%;">Alertas</th><th style="width:16%;">Estado</th><th style="width:12%;">Última ejecución</th><th style="width:11%;">Creador</th><th style="width:10%;"></th></tr></thead><tbody id="v-hub-tbody"></tbody></table>
       </div>
     </div>
   </div>
@@ -526,6 +526,61 @@
   </div>
 </div>
 
+<!-- ══════════════════ SCREEN · INFORME ══════════════════ -->
+<div class="screen" id="v-informe">
+  <nav class="navbar">
+    <div class="navbar-left">
+      <div class="navbar-logo" onclick="go('v-hub')" style="cursor:pointer;"><svg width="59" height="48" viewBox="0 0 59 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip_lm_home)"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.2915 41.8054H52.5042L29.3977 18.6992L6.2915 41.8054Z" fill="#78BE20"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.22546 40.8102L8.81565 37.2551L7.607 36.0465L5.36756 38.2862L1.31531 34.2336L0 35.549L5.22546 40.8102ZM6.75409 30.9634L7.64277 31.8521L9.49136 30.0035L10.5934 31.0698L8.70933 32.9183L9.88221 34.0561L12.1574 31.7809L13.2236 32.8475L9.59768 36.4728L4.33678 31.2122L7.96274 27.5866L9.0293 28.6528L6.75409 30.9634ZM18.4491 27.6217L14.8944 26.5909C15.321 25.8088 15.1077 24.7423 14.3969 24.0315C13.6148 23.2494 12.2995 23.2852 11.4105 24.1736L8.74444 26.8396L14.0053 32.1009L15.3206 30.7498L11.0554 26.4842L11.9438 25.631C12.2995 25.2401 12.9395 25.2401 13.2949 25.631C13.6503 25.9867 13.6503 26.5909 13.2594 26.9821L12.4774 27.7638L17.0275 29.0436L18.4491 27.6217ZM21.3997 19.339C20.6534 18.5573 19.6932 18.1306 18.7691 18.0952C17.8092 18.0952 16.885 18.4506 16.0672 19.2684C14.3965 20.9391 14.5744 23.1073 16.103 24.636C16.885 25.418 17.8092 25.8443 18.7691 25.8443C19.6932 25.8801 20.6531 25.5247 21.4706 24.7068C23.1059 23.0361 22.9638 20.8676 21.3997 19.339ZM20.4398 23.6403C19.9423 24.1381 19.3736 24.2444 18.7691 24.0311C18.3782 23.889 17.9516 23.6048 17.5604 23.1779C16.5296 22.1825 16.2806 21.1518 17.0984 20.3343C17.5959 19.8365 18.1649 19.7301 18.7691 19.9434C19.1599 20.0855 19.5511 20.3697 19.9777 20.7967C20.9731 21.792 21.2573 22.8228 20.4398 23.6403ZM22.9992 16.5308L22.0393 13.5448L23.5683 11.9807L24.8832 17.0641L26.9451 19.1256L25.5944 20.4767L23.5683 18.4152L18.6982 16.8865L20.1556 15.4288L22.9638 16.4954L22.9992 16.5308ZM47.3501 34.6248L52.5756 29.3636L51.1884 27.9774L45.9278 33.2383L47.3501 34.6248ZM27.1939 14.5043L31.2819 12.5498L28.2959 15.5712L29.5045 16.8153L34.7658 11.5544L33.0947 9.88303L29.1137 11.8028L31.1044 7.89268L29.3979 6.18652L24.137 11.4474L25.3456 12.6561L28.3671 9.63461L26.4118 13.7226L27.1939 14.5043ZM36.3298 15.2509L35.4411 16.1396L37.4315 18.1661L36.3653 19.2323L34.3395 17.2419L33.2014 18.3794L35.6548 20.8321L34.5876 21.8984L30.8198 18.0949L36.0811 12.8694L39.8488 16.6375L38.7826 17.704L36.3298 15.2509ZM41.4129 28.724L44.9679 32.2784L46.1766 31.0698L43.9368 28.8661L47.9894 24.7777L46.6744 23.4628L41.4129 28.724ZM55.5613 32.3496L53.8909 37.9305L57.5162 34.3049L58.7603 35.549L53.4997 40.8102L51.8645 39.1391L53.2861 33.4162L49.6959 37.0064L48.4869 35.7977L53.7485 30.5368L55.5613 32.3496ZM40.4179 27.7283L41.4132 24.1381C42.1956 24.5644 43.2618 24.3872 44.0084 23.6403C44.7546 22.8583 44.7546 21.543 43.8666 20.6543L41.0227 17.8107L35.7614 23.0716L37.1119 24.4223L41.342 20.1564L42.3731 21.1872C42.7643 21.5781 42.7643 22.1825 42.4089 22.5383C42.0531 22.9291 41.4129 22.8934 41.0578 22.5383L40.0979 21.5781L38.9604 26.2706L40.4179 27.7283Z" fill="black"/></g><defs><clipPath id="clip_lm_home"><rect width="58.7755" height="48" fill="white"/></clipPath></defs></svg></div>
+      <div class="navbar-breadcrumb">
+        <span class="navbar-breadcrumb-home" onclick="location.href='wireframe_descripciones.html'">eMerch Toolkit</span><span class="navbar-breadcrumb-sep">›</span><span class="navbar-breadcrumb-home" onclick="go('v-hub')">Validaciones</span><span class="navbar-breadcrumb-sep">›</span><span class="navbar-breadcrumb-current">Informe</span>
+      </div>
+    </div>
+    <div class="navbar-right">
+      <div class="row-menu" id="user-menu-vi">
+        <button class="navbar-link" onclick="event.stopPropagation(); document.getElementById('user-menu-vi').classList.toggle('open')" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:'Inter',system-ui,sans-serif;font-size:14px;font-weight:400;color:var(--text-body);padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Ana García<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="row-menu-dropdown" style="right:0; min-width:180px;"><div class="row-menu-item" style="color:var(--text-muted);">Cerrar sesión</div></div>
+      </div>
+    </div>
+  </nav>
+  <div class="page-body"><div class="grid" style="padding:0 clamp(24px, 5.6vw, 80px);">
+    <div style="margin-bottom:26px;">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <button onclick="go('v-hub')" title="Volver al hub" style="background:none; border:none; padding:0; cursor:pointer; flex-shrink:0; color:var(--text-ink); display:flex; align-items:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg></button>
+        <div style="font-size:28px; font-weight:700; color:var(--text-ink); line-height:1.2; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="v-inf-title">—</div>
+        <span id="v-inf-badge" style="flex-shrink:0;"></span>
+        <div style="flex:1;"></div>
+        <div id="v-inf-hs" style="flex-shrink:0; text-align:right; padding-left:20px;"></div>
+      </div>
+      <div style="font-size:13px; color:var(--text-muted); margin-top:8px; margin-left:42px;" id="v-inf-meta">—</div>
+    </div>
+    <div id="v-inf-body"></div>
+  </div></div>
+  <div class="bottom-bar" id="v-inf-bottom" style="display:flex;"></div>
+</div>
+
+<!-- ══════════════════ MODAL · FALSO POSITIVO ══════════════════ -->
+<div class="modal-overlay" id="v-fp-modal">
+  <div class="modal-box" style="width:520px; max-width:92vw; padding:32px;">
+    <div style="font-size:20px; font-weight:700; color:var(--text-ink); margin-bottom:6px;">Marcar como falso positivo</div>
+    <div style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Elige el motivo. La alerta saldrá del informe y el caso irá a <strong>Configuración del motor</strong> para que no vuelva a saltar.</div>
+    <div id="v-fp-motivos" style="display:flex; flex-direction:column; gap:8px;"></div>
+    <button onclick="closeFp()" style="margin-top:18px; background:none; border:none; color:var(--text-muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',system-ui,sans-serif;">Cancelar</button>
+  </div>
+</div>
+
+<!-- ══════════════════ MODAL · EXPORT ══════════════════ -->
+<div class="modal-overlay" id="v-export-modal">
+  <div class="modal-box" style="width:580px; max-width:92vw; padding:32px;">
+    <div style="font-size:20px; font-weight:700; color:var(--text-ink); margin-bottom:6px;">Generar exports</div>
+    <div style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Dos entregables <strong>independientes</strong>, por audiencia. Nunca se comparten en un mismo documento.</div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <button onclick="alert('Exportando PDF (defensivo) + CSV del seller…'); closeExport();" style="text-align:left; background:#fff; border:1px solid var(--border-input); border-radius:10px; padding:14px 16px; cursor:pointer; font-family:'Inter',system-ui,sans-serif;"><div style="font-size:14px; font-weight:700; color:var(--text-ink); margin-bottom:3px;">Export seller / proveedor</div><div style="font-size:12px; color:var(--text-muted); line-height:1.5;">PDF defensivo + CSV — solo lo que no cumple de <strong>sus</strong> referencias. Sin guía completa ni parte interna.</div></button>
+      <button onclick="alert('Exportando CSV interno TIP…'); closeExport();" style="text-align:left; background:#fff; border:1px solid var(--border-input); border-radius:10px; padding:14px 16px; cursor:pointer; font-family:'Inter',system-ui,sans-serif;"><div style="font-size:14px; font-weight:700; color:var(--text-ink); margin-bottom:3px;">Export interno TIP / ecommerce</div><div style="font-size:12px; color:var(--text-muted); line-height:1.5;">Matriz completa de coherencia, con el detalle para corregir o enrutar (1P → TIP, 3P → Marketplace).</div></button>
+    </div>
+    <button onclick="closeExport()" style="margin-top:18px; background:none; border:none; color:var(--text-muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',system-ui,sans-serif;">Cancelar</button>
+  </div>
+</div>
+
 <!-- ══════════════════ MODAL · TIPO ══════════════════ -->
 <div class="modal-overlay" id="v-type-modal">
   <div class="modal-box" style="position:relative; width:520px; max-width:92vw; padding:40px 36px 32px;">
@@ -547,7 +602,7 @@
       <div style="font-size:24px; font-weight:700; color:var(--text-ink); margin-bottom:12px;" id="v-prog-title">Auditando…</div>
       <div style="font-size:14px; color:var(--text-muted); margin-bottom:36px;" id="v-prog-sub">Perímetro</div>
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-        <div style="text-align:left;"><div style="display:flex; align-items:center; gap:14px;"><div style="font-size:28px; font-weight:500; color:var(--text-ink); line-height:1; min-width:110px; text-align:left; font-variant-numeric:tabular-nums;" id="v-prog-counter">0</div><div style="width:1px; height:24px; background:var(--border-card);"></div><div style="font-size:20px; font-weight:600; color:var(--text-ink); line-height:1; min-width:56px; font-variant-numeric:tabular-nums;" id="v-prog-pct">0%</div></div><div style="font-size:12px; color:var(--text-muted); margin-top:6px;">SKUs procesados de <span style="font-weight:600; color:var(--text-body);" id="v-prog-total">0</span></div></div>
+        <div style="text-align:left;"><div style="display:flex; align-items:center; gap:14px;"><div style="font-size:28px; font-weight:500; color:var(--text-ink); line-height:1; min-width:110px; text-align:left; font-variant-numeric:tabular-nums;" id="v-prog-counter">0</div><div style="width:1px; height:24px; background:var(--border-card);"></div><div style="font-size:20px; font-weight:600; color:var(--text-ink); line-height:1; min-width:56px; font-variant-numeric:tabular-nums;" id="v-prog-pct">0%</div></div><div style="font-size:12px; color:var(--text-muted); margin-top:6px;">Referencias procesadas de <span style="font-weight:600; color:var(--text-body);" id="v-prog-total">0</span></div></div>
         <button onclick="openVCancel()" style="background:#fff; border:1px solid #c61112; border-radius:8px; height:36px; padding:0 16px; font-size:13px; font-weight:600; font-family:'Inter',system-ui,sans-serif; cursor:pointer; color:#c61112; display:inline-flex; align-items:center; gap:7px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Cancelar</button>
       </div>
       <div style="height:10px; background:var(--bg-parchment); border-radius:99px; overflow:hidden;"><div id="v-prog-bar" style="height:100%; width:0%; background:var(--green); border-radius:99px; transition:width 0.4s ease;"></div></div>
@@ -603,13 +658,13 @@
 
   // ─────────── HUB ───────────
   var _audits = [
-    { id:1, perimetro:'Gama · Iluminación exterior', tipo:'Gama', refs:2480, hs:72, tend:1, alertas:340, fecha:'Hace 2 h', creador:'Ana García', estado:'por-revisar' },
-    { id:2, perimetro:'Proveedor · Simon', tipo:'Vendor', refs:1150, hs:81, tend:1, alertas:120, fecha:'Ayer', creador:'Miquel Soler', estado:'finalizada' },
-    { id:3, perimetro:'MOD_202512 · Puerta entrada nogal', tipo:'Modelo', refs:46, hs:64, tend:-1, alertas:18, fecha:'Hace 3 h', creador:'Laura Pons', estado:'en-curso' },
-    { id:4, perimetro:'Categoría · Griferías y sanitarios', tipo:'Categoría', refs:890, hs:77, tend:0, alertas:95, fecha:'Hace 5 días', creador:'Ana García', estado:'finalizada' },
-    { id:5, perimetro:'Seller · LuzHogar', tipo:'Vendor', refs:512, hs:58, tend:1, alertas:210, fecha:'Hace 1 día', creador:'Miquel Soler', estado:'por-revisar' },
-    { id:6, perimetro:'Gama · Climatización', tipo:'Gama', refs:1670, hs:85, tend:1, alertas:64, fecha:'Hace 10 días', creador:'Laura Pons', estado:'finalizada' },
-    { id:7, perimetro:'Categoría · Suelos y pavimentos', tipo:'Categoría', refs:154, hs:49, tend:-1, alertas:88, fecha:'Hace 4 min', creador:'Ana García', estado:'en-curso' }
+    { id:1, perimetro:'Gama · A', tipo:'Gama', refs:32658, hs:72, tend:1, alertas:21554, fecha:'Hace 2 h', creador:'Ana García', estado:'por-revisar' },
+    { id:2, perimetro:'Proveedor · Simon', tipo:'Vendor', refs:4120, hs:81, tend:1, alertas:2719, fecha:'Ayer', creador:'Miquel Soler', estado:'finalizada' },
+    { id:3, perimetro:'MOD_202512 · Puerta entrada nogal', tipo:'Modelo', refs:46, hs:64, tend:-1, alertas:30, fecha:'Hace 3 h', creador:'Laura Pons', estado:'en-curso' },
+    { id:4, perimetro:'Categoría · Griferías y sanitarios', tipo:'Categoría', refs:8940, hs:77, tend:0, alertas:5900, fecha:'Hace 5 días', creador:'Ana García', estado:'finalizada' },
+    { id:5, perimetro:'Seller · LuzHogar', tipo:'Vendor', refs:2150, hs:58, tend:1, alertas:1419, fecha:'Hace 1 día', creador:'Miquel Soler', estado:'por-revisar' },
+    { id:6, perimetro:'Gama · M', tipo:'Gama', refs:28470, hs:85, tend:1, alertas:18790, fecha:'Hace 10 días', creador:'Laura Pons', estado:'finalizada' },
+    { id:7, perimetro:'Categoría · Suelos y pavimentos', tipo:'Categoría', refs:1540, hs:49, tend:-1, alertas:1016, fecha:'Hace 4 min', creador:'Ana García', estado:'en-curso' }
   ];
   var _audCounter=100;
   var _vTab='todo';
@@ -627,7 +682,114 @@
   var IC_DL='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
   var IC_TR='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>';
   function closeAudMenus(){ document.querySelectorAll('.row-menu.open').forEach(function(m){m.classList.remove('open');}); }
-  function vAudInforme(id){ closeAudMenus(); alert('Informe de auditoría — pantalla pendiente de construir.'); }
+  function vAudInforme(id){ closeAudMenus(); openInforme(id); }
+
+  /* ═════════ INFORME ═════════ */
+  var _infId=null, _infTab='TIP', _infFindings=[], _fpPending=null, _infFSev='', _infFTipo='', _infFPp='', _infFSearch='', _infDistOpen=false;
+  var _INF_SAMPLE=[
+    { id:1, ref:'18570749', modelo:'MOD_202512', guia:'Puertas de entrada', emoji:'📐', tipo:'Discrepancia de medidas', ubic:'designación ↔ ficha técnica', diag:'Designación "120 cm" · atributo Altura "100 cm"', accion:'Unificar la medida (revisar cuál es correcta)', owner:'TIP', pp:'1P', sev:'critica' },
+    { id:2, ref:'18800786', modelo:'MOD_200485', guia:'Herramienta de mano', emoji:'🎨', tipo:'Color', ubic:'designación ↔ descripción', diag:'Designación "gris" · descripción "antracita"', accion:'Unificar el color en ambos', owner:'TIP', pp:'1P', sev:'critica' },
+    { id:3, ref:'81926777', modelo:'MOD_200547', guia:'Electroportátil', emoji:'🪵', tipo:'Material', ubic:'descripción ↔ ficha técnica', diag:'Descripción "acero" · atributo Material "aluminio"', accion:'Corregir el material incoherente', owner:'TIP', pp:'1P', sev:'critica' },
+    { id:4, ref:'81926783', modelo:'MOD_201071', guia:'Soluciones de ducha', emoji:'📐', tipo:'Dimensión extra no recogida', ubic:'descripción', diag:'La descripción añade "15 cm fondo" que no está en designación', accion:'Añadir a designación o retirar de descripción', owner:'TIP', pp:'1P', sev:'mejora' },
+    { id:5, ref:'44120983', modelo:'MOD_198220', guia:'Iluminación exterior', emoji:'🔄', tipo:'Dims reordenadas', ubic:'designación ↔ ficha técnica', diag:'Orden alto×ancho×fondo distinto al de la ficha', accion:'Reordenar según la guía', owner:'TIP', pp:'1P', sev:'mejora' },
+    { id:6, ref:'44120999', modelo:'MOD_198220', guia:'Iluminación exterior', emoji:'🔤', tipo:'Ortografía: palabra duplicada', ubic:'designación', diag:'"aplique aplique de pared"', accion:'Eliminar la palabra duplicada', owner:'TIP', pp:'1P', sev:'mejora' },
+    { id:7, ref:'71209884', modelo:'MOD_203015', guia:'Herramienta eléctrica', emoji:'❌', tipo:'Atributo obligatorio vacío', ubic:'ficha técnica (Voltaje)', diag:'El atributo "Voltaje" está vacío', accion:'Informar el atributo Voltaje', owner:'Seller', pp:'3P', sev:'bloqueante' },
+    { id:8, ref:'65540127', modelo:'MOD_203188', guia:'Mobiliario de jardín', emoji:'❌', tipo:'Sin descripción', ubic:'descripción', diag:'La ficha no tiene descripción', accion:'Redactar la descripción según la guía', owner:'Seller', pp:'3P', sev:'bloqueante' },
+    { id:9, ref:'93871450', modelo:'MOD_201540', guia:'Pintura', emoji:'⚠️', tipo:'Designación corta', ubic:'designación', diag:'17 caracteres (mínimo recomendado 35)', accion:'Completar la designación', owner:'Seller', pp:'1P', sev:'mejora' },
+    { id:10, ref:'52001347', modelo:'MOD_205110', guia:'Griferías', emoji:'❌', tipo:'Atributos básicos faltantes', ubic:'ficha técnica', diag:'Faltan 3 atributos básicos de la guía', accion:'Completar los atributos obligatorios', owner:'Seller', pp:'1P', sev:'bloqueante' },
+    { id:11, ref:'52001402', modelo:'MOD_205110', guia:'Griferías', emoji:'⚠️', tipo:'Estructura de título', ubic:'designación', diag:'Falta el color en el título', accion:'Reescribir con el orden de la guía', owner:'Seller', pp:'1P', sev:'mejora' }
+  ];
+  function sevChip(sev){ var m={bloqueante:['Bloqueante','#fdeaea','#f8bcbb','#c61112'],critica:['Crítica','var(--warning-bg)','var(--warning-border)','var(--warning-text)'],mejora:['Mejora','var(--bg-parchment)','var(--border-card)','var(--text-muted)']}[sev]||['—','#fff','var(--border-card)','var(--text-muted)']; return '<span style="display:inline-flex;align-items:center;background:'+m[1]+';border:1px solid '+m[2]+';color:'+m[3]+';border-radius:999px;padding:2px 9px;font-size:11px;font-weight:600;white-space:nowrap;">'+m[0]+'</span>'; }
+  function ownerChip(o){ var tip=o==='TIP'; return '<span style="display:inline-flex;background:'+(tip?'var(--info-bg)':'var(--bg-parchment)')+';color:'+(tip?'#1a6c8a':'var(--text-muted)')+';border-radius:999px;padding:2px 9px;font-size:11px;font-weight:600;white-space:nowrap;">'+o+'</span>'; }
+  function ppTag(pp){ return '<span class="v-tag" style="background:'+(pp==='1P'?'var(--success-bg)':'var(--bg-parchment)')+';color:'+(pp==='1P'?'var(--green)':'var(--text-muted)')+';">'+pp+'</span>'; }
+  function statCard(label, valueHtml, sub){ return '<div style="flex:1; min-width:150px; border:1px solid var(--border-card); border-radius:10px; padding:14px 16px; background:#fff;"><div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">'+label+'</div><div style="font-size:22px; font-weight:700; color:var(--text-ink); line-height:1.1;">'+valueHtml+'</div>'+(sub?'<div style="font-size:11px; color:var(--text-muted); margin-top:5px;">'+sub+'</div>':'')+'</div>'; }
+  function openInforme(id){ var a=_audits.filter(function(x){return x.id===id;})[0]; if(!a) return; _infId=id; _infTab='TIP'; _infFSev=''; _infFTipo=''; _infFPp=''; _infFSearch=''; _infFindings=_INF_SAMPLE.map(function(f){var o={};for(var k in f)o[k]=f[k];return o;});
+    var nombre=a.perimetro.split('·').slice(1).join('·').trim()||a.perimetro;
+    document.getElementById('v-inf-title').textContent=nombre;
+    document.getElementById('v-inf-badge').innerHTML=estadoBadge(a.estado);
+    var _sep='<span style="margin:0 12px; color:var(--text-tertiary);">·</span>';
+    document.getElementById('v-inf-meta').innerHTML='<span style="font-weight:600; color:var(--text-body);">'+audTipoLabel(a.tipo)+'</span>'+_sep+'Auditado '+(a.fecha||'—').toLowerCase()+_sep+'por '+(a.creador||'—')+_sep+'motor v1.4';
+    go('v-informe'); renderInforme(a); }
+  function renderInforme(a){ var e=a.estado, body=document.getElementById('v-inf-body'), bottom=document.getElementById('v-inf-bottom');
+    var hsEl=document.getElementById('v-inf-hs');
+    if(e==='en-curso'){ if(hsEl)hsEl.innerHTML=''; body.innerHTML='<div class="info-note" style="text-align:left;"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>Auditoría <strong>en curso</strong>. El informe estará disponible cuando termine.</span></div>'; bottom.style.display='none'; bottom.innerHTML=''; return; }
+    if(e==='error'){ if(hsEl)hsEl.innerHTML=''; body.innerHTML='<div style="background:#fdeaea;border:1px solid #f8bcbb;border-radius:12px;padding:20px;color:#c61112;font-size:14px;">La auditoría falló. Puedes reintentarla desde aquí.</div>'; bottom.style.display='flex'; bottom.innerHTML='<button class="btn btn-primary" style="margin-left:auto;" onclick="alert(\'Reintentar — próximamente\')">Reintentar</button>'; return; }
+    var review=(e==='por-revisar');
+    if(hsEl) hsEl.innerHTML=renderHs(a,review);
+    body.innerHTML=infSalud(a,review)+infImpacto(a)+infDist(a)+'<div id="v-inf-matriz"></div>';
+    renderMatriz();
+    bottom.style.display='flex';
+    if(review){ bottom.innerHTML='<button class="btn btn-primary" style="margin-left:auto;" onclick="marcarRevisado()">Marcar como revisado<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>'; }
+    else { bottom.innerHTML='<div style="margin-left:auto;display:flex;gap:12px;"><button onclick="alert(\'Re-auditar sobre el mismo perímetro — próximamente\')" style="background:#fff;border:1px solid var(--green);border-radius:8px;height:44px;padding:0 20px;font-size:14px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--green);">Re-auditar</button><button class="btn btn-primary" onclick="openExport()">Exportar</button></div>'; }
+  }
+  function renderHs(a, review){ var hsColor=a.hs>=75?'var(--green)':(a.hs>=55?'var(--warning-text)':'#c61112'); var lbl=review?'provisional':'base'; var tip=(review?'Se recalcula al depurar los falsos positivos. ':'')+'Escala de 100 puntos (modelo pág. 39), parte auditable.'; return '<div style="font-size:11px; color:var(--text-muted); display:flex; align-items:center; gap:5px; justify-content:flex-end;">Health Score · '+lbl+' <span title="'+tip+'" style="display:inline-flex; cursor:help; color:var(--text-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span></div><div style="font-size:40px; font-weight:700; color:'+hsColor+'; line-height:1; margin-top:2px;">'+a.hs+'<span style="font-size:18px; color:var(--text-muted); font-weight:600;"> / 100</span></div>'; }
+  function infSalud(a, review){ var total=a.refs||0;
+    var crit=Math.round(total*0.02), sinErr=Math.round(total*0.34), adv=Math.max(0,total-sinErr-crit);
+    var discr=Math.round(total*0.34), orto=Math.round(total*0.15);
+    function kpi(num,label,color,tip){ var dot=(color==='var(--text-ink)')?'':'<span style="width:8px;height:8px;border-radius:50%;background:'+color+';display:inline-block;flex-shrink:0;"></span>'; return '<div title="'+tip.replace(/"/g,'&quot;')+'" style="flex:1; min-width:140px; border:1px solid var(--border-card); border-radius:10px; padding:13px 15px; background:#fff; cursor:help;"><div style="font-size:24px; font-weight:700; color:'+color+'; line-height:1;">'+fmtNum(num)+'</div><div style="font-size:11px; color:var(--text-muted); margin-top:6px; display:flex; align-items:center; gap:6px;">'+dot+label+'</div></div>'; }
+    return '<div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:28px;">'
+      +kpi(total,'Total de referencias','var(--text-ink)','Total de referencias analizadas en la auditoría.')
+      +kpi(sinErr,'Sin errores','var(--green)','Referencias sin ningún problema: designación ≥35 car., descripción ≥80 car., y sin discrepancias ni faltas.')
+      +kpi(adv,'Con advertencias','var(--warning-text)','Referencias con 1–2 alertas: designación/descripción corta, discrepancia de color/material/medidas, o falta ortográfica.')
+      +kpi(crit,'Con errores críticos','#c61112','Referencias con 3 o más alertas, o sin designación/descripción. Requieren revisión prioritaria.')
+      +kpi(discr,'Con discrepancias','#a0341f','Referencias donde designación y descripción difieren: color, material, medidas (valor, dimensión extra, reordenadas) o nº de elementos.')
+      +kpi(orto,'Con faltas de ortografía','#1a6c8a','Referencias con posibles errores ortográficos en designación o descripción.')
+      +'</div>'; }
+  function infImpacto(a){ var total=a.refs||0;
+    var d=[
+      {cat:'Discrepancia interna PDP (título ↔ descripción ↔ ficha técnica)', pct:0.082, prio:'Alta', motivo:'Confunde al usuario', color:'#c61112', owner:'TIP'},
+      {cat:'Contenido faltante (sin designación o descripción)', pct:0.21, prio:'Alta', motivo:'Impide publicar la referencia', color:'#c61112', owner:'Seller'},
+      {cat:'Atributos obligatorios faltantes (guía eMerch)', pct:0.127, prio:'Media', motivo:'Afecta filtros de búsqueda', color:'var(--warning-text)', owner:'Seller'},
+      {cat:'Designación fuera de estándar (corta / estructura)', pct:0.11, prio:'Media', motivo:'Afecta legibilidad y SEO', color:'var(--warning-text)', owner:'Seller'},
+      {cat:'Errores ortográficos', pct:0.05, prio:'Baja', motivo:'Impacta en tasa de conversión', color:'#c9a227', owner:'TIP'}
+    ];
+    var rows=d.map(function(x){ var cnt=Math.round(total*x.pct), pctTxt=(x.pct*100).toFixed(1).replace(/\.0$/,'')+'%';
+      return '<tr><td style="font-size:13px;color:var(--text-ink);">'+x.cat+'</td><td style="font-size:13px;font-variant-numeric:tabular-nums;">'+fmtNum(cnt)+'</td><td style="font-size:13px;font-variant-numeric:tabular-nums;">'+pctTxt+'</td><td style="font-size:13px;"><span style="display:inline-flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:'+x.color+';display:inline-block;flex-shrink:0;"></span><span style="font-weight:600;">'+x.prio+'</span> · <span style="color:var(--text-muted);">'+x.motivo+'</span></span></td><td>'+ownerChip(x.owner)+'</td></tr>'; }).join('');
+    return '<div style="margin-bottom:28px;"><div style="font-size:16px; font-weight:700; color:var(--text-ink);">Impacto por tipo de error</div><div style="font-size:12px; color:var(--text-muted); margin:4px 0 12px;">Agregado por categoría para priorizar antes de ir al detalle. <em>(Cifras ilustrativas.)</em></div><div style="background:var(--bg-surface); overflow-x:auto; border:1px solid var(--border-card); border-radius:12px;"><table class="desc-table" style="width:100%; min-width:820px;"><thead><tr><th style="width:32%;">Categoría de error</th><th style="width:12%;">Referencias afectadas</th><th style="width:13%;">% sobre catálogo</th><th style="width:31%;">Prioridad de resolución</th><th style="width:12%;">Owner</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>'; }
+  function distCol(title, rows){ var body=rows.map(function(r){ var w=Math.min(100,Math.round(r[1]/32*100)); return '<div style="display:flex;align-items:center;gap:10px;padding:5px 0;"><span style="width:170px;flex-shrink:0;font-size:12px;color:var(--text-ink);">'+r[0]+'</span><div style="flex:1;min-width:40px;height:7px;background:var(--bg-parchment);border-radius:99px;overflow:hidden;"><div style="width:'+w+'%;height:100%;background:var(--green-mid);border-radius:99px;"></div></div><span style="width:34px;text-align:right;font-size:12px;font-weight:700;color:var(--text-ink);">'+Math.round(r[1])+'%</span><span style="width:58px;text-align:right;font-size:11px;color:var(--text-muted);">('+fmtNum(r[2])+')</span></div>'; }).join(''); return '<div style="flex:1; min-width:300px;"><div style="font-size:13px;font-weight:700;color:var(--text-ink);padding-bottom:8px;border-bottom:1px solid var(--border-card);margin-bottom:6px;">'+title+'</div>'+body+'</div>'; }
+  function infDist(a){ var total=a.refs||0; function c(p){return Math.round(total*p/100);}
+    var mk=function(arr){return arr.map(function(r){return [r[0],r[1],c(r[1])];});};
+    var desig=mk([['Sin designación',21],['Designación administrativa',0.2],['Designación corta (<35)',11],['Ortografía',6],['Color incoherente',2],['Material incoherente',1],['Dimensiones incoherentes',32]]);
+    var desc=mk([['Sin descripción',22],['Descripción < 80 car.',3],['Ortografía',11],['Color incoherente',2],['Material incoherente',1],['Dimensiones incoherentes',32]]);
+    var ficha=mk([['Atributos obligatorios faltantes',13],['Atributos básicos faltantes',6],['Discrepancia atributo ↔ texto',5],['Unidades no normalizadas',2]]);
+    var chevRot=_infDistOpen?' style="transform:rotate(180deg);"':'';
+    return '<div style="border:1px solid var(--border-card); border-radius:12px; background:#fff; margin-bottom:28px; overflow:hidden;"><button onclick="toggleDist()" style="width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 20px; background:none; border:none; cursor:pointer; font-family:\'Inter\',system-ui,sans-serif;"><span style="font-size:14px; font-weight:700; color:var(--text-ink);">Distribución de errores <span style="font-weight:400; color:var(--text-muted);">· % de referencias afectadas</span></span><svg id="v-inf-dist-chev"'+chevRot+' width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button><div id="v-inf-dist-body" style="display:'+(_infDistOpen?'block':'none')+'; padding:4px 20px 20px;"><div style="display:flex; gap:36px; flex-wrap:wrap;">'+distCol('Designación',desig)+distCol('Descripción',desc)+distCol('Ficha técnica',ficha)+'</div></div></div>'; }
+  function toggleDist(){ _infDistOpen=!_infDistOpen; var b=document.getElementById('v-inf-dist-body'); var c=document.getElementById('v-inf-dist-chev'); if(b) b.style.display=_infDistOpen?'block':'none'; if(c) c.style.transform=_infDistOpen?'rotate(180deg)':''; }
+  function fsel(varName,val,pairs,ph){ var o='<option value="">'+ph+'</option>'+pairs.map(function(p){return '<option value="'+p[0]+'"'+(val===p[0]?' selected':'')+'>'+p[1]+'</option>';}).join(''); return '<div style="position:relative;"><select onchange="'+varName+'=this.value; renderMTabla();" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;appearance:none;-webkit-appearance:none;">'+o+'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'; }
+  function renderMatriz(){ var host=document.getElementById('v-inf-matriz'); if(!host) return;
+    function tab(k,lbl){ return '<button class="v-tab'+(_infTab===k?' active':'')+'" onclick="infSetTab(\''+k+'\')">'+lbl+'</button>'; }
+    var tabs='<div style="display:flex; gap:8px; margin-bottom:14px;">'+tab('TIP','TIP · coherencia')+tab('Seller','Seller · completitud')+'</div>';
+    var tipos=[]; _infFindings.forEach(function(f){ if(f.owner===_infTab && tipos.indexOf(f.tipo)===-1) tipos.push(f.tipo); });
+    var filters='<div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">'
+      +fsel('_infFSev',_infFSev,[['bloqueante','Bloqueante'],['critica','Crítica'],['mejora','Mejora']],'Toda severidad')
+      +fsel('_infFTipo',_infFTipo,tipos.map(function(t){return [t,t];}),'Todos los tipos')
+      +fsel('_infFPp',_infFPp,[['1P','1P'],['3P','3P']],'1P y 3P')
+      +'<div style="position:relative; flex:1; min-width:200px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input value="'+(_infFSearch||'').replace(/"/g,'&quot;')+'" oninput="_infFSearch=this.value; renderMTabla();" placeholder="Referencia o modelo…" style="width:100%;height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 12px 0 34px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;"/></div>'
+      +'</div>';
+    host.innerHTML='<div style="font-size:16px; font-weight:700; color:var(--text-ink); margin-bottom:10px;">Matriz de trabajo</div>'+tabs+filters+'<div id="v-inf-mtabla"></div>';
+    renderMTabla();
+  }
+  function renderMTabla(){ var host=document.getElementById('v-inf-mtabla'); if(!host) return; var a=_audits.filter(function(x){return x.id===_infId;})[0]; var review=(a&&a.estado==='por-revisar');
+    var FP_BTN='background:#fff;border:1px solid var(--border-input);border-radius:6px;height:28px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;';
+    var FP_DONE='background:var(--bg-parchment);border:1px solid var(--border-card);border-radius:6px;height:28px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-muted);white-space:nowrap;';
+    var FICHA='background:#fff;border:1px solid var(--green);border-radius:6px;height:28px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--green);white-space:nowrap;';
+    var q=(_infFSearch||'').toLowerCase();
+    var list=_infFindings.filter(function(f){ return f.owner===_infTab && (review || !f.fp) && (!_infFSev||f.sev===_infFSev) && (!_infFTipo||f.tipo===_infFTipo) && (!_infFPp||f.pp===_infFPp) && (!q||(f.ref+' '+f.modelo).toLowerCase().indexOf(q)!==-1); });
+    var head='<thead><tr><th style="width:12%;">Referencia</th><th style="width:16%;">Tipo</th><th style="width:12%;">Ubicación</th><th style="width:24%;">Diagnóstico</th><th style="width:18%;">Acción correctiva</th><th style="width:5%;">1P/3P</th><th style="width:8%;">Severidad</th><th style="width:8%;"></th></tr></thead>';
+    var rows=list.map(function(f){ var act=review?(f.fp?'<button onclick="undoFp('+f.id+')" style="'+FP_DONE+'">Falso positivo ✓</button>':'<button onclick="openFp('+f.id+')" style="'+FP_BTN+'">Falso positivo</button>'):'<button onclick="alert(\'Abriendo ficha (PDP)…\')" style="'+FICHA+'">Ver ficha</button>';
+      return '<tr style="'+(review&&f.fp?'opacity:0.45;':'')+'"><td><div style="font-size:12px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+f.ref+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:1px;">'+f.modelo+'</div></td><td style="font-size:12px;">'+f.emoji+' '+f.tipo+'</td><td style="font-size:12px;color:var(--text-muted);">'+f.ubic+'</td><td style="font-size:12px;color:var(--text-body);">'+f.diag+'</td><td style="font-size:12px;color:var(--text-body);">'+f.accion+'</td><td>'+ppTag(f.pp)+'</td><td>'+sevChip(f.sev)+'</td><td style="text-align:right;">'+act+'</td></tr>'; }).join('') || '<tr><td colspan="8" style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;">Sin alertas con estos filtros.</td></tr>';
+    var note=review?'<div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Marca los <strong>falsos positivos</strong> (saldrán del informe y alimentarán el motor). El resto se dan por válidos.</div>':'';
+    var cap='<div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Mostrando <strong>'+list.length+'</strong> de una muestra · '+(a?fmtNum(a.alertas):'—')+' alertas en total.</div>';
+    host.innerHTML=note+cap+'<div style="background:var(--bg-surface); overflow-x:auto; border:1px solid var(--border-card); border-radius:12px;"><table class="desc-table" style="min-width:900px; table-layout:fixed;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
+  function infSetTab(t){ _infTab=t; _infFSev=''; _infFTipo=''; _infFPp=''; _infFSearch=''; renderMatriz(); }
+  var _FP_MOTIVOS=['Término técnico válido','Equivalencia de color','Material bien clasificado','Contexto / no aplica','Otro'];
+  function openFp(fid){ _fpPending=fid; document.getElementById('v-fp-motivos').innerHTML=_FP_MOTIVOS.map(function(m){ return '<button onclick="confirmFp(\''+m.replace(/'/g,"\\'")+'\')" style="text-align:left;background:#fff;border:1px solid var(--border-input);border-radius:8px;height:44px;padding:0 14px;font-size:13px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-ink);">'+m+'</button>'; }).join(''); document.getElementById('v-fp-modal').classList.add('open'); }
+  function closeFp(){ document.getElementById('v-fp-modal').classList.remove('open'); _fpPending=null; }
+  function confirmFp(m){ var f=_infFindings.filter(function(x){return x.id===_fpPending;})[0]; if(f){ f.fp=true; f.motivo=m; } closeFp(); renderMTabla(); }
+  function undoFp(fid){ var f=_infFindings.filter(function(x){return x.id===fid;})[0]; if(f){ f.fp=false; f.motivo=null; } renderMTabla(); }
+  function marcarRevisado(){ var a=_audits.filter(function(x){return x.id===_infId;})[0]; if(!a) return; a.estado='revisado'; a.fecha='Ahora'; renderAudits(); document.getElementById('v-inf-badge').innerHTML=estadoBadge(a.estado); renderInforme(a); }
+  function openExport(){ document.getElementById('v-export-modal').classList.add('open'); }
+  function closeExport(){ document.getElementById('v-export-modal').classList.remove('open'); }
   function vAudReauditar(id){ closeAudMenus(); alert('Re-auditar sobre el mismo perímetro — próximamente.'); }
   function vAudExport(id){ closeAudMenus(); alert('Exportar (PDF seller / CSV interno) — próximamente.'); }
   function vAudDelete(id){ closeAudMenus(); _audits=_audits.filter(function(a){return a.id!==id;}); renderAudits(); }
@@ -653,15 +815,15 @@
 
   // ─────────── NUEVA AUDITORÍA ───────────
   var _vTipos=[
-    { k:'Modelo', label:'Modelo', sub:'Un modelo concreto (tipología)', ico:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>' },
     { k:'Gama', label:'Gama', sub:'Todas las referencias de una gama', ico:'<svg viewBox="0 0 24 24"><path d="M3 7h18"/><path d="M3 12h18"/><path d="M3 17h18"/></svg>' },
     { k:'Vendor', label:'Proveedor / Seller', sub:'Catálogo de un proveedor (1P) o seller (3P)', ico:'<svg viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg>' },
+    { k:'Modelo', label:'Modelo', sub:'Un modelo concreto (tipología)', ico:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>' },
     { k:'Categoría', label:'Categoría web', sub:'Pegar la URL de su PLP', ico:'<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>' },
     { k:'Listado', label:'Listado (CSV)', sub:'Subir un fichero con las referencias', ico:'<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' }
   ];
   var _vLists={
     'Modelo':[{name:'Puerta entrada nogal',code:'MOD_202512'},{name:'Aplique de pared industrial',code:'MOD_000000'},{name:'Foco empotrable LED 8W',code:'MOD_445120'},{name:'Suelo laminado roble natural',code:'MOD_889900'},{name:'Ventana PVC oscilobatiente',code:'MOD_202513'},{name:'Armario modular 3 puertas',code:'MOD_334455'},{name:'Grifo monomando cocina',code:'MOD_112233'},{name:'Radiador aluminio 8 elementos',code:'MOD_667788'},{name:'Cortadora de césped eléctrica',code:'MOD_998877'},{name:'Persiana enrollable exterior',code:'MOD_223344'},{name:'Encimera de cuarzo blanco',code:'MOD_778899'},{name:'Mampara de ducha corredera',code:'MOD_556677'},{name:'Toldo motorizado 3,5m',code:'MOD_445566'},{name:'Caldera de condensación 24kW',code:'MOD_334488'}],
-    'Gama':[{name:'Iluminación exterior'},{name:'Iluminación interior'},{name:'Climatización'},{name:'Griferías y sanitarios'},{name:'Suelos y pavimentos'},{name:'Ventanas y puertas'},{name:'Jardín y exterior'},{name:'Cocinas'}],
+    'Gama':[{name:'A',desc:'Descripción pendiente'},{name:'B',desc:'Descripción pendiente'},{name:'C',desc:'Descripción pendiente'},{name:'K',desc:'Descripción pendiente'},{name:'M',desc:'Descripción pendiente'},{name:'S',desc:'Descripción pendiente'}],
     'Vendor':[{name:'Simon',tag:'1P'},{name:'Roca',tag:'1P'},{name:'Grohe',tag:'1P'},{name:'Saint-Gobain',tag:'1P'},{name:'Philips',tag:'1P'},{name:'Bosch',tag:'1P'},{name:'Legrand',tag:'1P'},{name:'Somfy',tag:'1P'},{name:'LuzHogar',tag:'3P'},{name:'IlumStore',tag:'3P'},{name:'ElectroLuz',tag:'3P'},{name:'DecoLight',tag:'3P'},{name:'JardínPro',tag:'3P'},{name:'BañoExpress',tag:'3P'}]
   };
   var _vSkuBase={ 'Modelo':46,'Gama':2480,'Vendor':1150,'Categoría':890,'Listado':640 };
@@ -699,7 +861,8 @@
     list.innerHTML=items.map(function(o){
       var tag=o.tag?'<span class="v-tag" style="background:'+(o.tag==='1P'?'var(--success-bg)':'var(--bg-parchment)')+';color:'+(o.tag==='1P'?'var(--green)':'var(--text-muted)')+';">'+o.tag+'</span>':'';
       var code=o.code?'<span style="font-size:13px;color:var(--text-muted);font-weight:400;flex-shrink:0;">'+o.code+'</span>':'';
-      return '<div class="v-opt" onclick="pickOpt(\''+o.name.replace(/'/g,"\\'")+'\')"><div style="min-width:0;display:flex;align-items:baseline;gap:8px;">'+code+'<span style="font-size:13px;color:var(--text-ink);font-weight:600;">'+o.name+'</span></div>'+(tag?'<div>'+tag+'</div>':'')+'</div>';
+      var desc=o.desc?'<span style="font-size:13px;color:var(--text-tertiary);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+o.desc+'</span>':'';
+      return '<div class="v-opt" onclick="pickOpt(\''+o.name.replace(/'/g,"\\'")+'\')"><div style="min-width:0;display:flex;align-items:baseline;gap:8px;">'+code+'<span style="font-size:13px;color:var(--text-ink);font-weight:600;flex-shrink:0;">'+o.name+'</span>'+desc+'</div>'+(tag?'<div>'+tag+'</div>':'')+'</div>';
     }).join('');
   }
   function filterOpts(q){ renderOpts(q); }
@@ -747,7 +910,7 @@
   function slotResult(){ _vDetectNum=_vSkuBase[_vTipo]||500;
     var h=selHeader(true);
     var lbl=(_vTipo==='Listado')?'Referencias válidas del CSV subido.':'Se leerán directamente del catálogo (BigQuery).';
-    document.getElementById('v-detect-slot').innerHTML='<div class="sku-count-card" style="position:relative;">'+h.pencil+h.html+'<div class="sku-count-head"><span class="sku-count-num">'+fmtNum(_vDetectNum)+'</span><span class="sku-count-unit">SKUs</span><span class="sku-count-detected">detectados</span></div><div class="sku-count-label">'+lbl+'</div></div>'+_queBox;
+    document.getElementById('v-detect-slot').innerHTML='<div class="sku-count-card" style="position:relative;">'+h.pencil+h.html+'<div class="sku-count-head"><span class="sku-count-num">'+fmtNum(_vDetectNum)+'</span><span class="sku-count-unit">referencias</span><span class="sku-count-detected">detectadas</span></div><div class="sku-count-label">'+lbl+'</div></div>'+_queBox;
     if(_vTipo==='Listado' && _vEditingName){ var ni=document.getElementById('v-name-input'); if(ni){ try{ ni.focus(); ni.select&&ni.select(); }catch(e){} } }
   }
   function slotCsvError(){ document.getElementById('v-detect-slot').innerHTML='<div style="background:#fdeaea; border:1px solid #f8bcbb; border-radius:8px; padding:14px 16px; display:flex; gap:12px; align-items:flex-start;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c61112" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><div style="font-size:13px;font-weight:700;color:#c61112;margin-bottom:2px;">El CSV contiene referencias no válidas</div><div style="font-size:12px;color:var(--text-body);line-height:1.5;">38 referencias no corresponden al catálogo. Usa <strong>Subir otro CSV</strong> para reemplazarlo.</div></div></div>'; }

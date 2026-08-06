@@ -13,3 +13,6 @@
 # Temporales
 *.tmp
 *.log
+
+# Material fuente del cliente (no debe publicarse en Pages ni versionarse)
+docs/validaciones/docs de cliente/
