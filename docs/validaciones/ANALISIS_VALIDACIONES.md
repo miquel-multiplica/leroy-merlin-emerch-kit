@@ -94,14 +94,14 @@ Módulo **Validaciones**, espejo estructural de Descripciones.
 5. Configuración del motor (admin)
 
 ### Estados de una ejecución
-**En curso → Pendiente de revisión → Revisado → Enviada** (+ Error). *(No hay concepto de "borrador" — eso en Descripciones significa otra cosa.)* El **perímetro** persiste entre ejecuciones para el siguiente ciclo.
+**En curso → Pendiente de revisión → Revisado → Finalizada** (+ Error). *(No hay concepto de "borrador" — eso en Descripciones significa otra cosa.)* El estado terminal es **Finalizada** (no "Enviada"/"Con seguimiento"): la herramienta **produce los artefactos pero no controla el flujo posterior** (corrección del seller / gobernanza va por fuera, en Jira), así que no promete un seguimiento que no gestiona. El **perímetro** persiste entre ejecuciones para el siguiente ciclo.
 
 ---
 
 ### 1 · Hub de auditorías
 La entidad que persiste es el **perímetro/auditoría recurrente**; cada pasada es una **ejecución (snapshot)** con su Health Score y sus alertas.
 - **Columnas:** perímetro auditado (con **chip de tipo** dentro de la celda: Modelo / Gama / Proveedor-Seller / Categoría web (PLP) / Listado) · nº de referencias · **Health Score (base)** · **tendencia** (↑/↓ vs. ejecución anterior) · nº de alertas · última ejecución · creador · estado.
-- **Pestañas:** **Todo · En curso · Por revisar · Con seguimiento (activas)**.
+- **Pestañas:** **Todo · En curso · Pendientes de revisión · Finalizadas** (revisadas + finalizadas). *(Los nombres de pestaña coinciden con los estados.)*
 - **Filtros:** sección/tipología, 1P/3P (este último aplica cuando entre 3P).
 - **Acciones por fila:** Ver informe · Exportar · **Re-auditar** · eliminar.
 - **Entradas:** botón "Nueva auditoría" **y** desde Guías ("Empezar validación" de esa guía/categoría).
@@ -193,7 +193,7 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 - **Health Score base** (criterios auditables, misma escala que pág. 39).
 - Informe interno con **impacto por tipo de error** + **matriz TIP/seller**, con marca 1P/3P y severidad básica.
 - **Dos exports separados por audiencia** (seller: PDF acotado + CSV/XLSX; interno TIP/ecommerce).
-- **Revisión de falsos positivos** (En curso → Pendiente de revisión → Revisado → Enviada) con **loop** al motor.
+- **Revisión de falsos positivos** (En curso → Pendiente de revisión → Revisado → Finalizada) con **loop** al motor.
 - **Configuración del motor** (prompt + .md + vocabulario), versionada, por sección/tipología.
 - **Histórico de cambios desde el día 1** (para alimentar la fase 3 y el evolutivo).
 - **Re-auditoría manual** sobre la auditoría previa (mismo perímetro: seller / categoría web / modelo). *(La automática es fase posterior.)*
