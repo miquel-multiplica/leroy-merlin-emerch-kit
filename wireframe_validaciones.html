@@ -562,9 +562,10 @@
 <div class="modal-overlay" id="v-fp-modal">
   <div class="modal-box" style="width:520px; max-width:92vw; padding:32px;">
     <div style="font-size:20px; font-weight:700; color:var(--text-ink); margin-bottom:6px;">Marcar como falso positivo</div>
-    <div style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Elige el motivo. La alerta saldrá del informe y el caso irá a <strong>Configuración del motor</strong> para que no vuelva a saltar.</div>
-    <div id="v-fp-motivos" style="display:flex; flex-direction:column; gap:8px;"></div>
-    <button onclick="closeFp()" style="margin-top:18px; background:none; border:none; color:var(--text-muted); font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',system-ui,sans-serif;">Cancelar</button>
+    <div style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Marca uno o varios motivos y añade un comentario si quieres. La alerta saldrá del informe y el caso irá a <strong>Configuración del motor</strong> para afinar la regla.</div>
+    <div id="v-fp-motivos" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+    <div style="margin-top:16px;"><div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">Comentario (opcional)</div><textarea id="v-fp-comment" rows="2" placeholder="Añade contexto para el equipo del motor…" style="width:100%; border:1px solid var(--border-input); border-radius:8px; padding:10px 12px; font-size:13px; font-family:'Inter',system-ui,sans-serif; color:var(--text-ink); outline:none; box-sizing:border-box; resize:vertical;"></textarea></div>
+    <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:20px;"><button onclick="closeFp()" style="background:none; border:none; color:var(--text-muted); font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',system-ui,sans-serif; padding:0 8px;">Cancelar</button><button onclick="confirmFp()" class="btn btn-primary">Marcar falso positivo</button></div>
   </div>
 </div>
 
@@ -829,7 +830,7 @@
     if(_infPage>totalPages)_infPage=totalPages; if(_infPage<1)_infPage=1;
     var start=(_infPage-1)*per, end=Math.min(total,start+per), pageRows=list.slice(start,end);
     var head='<thead><tr><th style="width:128px;">Referencia</th><th style="width:190px;">Tipo de error</th><th style="width:300px;">Diagnóstico</th><th style="width:180px; padding-left:22px;">Corrección</th><th style="width:96px; padding-left:22px;">Severidad</th><th style="width:96px; padding-left:40px;">Owner</th><th style="width:92px;">Segmento</th><th></th></tr></thead>';
-    var rows=pageRows.map(function(f){ var act=_infFpView?'<button onclick="undoFp('+f.id+')" style="'+FP_BTN+'">Restaurar</button>':(review?(f.fp?'<button onclick="undoFp('+f.id+')" style="'+FP_DONE+'">Falso positivo ✓</button>':'<button onclick="openFp('+f.id+')" style="'+FP_BTN+'">Falso positivo</button>'):'');
+    var rows=pageRows.map(function(f){ var act=_infFpView?'<button onclick="openFp('+f.id+')" style="'+FP_BTN+'">Editar</button> <button onclick="undoFp('+f.id+')" style="'+FP_BTN+'">Restaurar</button>':(review?(f.fp?'<button onclick="undoFp('+f.id+')" style="'+FP_DONE+'">Falso positivo ✓</button>':'<button onclick="openFp('+f.id+')" style="'+FP_BTN+'">Falso positivo</button>'):'');
       var reflink='<a href="https://www.leroymerlin.es/productos/ref-'+f.ref+'.html" target="_blank" rel="noopener" title="Abrir la ficha en leroymerlin.es" style="font-size:12px;font-weight:700;color:var(--green);text-decoration:none;font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;gap:4px;">'+f.ref+'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>';
       return '<tr style="'+(!_infFpView&&review&&f.fp?'opacity:0.45;':'')+'"><td>'+reflink+'<div style="font-size:11px;color:var(--text-muted);margin-top:1px;">'+f.modelo+'</div></td><td style="font-size:12px;">'+f.emoji+' '+f.tipo+'</td><td style="font-size:12px;color:var(--text-body);">'+f.diag+'</td><td style="font-size:12px;color:var(--text-body);padding-left:22px;">'+(_infFpView?'<span style="color:var(--text-muted);font-style:italic;">Motivo: '+(f.motivo||'—')+'</span>':f.accion)+'</td><td style="padding-left:22px;">'+sevChip(f.sev)+'</td><td style="font-size:12px;color:var(--text-body);padding-left:40px;">'+f.owner+'</td><td style="font-size:12px;color:var(--text-body);">'+f.pp+'</td><td style="text-align:right;">'+act+'</td></tr>'; }).join('') || '<tr><td colspan="8" style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;">'+(_infFpView?'No hay falsos positivos marcados.':'Sin alertas con estos filtros.')+'</td></tr>';
     var note='';
@@ -837,11 +838,24 @@
     var pager='<div style="display:flex; align-items:center; gap:10px; margin-top:16px;">'+pbtn(_infPage-1,_infPage<=1,'m15 18-6-6 6-6')+pbtn(_infPage+1,_infPage>=totalPages,'m9 18 6-6-6-6')+'<span style="font-size:13px;color:var(--text-muted);margin-left:6px;">'+(total?(fmtNum(start+1)+'–'+fmtNum(end)):'0')+' de '+fmtNum(total)+' alertas · pág. '+_infPage+' de '+fmtNum(totalPages)+'</span></div>';
     host.innerHTML=note+'<div style="background:var(--bg-surface); overflow-x:auto; border:1px solid var(--border-card); border-radius:12px;"><table class="desc-table" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'+pager; }
   function infGoPage(p){ _infPage=p; renderMTabla(); }
-  var _FP_MOTIVOS=['Término técnico válido','Equivalencia de color','Material bien clasificado','Contexto / no aplica','Otro'];
-  function openFp(fid){ _fpPending=fid; document.getElementById('v-fp-motivos').innerHTML=_FP_MOTIVOS.map(function(m){ return '<button onclick="confirmFp(\''+m.replace(/'/g,"\\'")+'\')" style="text-align:left;background:#fff;border:1px solid var(--border-input);border-radius:8px;height:44px;padding:0 14px;font-size:13px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-ink);">'+m+'</button>'; }).join(''); document.getElementById('v-fp-modal').classList.add('open'); }
-  function closeFp(){ document.getElementById('v-fp-modal').classList.remove('open'); _fpPending=null; }
-  function confirmFp(m){ var f=_infFindings.filter(function(x){return x.id===_fpPending;})[0]; if(f){ f.fp=true; f.motivo=m; } closeFp(); renderMTabla(); }
-  function undoFp(fid){ var f=_infFindings.filter(function(x){return x.id===fid;})[0]; if(f){ f.fp=false; f.motivo=null; } renderMTabla(); }
+  var _fpSel=[];
+  var FP_CHIP="text-align:left;background:#fff;border:1px solid var(--border-input);border-radius:999px;height:34px;padding:0 14px;font-size:12px;font-weight:600;font-family:'Inter',system-ui,sans-serif;cursor:pointer;color:var(--text-body);";
+  var FP_CHIP_ON="text-align:left;background:var(--success-bg);border:1px solid var(--green);border-radius:999px;height:34px;padding:0 14px;font-size:12px;font-weight:600;font-family:'Inter',system-ui,sans-serif;cursor:pointer;color:var(--green);";
+  function fpMotivos(f){ var t=(f&&f.tipo?f.tipo:'').toLowerCase();
+    if(t.indexOf('ortograf')>=0) return ['Término técnico válido','Marca o nombre propio','Extranjerismo aceptado'];
+    if(t.indexOf('seo')>=0) return ['Término ya presente (sinónimo)','No aplica a esta categoría'];
+    if(t.indexOf('color')>=0) return ['Colores equivalentes','Tono o acabado admitido'];
+    if(t.indexOf('material')>=0) return ['Material equivalente','Bien clasificado'];
+    if(t.indexOf('dimension')>=0||t.indexOf('cantidad')>=0||t.indexOf('medida')>=0||t.indexOf('unidad')>=0) return ['Medida o formato aceptable','Dentro de tolerancia'];
+    if(t.indexOf('concatenaci')>=0||t.indexOf('administrativa')>=0||t.indexOf('estructura')>=0||t.indexOf('designación corta')>=0) return ['Estructura correcta para esta gama','Orden alternativo válido'];
+    if(t.indexOf('atributo')>=0||t.indexOf('imágen')>=0||t.indexOf('imagen')>=0||t.indexOf('descripción')>=0||t.indexOf('sin designación')>=0) return ['Dato presente en otro campo','No aplica a este producto'];
+    return ['No aplica a este producto','Regla demasiado estricta'];
+  }
+  function openFp(fid){ _fpPending=fid; var f=_infFindings.filter(function(x){return x.id===fid;})[0]; _fpSel=(f&&f.motivos)?f.motivos.slice():[]; document.getElementById('v-fp-motivos').innerHTML=fpMotivos(f).map(function(m){ var on=_fpSel.indexOf(m)>=0; return '<button type="button" data-m="'+m.replace(/"/g,'&quot;')+'" onclick="fpToggle(this)" style="'+(on?FP_CHIP_ON:FP_CHIP)+'">'+m+'</button>'; }).join(''); var _c=document.getElementById('v-fp-comment'); if(_c)_c.value=(f&&f.comment)?f.comment:''; document.getElementById('v-fp-modal').classList.add('open'); }
+  function closeFp(){ document.getElementById('v-fp-modal').classList.remove('open'); _fpPending=null; _fpSel=[]; }
+  function fpToggle(el){ var m=el.getAttribute('data-m'); var i=_fpSel.indexOf(m); if(i>=0){ _fpSel.splice(i,1); el.style.cssText=FP_CHIP; } else { _fpSel.push(m); el.style.cssText=FP_CHIP_ON; } }
+  function confirmFp(){ var f=_infFindings.filter(function(x){return x.id===_fpPending;})[0]; var c=(document.getElementById('v-fp-comment').value||'').trim(); if(f){ f.fp=true; f.motivos=_fpSel.slice(); f.comment=c; f.motivo=_fpSel.join(' · ')+((_fpSel.length&&c)?' — ':'')+(c||''); if(!f.motivo)f.motivo='—'; } closeFp(); renderMTabla(); }
+  function undoFp(fid){ var f=_infFindings.filter(function(x){return x.id===fid;})[0]; if(f){ f.fp=false; f.motivo=null; f.motivos=null; f.comment=null; } renderMTabla(); }
   function openRevisarConfirm(){ var fp=_infFindings.filter(function(x){return x.fp;}).length; var tot=_infFindings.length; var val=tot-fp; document.getElementById('v-revisar-msg').innerHTML='Vas a cerrar la revisión de esta auditoría. <strong>'+fmtNum(val)+'</strong> alertas quedan como hallazgos válidos'+(fp>0?' y <strong>'+fmtNum(fp)+'</strong> se descartan como falso positivo (salen del informe y van a la cola de <strong>Configuración del motor</strong>)':'')+'. Después podrás generar los exports.'; document.getElementById('v-revisar-modal').classList.add('open'); }
   function closeRevisarConfirm(){ document.getElementById('v-revisar-modal').classList.remove('open'); }
   function confirmRevisar(){ closeRevisarConfirm(); marcarRevisado(); }

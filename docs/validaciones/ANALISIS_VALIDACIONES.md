@@ -253,7 +253,7 @@ Gestión del "cerebro" del motor, no solo listas:
 **Revisión de falsos positivos (cómo funciona):**
 1. Tras la auditoría → informe *Pendiente de revisión* con todas las alertas.
 2. El validador de gama marca cada alerta **válida** o **falso positivo** (puede ser en bloque: "todas las de este tipo/término").
-3. Al marcar **falso positivo** se pide un **motivo/categoría** (término técnico válido · equivalencia de color · material mal clasificado · contexto…) y: la alerta **sale del informe** + el caso entra en una **cola hacia Configuración del motor** para incorporarlo al vocabulario/prompt/.md → deja de saltar la próxima vez.
+3. Al marcar **falso positivo** se piden **uno o varios motivos** (**multiselección, contextuales al tipo de alerta**) + un **comentario libre** (siempre disponible). Cada motivo mapea con **cómo aprende el motor** (p. ej. color→ampliar sinónimos, ortografía→whitelist, atributo→excepción por categoría). La alerta **sale del informe** y el caso entra en una **cola hacia Configuración del motor**. El motivo es **editable** desde la propia sección de falsos positivos (toggle), y el FP se puede **restaurar**. *(Las etiquetas concretas de motivo por tipo son propuesta a validar con cliente — ver §5.)*
 4. Al terminar la depuración, el informe pasa a *Revisado* y ya se puede **exportar/enviar**.
 Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en un Drive suelto).
 
