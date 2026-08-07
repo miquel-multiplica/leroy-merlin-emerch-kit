@@ -227,10 +227,11 @@ Lo que ve el **validador de gama**. **Soporta perímetros multi-modelo y multi-g
 
 *(Bloque "Cumplimiento vs guía" eliminado → es un tipo de error dentro de la matriz. Bloque "Impacto en negocio" eliminado del MVP → Data-to-Revenue es fase 3.)*
 
-### 4 · Generar exports (por audiencia)
-Dos entregables **independientes**, nunca uno compartido:
-- **Export del seller/proveedor** (hacia fuera): **PDF minimalista y defensivo** — solo **lo que no cumple + qué corregir**, de **sus** referencias/familias; **sin** guía completa, **sin** estrategia de familia, **sin** orden de imágenes — **+ CSV/XLSX** de su matriz. El **CSV** incluye: **SKU · nombre del proveedor/seller · identificación 1P/3P · atributos sin completitud de dato**. *(No hay "PIM" — era un error de su slide.)*
-- **Export interno TIP / equipo ecommerce**: la vista de trabajo completa (incoherencias/congruencia), con el detalle para corregir o enrutar (1P → TIP, 3P → Marketplace).
+### 4 · Generar informes
+La modal ofrece **tres informes** (los dos por audiencia son **independientes**, nunca un doc compartido; el tercero es interno para el motor). Cada uno con su botón **Descargar**:
+- **Informe del seller/proveedor** (hacia fuera): **PDF minimalista y defensivo** — solo **lo que no cumple + qué corregir**, de **sus** referencias/familias; **sin** guía completa, **sin** estrategia de familia, **sin** orden de imágenes — **+ CSV/XLSX** de su matriz. El **CSV** incluye: **SKU · nombre del proveedor/seller · identificación 1P/3P · atributos sin completitud de dato**. *(No hay "PIM" — era un error de su slide.)*
+- **Informe interno TIP / equipo ecommerce**: la vista de trabajo completa (incoherencias/congruencia), con el detalle para corregir o enrutar (1P → TIP, 3P → Marketplace).
+- **Informe de falsos positivos** (Excel o CSV, interno): motivos + comentarios de las alertas descartadas, por tipo/regla → **insumo para Configuración del motor (admin)**. *(Su flujo exacto y si es descarga o conexión directa: ver §5.14.)*
 - El formato/estructura de cada documento (un doc multi-guía vs. varios, cómo ordena las referencias) queda **a definir**.
 
 **Lo que exporta hoy su artefacto (dos formatos, por *granularidad* — no por audiencia; ejemplos en `docs de cliente/`):**
