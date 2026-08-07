@@ -41,9 +41,9 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 3. Recurrencia: casi seguro **manual** (el usuario relanza cuando quiere, sin automatización). Confirmar cómo se articulan hub, ejecuciones, histórico y comparación de periodos.
 4. Granularidad/formato del informe.
 5. Cómo se sube el perímetro "Listado" (la lista de productos a auditar): ¿una lista de **URLs de fichas (PDP)**, como en el deck del cliente, o un **CSV de referencias/SKUs**, como en el prototipo? Alinear el formato.
-6. Significado de las letras de gama (A/M/S/C/K/B).
-7. Atributos obligatorios: severidad (Bloqueante) vs. prioridad (Media).
-8. Alcance BQ: ¿referencias no publicadas? + ¿expone el campo ADM?
+6. Significado de las letras de gama (A/M/S/C/K/B): qué es cada una y **cuántas hay**.
+7. Atributos obligatorios: ¿obligatorio para **publicar** (→ Bloqueante → «No publicable»), u obligatorio **según la guía** pero la ficha sigue viva (→ Crítica/Leve)? De ahí en qué caja cae. Severidad ≠ prioridad (grave ≠ urgente).
+8. Alcance BQ (lo planteó Susana): ¿referencias no publicadas? + ¿expone el campo ADM?
 9. Owner de "Estructura de designación": Seller (dato) vs. TIP (título).
 10. Normalización del Health Score base (solo ~5/10 puntos auditables en MVP).
 11. Health Score: ¿calculado por nosotros o ingerido de origen?
