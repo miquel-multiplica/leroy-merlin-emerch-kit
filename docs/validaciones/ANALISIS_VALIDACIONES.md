@@ -239,6 +239,22 @@ La modal ofrece **tres informes** (los dos por audiencia son **independientes**,
 - **Informe de falsos positivos** (Excel o CSV, interno): motivos + comentarios de las alertas descartadas, por tipo/regla → **insumo para Configuración del motor (admin)**. *(Su flujo exacto y si es descarga o conexión directa: ver §5.14.)*
 - El formato/estructura de cada documento (un doc multi-guía vs. varios, cómo ordena las referencias) queda **a definir**.
 
+**Contenido propuesto de cada informe** *(el PDF de guía `guia-gua-emerch-60.pdf` en `docs de cliente/` es la referencia del "debe ser": portada · Designación [concatenación de atributos + vista previa + ejemplos] · Descripción [atributos incluidos + ejemplos] · Atributos básicos y específicos · Multimedia [categorías de imagen mín-máx + regla de nombrado]).* 
+
+**1. Informe del seller/proveedor — PDF (defensivo) + CSV.** Solo **sus** referencias y **solo lo suyo** (completitud + imágenes; **sin** coherencias internas, **sin** guía completa, **sin** estrategia de familia).
+- **PDF** (por seller, tono constructivo "qué falta / cómo corregir"), estructurado como la guía:
+  - Portada: seller · perímetro · fecha · resumen (nº refs, % conforme, nº refs con acciones).
+  - Por referencia con incidencias: ref · modelo · designación actual · y, agrupado por sección de guía: **campos obligatorios vacíos** (designación/descripción) · **atributos obligatorios/básicos faltantes** (nombre legible + `ATT_*`) · **imágenes** (tiene X / mínimo Y, categorías que faltan — Packshot, Ambient… con la regla de nombrado) · estructura/SEO si aplica.
+  - Cierre: cómo subir las correcciones / contacto.
+- **CSV (por referencia):** `Referencia · Modelo · Designación actual · Segmento (1P/3P) · Estado · Campos vacíos · Atributos obligatorios faltantes (lista) · Nº imágenes / mínimo · Categorías de imagen faltantes · Acción principal`. Filtrado a sus refs; sin coherencia.
+
+**2. Informe interno TIP / ecommerce — CSV (matriz enriquecida, una fila por alerta).** La vista de trabajo completa (coherencia + cumplimiento).
+- **Columnas:** `Referencia · Modelo · Guía/Categoría · Tipo de error · Categoría de error · Severidad · Campo/ubicación (designación/descripción/ficha/multimedia) · Diagnóstico · Corrección sugerida · Origen (Guía/General) · Owner (TIP/Seller) · Segmento (1P/3P) · Seller · Estado de la referencia`. *(Equivale al "un error por fila" del cliente —Ref·Gama·Id modelo·Modelo·Estado·Campo·Error— enriquecido.)*
+- *Opcional:* segunda hoja **resumen por referencia** (`Referencia · Modelo · Health Score · Estado · nº alertas por severidad`).
+
+**3. Informe de falsos positivos — Excel/CSV (interno, para el admin/motor).** Una fila por alerta descartada como falso positivo → insumo para afinar el motor.
+- **Columnas:** `Referencia · Modelo · Tipo de error · Categoría · Origen (Guía/General) · Motor (determinista/comparación/LLM) · Regla/check · Severidad · Diagnóstico original · Motivo(s) del FP · Comentario · Campo/ubicación · Seller · Perímetro · Revisor · Fecha`. Pensado para **pivotar por tipo/regla/motivo** y decidir la acción del motor (whitelist, sinónimos, umbral, prompt). Ver §5.14.
+
 **Lo que exporta hoy su artefacto (dos formatos, por *granularidad* — no por audiencia; ejemplos en `docs de cliente/`):**
 - **"Exportar resultados CSV"** → **una fila por referencia** (13 col., delimitado por `;`): el catálogo de entrada + `Estado` + `Errores Designación` + `Errores Descripción` (las alertas de cada campo **agregadas** en una celda). = catálogo anotado.
 - **"Exportar (un error por fila)"** → **una fila por alerta** (7 col.): `Ref · Letra de gama · Id modelo · Modelo · Estado · Campo (Designación/Descripción) · Error`. `Estado` se repite por fila; incluye las OK como placeholder (`Campo = —`). = lista plana de trabajo.
