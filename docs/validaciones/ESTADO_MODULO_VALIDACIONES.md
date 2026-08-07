@@ -51,15 +51,13 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 
 ## Pendiente de prototipo (por maquetar)
 - ~~**Estado *En curso***~~: **resuelto** — vista de progreso (contador · % · barra · Cancelar).
-- **Estado *Error***: sigue siendo **stub** (falta pantalla de reintento con detalle).
+- ~~**Estado *Error***~~: **resuelto** — caja de aviso (conexión perdida, lo analizado no se pierde) + **Reintentar**.
 - ~~**Revisado vs. Finalizada**~~: **resuelto** — fusionados en **Revisada**.
 - ~~**Generar exports**~~: **resuelto** — modal "Generar informes" con 3 informes + Descargar. *Falta el detalle real del contenido de cada informe/CSV.*
 - ~~**Cancelar auditoría En curso**~~: **resuelto** — desde hub y ficha (→ Borrador); pestaña Borradores.
 - **Re-auditoría** + comparación **Corregidos / Persisten / Nuevos** (hoy es un placeholder/alert). **Ojo:** las **transiciones de estado en re-auditoría** están pendientes (§5.15) — **cancelar una re-auditoría NO debe crear borrador** (vuelve a *Revisada*, informe previo intacto); el borrador solo aplica a primeras auditorías. En código, el cancelar deberá ramificar según *¿hay ejecución previa completada?*.
-- **Matriz**: **agrupar por referencia/modelo** (colapsable) → todas las alertas de un mismo SKU juntas.
 - **Panel de Configuración del motor (admin)**: **stub** (solo el enlace). Aquí aterriza la cola de falsos positivos.
 - **Flujo falsos positivos → admin**: cómo se materializa (¿informe de FP descargable vs. conexión directa?) — ver §5.14. De ello depende el copy de los modales de FP y de "¿Marcar como revisado?".
-- **URL real de la PDP** en el enlace de referencia (hoy placeholder; depende del mapeo de datos, §5.1).
 
 *(Nota: **no** hacemos "detalle de referencia" interno. Igual que el artefacto del cliente, la referencia **enlaza a la ficha real de Leroy (PDP en vivo)**, que es la fuente de verdad para revisar falsos positivos.)*
 
