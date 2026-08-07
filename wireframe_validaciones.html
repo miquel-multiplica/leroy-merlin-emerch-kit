@@ -862,7 +862,7 @@
       '<td style="font-size:13px;color:var(--text-body);">'+fmtNum(r.refs)+'</td>' +
       '<td>'+(r.hs>0?'<div style="display:flex;align-items:center;gap:8px;">'+hsBadge(r.hs)+tendArrow(r.tend)+'</div>':'<span style="color:var(--text-muted);">—</span>')+'</td>' +
       '<td style="font-size:13px;color:var(--text-body);">'+(r.hs>0?(r.alertas>0?'<span style="font-weight:600;color:#c61112;">'+fmtNum(r.alertas)+'</span>':'0'):'<span style="color:var(--text-muted);">—</span>')+'</td>' +
-      '<td>'+(r.estado==='en-curso'?'<div style="display:flex;align-items:center;gap:8px;">'+estadoBadge(r.estado)+'<span style="font-size:12px;font-weight:600;color:var(--warning-text);font-variant-numeric:tabular-nums;">'+(r.prog!=null?r.prog:0)+'%</span></div>':estadoBadge(r.estado))+'</td>' +
+      '<td>'+(r.estado==='en-curso'?'<div style="display:flex;align-items:center;gap:8px;">'+estadoBadge(r.estado)+'<span style="font-size:14px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+(r.prog!=null?r.prog:0)+'%</span></div>':estadoBadge(r.estado))+'</td>' +
       '<td style="font-size:13px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+r.fecha+'</td>' +
       '<td style="font-size:13px;color:var(--text-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+r.creador+'">'+r.creador+'</td>' +
       '<td style="text-align:right;overflow:visible;"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;"><div class="row-cta-overlay" style="display:flex;align-items:center;gap:4px;">'+audCTA(r)+'</div>'+audMenu(r)+'</div></td>' +
