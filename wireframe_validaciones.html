@@ -582,7 +582,7 @@
 </div>
 
 <div class="modal-overlay" id="v-export-modal">
-  <div class="modal-box" style="width:580px; max-width:92vw; padding:32px;">
+  <div class="modal-box" style="position:relative; width:580px; max-width:92vw; padding:32px;"><button onclick="closeExport()" style="position:absolute; top:16px; right:16px; background:none; border:none; cursor:pointer; color:var(--text-muted); padding:4px; display:flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <div style="font-size:20px; font-weight:700; color:var(--text-ink); margin-bottom:6px;">Generar informes</div>
     <div style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Los dos informes por audiencia son <strong>independientes</strong> (nunca se comparten). El <strong>informe de falsos positivos</strong> es interno, para afinar el motor.</div>
     <div style="display:flex; flex-direction:column; gap:12px;">
@@ -591,7 +591,6 @@
       <div style="height:1px; background:var(--border-card); margin:4px 0;"></div>
       <div style="display:flex; align-items:center; gap:16px; border:1px solid var(--border-input); border-radius:10px; padding:14px 16px;"><div style="flex:1; min-width:0;"><div style="font-size:14px; font-weight:700; color:var(--text-ink); margin-bottom:3px;">Informe de falsos positivos <span style="font-weight:600; color:var(--text-muted); font-size:12px;">· Excel o CSV</span></div><div style="font-size:12px; color:var(--text-muted); line-height:1.5;">Motivos y comentarios de las alertas descartadas, por tipo y regla. Insumo interno para <strong>Configuración del motor</strong> (admin).</div></div><button onclick="alert('Exportando informe de falsos positivos (Excel o CSV)…'); closeExport();" class="btn btn-primary" style="flex-shrink:0; height:40px; gap:7px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar</button></div>
     </div>
-    <div style="display:flex; justify-content:flex-end; margin-top:20px;"><button onclick="closeExport()" style="background:#fff; border:1px solid var(--border-input); border-radius:8px; height:40px; padding:0 20px; color:var(--text-body); font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',system-ui,sans-serif;">Cerrar</button></div>
   </div>
 </div>
 
