@@ -37,7 +37,7 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 
 ## Pendiente de prototipo (por maquetar)
 - **Estados del detalle** *En curso* y *Error*: hoy solo **placeholders** → falta la **versión completa** (vista de progreso real / pantalla de reintento).
-- **Revisado vs. Finalizada**: decidir si se fusionan en una sola vista.
+- ~~**Revisado vs. Finalizada**~~: **resuelto** — fusionados en **Revisada** (estado terminal único; "Finalizada" no correspondía a ninguna acción de la herramienta).
 - **Re-auditoría** + comparación **Corregidos / Persisten / Nuevos** (hoy es un placeholder/alert).
 - **Generar exports** (pantalla por audiencia): hoy solo una modal con placeholders. Export **interno TIP** = matriz enriquecida (por alerta); export **seller** = por referencia (con columna Campo/ubicación en el CSV).
 - **Matriz**: **agrupar por referencia/modelo** (colapsable) → así se ven juntas todas las alertas de un mismo SKU (la matriz es por alerta).
