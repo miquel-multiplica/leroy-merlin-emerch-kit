@@ -48,7 +48,7 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 10. Normalización del Health Score base (solo ~5/10 puntos auditables en MVP).
 11. Health Score: ¿calculado por nosotros o ingerido de origen?
 12. Granularidad de exports (asunción): seller = por referencia, TIP = por alerta.
-13. Modelo de estados a 4 cajas (gravedad de la peor alerta + 3 divergencias del artefacto).
+13. Modelo de estados a 4 cajas — **validado con cliente (le gustaron las cajitas)**. Bordes menores nuestros: que «3+ alertas» solo-leves no infle «críticos»; y cómo cuentan las «No publicable» en el Health Score (dependen de que BQ traiga las no publicadas — asunción: BQ filtra lo que necesitemos).
 14. Flujo falsos positivos → admin (¿informe descargable vs. conexión directa?) + copy de los modales de falsos positivos y de "¿Marcar como revisado?".
 15. Re-auditoría: modelo del loop y transiciones de estado (cancelar una re-auditoría NO crea borrador; vuelve a Revisada).
 16. ¿Qué tipos de check admiten falso positivo? No decidido. Hipótesis del proto: solo los de juicio (discrepancias, ortografía, SEO, administrativa); las ausencias objetivas no. Confirmar si todos deben admitirlo. Principio: la IA no prescribe el falso positivo, lo detecta el humano.
