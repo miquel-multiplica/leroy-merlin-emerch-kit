@@ -569,6 +569,17 @@
 </div>
 
 <!-- ══════════════════ MODAL · EXPORT ══════════════════ -->
+<div class="modal-overlay" id="v-revisar-modal">
+  <div class="modal-box" style="width:520px; max-width:92vw; padding:32px;">
+    <div style="font-size:20px; font-weight:700; color:var(--text-ink); margin-bottom:6px;">Marcar como revisado</div>
+    <div id="v-revisar-msg" style="font-size:13px; color:var(--text-muted); margin-bottom:22px; line-height:1.55;"></div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;">
+      <button onclick="closeRevisarConfirm()" style="background:#fff; border:1px solid var(--border-input); border-radius:8px; height:44px; padding:0 20px; font-size:14px; font-weight:600; font-family:'Inter',system-ui,sans-serif; cursor:pointer; color:var(--text-body);">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmRevisar()">Marcar como revisado</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="v-export-modal">
   <div class="modal-box" style="width:580px; max-width:92vw; padding:32px;">
     <div style="font-size:20px; font-weight:700; color:var(--text-ink); margin-bottom:6px;">Generar exports</div>
@@ -739,7 +750,7 @@
     body.innerHTML=infSalud(a,review)+infDist(a)+infImpacto(a)+'<div id="v-inf-matriz"></div>';
     renderMatriz();
     bottom.style.display='flex';
-    if(review){ bottom.innerHTML='<button class="btn btn-primary" style="margin-left:auto;" onclick="marcarRevisado()">Marcar como revisado<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>'; }
+    if(review){ bottom.innerHTML='<button class="btn btn-primary" style="margin-left:auto;" onclick="openRevisarConfirm()">Marcar como revisado<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>'; }
     else { bottom.innerHTML='<div style="margin-left:auto;display:flex;gap:12px;"><button onclick="alert(\'Re-auditar sobre el mismo perímetro — próximamente\')" style="background:#fff;border:1px solid var(--green);border-radius:8px;height:44px;padding:0 20px;font-size:14px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--green);display:inline-flex;align-items:center;gap:8px;">'+IC_REF+'Re-auditar</button><button class="btn btn-primary" onclick="openExport()">'+IC_DL+'Exportar informe</button></div>'; }
   }
   function renderHs(a, review){ var hsColor=a.hs>=75?'var(--green)':(a.hs>=55?'var(--warning-text)':'#c61112'); var lbl=review?'provisional':'base'; var tip=(review?'Se recalcula al depurar los falsos positivos. ':'')+'Escala de 100 puntos (modelo pág. 39), parte auditable.'; return '<div style="display:flex; align-items:baseline; gap:6px; justify-content:flex-end;"><span style="font-size:40px; font-weight:700; color:'+hsColor+'; line-height:1;">'+a.hs+'</span><span style="align-self:center; width:1px; height:28px; background:var(--border-card); margin:0 8px;"></span><span style="align-self:center; display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-muted); text-align:left; line-height:1.25; max-width:120px;"><span>Health Score · '+lbl+'</span><span title="'+tip+'" style="display:inline-flex; cursor:help; color:var(--text-secondary); flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span></span></div>'; }
@@ -829,6 +840,9 @@
   function closeFp(){ document.getElementById('v-fp-modal').classList.remove('open'); _fpPending=null; }
   function confirmFp(m){ var f=_infFindings.filter(function(x){return x.id===_fpPending;})[0]; if(f){ f.fp=true; f.motivo=m; } closeFp(); renderMTabla(); }
   function undoFp(fid){ var f=_infFindings.filter(function(x){return x.id===fid;})[0]; if(f){ f.fp=false; f.motivo=null; } renderMTabla(); }
+  function openRevisarConfirm(){ var fp=_infFindings.filter(function(x){return x.fp;}).length; var tot=_infFindings.length; var val=tot-fp; document.getElementById('v-revisar-msg').innerHTML='Vas a cerrar la revisión de esta auditoría. <strong>'+fmtNum(val)+'</strong> alertas quedan como hallazgos válidos'+(fp>0?' y <strong>'+fmtNum(fp)+'</strong> se descartan como falso positivo (salen del informe y van a la cola de <strong>Configuración del motor</strong>)':'')+'. Después podrás generar los exports.'; document.getElementById('v-revisar-modal').classList.add('open'); }
+  function closeRevisarConfirm(){ document.getElementById('v-revisar-modal').classList.remove('open'); }
+  function confirmRevisar(){ closeRevisarConfirm(); marcarRevisado(); }
   function marcarRevisado(){ var a=_audits.filter(function(x){return x.id===_infId;})[0]; if(!a) return; a.estado='revisado'; a.fecha='Ahora'; renderAudits(); document.getElementById('v-inf-badge').innerHTML=estadoBadge(a.estado); renderInforme(a); }
   function openExport(){ document.getElementById('v-export-modal').classList.add('open'); }
   function closeExport(){ document.getElementById('v-export-modal').classList.remove('open'); }
