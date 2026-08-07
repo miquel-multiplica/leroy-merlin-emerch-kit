@@ -778,8 +778,8 @@
       +fsel('_infFSev',_infFSev,[['bloqueante','Bloqueante'],['critica','Crítica'],['mejora','Leve']],'Toda severidad')
       +fsel('_infFTipo',_infFTipo,tipos.map(function(t){return [t,t];}),'Todos los tipos de error')
       +fsel('_infFPp',_infFPp,[['1P','1P'],['3P','3P']],'Todos los segmentos')
-      +fsel('_infSort',_infSort,[['sev','Severidad (más grave)'],['ref','Referencia'],['tipo','Tipo de error'],['owner','Owner'],['segmento','Segmento']],'Ordenar por')
       +'<div style="position:relative; flex:1; min-width:200px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input value="'+(_infFSearch||'').replace(/"/g,'&quot;')+'" oninput="_infFSearch=this.value; _infPage=1; renderMTabla();" placeholder="Referencia o modelo…" style="width:100%;height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 12px 0 34px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;"/></div>'
+      +fsel('_infSort',_infSort,[['sev','Severidad (más grave)'],['ref','Referencia'],['tipo','Tipo de error'],['owner','Owner'],['segmento','Segmento']],'Ordenar por')
       +'</div>';
     host.innerHTML='<div style="font-size:16px; font-weight:700; color:var(--text-ink); margin-bottom:10px;">Matriz de correcciones</div>'+filters+'<div id="v-inf-mtabla"></div>';
     renderMTabla();
