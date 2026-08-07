@@ -882,8 +882,8 @@
     var isDraft=(_vTab==='borradores');
     var thead=document.getElementById('v-hub-thead');
     if(thead) thead.innerHTML = isDraft
-      ? '<tr><th style="width:36%;">Perímetro</th><th style="width:10%;">Refs.</th><th style="width:22%;">Última ejecución</th><th style="width:18%;">Creador</th><th style="width:14%;"></th></tr>'
-      : '<tr><th style="width:26%;">Perímetro</th><th style="width:7%;">Refs.</th><th style="width:10%;">Health Score</th><th style="width:8%;">Alertas</th><th style="width:16%;">Estado</th><th style="width:12%;">Última ejecución</th><th style="width:11%;">Creador</th><th style="width:10%;"></th></tr>';
+      ? '<tr><th style="width:34%;">Perímetro</th><th style="width:12%;">Referencias</th><th style="width:22%;">Última ejecución</th><th style="width:18%;">Creador</th><th style="width:14%;"></th></tr>'
+      : '<tr><th style="width:23%;">Perímetro</th><th style="width:10%;">Referencias</th><th style="width:10%;">Health Score</th><th style="width:8%;">Alertas</th><th style="width:16%;">Estado</th><th style="width:12%;">Última ejecución</th><th style="width:11%;">Creador</th><th style="width:10%;"></th></tr>';
     if(rows.length===0){ tbody.innerHTML='<tr><td colspan="'+(isDraft?5:8)+'" style="padding:48px;text-align:center;color:var(--text-muted);font-size:14px;">No hay auditorías que coincidan.</td></tr>'; return; }
     tbody.innerHTML=rows.map(function(r){ var nombre=r.perimetro.split('·').slice(1).join('·').trim()||r.perimetro; var nEsc=nombre.replace(/"/g,'&quot;');
       var cPer='<td><div style="min-width:0;"><div style="font-size:13px;color:var(--text-ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+nEsc+'">'+nombre+'</div><div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+audTipoLabel(r.tipo)+'</div></div></td>';
