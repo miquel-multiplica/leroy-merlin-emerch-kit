@@ -712,7 +712,7 @@
     var _crumb=document.getElementById('v-inf-crumb'); if(_crumb) _crumb.textContent=a.perimetro;
     document.getElementById('v-inf-badge').innerHTML=estadoBadge(a.estado);
     var _sep='<span style="margin:0 12px; color:var(--text-tertiary);">·</span>';
-    document.getElementById('v-inf-meta').innerHTML='<span style="font-weight:600; color:var(--text-body);">'+audTipoLabel(a.tipo)+'</span>'+_sep+'Auditado '+(a.fecha||'—').toLowerCase()+_sep+'por '+(a.creador||'—')+_sep+'motor v1.4';
+    document.getElementById('v-inf-meta').innerHTML='<span style="font-weight:600; color:var(--text-body);">'+'Auditoría de '+audTipoLabel(a.tipo).toLowerCase()+'</span>'+_sep+'Auditado '+(a.fecha||'—').toLowerCase()+_sep+'por '+(a.creador||'—')+_sep+'motor v1.4';
     go('v-informe'); renderInforme(a); }
   function renderInforme(a){ var e=a.estado, body=document.getElementById('v-inf-body'), bottom=document.getElementById('v-inf-bottom');
     var hsEl=document.getElementById('v-inf-hs');
