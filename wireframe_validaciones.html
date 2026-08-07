@@ -1018,7 +1018,7 @@
   function closeVCancel(doCancel){ document.getElementById('v-cancel-modal').classList.remove('open'); _vPaused=false; if(doCancel){ if(_vProgIv){ clearInterval(_vProgIv); _vProgIv=null; } document.getElementById('v-progress-modal').classList.remove('open'); } }
   function resetNueva(){ _vTipo=null; _vValor=null; _vSelOpt=null; _vListName=''; _vCsvAttempt=0; _vUrlAttempt=0; _vEditingName=false; _vDetectNum=0; _vDetected=false; }
   function closeBackground(){ if(_vProgIv){ clearInterval(_vProgIv); _vProgIv=null; } var pct=_vProgTotal?Math.round(_vProgDone/_vProgTotal*100):0; _audits.unshift({ id:_audCounter++, perimetro:typeLabel(_vTipo)+' · '+(_vValor||''), tipo:_vTipo, refs:_vProgTotal, hs:0, tend:0, alertas:0, fecha:'Ahora', creador:'Ana García', estado:'en-curso', prog:pct }); document.getElementById('v-progress-modal').classList.remove('open'); resetNueva(); go('v-hub'); switchTab('en-curso'); }
-  function viewProcess(){ closeBackground(); }
+  function viewProcess(){ if(_vProgIv){ clearInterval(_vProgIv); _vProgIv=null; } var pct=_vProgTotal?Math.round(_vProgDone/_vProgTotal*100):0; var id=_audCounter++; _audits.unshift({ id:id, perimetro:typeLabel(_vTipo)+' · '+(_vValor||''), tipo:_vTipo, refs:_vProgTotal, hs:0, tend:0, alertas:0, fecha:'Ahora', creador:'Ana García', estado:'en-curso', prog:pct }); document.getElementById('v-progress-modal').classList.remove('open'); resetNueva(); renderAudits(); openInforme(id); }
   function finishAudit(){
     if(_vProgIv){ clearInterval(_vProgIv); _vProgIv=null; } _vPaused=false;
     var total=_vProgTotal||_vDetectNum||500;
