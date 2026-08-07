@@ -2,6 +2,15 @@
 
 > Contexto entre sesiones del módulo **Validaciones** (Auditor de Calidad de Producto). Recoge qué hay montado en el prototipo `wireframe_validaciones.html` y la lista de pendientes. El análisis funcional completo está en [ANALISIS_VALIDACIONES.md](ANALISIS_VALIDACIONES.md) (los pendientes con cliente son su §5).
 
+## Para el equipo que construye el motor (dev / IA)
+El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectura, sino **qué se ha construido, qué reglas debe cumplir y qué falta**. Ruta de entrada:
+1. **Abrir `wireframe_validaciones.html`** — es la **UX construida** y la fuente de verdad de comportamiento (pantallas, informe, matriz, estados, filtros/orden).
+2. **`ANALISIS_VALIDACIONES.md` §2** — las **reglas que el motor debe cumplir**: taxonomía de checks (tipo → categoría), **severidad** (Bloqueante/Crítica/Leve), **origen** (Guía / General), **motor** por check (determinista / comparación / LLM), y el **cálculo del Estado** (4 cajas con precedencia: Bloqueante→No publicable · Crítica/3+→críticos · Leve→leves).
+3. **`ANALISIS` §5** — lo que está **bloqueado por decisión/dato de cliente**.
+
+**Se puede empezar ya:** checks **deterministas** de guía (atributos exigidos, concatenación de la designación, nº de imágenes vs. mínimo) y generales (longitud, unidades, administrativa, ortografía); el **esquema de alerta** (implícito en las columnas de la matriz: ref · modelo · tipo · categoría · diagnóstico · corrección · severidad · origen · owner · segmento · campo/ubicación); y el **cálculo del Estado**.
+**Bloqueado / pendiente:** **Health Score** (cómo se calcula/normaliza o si viene de origen — §5.10/11), **campos exactos de BigQuery** (§5.1/8), checks **LLM** (color/material, SEO en texto, coherencia semántica) y **análisis de contenido de imagen** (fase 2).
+
 ## Qué hay montado (prototipo)
 - **Hub de auditorías**: tabla (perímetro con tipo como subtexto · referencias · Health Score · tendencia · alertas · última ejecución · creador · estado), pestañas **Todo · En curso · Pendientes de revisión · Finalizadas**, filtro de tipo + buscador con lupa, y **acciones de fila** (CTA en hover + menú kebab: Ver informe / Re-auditar / Exportar / Eliminar).
 - **Nueva auditoría**: **modal de tipos** (Gama · Proveedor/Seller · Modelo · Categoría web · Listado) → **wizard de 2 columnas** ("Tu selección"): selector + detección de referencias (buscador/lista, URL con Consultar, subida de CSV con nombre editable), caja azul "¿Qué se validará?".
