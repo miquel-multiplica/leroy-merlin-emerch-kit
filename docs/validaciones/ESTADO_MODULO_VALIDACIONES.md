@@ -33,7 +33,7 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
       - **Hipótesis de elegibilidad** (no confirmada, ver pendiente 16): checks de **juicio** (discrepancias, ortografía, SEO, administrativa) llevan botón de FP; **ausencias objetivas** (sin descripción/designación, atributos vacíos, imágenes, longitud) no.
   - **Pie**: *Pendiente de revisión* → **"Marcar como revisado"** (modal de confirmación con cifras: **hallazgos válidos** —barrita roja— vs. **falsos positivos descartados** —barrita **gris**—; barritas a la altura del texto). *Revisada* → **Re-auditar** (icono) + **Exportar informes** (icono).
 - **Generar informes** (modal, cierra con **X**): tres informes con botón **Descargar** — **seller/proveedor** (PDF+CSV), **interno TIP** (matriz), e **informe de falsos positivos** (Excel/CSV, para el admin/motor).
-- **Configuración** (admin): **enlace** (verde, icono ajustes) junto a "Nueva auditoría" → panel admin (**stub** "próximamente").
+- **Configuración** (admin): **enlace** (verde, icono ajustes) junto a "Nueva auditoría" → panel admin (pantalla vacía de momento, "próximamente").
 
 ## Pendiente con cliente (decisiones/datos) — detalle en §5 del análisis
 1. Acceso a datos (BigQuery 1P): campos expuestos + mapeo PLP↔referencias.
@@ -64,7 +64,7 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 - ~~**Health Score provisional**~~: **resuelto** — en **gris** (sin flecha, también en filas del hub) mientras *Pendiente de revisión*; **color + bold** en *Revisada*; **tooltip estilado**.
 - **Detalle/contenido real de los exports** (informe seller/proveedor PDF, CSVs, informe interno TIP, informe de FP): **mapeado en §4** del análisis, **falta maquetarlo**.
 - **Re-auditoría** + comparación **Corregidos / Persisten / Nuevos** (hoy es un placeholder/alert). **Ojo:** las **transiciones de estado en re-auditoría** están pendientes (§5.15) — **cancelar una re-auditoría NO debe crear borrador** (vuelve a *Revisada*, informe previo intacto); el borrador solo aplica a primeras auditorías. En código, el cancelar deberá ramificar según *¿hay ejecución previa completada?*.
-- **Panel de Configuración del motor (admin)**: **stub** (solo el enlace). Aquí aterriza la cola de falsos positivos.
+- **Panel de Configuración del motor (admin)**: solo está el enlace (sin contenido aún). Aquí aterriza la cola de falsos positivos.
 - **Flujo falsos positivos → admin**: cómo se materializa (¿informe de FP descargable vs. conexión directa?) — ver §5.14. De ello depende el copy de los modales de FP y de "¿Marcar como revisado?".
 
 *(Nota: **no** hacemos "detalle de referencia" interno. Igual que el artefacto del cliente, la referencia **enlaza a la ficha real de Leroy (PDP en vivo)**, que es la fuente de verdad para revisar falsos positivos.)*
