@@ -65,15 +65,27 @@ Qué podemos calcular por fase:
 - → La herramienta debe **marcar cada referencia como 1P o 3P** para enrutar el owner.
 
 **Arquitectura en 3 capas (evita el lío de vocabularios):**
-- **Alerta** (un problema concreto en una referencia): *tipo* → *categoría* · *severidad* (Bloqueante/Crítica/Mejora) · owner · 1P/3P.
-- **Referencia** (0..N alertas): su **Estado** por **gravedad** → **Sin errores** (0 alertas) · **Con errores leves** (1–2, ninguna crítica) · **Con errores críticos** (3 o más alertas **o** falta designación/descripción — **basta 1 alerta esencial**). Nota: NO es solo por cantidad; el nivel crítico se dispara también por una única alerta esencial. **Ojo: Estado "Con errores críticos" (por referencia) ≠ Severidad "Crítica" (por alerta, del deck)** → colisión de palabra en capas distintas, etiquetar con cuidado.
-- **Auditoría** (N referencias): Health Score · reparto de referencias por Estado · distribución por tipo · impacto por categoría.
+- **Alerta** (un problema concreto en una referencia): *tipo* → *categoría* · *severidad* (**Bloqueante / Crítica / Leve**) · owner · segmento (1P/3P).
+- **Referencia** (0..N alertas): su **Estado** lo marca **la peor alerta que tiene** (gravedad), con la acumulación por cantidad como vía secundaria. Cuatro estados, por precedencia:
+  - **No publicable** — ≥1 alerta **Bloqueante** (falta designación/descripción o atributos obligatorios: no alcanza mínimos → no se publica).
+  - **Con errores críticos** — ≥1 alerta **Crítica** (contradicción entre piezas de la ficha, ya publicada → engaña) **o** **3+ alertas** acumuladas.
+  - **Con errores leves** — 1–2 alertas, **todas Leve** (formato / estructura / ortografía).
+  - **Sin errores** — 0 alertas.
+- **Auditoría** (N referencias): Health Score · reparto de referencias por Estado (4 cajas) · distribución por tipo · impacto por categoría.
 
-Las **cajitas** del informe tienen **dos lentes**: **Estado/gravedad** (Sin errores / Con errores leves / Con errores críticos — **excluyentes, suman el total**) y **por tipo** (con discrepancias / con faltas de ortografía — **solapan**, no suman).
+**Coherencia severidad ↔ estado.** Cada severidad de alerta empuja a su caja 1:1 → **Bloqueante → No publicable · Crítica → Con errores críticos · Leve → Con errores leves**. La colisión de la palabra "crítico" desaparece (alerta Crítica → ficha crítica, refuerza en vez de contradecir); lo único distinto es **Bloqueante** (severidad de la alerta) vs **No publicable** (estado de la ficha) → se lee como **causa → efecto**, no es colisión.
+
+**Modelo propuesto (4 estados) — diverge del artefacto del cliente en 3 puntos, a validar (ver §5):**
+1. **Mejora → Leve** (naming): el deck usa "Mejora" (habla de *oportunidad*); lo pasamos a "Leve" para que las tres severidades hablen de *gravedad* y encajen con las cajitas en una sola escala.
+2. **La falta esencial sale de "críticos" y va a "No publicable"**: es Bloqueante (no está en la web); el artefacto la metía en "críticos" solo por no tener caja propia.
+3. **Una contradicción (Crítica) escala sola a "críticos"** aunque sea la única alerta; el artefacto, al contar solo cantidad, la dejaba en "advertencias/leves".
+La vía de **acumulación (3+ alertas)** del artefacto **se conserva** igual.
+
+Las **cajitas** del informe tienen **dos lentes**: **Estado/gravedad** (Sin errores / Con errores leves / Con errores críticos / **No publicable** — **excluyentes, suman el total**) y **por tipo** (con discrepancias / con faltas de ortografía — **solapan**, no suman).
 
 **Mapa de tipos de error · severidad · prioridad (propuesta — con puntos pendientes, ver §5).** Tres ejes distintos que **no se derivan uno de otro**:
 - **Tipo de error** (qué falla) → se agrupa en **categorías**.
-- **Severidad** (por referencia): **Bloqueante / Crítica / Mejora** (Severity Score, PDF pág. 34).
+- **Severidad** (por alerta): **Bloqueante / Crítica / Leve** (Severity Score, PDF pág. 34 — el deck la nombra "Mejora"; la renombramos a "Leve", ver divergencia arriba).
 - **Prioridad de resolución** (por categoría, motivo de negocio): **Alta / Media / Baja** (PDF Bloque 1). **Fija por categoría** — el volumen (*SKUs afectados / % catálogo*) se muestra aparte y **no altera** la prioridad.
 
 | Categoría | Tipos que agrupa | Familia | Owner | Severidad | Prioridad · motivo |
@@ -81,11 +93,11 @@ Las **cajitas** del informe tienen **dos lentes**: **Estado/gravedad** (Sin erro
 | Contenido faltante | sin designación, sin descripción | Cumplimiento | Seller | Bloqueante | **Alta** · impide publicar |
 | Atributos obligatorios faltantes | atributos básicos/específicos de la guía vacíos | Cumplimiento | Seller | **Bloqueante** ⚠️ | **Media** · afecta filtros de búsqueda |
 | Discrepancia interna PDP | medidas/dimensiones, color, material, nº de elementos (desig ↔ desc ↔ ficha técnica) | Coherencia | TIP | Crítica | **Alta** · confunde al usuario / devoluciones |
-| Estructura de designación | designación corta, estructura de título, mayúsculas admin, unidades, coma decimal, dims reordenadas | Cumplimiento | Seller* | Mejora | **Baja** · SEO / legibilidad |
-| Ortografía | faltas en designación o descripción | Calidad | TIP | Mejora | **Baja** · conversión |
+| Estructura de designación | designación corta, estructura de título, mayúsculas admin, unidades, coma decimal, dims reordenadas | Cumplimiento | Seller* | Leve | **Baja** · SEO / legibilidad |
+| Ortografía | faltas en designación o descripción | Calidad | TIP | Leve | **Baja** · conversión |
 | Imágenes *(fase 2)* | mínimo no alcanzado, obligatorias | Cumplimiento | Seller | — | — |
 
-**Regla de severidad** (por referencia): *Bloqueante* = falta contenido esencial o atributos obligatorios (no publicable) · *Crítica* = contradicción entre componentes (info engañosa) · *Mejora* = formato/estructura/ortografía.
+**Regla de severidad** (por alerta): *Bloqueante* = falta contenido esencial o atributos obligatorios (no publicable) · *Crítica* = contradicción entre componentes (info engañosa) · *Leve* = formato/estructura/ortografía.
 
 **Jerarquía tipo/categoría:** una **categoría** (nivel alto, 5) agrupa varios **tipos** (checks granulares). Dónde se ve cada eje: la **matriz** muestra *tipo* + *severidad* por fila · **"Impacto por categoría de error"** muestra *prioridad + motivo* por **categoría** (todas) · **"Distribución de errores"** muestra los *tipos granulares* por campo (mismo nivel que la columna "Tipo" de la matriz). Orden en el informe: métricas → distribución (colapsable) → impacto → matriz.
 
@@ -97,13 +109,13 @@ Las **cajitas** del informe tienen **dos lentes**: **Estado/gravedad** (Sin erro
 | Discrepancia de medidas · Dimensión extra no recogida · Diferente nº de dimensiones · Medida no encontrada · Unidades distintas · Coma decimal | Discrepancia interna PDP | Crítica | **Coherencia · comparación de datos** (determinista) |
 | Color · Material incoherentes | Discrepancia interna PDP | Crítica | **Coherencia · LLM** (semántico: "gris"≟"antracita", "teca") |
 | **Info en ADM no reflejada** | Discrepancia interna PDP | Crítica | Coherencia · comparación de datos (+ LLM si es semántico) |
-| Dims reordenadas | Estructura de designación | Mejora | Coherencia · comparación de datos (determinista) |
-| Designación corta (<35) · Descripción < 80 car. · Estructura de título (orden/color) · **Posible designación administrativa** | Estructura de designación | Mejora | **Guía de estilo** (cumplimiento · determinista) |
+| Dims reordenadas | Estructura de designación | Leve | Coherencia · comparación de datos (determinista) |
+| Designación corta (<35) · Descripción < 80 car. · Estructura de título (orden/color) · **Posible designación administrativa** | Estructura de designación | Leve | **Guía de estilo** (cumplimiento · determinista) |
 | Atributos obligatorios · Atributos básicos faltantes | Atributos obligatorios faltantes | Bloqueante ⚠️ | **Guía de estilo** (cumplimiento · determinista) |
-| Ortografía (designación / descripción) | Ortografía | Mejora | Calidad · diccionario / LLM |
+| Ortografía (designación / descripción) | Ortografía | Leve | Calidad · diccionario / LLM |
 
 **Designación administrativa (ADM) — glosario.** Hay **dos** designaciones: la **administrativa/ADM** (nombre **interno** de back-office, normalmente en MAYÚSCULAS, abreviado) y la **comercial** ("designación cliente larga", la que ve el cliente). De ahí dos checks:
-- **"Posible designación administrativa"**: la designación pública **parece la interna** (la detecta por venir *todo en mayúsculas*) → han puesto el nombre interno en el campo público. → categoría *Estructura de designación* · Mejora.
+- **"Posible designación administrativa"**: la designación pública **parece la interna** (la detecta por venir *todo en mayúsculas*) → han puesto el nombre interno en el campo público. → categoría *Estructura de designación* · Leve.
 - **"Info en ADM no reflejada"**: el ADM tiene **datos que no aparecen** en la ficha comercial/descripción. → categoría *Discrepancia interna PDP* · Crítica.
 
 *Ambos dependen del **campo ADM en origen** → confirmar que BigQuery lo expone (ver §5.8).*
@@ -244,6 +256,7 @@ Esto cierra el paso 3 → paso 4 de su workflow dentro de la herramienta (hoy en
 10. **Normalización del Health Score base (MVP):** en MVP solo son auditables ~**5 de los 10 puntos** (designación/descripción/atributos = 3,5 + orphan = 1,5); faltan reviews (3) e imágenes (2). ¿Cómo se expresa el número que se muestra? Opciones: (a) **% sobre los puntos auditables** (normalizado, comparable), (b) **/10 con los componentes no disponibles a 0** (penaliza y no es comparable con el score completo), (c) mostrarlo explícitamente como **base/parcial**. Afecta al número de la cabecera y a la **tendencia** entre ejecuciones. *(Se presenta como % — ver §2.)*
 11. **¿Health Score calculado o ingerido?** ¿Lo **computa nuestro módulo** (a partir de los componentes que auditamos) o **viene ya calculado como dato de origen** (su sistema actual de medición de calidad / BigQuery expone el campo)? Determina si solo lo **mostramos** vs. lo **recalculamos**, y se relaciona con la normalización (punto 10) y con los campos de origen (§5.8). *(El PDF pág. 39 sugiere que ya tienen el modelo; confirmar si el valor viene dado o se recalcula.)*
 12. **Granularidad de los exports (asunción a validar):** asumimos **seller = por referencia** (agregado por SKU) y **TIP = por alerta** (matriz enriquecida). Confirmar con cliente si es así, o si prefieren otra combinación (ambas granularidades por audiencia, un único formato, o el "resumen por referencia" también en el interno). Ver §4.
+13. **Modelo de estados de la referencia (4 cajas) — diverge del artefacto en 3 puntos:** (a) severidad **"Mejora" → "Leve"** (naming, para una escala única de gravedad); (b) la **falta esencial** sale de "críticos" y pasa a **"No publicable"** (es Bloqueante = no está en la web); (c) una **contradicción (Crítica)** escala sola a "críticos" aunque sea la única alerta (el artefacto la dejaba en "advertencias" por contar solo cantidad). Se conserva la vía de **acumulación (3+ alertas)**. Confirmar con cliente que el estado se rija por **gravedad de la peor alerta** (con 3+ como vía secundaria), no solo por cantidad. Ver §2.
 
 ---
 
