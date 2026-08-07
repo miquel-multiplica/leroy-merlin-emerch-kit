@@ -453,7 +453,7 @@
     <div class="grid" style="max-width:none; padding:0 40px;">
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:24px;">
         <div style="font-size:32px; font-weight:700; color:var(--text-ink);">Validaciones</div>
-        <button class="btn btn-primary" onclick="startNueva()" style="height:44px; font-size:14px; padding:0 20px; white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva auditoría</button>
+        <div style="display:flex; gap:10px; align-items:center;"><button onclick="alert('Panel de configuración del motor (solo admin) — próximamente')" style="height:44px; font-size:14px; padding:0 16px; white-space:nowrap; background:#fff; border:1px solid var(--border-input); border-radius:8px; font-weight:600; color:var(--text-body); cursor:pointer; display:inline-flex; align-items:center; gap:8px; font-family:'Inter',system-ui,sans-serif;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Configuración</button><button class="btn btn-primary" onclick="startNueva()" style="height:44px; font-size:14px; padding:0 20px; white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva auditoría</button></div>
       </div>
       <div style="display:flex; gap:0; border-bottom:1px solid var(--border-card); margin-bottom:20px;">
         <button class="v-tab" data-tab="todo" onclick="switchTab('todo')">Todo</button>
@@ -663,11 +663,11 @@
   var _audits = [
     { id:1, perimetro:'Gama · A', tipo:'Gama', refs:32658, hs:72, tend:1, alertas:21554, fecha:'Hace 2 h', creador:'Ana García', estado:'por-revisar' },
     { id:2, perimetro:'Proveedor · Simon', tipo:'Vendor', refs:4120, hs:81, tend:1, alertas:2719, fecha:'Ayer', creador:'Miquel Soler', estado:'finalizada' },
-    { id:3, perimetro:'MOD_202512 · Puerta entrada nogal', tipo:'Modelo', refs:46, hs:64, tend:-1, alertas:30, fecha:'Hace 3 h', creador:'Laura Pons', estado:'en-curso' },
+    { id:3, perimetro:'MOD_202512 · Puerta entrada nogal', tipo:'Modelo', refs:46, hs:64, tend:-1, alertas:30, fecha:'Hace 3 h', creador:'Laura Pons', estado:'en-curso', prog:42 },
     { id:4, perimetro:'Categoría · Griferías y sanitarios', tipo:'Categoría', refs:8940, hs:77, tend:0, alertas:5900, fecha:'Hace 5 días', creador:'Ana García', estado:'finalizada' },
     { id:5, perimetro:'Seller · LuzHogar', tipo:'Vendor', refs:2150, hs:58, tend:1, alertas:1419, fecha:'Hace 1 día', creador:'Miquel Soler', estado:'por-revisar' },
     { id:6, perimetro:'Gama · M', tipo:'Gama', refs:28470, hs:85, tend:1, alertas:18790, fecha:'Hace 10 días', creador:'Laura Pons', estado:'finalizada' },
-    { id:7, perimetro:'Categoría · Suelos y pavimentos', tipo:'Categoría', refs:1540, hs:49, tend:-1, alertas:1016, fecha:'Hace 4 min', creador:'Ana García', estado:'en-curso' }
+    { id:7, perimetro:'Categoría · Suelos y pavimentos', tipo:'Categoría', refs:1540, hs:49, tend:-1, alertas:1016, fecha:'Hace 4 min', creador:'Ana García', estado:'en-curso', prog:18 }
   ];
   var _audCounter=100;
   var _vTab='todo';
@@ -790,12 +790,12 @@
   function renderMatriz(){ var host=document.getElementById('v-inf-matriz'); if(!host) return;
     var tipos=[], sellers=[]; _infFindings.forEach(function(f){ if(tipos.indexOf(f.tipo)===-1) tipos.push(f.tipo); if(f.seller && sellers.indexOf(f.seller)===-1) sellers.push(f.seller); });
     var filters='<div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">'
-      +fsel('_infFSeller',_infFSeller,sellers.sort().map(function(s){return [s,s];}),'Todos los sellers')
-      +fsel('_infFOwner',_infFOwner,[['TIP','TIP'],['Seller','Seller']],'Todos los owners')
-      +fsel('_infFSev',_infFSev,[['bloqueante','Bloqueante'],['critica','Crítica'],['mejora','Leve']],'Toda severidad')
-      +fselG('_infFTipo',_infFTipo,TIPOS_GRUPOS,'Todos los tipos de error')
-      +fsel('_infFPp',_infFPp,[['1P','1P'],['3P','3P']],'Todos los segmentos')
-      +'<div style="position:relative; flex:1; min-width:200px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input value="'+(_infFSearch||'').replace(/"/g,'&quot;')+'" oninput="_infFSearch=this.value; _infPage=1; renderMTabla();" placeholder="Referencia o modelo…" style="width:100%;height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 12px 0 34px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;"/></div>'
+      +fsel('_infFSeller',_infFSeller,sellers.sort().map(function(s){return [s,s];}),'Seller')
+      +fsel('_infFOwner',_infFOwner,[['TIP','TIP'],['Seller','Seller']],'Owner')
+      +fsel('_infFSev',_infFSev,[['bloqueante','Bloqueante'],['critica','Crítica'],['mejora','Leve']],'Severidad')
+      +fselG('_infFTipo',_infFTipo,TIPOS_GRUPOS,'Tipo de error')
+      +fsel('_infFPp',_infFPp,[['1P','1P'],['3P','3P']],'Segmento')
+      +'<div style="position:relative; flex:0 1 240px; min-width:150px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input value="'+(_infFSearch||'').replace(/"/g,'&quot;')+'" oninput="_infFSearch=this.value; _infPage=1; renderMTabla();" placeholder="Referencia o modelo…" style="width:100%;height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 12px 0 34px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;"/></div>'
       +fsel('_infSort',_infSort,[['sev','Severidad (más grave)'],['ref','Referencia'],['tipo','Tipo de error'],['owner','Owner'],['segmento','Segmento']],'Ordenar por')
       +'</div>';
     host.innerHTML='<div style="font-size:16px; font-weight:700; color:var(--text-ink); margin-bottom:10px;">Matriz de correcciones</div>'+filters+'<div id="v-inf-mtabla"></div>';
@@ -848,7 +848,7 @@
       '<td style="font-size:13px;color:var(--text-body);">'+fmtNum(r.refs)+'</td>' +
       '<td>'+(r.hs>0?'<div style="display:flex;align-items:center;gap:8px;">'+hsBadge(r.hs)+tendArrow(r.tend)+'</div>':'<span style="color:var(--text-muted);">—</span>')+'</td>' +
       '<td style="font-size:13px;color:var(--text-body);">'+(r.hs>0?(r.alertas>0?'<span style="font-weight:600;color:#c61112;">'+fmtNum(r.alertas)+'</span>':'0'):'<span style="color:var(--text-muted);">—</span>')+'</td>' +
-      '<td>'+estadoBadge(r.estado)+'</td>' +
+      '<td>'+(r.estado==='en-curso'?'<div style="display:flex;align-items:center;gap:8px;">'+estadoBadge(r.estado)+'<span style="font-size:12px;font-weight:600;color:var(--warning-text);font-variant-numeric:tabular-nums;">'+(r.prog!=null?r.prog:0)+'%</span></div>':estadoBadge(r.estado))+'</td>' +
       '<td style="font-size:13px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+r.fecha+'</td>' +
       '<td style="font-size:13px;color:var(--text-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+r.creador+'">'+r.creador+'</td>' +
       '<td style="text-align:right;overflow:visible;"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;"><div class="row-cta-overlay" style="display:flex;align-items:center;gap:4px;">'+audCTA(r)+'</div>'+audMenu(r)+'</div></td>' +
@@ -986,7 +986,7 @@
   function openVCancel(){ _vPaused=true; var pBox=document.querySelector('#v-progress-modal .modal-box'); var cBox=document.querySelector('#v-cancel-modal .modal-box'); if(pBox&&cBox&&pBox.offsetHeight>0) cBox.style.minHeight=pBox.offsetHeight+'px'; else if(cBox) cBox.style.minHeight=''; document.getElementById('v-cancel-modal').classList.add('open'); }
   function closeVCancel(doCancel){ document.getElementById('v-cancel-modal').classList.remove('open'); _vPaused=false; if(doCancel){ if(_vProgIv){ clearInterval(_vProgIv); _vProgIv=null; } document.getElementById('v-progress-modal').classList.remove('open'); } }
   function resetNueva(){ _vTipo=null; _vValor=null; _vSelOpt=null; _vListName=''; _vCsvAttempt=0; _vUrlAttempt=0; _vEditingName=false; _vDetectNum=0; _vDetected=false; }
-  function closeBackground(){ if(_vProgIv){ clearInterval(_vProgIv); _vProgIv=null; } var pct=_vProgTotal?Math.round(_vProgDone/_vProgTotal*100):0; _audits.unshift({ id:_audCounter++, perimetro:typeLabel(_vTipo)+' · '+(_vValor||''), tipo:_vTipo, refs:_vProgTotal, hs:0, tend:0, alertas:0, fecha:'En curso · '+pct+'%', creador:'Ana García', estado:'en-curso' }); document.getElementById('v-progress-modal').classList.remove('open'); resetNueva(); go('v-hub'); switchTab('en-curso'); }
+  function closeBackground(){ if(_vProgIv){ clearInterval(_vProgIv); _vProgIv=null; } var pct=_vProgTotal?Math.round(_vProgDone/_vProgTotal*100):0; _audits.unshift({ id:_audCounter++, perimetro:typeLabel(_vTipo)+' · '+(_vValor||''), tipo:_vTipo, refs:_vProgTotal, hs:0, tend:0, alertas:0, fecha:'Ahora', creador:'Ana García', estado:'en-curso', prog:pct }); document.getElementById('v-progress-modal').classList.remove('open'); resetNueva(); go('v-hub'); switchTab('en-curso'); }
   function viewProcess(){ closeBackground(); }
   function finishAudit(){
     if(_vProgIv){ clearInterval(_vProgIv); _vProgIv=null; } _vPaused=false;
