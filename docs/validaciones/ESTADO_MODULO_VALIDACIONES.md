@@ -52,6 +52,7 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 14. Flujo falsos positivos → admin (¿informe descargable vs. conexión directa?) + copy de los modales de FP y de "¿Marcar como revisado?".
 15. Re-auditoría: modelo del loop y transiciones de estado (cancelar una re-auditoría NO crea borrador; vuelve a Revisada).
 16. ¿Qué tipos de check admiten falso positivo? No decidido. Hipótesis del proto: solo los de juicio (discrepancias, ortografía, SEO, administrativa); las ausencias objetivas no. Confirmar si todos deben admitirlo. Principio: la IA no prescribe el FP, lo detecta el humano.
+17. Datos del falso positivo en bloque: que el motor exponga el **disparador** (término/patrón que origina la alerta = clave de agrupación) y la jerarquía **Familia → Modelo (arquetipo de la guía) → Referencia** + el **seller** por referencia, y **cómo calcula la equivalencia** (exacta vs IA). Sin esos datos el bloque no es fiable.
 
 ## Pendiente de prototipo (por maquetar)
 - ~~**Estado *En curso***~~: **resuelto** — vista de progreso (contador · % · barra · Cancelar).
@@ -59,6 +60,9 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 - ~~**Revisado vs. Finalizada**~~: **resuelto** — fusionados en **Revisada**.
 - ~~**Generar exports**~~: **resuelto** — modal "Generar informes" con 3 informes + Descargar. *Falta el detalle real del contenido de cada informe/CSV.*
 - ~~**Cancelar auditoría En curso**~~: **resuelto** — desde hub y ficha (→ Borrador); pestaña Borradores.
+- ~~**Falsos positivos en bloque**~~: **resuelto** — modal *"Selecciona el motivo…"* (resumen colapsable + referencia enlazada) + sub-vista *"Marcar falso positivo en bloque"* (Familia→Modelo→Referencia): original fija, modelos con separador *Otros modelos*, filtro por seller, estados del scope card (aviso vs. verde + lápiz), botón dinámico *"Marcar N falsos positivos"*, restaurar en bloque. *(Elegibilidad de checks sin confirmar — §5.16; dependencia de datos — §5.17.)*
+- ~~**Health Score provisional**~~: **resuelto** — en **gris** (sin flecha, también en filas del hub) mientras *Pendiente de revisión*; **color + bold** en *Revisada*; **tooltip estilado**.
+- **Detalle/contenido real de los exports** (informe seller/proveedor PDF, CSVs, informe interno TIP, informe de FP): **mapeado en §4** del análisis, **falta maquetarlo**.
 - **Re-auditoría** + comparación **Corregidos / Persisten / Nuevos** (hoy es un placeholder/alert). **Ojo:** las **transiciones de estado en re-auditoría** están pendientes (§5.15) — **cancelar una re-auditoría NO debe crear borrador** (vuelve a *Revisada*, informe previo intacto); el borrador solo aplica a primeras auditorías. En código, el cancelar deberá ramificar según *¿hay ejecución previa completada?*.
 - **Panel de Configuración del motor (admin)**: **stub** (solo el enlace). Aquí aterriza la cola de falsos positivos.
 - **Flujo falsos positivos → admin**: cómo se materializa (¿informe de FP descargable vs. conexión directa?) — ver §5.14. De ello depende el copy de los modales de FP y de "¿Marcar como revisado?".
