@@ -26,6 +26,7 @@ Se abren directamente en el navegador. Se sirven además vía GitHub Pages:
 
 ### Validaciones
 - [docs/validaciones/ANALISIS_VALIDACIONES.md](docs/validaciones/ANALISIS_VALIDACIONES.md) — análisis consolidado del módulo (auditor de calidad).
+- [docs/validaciones/ESTADO_MODULO_VALIDACIONES.md](docs/validaciones/ESTADO_MODULO_VALIDACIONES.md) — estado del prototipo y pendientes (contexto entre sesiones).
 
 ## Estructura del repo
 
