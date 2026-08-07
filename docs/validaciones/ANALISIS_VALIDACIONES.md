@@ -83,6 +83,8 @@ La vía de **acumulación (3+ alertas)** del artefacto **se conserva** igual.
 
 Las **cajitas** del informe tienen **dos lentes**: **Estado/gravedad** (Sin errores / Con errores leves / Con errores críticos / **No publicable** — **excluyentes, suman el total**) y **por tipo** (con discrepancias / con faltas de ortografía — **solapan**, no suman).
 
+**Paleta única de severidad** (una sola escala en chips de la matriz, cajitas de estado y barritas de "Distribución de errores", para leerse coherente): **Leve = dorado** (`#b8860b` gráfico / `#7a5a00` texto) · **Crítica = rojo oscuro** (`#7a0d0d`) · **Bloqueante/No publicable = rojo** (`#c61112`) · Sin errores = verde. Contraste **WCAG AA** verificado (texto ≥4.5:1, gráficos ≥3:1). En "Distribución de errores" cada barrita se pinta por la severidad de su tipo y las filas se **ordenan por gravedad** (Bloqueante → Crítica → Leve, y dentro por %).
+
 **Mapa de tipos de error · severidad · prioridad (propuesta — con puntos pendientes, ver §5).** Tres ejes distintos que **no se derivan uno de otro**:
 - **Tipo de error** (qué falla) → se agrupa en **categorías**.
 - **Severidad** (por alerta): **Bloqueante / Crítica / Leve** (Severity Score, PDF pág. 34 — el deck la nombra "Mejora"; la renombramos a "Leve", ver divergencia arriba).

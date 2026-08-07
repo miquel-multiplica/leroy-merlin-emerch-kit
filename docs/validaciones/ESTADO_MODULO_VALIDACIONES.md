@@ -7,8 +7,9 @@
 - **Nueva auditoría**: **modal de tipos** (Gama · Proveedor/Seller · Modelo · Categoría web · Listado) → **wizard de 2 columnas** ("Tu selección"): selector + detección de referencias (buscador/lista, URL con Consultar, subida de CSV con nombre editable), caja azul "¿Qué se validará?".
 - **Ejecución**: modal con **barra de progreso global**, **cancelable** (con confirmación, vuelve al wizard) y **continuar en segundo plano** (aparece como *En curso*). Sin pausa.
 - **Detalle de auditoría** (`v-informe`, una sola pantalla condicional por estado):
-  - Cabecera: título = perímetro, badge de estado, meta en una línea, **Health Score** arriba-derecha; **cajitas** de estado (Sin errores / Con errores leves / Con errores críticos, excluyentes) + por tipo (discrepancias / ortografía, solapan), con tooltip.
-  - **Impacto por categoría de error** y **Distribución de errores** → **dropdowns colapsables** (la matriz cobra protagonismo).
+  - Cabecera: título = perímetro, badge de estado, meta en una línea, **Health Score** arriba-derecha; **cajitas** de estado en **4 niveles excluyentes** (Sin errores / Con errores leves / Con errores críticos / **No publicable**) + por tipo (discrepancias / ortografía, solapan), con tooltip.
+  - **Impacto por categoría de error** y **Distribución de errores** → **dropdowns colapsables** (la matriz cobra protagonismo). Las barritas de Distribución van **coloreadas por severidad** y **ordenadas** por gravedad (Bloqueante → Crítica → Leve), con leyenda.
+  - **Paleta única de severidad** en toda la vista (chips de la matriz + cajitas de estado + barritas): **Leve = dorado** · **Crítica = rojo oscuro** · **Bloqueante/No publicable = rojo** (contraste WCAG AA verificado).
   - **Matriz de correcciones**: filtros (seller · severidad · tipo de error · segmento · búsqueda), **paginado**, referencia con enlace a la ficha, y **revisión de falsos positivos** (con motivo). Modos *Pendiente de revisión* (interactivo) y *Revisado* (read-only + exportar).
 
 ## Pendiente con cliente (decisiones/datos) — detalle en §5 del análisis
