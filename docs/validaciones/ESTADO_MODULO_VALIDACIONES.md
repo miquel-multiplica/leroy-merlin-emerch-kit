@@ -38,9 +38,9 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 ## Pendiente con cliente (decisiones/datos) — detalle en §5 del análisis
 1. Acceso a datos (BigQuery 1P): campos expuestos + mapeo PLP↔referencias.
 2. Motor actual: walkthrough y si ya usa LLM.
-3. Loop recurrente: hub + ejecuciones + histórico + comparación de periodos.
+3. Recurrencia: casi seguro **manual** (el usuario relanza cuando quiere, sin automatización). Confirmar cómo se articulan hub, ejecuciones, histórico y comparación de periodos.
 4. Granularidad/formato del informe.
-5. Formato del perímetro "Listado": URLs de PDP (PDF) vs. CSV de SKUs (prototipo).
+5. Cómo se sube el perímetro "Listado" (la lista de productos a auditar): ¿una lista de **URLs de fichas (PDP)**, como en el deck del cliente, o un **CSV de referencias/SKUs**, como en el prototipo? Alinear el formato.
 6. Significado de las letras de gama (A/M/S/C/K/B).
 7. Atributos obligatorios: severidad (Bloqueante) vs. prioridad (Media).
 8. Alcance BQ: ¿referencias no publicadas? + ¿expone el campo ADM?

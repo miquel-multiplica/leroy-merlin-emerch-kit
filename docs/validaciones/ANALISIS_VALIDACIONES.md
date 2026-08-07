@@ -292,7 +292,7 @@ Gestión del "cerebro" del motor, no solo listas:
 **Sigue bloqueando diseño / alcance:**
 1. **Acceso a datos:** confirmar BigQuery 1P y **qué campos expone** (ficha técnica/atributos, seller/proveedor, 1P/3P, sección/tipología, **orphan/ubicación en familia** para el Health Score) y si existe el **mapeo PLP/categoría-web ↔ referencias**.
 2. **Motor actual:** walkthrough (cómo suben, output, entorno) y **si ya usa LLM** por detrás o el "prompt" son plantillas/instrucciones.
-3. **El loop recurrente:** cómo se articulan hub, ejecuciones, histórico y **comparación de periodos** (evolutivo).
+3. **Recurrencia (probablemente manual):** casi seguro **no** habrá automatización; el usuario relanza cuando quiere. Confirmar cómo se articulan hub, ejecuciones, histórico y **comparación de periodos** (evolutivo).
 4. **Granularidad y formato del informe:** unidad (categoría/guía), agregación (modelo), y si el entregable es un doc multi-guía o varios.
 5. **Formato del perímetro "Listado":** el cliente lo contempla como **lista de URLs de PDPs** (PDF pág. 37); el prototipo lo montó como **CSV de SKUs**. Alinear el formato (URLs de PDP vs. SKUs) y, si es CSV, si las referencias deben validarse contra el catálogo antes de aceptarlas (como en Descripciones). *Relacionado:* el PDF describe la ingesta como URL-based (A: PLP, B: listado de URLs), mientras el análisis asume acceso directo **1P vía BigQuery** con selectores (modelo/gama/proveedor/seller) → confirmar la vía real (ver punto 1).
 6. **Significado de las letras de gama** (A/M/S/C/K/B): qué tier/criterio de surtido representa cada una y si una referencia puede pertenecer a más de una. Necesario para el subtexto del selector de "Gama" y para la lectura del informe.
