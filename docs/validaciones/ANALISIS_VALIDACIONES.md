@@ -174,14 +174,18 @@ Módulo **Validaciones**, espejo estructural de Descripciones.
 5. Configuración del motor (admin)
 
 ### Estados de una ejecución
-**En curso → Pendiente de revisión → Revisada** (+ Error). *(No hay concepto de "borrador" — eso en Descripciones significa otra cosa.)* El estado terminal es **Revisada** (no "Finalizada"/"Enviada"/"Con seguimiento"): la herramienta **produce los artefactos pero no controla el flujo posterior** (corrección del seller / gobernanza va por fuera, en Jira), así que no promete un seguimiento que no gestiona. *(Decisión: se **fusionó "Finalizada" con "Revisada"** — "Finalizada" no correspondía a ninguna acción de la herramienta.)* El **perímetro** persiste entre ejecuciones para el siguiente ciclo.
+**En curso → Pendiente de revisión → Revisada** (+ **Error** · + **Borrador**). El estado terminal es **Revisada** (no "Finalizada"/"Enviada"/"Con seguimiento"): la herramienta **produce los artefactos pero no controla el flujo posterior** (corrección del seller / gobernanza va por fuera, en Jira), así que no promete un seguimiento que no gestiona. *(Decisión: se **fusionó "Finalizada" con "Revisada"** — "Finalizada" no correspondía a ninguna acción de la herramienta.)*
+
+- **Borrador** (lateral): una auditoría *En curso* **cancelada desde el hub o su ficha** queda como **Borrador** con el **perímetro guardado** (el modal avisa). Aparece en la pestaña *Borradores* como fila con **Continuar / Eliminar** (sin ficha). Cancelar **dentro del funnel** de creación **no** crea borrador → te deja en el wizard con el perímetro intacto. *(Alineado con Descripciones.)*
+
+El **perímetro** persiste entre ejecuciones para el siguiente ciclo.
 
 ---
 
 ### 1 · Hub de auditorías
 La entidad que persiste es el **perímetro/auditoría recurrente**; cada pasada es una **ejecución (snapshot)** con su Health Score y sus alertas.
 - **Columnas:** perímetro auditado (con **chip de tipo** dentro de la celda: Modelo / Gama / Proveedor-Seller / Categoría web (PLP) / Listado) · nº de referencias · **Health Score (base)** · **tendencia** (↑/↓ vs. ejecución anterior) · nº de alertas · última ejecución · creador · estado.
-- **Pestañas:** **Todo · En curso · Pendientes de revisión · Revisadas**. *(Los nombres de pestaña coinciden con los estados.)*
+- **Pestañas:** **Todo · En curso · Pendientes de revisión · Revisadas · Borradores** (con contador). *(Los nombres de pestaña coinciden con los estados.)*
 - **Filtros:** sección/tipología, 1P/3P (este último aplica cuando entre 3P).
 - **Acciones por fila:** Ver informe · Exportar · **Re-auditar** · eliminar.
 - **Entradas:** botón "Nueva auditoría" **y** desde Guías ("Empezar validación" de esa guía/categoría).

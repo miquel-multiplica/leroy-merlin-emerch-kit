@@ -12,14 +12,25 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 **Bloqueado / pendiente:** **Health Score** (cómo se calcula/normaliza o si viene de origen — §5.10/11), **campos exactos de BigQuery** (§5.1/8), checks **LLM** (color/material, SEO en texto, coherencia semántica) y **análisis de contenido de imagen** (fase 2).
 
 ## Qué hay montado (prototipo)
-- **Hub de auditorías**: tabla (perímetro con tipo como subtexto · referencias · Health Score · tendencia · alertas · última ejecución · creador · estado), pestañas **Todo · En curso · Pendientes de revisión · Finalizadas**, filtro de tipo + buscador con lupa, y **acciones de fila** (CTA en hover + menú kebab: Ver informe / Re-auditar / Exportar / Eliminar).
+- **Hub de auditorías**: tabla (perímetro con tipo como subtexto · referencias · Health Score · tendencia · alertas · última ejecución · creador · estado), pestañas **Todo · En curso · Pendientes de revisión · Revisadas · Borradores** (con **contador** en cada una), filtro de tipo + buscador. **Acciones de fila por estado**:
+  - *En curso*: **% junto al tag**; en hover, botón **Cancelar** (rojo); kebab **Ver detalle / Cancelar**.
+  - *Pendiente de revisión*: **Revisar** (CTA).
+  - *Revisada*: **Ver informe**; kebab **Ver informe / Re-auditar / Exportar / Eliminar**.
+  - *Borrador*: fila con **Continuar** (verde) + **papelera** (eliminar), siempre visibles, **sin ficha**.
 - **Nueva auditoría**: **modal de tipos** (Gama · Proveedor/Seller · Modelo · Categoría web · Listado) → **wizard de 2 columnas** ("Tu selección"): selector + detección de referencias (buscador/lista, URL con Consultar, subida de CSV con nombre editable), caja azul "¿Qué se validará?".
-- **Ejecución**: modal con **barra de progreso global**, **cancelable** (con confirmación, vuelve al wizard) y **continuar en segundo plano** (aparece como *En curso*). Sin pausa.
+- **Ejecución**: modal con **barra de progreso global**, **cancelable** (con confirmación — dentro del funnel vuelve al wizard con el perímetro), **continuar en segundo plano** y **"Ver proceso en detalle"** (abre la ficha del informe *En curso*). Sin pausa.
+- **Estados de la auditoría**: **En curso · Pendiente de revisión · Revisada · Borrador · Error**. **Borrador** = auditoría *En curso* cancelada desde el **hub o su ficha** (guarda el perímetro; el modal avisa de que queda como borrador). Cancelar **dentro del funnel** no crea borrador (te deja en el wizard).
 - **Detalle de auditoría** (`v-informe`, una sola pantalla condicional por estado):
-  - Cabecera: título = perímetro, badge de estado, meta en una línea, **Health Score** arriba-derecha; **cajitas** de estado en **4 niveles excluyentes** (Sin errores / Con errores leves / Con errores críticos / **No publicable**) + por tipo (discrepancias / ortografía, solapan), con tooltip.
-  - **Impacto por categoría de error** y **Distribución de errores** → **dropdowns colapsables** (la matriz cobra protagonismo). Las barritas de Distribución van **coloreadas por severidad** y **ordenadas** por gravedad (Bloqueante → Crítica → Leve), con leyenda.
-  - **Paleta única de severidad** en toda la vista (chips de la matriz + cajitas de estado + barritas): **Leve = dorado** · **Crítica = rojo oscuro** · **Bloqueante/No publicable = rojo** (contraste WCAG AA verificado).
-  - **Matriz de correcciones**: filtros (seller · severidad · tipo de error · segmento · búsqueda), **paginado**, referencia con enlace a la ficha, y **revisión de falsos positivos** (con motivo). Modos *Pendiente de revisión* (interactivo) y *Revisado* (read-only + exportar).
+  - **En curso** → **vista de progreso** (contador de referencias analizadas · % · barra · botón **Cancelar**), sin métricas que dependan del fin.
+  - **Pendiente de revisión / Revisada**:
+    - Cabecera: título = perímetro, badge, meta ("**Auditoría de** gama/modelo/…"), **Health Score** arriba-derecha; **cajitas** de estado en **4 niveles excluyentes** (Sin errores / Con errores leves / Con errores críticos / **No publicable**) + por tipo (discrepancias / ortografía), con tooltip.
+    - **Impacto por categoría de error** y **Distribución de errores** → **dropdowns colapsables**. La Distribución tiene 3 columnas (Designación · Descripción · Ficha técnica, con **Multimedia** anidada bajo Ficha técnica), barritas **coloreadas por severidad** y **ordenadas** por gravedad, con leyenda.
+    - **Paleta única de severidad** en toda la vista: **Leve = dorado** · **Crítica = rojo oscuro** · **Bloqueante/No publicable = rojo** (WCAG AA).
+    - **Matriz de correcciones**: filtros con placeholders cortos que **adaptan su ancho al texto** (Seller · Owner · Severidad · Tipo de error **agrupado por área** con todos los tipos · Segmento · búsqueda) + **"Ordenar por"** (Severidad/Referencia/Tipo/Owner/Segmento) + **toggle "Falsos positivos (N)"** (aislado a la derecha, con contador). Paginada.
+    - **Falsos positivos**: al marcar se piden **motivos contextuales al tipo** (chips **multiselección**) + **comentario** + **"Otro"** siempre disponible; salen del informe y van a la cola de Configuración del motor. El toggle muestra los descartados con su **Motivo**, con **Editar** y **Restaurar**.
+  - **Pie**: *Pendiente de revisión* → **"Marcar como revisado"** (modal de confirmación con cifras: hallazgos válidos vs. falsos positivos). *Revisada* → **Re-auditar** (icono) + **Exportar informes** (icono).
+- **Generar informes** (modal, cierra con **X**): tres informes con botón **Descargar** — **seller/proveedor** (PDF+CSV), **interno TIP** (matriz), e **informe de falsos positivos** (Excel/CSV, para el admin/motor).
+- **Configuración** (admin): **enlace** (verde, icono ajustes) junto a "Nueva auditoría" → panel admin (**stub** "próximamente").
 
 ## Pendiente con cliente (decisiones/datos) — detalle en §5 del análisis
 1. Acceso a datos (BigQuery 1P): campos expuestos + mapeo PLP↔referencias.
@@ -34,16 +45,22 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 10. Normalización del Health Score base (solo ~5/10 puntos auditables en MVP).
 11. Health Score: ¿calculado por nosotros o ingerido de origen?
 12. Granularidad de exports (asunción): seller = por referencia, TIP = por alerta.
+13. Modelo de estados a 4 cajas (gravedad de la peor alerta + 3 divergencias del artefacto).
+14. Flujo falsos positivos → admin (¿informe descargable vs. conexión directa?) + copy de los modales de FP y de "¿Marcar como revisado?".
 
 ## Pendiente de prototipo (por maquetar)
-- **Estados del detalle** *En curso* y *Error*: hoy solo **placeholders** → falta la **versión completa** (vista de progreso real / pantalla de reintento).
-- ~~**Revisado vs. Finalizada**~~: **resuelto** — fusionados en **Revisada** (estado terminal único; "Finalizada" no correspondía a ninguna acción de la herramienta).
+- ~~**Estado *En curso***~~: **resuelto** — vista de progreso (contador · % · barra · Cancelar).
+- **Estado *Error***: sigue siendo **stub** (falta pantalla de reintento con detalle).
+- ~~**Revisado vs. Finalizada**~~: **resuelto** — fusionados en **Revisada**.
+- ~~**Generar exports**~~: **resuelto** — modal "Generar informes" con 3 informes + Descargar. *Falta el detalle real del contenido de cada informe/CSV.*
+- ~~**Cancelar auditoría En curso**~~: **resuelto** — desde hub y ficha (→ Borrador); pestaña Borradores.
 - **Re-auditoría** + comparación **Corregidos / Persisten / Nuevos** (hoy es un placeholder/alert).
-- **Generar exports** (pantalla por audiencia): hoy solo una modal con placeholders. Export **interno TIP** = matriz enriquecida (por alerta); export **seller** = por referencia (con columna Campo/ubicación en el CSV).
-- **Matriz**: **agrupar por referencia/modelo** (colapsable) → así se ven juntas todas las alertas de un mismo SKU (la matriz es por alerta).
-- **Configuración del motor (admin)**: sin maquetar.
+- **Matriz**: **agrupar por referencia/modelo** (colapsable) → todas las alertas de un mismo SKU juntas.
+- **Panel de Configuración del motor (admin)**: **stub** (solo el enlace). Aquí aterriza la cola de falsos positivos.
+- **Flujo falsos positivos → admin**: cómo se materializa (¿informe de FP descargable vs. conexión directa?) — ver §5.14. De ello depende el copy de los modales de FP y de "¿Marcar como revisado?".
+- **URL real de la PDP** en el enlace de referencia (hoy placeholder; depende del mapeo de datos, §5.1).
 
-*(Nota: **no** hacemos "detalle de referencia" interno. Igual que el artefacto del cliente, la referencia **enlaza a la ficha real de Leroy (PDP en vivo)**, que es la fuente de verdad para revisar falsos positivos. Pendiente: usar la **URL real de la PDP** en el enlace, no la placeholder actual.)*
+*(Nota: **no** hacemos "detalle de referencia" interno. Igual que el artefacto del cliente, la referencia **enlaza a la ficha real de Leroy (PDP en vivo)**, que es la fuente de verdad para revisar falsos positivos.)*
 
 ## Infra / repo
 - **GitHub Pages** vía **GitHub Actions** (`concurrency: cancel-in-progress: false` + `workflow_dispatch`). Deploy **encolado por incidencia de GitHub** (ago 2026); se publica solo al resolverse. Código a salvo en `main`.
