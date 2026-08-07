@@ -30,9 +30,10 @@
 - **Revisado vs. Finalizada**: decidir si se fusionan en una sola vista.
 - **Re-auditoría** + comparación **Corregidos / Persisten / Nuevos** (hoy es un placeholder/alert).
 - **Generar exports** (pantalla por audiencia): hoy solo una modal con placeholders. Export **interno TIP** = matriz enriquecida (por alerta); export **seller** = por referencia (con columna Campo/ubicación en el CSV).
-- **Detalle de referencia** (abrir ficha): hoy enlace externo fake a leroymerlin.es.
-- **Matriz**: agrupar por referencia/modelo (colapsable).
+- **Matriz**: **agrupar por referencia/modelo** (colapsable) → así se ven juntas todas las alertas de un mismo SKU (la matriz es por alerta).
 - **Configuración del motor (admin)**: sin maquetar.
+
+*(Nota: **no** hacemos "detalle de referencia" interno. Igual que el artefacto del cliente, la referencia **enlaza a la ficha real de Leroy (PDP en vivo)**, que es la fuente de verdad para revisar falsos positivos. Pendiente: usar la **URL real de la PDP** en el enlace, no la placeholder actual.)*
 
 ## Infra / repo
 - **GitHub Pages** vía **GitHub Actions** (`concurrency: cancel-in-progress: false` + `workflow_dispatch`). Deploy **encolado por incidencia de GitHub** (ago 2026); se publica solo al resolverse. Código a salvo en `main`.
