@@ -628,7 +628,8 @@
     </div>
     <div id="v-prog-done" style="display:none; flex-direction:column; align-items:center; text-align:center;">
       <div style="width:56px; height:56px; border-radius:50%; border:2px solid #46a610; display:inline-flex; align-items:center; justify-content:center; margin-bottom:16px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#188803" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div style="font-size:24px; font-weight:700; color:var(--text-ink); margin-bottom:12px;">Auditoría completada</div>
+      <div style="font-size:24px; font-weight:700; color:var(--text-ink); margin-bottom:6px;">Auditoría completada</div>
+      <div id="v-prog-done-sub" style="font-size:14px; color:var(--text-muted); margin-bottom:16px;"></div>
       <div style="font-size:14px; color:var(--text-muted); margin-bottom:24px;">El informe está listo para revisar los falsos positivos antes de enviarlo.</div>
       <button onclick="finishAudit()" class="btn btn-primary" style="height:44px; font-size:14px; width:100%; justify-content:center;">Ver informe</button>
       <button onclick="finishAudit()" style="background:#fff; border:1px solid var(--green); border-radius:8px; height:44px; font-size:13px; font-weight:600; font-family:'Inter',system-ui,sans-serif; cursor:pointer; color:var(--green); width:100%; margin-top:12px;">Ir al listado</button>
@@ -912,7 +913,7 @@
   ];
   var _vLists={
     'Modelo':[{name:'Puerta entrada nogal',code:'MOD_202512'},{name:'Aplique de pared industrial',code:'MOD_000000'},{name:'Foco empotrable LED 8W',code:'MOD_445120'},{name:'Suelo laminado roble natural',code:'MOD_889900'},{name:'Ventana PVC oscilobatiente',code:'MOD_202513'},{name:'Armario modular 3 puertas',code:'MOD_334455'},{name:'Grifo monomando cocina',code:'MOD_112233'},{name:'Radiador aluminio 8 elementos',code:'MOD_667788'},{name:'Cortadora de césped eléctrica',code:'MOD_998877'},{name:'Persiana enrollable exterior',code:'MOD_223344'},{name:'Encimera de cuarzo blanco',code:'MOD_778899'},{name:'Mampara de ducha corredera',code:'MOD_556677'},{name:'Toldo motorizado 3,5m',code:'MOD_445566'},{name:'Caldera de condensación 24kW',code:'MOD_334488'}],
-    'Gama':[{name:'A',desc:'Descripción pendiente'},{name:'B',desc:'Descripción pendiente'},{name:'C',desc:'Descripción pendiente'},{name:'K',desc:'Descripción pendiente'},{name:'M',desc:'Descripción pendiente'},{name:'S',desc:'Descripción pendiente'}],
+    'Gama':[{name:'A',desc:'Descripción pendiente'},{name:'B',desc:'Descripción pendiente'},{name:'C',desc:'Descripción pendiente'},{name:'D',desc:'Descripción pendiente'},{name:'E',desc:'Descripción pendiente'},{name:'F',desc:'Descripción pendiente'},{name:'G',desc:'Descripción pendiente'},{name:'H',desc:'Descripción pendiente'},{name:'I',desc:'Descripción pendiente'},{name:'J',desc:'Descripción pendiente'},{name:'K',desc:'Descripción pendiente'},{name:'M',desc:'Descripción pendiente'}],
     'Vendor':[{name:'Simon',tag:'1P'},{name:'Roca',tag:'1P'},{name:'Grohe',tag:'1P'},{name:'Saint-Gobain',tag:'1P'},{name:'Philips',tag:'1P'},{name:'Bosch',tag:'1P'},{name:'Legrand',tag:'1P'},{name:'Somfy',tag:'1P'},{name:'LuzHogar',tag:'3P'},{name:'IlumStore',tag:'3P'},{name:'ElectroLuz',tag:'3P'},{name:'DecoLight',tag:'3P'},{name:'JardínPro',tag:'3P'},{name:'BañoExpress',tag:'3P'}],
     'Seccion':[{name:'Baño'},{name:'Cocina'},{name:'Jardín'},{name:'Carpintería y madera'},{name:'Ferretería'},{name:'Herramientas'},{name:'Electricidad'},{name:'Fontanería y calefacción'},{name:'Climatización'},{name:'Iluminación'},{name:'Pintura y droguería'},{name:'Revestimientos y suelos'},{name:'Decoración'},{name:'Construcción y aislamiento'}]
   };
@@ -1017,7 +1018,7 @@
     _vProgTotal=_vDetectNum||500; _vProgDone=0; _vPaused=false;
     document.getElementById('v-prog-running').style.display='block'; document.getElementById('v-prog-done').style.display='none';
     document.getElementById('v-prog-title').textContent='Auditando…';
-    document.getElementById('v-prog-sub').textContent=typeLabel(_vTipo)+' · '+(_vValor||'');
+    document.getElementById('v-prog-sub').textContent=typeLabel(_vTipo)+' · '+(_vValor||''); var _ds=document.getElementById('v-prog-done-sub'); if(_ds)_ds.textContent=typeLabel(_vTipo)+' · '+(_vValor||'');
     document.getElementById('v-prog-total').textContent=fmtNum(_vProgTotal);
     document.getElementById('v-progress-modal').classList.add('open');
     if(_vProgIv) clearInterval(_vProgIv);
