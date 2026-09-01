@@ -461,7 +461,7 @@
     <div class="grid" style="max-width:none; padding:0 40px;">
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:24px;">
         <div style="font-size:32px; font-weight:700; color:var(--text-ink);">Validaciones</div>
-        <div style="display:flex; gap:20px; align-items:center;"><button onclick="alert('Panel de configuración del motor (solo admin) — próximamente')" style="height:44px; font-size:14px; padding:0 4px; white-space:nowrap; background:none; border:none; color:var(--green); cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-family:'Inter',system-ui,sans-serif;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Configuración</button><button class="btn btn-primary" onclick="startNueva()" style="height:44px; font-size:14px; padding:0 20px; white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva auditoría</button></div>
+        <div style="display:flex; gap:20px; align-items:center;"><button onclick="go('v-config'); renderConfig();" style="height:44px; font-size:14px; padding:0 4px; white-space:nowrap; background:none; border:none; color:var(--green); cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-family:'Inter',system-ui,sans-serif;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Configuración</button><button class="btn btn-primary" onclick="startNueva()" style="height:44px; font-size:14px; padding:0 20px; white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva auditoría</button></div>
       </div>
       <div style="display:flex; gap:0; border-bottom:1px solid var(--border-card); margin-bottom:20px;">
         <button class="v-tab" data-tab="todo" onclick="switchTab('todo')">Todo</button>
@@ -568,6 +568,17 @@
 </div>
 
 <!-- ══════════════════ MODAL · FALSO POSITIVO ══════════════════ -->
+<div class="screen" id="v-config">
+  <div style="max-width:1180px;margin:0 auto;padding:28px 32px;">
+    <button onclick="go('v-hub')" style="background:none;border:none;color:var(--green);font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',system-ui,sans-serif;padding:0;margin-bottom:14px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Volver</button>
+    <div style="font-size:24px;font-weight:700;color:var(--text-ink);margin-bottom:4px;">Configuración del motor</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;max-width:760px;line-height:1.5;">Prompt general y sub-prompts por nivel (con herencia). La guía es la <strong>fuente de verdad</strong> y solo se consulta (se edita en el módulo de Guías). Las propuestas de falsos positivos llegan como <strong>archivo aparte</strong>.</div>
+    <div style="display:flex;gap:24px;align-items:flex-start;">
+      <div style="width:290px;flex-shrink:0;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:12px;"><div id="v-cfg-tree"></div></div>
+      <div style="flex:1;min-width:0;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:24px 26px;"><div id="v-cfg-node"></div></div>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="v-fp-modal">
   <div class="modal-box" style="width:1100px; max-width:95vw; max-height:calc(100vh - 96px); padding:0; display:flex; overflow:hidden;">
     <div style="width:36%; min-width:320px; background:#f5f5f3; border-right:1px solid var(--border-card); padding:28px; overflow-y:auto;">
@@ -699,6 +710,47 @@
 <script>
   function go(id){ document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); }); var t=document.getElementById(id); if(t){ t.classList.add('active'); window.scrollTo(0,0); } }
   document.addEventListener('click', function(e){ document.querySelectorAll('.row-menu.open').forEach(function(m){ if(!m.contains(e.target)) m.classList.remove('open'); }); });
+  var _cfgFamilias=[
+    {name:'Puertas y ventanas', modelos:[{name:'Puerta de entrada',code:'MOD_PE01'},{name:'Puerta corredera',code:'MOD_PC02'},{name:'Puerta acorazada',code:'MOD_PA03'},{name:'Ventana corredera',code:'MOD_VC04'}]},
+    {name:'Herramientas', modelos:[{name:'Taladro percutor',code:'MOD_TP11'},{name:'Atornillador',code:'MOD_AT12'},{name:'Lijadora',code:'MOD_LJ13'},{name:'Sierra circular',code:'MOD_SC14'}]},
+    {name:'Iluminación', modelos:[{name:'Aplique exterior',code:'MOD_AE21'},{name:'Farola solar',code:'MOD_FS22'},{name:'Proyector LED',code:'MOD_PL23'}]},
+    {name:'Baño', modelos:[{name:'Inodoro suspendido',code:'MOD_IS31'},{name:'Lavabo mural',code:'MOD_LM32'},{name:'Grifería monomando',code:'MOD_GM33'}]}
+  ];
+  var _cfgPrompts={ 'general':'Reglas transversales del motor (aplican a todas las referencias):\n\n- Ortografía y tipografía correctas (sin palabras duplicadas ni faltas).\n- Unidades normalizadas ("40 cm", no "40cm"); coma decimal.\n- La designación comercial no debe mostrar el nombre interno/administrativo.\n- Coherencia entre designación, descripción y ficha técnica.\n- Vocabulario válido y sinónimos aceptados: se alimentan del informe de falsos positivos.' };
+  var _cfgSel={level:'general',fam:0,mod:0};
+  var _cfgExpanded={};
+  function cfgKey(sel){ if(sel.level==='general')return 'general'; if(sel.level==='familia')return 'fam:'+sel.fam; return 'mod:'+sel.fam+':'+sel.mod; }
+  function cfgSelect(level,fam,mod){ _cfgSel={level:level,fam:(fam==null?_cfgSel.fam:fam),mod:(mod==null?_cfgSel.mod:mod)}; renderConfig(); }
+  function cfgToggleFam(i){ _cfgExpanded[i]=!_cfgExpanded[i]; renderConfig(); }
+  function renderConfig(){ renderCfgTree(); renderCfgNode(); }
+  function _cfgItem(active){ return 'display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;'+(active?'background:var(--success-bg);color:var(--green);font-weight:700;':'color:var(--text-body);'); }
+  function renderCfgTree(){ var el=document.getElementById('v-cfg-tree'); if(!el)return; var sel=_cfgSel;
+    var html='<div onclick="cfgSelect(\'general\')" style="'+_cfgItem(sel.level==='general')+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>Prompt general</div>';
+    _cfgFamilias.forEach(function(fam,fi){ var famActive=(sel.level==='familia'&&sel.fam===fi); var exp=_cfgExpanded[fi];
+      html+='<div style="margin-top:2px;"><div style="display:flex;align-items:center;">'
+        +'<button onclick="cfgToggleFam('+fi+')" style="background:none;border:none;cursor:pointer;padding:6px;display:flex;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate('+(exp?'90deg':'0deg')+');transition:transform .15s;"><polyline points="9 18 15 12 9 6"/></svg></button>'
+        +'<div onclick="cfgSelect(\'familia\','+fi+')" style="flex:1;'+_cfgItem(famActive)+'">'+fam.name+'</div></div>';
+      if(exp){ html+='<div style="margin-left:20px;border-left:1px solid var(--border-card);padding-left:6px;">'; fam.modelos.forEach(function(m,mi){ var mActive=(sel.level==='modelo'&&sel.fam===fi&&sel.mod===mi); html+='<div onclick="cfgSelect(\'modelo\','+fi+','+mi+')" style="'+_cfgItem(mActive)+'">'+m.name+'</div>'; }); html+='</div>'; }
+      html+='</div>';
+    });
+    el.innerHTML=html;
+  }
+  function renderCfgNode(){ var el=document.getElementById('v-cfg-node'); if(!el)return; var sel=_cfgSel; var key=cfgKey(sel); var title,crumb,inherited='',guideBox='';
+    if(sel.level==='general'){ title='Prompt general'; crumb='Aplica a todas las referencias.'; }
+    else if(sel.level==='familia'){ var fam=_cfgFamilias[sel.fam]; title=fam.name; crumb='Familia · hereda del prompt general.'; inherited='general'; }
+    else { var fam=_cfgFamilias[sel.fam]; var m=fam.modelos[sel.mod]; title=m.name; crumb='Modelo ('+m.code+') · '+fam.name+' · hereda de general + familia.'; inherited='fam'; guideBox='<div style="margin-top:24px;border:1px solid var(--border-card);border-radius:10px;padding:16px 18px;background:var(--bg-surface);"><div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;">Guía aplicable (fuente de verdad · solo lectura)</div><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><div style="font-size:14px;font-weight:700;color:var(--text-ink);">Guía de «'+m.name+'»</div><button onclick="alert(\'Resumen de la guía de '+m.name+' — solo lectura (se edita en el módulo de Guías).\')" style="background:none;border:none;color:var(--green);font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:\'Inter\',system-ui,sans-serif;">Ver resumen<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div></div>'; }
+    var inhHtml='';
+    if(inherited){ var parts=[{t:'Prompt general', v:_cfgPrompts['general']||'(vacío)'}]; if(inherited==='fam'){ parts.push({t:_cfgFamilias[sel.fam].name+' (familia)', v:_cfgPrompts['fam:'+sel.fam]||'(sin reglas propias)'}); } inhHtml='<div style="margin-bottom:22px;"><div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;">Reglas heredadas (solo lectura)</div>'+parts.map(function(p){return '<div style="border:1px solid var(--border-card);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:#faf9f7;"><div style="font-size:12px;font-weight:700;color:var(--text-ink);margin-bottom:4px;">'+p.t+'</div><div style="font-size:12px;color:var(--text-muted);white-space:pre-wrap;line-height:1.5;">'+p.v+'</div></div>';}).join('')+'</div>'; }
+    var promptVal=(_cfgPrompts[key]||'').replace(/</g,'&lt;');
+    var ph=(sel.level==='general')?'Reglas transversales…':(sel.level==='familia'?'Reglas propias de esta familia (además de las heredadas)…':'Reglas/excepciones de este modelo: vocabulario válido, sinónimos, matices…');
+    el.innerHTML='<div style="font-size:20px;font-weight:700;color:var(--text-ink);">'+title+'</div><div style="font-size:13px;color:var(--text-muted);margin:4px 0 22px;">'+crumb+'</div>'
+      +inhHtml
+      +'<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;">Prompt de este nivel</div>'
+      +'<textarea id="v-cfg-textarea" rows="12" placeholder="'+ph+'" style="width:100%;border:1px solid var(--border-input);border-radius:10px;padding:14px 16px;font-size:13px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;resize:vertical;line-height:1.6;">'+promptVal+'</textarea>'
+      +guideBox
+      +'<div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;"><button id="v-cfg-save" onclick="cfgSavePrompt()" class="btn btn-primary" style="height:44px;">Guardar cambios</button></div>';
+  }
+  function cfgSavePrompt(){ var ta=document.getElementById('v-cfg-textarea'); if(ta)_cfgPrompts[cfgKey(_cfgSel)]=ta.value; var b=document.getElementById('v-cfg-save'); if(b){ b.textContent='Guardado ✓'; setTimeout(function(){ if(b)b.textContent='Guardar cambios'; },1200); } }
   function fmtNum(n){ return n.toLocaleString('es-ES'); }
 
   // ─────────── HUB ───────────
