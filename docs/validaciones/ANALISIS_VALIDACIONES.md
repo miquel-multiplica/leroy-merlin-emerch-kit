@@ -308,7 +308,7 @@ Gestión del "cerebro" del motor, no solo listas:
 16. **¿Qué tipos de check admiten falso positivo?** **No decidido.** Hipótesis del prototipo: solo los checks de **juicio** (discrepancias, ortografía, SEO semántico, designación administrativa) muestran el botón de falso positivo; las **ausencias objetivas** (sin descripción/designación, atributos vacíos, imágenes < mínimo, longitud) no lo muestran (son hechos verificables, no un error de juicio del motor). Confirmar con cliente/motor si **todos** los tipos deben poder marcarse como falso positivo o solo un subconjunto, y con qué criterio. Afecta a **qué filas de la matriz muestran la acción** y a qué disparadores permiten el **bloque**. *(Principio de base: la IA no prescribe el falso positivo; lo detecta el humano.)*
 17. **Datos del falso positivo en bloque:** el bloque asume que el motor expone el **disparador** (término/patrón que origina la alerta = clave de agrupación) y la jerarquía **Familia → Modelo (arquetipo de la guía) → Referencia** + el **seller** por referencia, además de **cómo calcula la equivalencia** (exacta vs IA). Confirmar que esos datos existen/son accesibles (BQ/motor); sin ellos el bloque no es fiable.
 18. **Nombre final del concepto/módulo:** ¿**"Auditorías"** o **"Validaciones"**? Decidir el naming del flujo (afecta a títulos de la UI y a la cuarta sección del toolkit).
-19. **¿"Subsección" además de "Sección"?** valorar si hace falta un nivel más fino que la sección de tienda como criterio de auditoría.
+19. **Subsección: descartada de momento** — solo se usa **"Sección"** como criterio de auditoría. (Reabrir únicamente si el cliente lo pide.)
 
 ---
 
