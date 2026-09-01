@@ -49,13 +49,24 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 11. ✅ **Health Score = viene dado** (nos pasan el valor; contacto **Javier Hernán**). **Fleco en el proto:** quitar "provisional en gris + recálculo por falsos positivos" → mostrar su valor + tendencia. **Pendiente (Javier):** ¿se calcula en vivo al auditar (snapshot) o es un valor pre-calculado?
 12. Granularidad de exports (asunción): seller = por referencia, TIP = por alerta.
 13. **Modelo de 4 cajas** — cajitas OK visualmente, pero **publicar = oferta + imagen** (regla de plataforma) y **despublicar es MANUAL** (emerchand/TIP). **Hay fichas publicadas que no deberían estarlo** → **se mantiene el nombre "No publicable"**, pero su lectura es: *publicada que no debería estarlo* (recomendación para despublicar manualmente, no un estado automático de plataforma). El reparto en tiers depende de la escala (ver 20).
-14. Flujo falsos positivos → admin (export vs. otro método) — **lo tratan en un meet**. Piden el **link del prototipo**.
+14. Flujo falsos positivos → panel del administrador (con el export o con otro método): **pendiente**; nos pidieron el **enlace del prototipo** para verlo. *(No es reunión.)*
 15. Re-auditoría: modelo del loop y transiciones (cancelar re-auditoría NO crea borrador; vuelve a Revisada).
 16. ¿Qué tipos de check admiten falso positivo? **No decidido → meet.** (Hipótesis proto: solo los de juicio.)
 17. Datos del falso positivo en bloque (disparador + Familia→Modelo→Referencia + seller + equivalencia) — **lo tratan en un meet**.
 18. Nombre final del concepto: ¿"Auditorías" o "Validaciones"?
 19. Subsección: descartada (solo "Sección").
 20. ⚠️ **Escala de criticidad SIN DEFINIR** — el cliente pide *"establecer una escala de criticidad"*: qué **tipo de error → qué tier**, y cuáles llegan a **"candidata a despublicar"**. Es el **núcleo del módulo**; nuestra Bloqueante/Crítica/Leve es **propuesta**. Probablemente **sesión de trabajo**.
+
+### Preguntas redactadas al cliente
+**Por escrito (confirmables):**
+- **Obligatorios de la guía:** ¿solo los atributos de la **ficha técnica**, o también los que la guía exige en **designación/descripción**? ¿qué gravedad si faltan estos últimos?
+- **Health Score (Javier):** ¿se **calcula al lanzar la auditoría** o lo **actualizáis vosotros**? ¿nos dais **fecha/hora de última actualización** por referencia?
+- **"No publicable":** además de faltar **designación/descripción**, ¿hay otros mínimos (p. ej. **por debajo del mínimo de imágenes**) que hagan que una ficha no debería estar publicada?
+
+**Para la sesión de trabajo:**
+- **Escala de criticidad:** qué **tipo de error → qué nivel**, y cuáles llegan a **"No publicable"**.
+- **Falsos positivos — elegibilidad:** ¿qué **tipos de error** admiten falso positivo?
+- **Falsos positivos — datos del bloque:** ¿el motor puede exponer el **disparador**, la jerarquía **Familia→Modelo→Referencia** y el **seller**? ¿cómo se calcula la **equivalencia**?
 
 ## Pendiente de prototipo (por maquetar)
 - ~~**Estado *En curso***~~: **resuelto** — vista de progreso (contador · % · barra · Cancelar).
