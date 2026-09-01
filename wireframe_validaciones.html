@@ -586,7 +586,7 @@
   <div class="page-body">
     <div class="grid" style="max-width:none; padding:0 40px;">
       <button onclick="go('v-hub')" style="background:none;border:none;color:var(--green);font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',system-ui,sans-serif;padding:0;margin-bottom:14px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Volver</button>
-      <div style="font-size:28px;font-weight:700;color:var(--text-ink);margin-bottom:4px;">Configuración del motor</div>
+      <div style="font-size:28px;font-weight:700;color:var(--text-ink);margin-bottom:24px;">Configuración del motor</div>
       <div style="display:flex;gap:24px;align-items:flex-start;">
         <div style="width:340px;flex-shrink:0;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:12px;">
           <input id="v-cfg-search" oninput="cfgSearch(this.value)" placeholder="Buscar familia o modelo…" style="width:100%;border:1px solid var(--border-input);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Inter',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;margin-bottom:10px;">
@@ -755,9 +755,9 @@
   var _cfgSel={level:'general',fam:0,mod:0};
   var _cfgExpanded={};
   var _cfgSearch='';
-  var _cfgMeta={ 'general':'12 ago 2026, 10:24 · prompt engineer' };
+  var _cfgMeta={ 'general':'12 ago 2026, 10:24 · Ana García' };
   function cfgSearch(v){ _cfgSearch=(v||'').toLowerCase(); renderCfgTree(); }
-  function _cfgNow(){ var d=new Date(); return d.toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'})+', '+d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+' · prompt engineer'; }
+  function _cfgNow(){ var d=new Date(); return d.toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'})+', '+d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+' · Ana García'; }
   function cfgKey(sel){ if(sel.level==='general')return 'general'; if(sel.level==='familia')return 'fam:'+sel.fam; return 'mod:'+sel.fam+':'+sel.mod; }
   function cfgSelect(level,fam,mod){ _cfgSel={level:level,fam:(fam==null?_cfgSel.fam:fam),mod:(mod==null?_cfgSel.mod:mod)}; renderConfig(); }
   function cfgToggleFam(i){ _cfgExpanded[i]=!_cfgExpanded[i]; renderConfig(); }
@@ -769,7 +769,7 @@
       html+='<div style="margin-top:2px;"><div style="display:flex;align-items:center;">'
         +'<button onclick="cfgToggleFam('+fi+')" style="background:none;border:none;cursor:pointer;padding:6px;display:flex;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate('+(exp?'90deg':'0deg')+');transition:transform .15s;"><polyline points="9 18 15 12 9 6"/></svg></button>'
         +'<div onclick="cfgSelect(\'familia\','+fi+')" style="flex:1;'+_cfgItem(famActive)+'">'+fam.name+'</div></div>';
-      if(exp){ html+='<div style="margin-left:20px;border-left:1px solid var(--border-card);padding-left:6px;">'; mods.forEach(function(x){ var mActive=(sel.level==='modelo'&&sel.fam===fi&&sel.mod===x.mi); html+='<div onclick="cfgSelect(\'modelo\','+fi+','+x.mi+')" style="'+_cfgItem(mActive)+'display:flex;justify-content:space-between;gap:8px;">'+x.m.name+'<span style="color:var(--text-muted);font-weight:500;font-size:11px;font-variant-numeric:tabular-nums;">'+x.m.code+'</span></div>'; }); html+='</div>'; }
+      if(exp){ html+='<div style="margin-left:20px;border-left:1px solid var(--border-card);padding-left:6px;">'; mods.forEach(function(x){ var mActive=(sel.level==='modelo'&&sel.fam===fi&&sel.mod===x.mi); html+='<div onclick="cfgSelect(\'modelo\','+fi+','+x.mi+')" style="'+_cfgItem(mActive)+'">'+x.m.name+' <span style="color:var(--text-muted);font-weight:500;font-size:11px;font-variant-numeric:tabular-nums;">'+x.m.code+'</span></div>'; }); html+='</div>'; }
       html+='</div>';
     });
     el.innerHTML=html;
@@ -892,8 +892,8 @@
   function ppTag(pp){ return '<span class="v-tag" style="background:'+(pp==='1P'?'var(--success-bg)':'var(--bg-parchment)')+';color:'+(pp==='1P'?'var(--green)':'var(--text-muted)')+';">'+pp+'</span>'; }
   function statCard(label, valueHtml, sub){ return '<div style="flex:1; min-width:150px; border:1px solid var(--border-card); border-radius:10px; padding:14px 16px; background:#fff;"><div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">'+label+'</div><div style="font-size:22px; font-weight:700; color:var(--text-ink); line-height:1.1;">'+valueHtml+'</div>'+(sub?'<div style="font-size:11px; color:var(--text-muted); margin-top:5px;">'+sub+'</div>':'')+'</div>'; }
   function openInforme(id){ var a=_audits.filter(function(x){return x.id===id;})[0]; if(!a) return; _infId=id; _infFOwner=''; _infFSeller=''; _infFSev=''; _infFTipo=''; _infFPp=''; _infFSeccion=''; _infFSearch=''; _infSort='sev'; _infFpView=false; _infPage=1; _infFindings=[]; var _idc=0; var _pushF=function(o,pin){ var c=_fpClone(o); c.id=++_idc; c.pin=pin||0; _infFindings.push(c); }; FP_HEROES.forEach(function(h,hx){ _pushF(h,hx+1); }); for(var _tp in FP_CFG){ if(!FP_CFG[_tp].bulk) continue; var _cfg=FP_CFG[_tp], _tpl=FP_TPL[_tp]; var _have=0; for(var _q=0;_q<_infFindings.length;_q++){ if(_infFindings[_q].tipo===_tp)_have++; } for(var _j=_have;_j<_cfg.count;_j++){ var _md=_cfg.modelos[_j % _cfg.modelos.length]; var _o=_fpClone(_tpl); _o.familia=_cfg.familia; _o.guia=_md.name; _o.modelo=_md.code; _o.seller=(_cfg.sellers?_cfg.sellers[Math.floor(_j/_cfg.modelos.length)%_cfg.sellers.length]:_o.seller); _o.ref=String(_md.refBase+100+_j); _pushF(_o,0); } } var _fill=_INF_SAMPLE.filter(function(t){return !FP_CFG.hasOwnProperty(t.tipo);}); var _target=Math.max(_infFindings.length+24, a.alertas||0); var _fi=0; while(_infFindings.length<_target){ var _t2=_fill[_fi%_fill.length]; var _o2=_fpClone(_t2); _o2.familia=(FAMILIA_OF[_o2.guia]||_o2.seccion||'—'); _o2.ref=String(30000000+_infFindings.length); _o2.modelo='MOD_F'+(1000+_infFindings.length); _pushF(_o2,0); _fi++; }
-    var nombre=a.perimetro.split('·').slice(1).join('·').trim()||a.perimetro;
-    document.getElementById('v-inf-title').textContent=nombre;
+    var _pp=a.perimetro.split('·'); var nombre=_pp.slice(1).join('·').trim()||a.perimetro; var _pcode=(a.tipo==='Modelo'&&_pp.length>1)?_pp[0].trim():'';
+    document.getElementById('v-inf-title').innerHTML=nombre+(_pcode?' <span style="font-size:18px;font-weight:500;color:var(--text-muted);font-variant-numeric:tabular-nums;">'+_pcode+'</span>':'');
     var _crumb=document.getElementById('v-inf-crumb'); if(_crumb) _crumb.textContent=a.perimetro;
     document.getElementById('v-inf-badge').innerHTML=estadoBadge(a.estado);
     var _sep='<span style="margin:0 12px; color:var(--text-tertiary);">·</span>';
@@ -1053,8 +1053,8 @@
       ? '<tr><th style="width:34%;">Perímetro</th><th style="width:12%;">Referencias</th><th style="width:22%;">Última ejecución</th><th style="width:18%;">Creador</th><th style="width:14%;"></th></tr>'
       : '<tr><th style="width:23%;">Perímetro</th><th style="width:10%;">Referencias</th><th style="width:10%;">Health Score</th><th style="width:8%;">Alertas</th><th style="width:16%;">Estado</th><th style="width:12%;">Última ejecución</th><th style="width:11%;">Creador</th><th style="width:10%;"></th></tr>';
     if(rows.length===0){ tbody.innerHTML='<tr><td colspan="'+(isDraft?5:8)+'" style="padding:48px;text-align:center;color:var(--text-muted);font-size:14px;">No hay auditorías que coincidan.</td></tr>'; return; }
-    tbody.innerHTML=rows.map(function(r){ var nombre=r.perimetro.split('·').slice(1).join('·').trim()||r.perimetro; var nEsc=nombre.replace(/"/g,'&quot;');
-      var cPer='<td><div style="min-width:0;"><div style="font-size:13px;color:var(--text-ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+nEsc+'">'+nombre+'</div><div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+audTipoLabel(r.tipo)+'</div></div></td>';
+    tbody.innerHTML=rows.map(function(r){ var _rp=r.perimetro.split('·'); var nombre=_rp.slice(1).join('·').trim()||r.perimetro; var rcode=(r.tipo==='Modelo'&&_rp.length>1)?_rp[0].trim():''; var nEsc=nombre.replace(/"/g,'&quot;');
+      var cPer='<td><div style="min-width:0;"><div style="font-size:13px;color:var(--text-ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+nEsc+'">'+nombre+'</div><div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+audTipoLabel(r.tipo)+(rcode?' · '+rcode:'')+'</div></div></td>';
       var cRefs='<td style="font-size:13px;color:var(--text-body);">'+fmtNum(r.refs)+'</td>';
       var cFecha='<td style="font-size:13px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+r.fecha+'</td>';
       var cCreador='<td style="font-size:13px;color:var(--text-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+r.creador+'">'+r.creador+'</td>';
@@ -1165,7 +1165,7 @@
   function slotLoading(msg){ var h=selHeader(false); document.getElementById('v-detect-slot').innerHTML='<div class="sku-count-card">'+h.html+'<div class="sku-loading" style="justify-content:flex-start;background:none;border:none;box-shadow:none;padding:16px 0 0;"><div class="sku-spinner"></div><span>'+(msg||'Consultando el catálogo de Leroy Merlin…')+'</span></div></div>'; }
   var _vFakeCats=[{name:'Iluminación exterior',url:'https://www.leroymerlin.es/productos/iluminacion-exterior.html'},{name:'Grifería de cocina',url:'https://www.leroymerlin.es/productos/griferia-de-cocina.html'},{name:'Suelos laminados',url:'https://www.leroymerlin.es/productos/suelos-laminados.html'},{name:'Radiadores y calefacción',url:'https://www.leroymerlin.es/productos/radiadores-calefaccion.html'},{name:'Mamparas de ducha',url:'https://www.leroymerlin.es/productos/mamparas-de-ducha.html'},{name:'Persianas y estores',url:'https://www.leroymerlin.es/productos/persianas-estores.html'}];
   var _vUrlPick=0, _vUrlName='';
-  function currentTitle(){ if(_vTipo==='Categoría') return _vUrlName||'Categoría web'; if(_vTipo==='Listado') return _vListName||'seleccion_referencias.csv'; if(_vSelOpt&&_vSelOpt.name) return _vSelOpt.name; return _vValor||''; }
+  function currentTitle(){ if(_vTipo==='Categoría') return _vUrlName||'Categoría web'; if(_vTipo==='Listado') return _vListName||'seleccion_referencias.csv'; if(_vSelOpt&&_vSelOpt.name) return _vSelOpt.name+((_vTipo==='Modelo'&&_vSelOpt.code)?(' · '+_vSelOpt.code):''); return _vValor||''; }
   function slotResult(){ _vDetectNum=_vSkuBase[_vTipo]||500; if(_vTipo==='Vendor'&&_vCatalogo==='1P')_vDetectNum=Math.round(_vDetectNum*0.7); else if(_vTipo==='Vendor'&&_vCatalogo==='3P')_vDetectNum=Math.round(_vDetectNum*0.3);
     var h=selHeader(true);
     var lbl=(_vTipo==='Listado')?'Referencias válidas del CSV subido.':'Se leerán directamente del catálogo (BigQuery).';
