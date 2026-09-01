@@ -48,7 +48,7 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 10. Normalización del Health Score en MVP → ver 11.
 11. ✅ **Health Score = viene dado** (nos pasan el valor; contacto **Javier Hernán**). **Fleco en el proto:** quitar "provisional en gris + recálculo por falsos positivos" → mostrar su valor + tendencia. **Pendiente (Javier):** ¿se calcula en vivo al auditar (snapshot) o es un valor pre-calculado?
 12. Granularidad de exports (asunción): seller = por referencia, TIP = por alerta.
-13. **Modelo de 4 cajas** — cajitas OK visualmente, pero **publicar = oferta + imagen** (regla de plataforma) y **despublicar es MANUAL** (emerchand/TIP). **Hay fichas publicadas que no deberían estarlo** → la 4ª caja pasa de "No publicable" a **"Candidata a despublicar"** (recomendación, no estado). El reparto en tiers depende de la escala (ver 20).
+13. **Modelo de 4 cajas** — cajitas OK visualmente, pero **publicar = oferta + imagen** (regla de plataforma) y **despublicar es MANUAL** (emerchand/TIP). **Hay fichas publicadas que no deberían estarlo** → **se mantiene el nombre "No publicable"**, pero su lectura es: *publicada que no debería estarlo* (recomendación para despublicar manualmente, no un estado automático de plataforma). El reparto en tiers depende de la escala (ver 20).
 14. Flujo falsos positivos → admin (export vs. otro método) — **lo tratan en un meet**. Piden el **link del prototipo**.
 15. Re-auditoría: modelo del loop y transiciones (cancelar re-auditoría NO crea borrador; vuelve a Revisada).
 16. ¿Qué tipos de check admiten falso positivo? **No decidido → meet.** (Hipótesis proto: solo los de juicio.)
