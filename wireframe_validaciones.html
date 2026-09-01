@@ -587,15 +587,20 @@
     <div class="grid" style="max-width:none; padding:0 40px;">
       <button onclick="go('v-hub')" style="background:none;border:none;color:var(--green);font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',system-ui,sans-serif;padding:0;margin-bottom:14px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Volver</button>
       <div style="font-size:28px;font-weight:700;color:var(--text-ink);margin-bottom:4px;">Configuración del motor</div>
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;max-width:820px;line-height:1.5;">Prompt general y sub-prompts por nivel (con herencia). La guía es la <strong>fuente de verdad</strong> y solo se consulta. Las propuestas de falsos positivos llegan como <strong>archivo aparte</strong>.</div>
       <div style="display:flex;gap:24px;align-items:flex-start;">
-        <div style="width:300px;flex-shrink:0;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:12px;">
+        <div style="width:340px;flex-shrink:0;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:12px;">
           <input id="v-cfg-search" oninput="cfgSearch(this.value)" placeholder="Buscar familia o modelo…" style="width:100%;border:1px solid var(--border-input);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Inter',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;margin-bottom:10px;">
           <div id="v-cfg-tree"></div>
         </div>
-        <div style="flex:1;min-width:0;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:24px 26px;"><div id="v-cfg-node"></div></div>
+        <div style="flex:1;min-width:0;max-width:840px;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:24px 26px;"><div id="v-cfg-node"></div></div>
       </div>
     </div>
+  </div>
+</div>
+<div class="modal-overlay" id="guia-modal">
+  <div class="modal-box" style="width:520px; max-width:92vw; height:100vh; max-height:100vh; border-radius:0; padding:28px 30px; overflow-y:auto; position:relative;">
+    <button onclick="closeCfgGuia()" style="position:absolute; top:18px; right:18px; background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div id="cfg-guia-body" style="margin-top:6px;"></div>
   </div>
 </div>
 <div class="modal-overlay" id="v-fp-modal">
@@ -753,24 +758,26 @@
       html+='<div style="margin-top:2px;"><div style="display:flex;align-items:center;">'
         +'<button onclick="cfgToggleFam('+fi+')" style="background:none;border:none;cursor:pointer;padding:6px;display:flex;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate('+(exp?'90deg':'0deg')+');transition:transform .15s;"><polyline points="9 18 15 12 9 6"/></svg></button>'
         +'<div onclick="cfgSelect(\'familia\','+fi+')" style="flex:1;'+_cfgItem(famActive)+'">'+fam.name+'</div></div>';
-      if(exp){ html+='<div style="margin-left:20px;border-left:1px solid var(--border-card);padding-left:6px;">'; mods.forEach(function(x){ var mActive=(sel.level==='modelo'&&sel.fam===fi&&sel.mod===x.mi); html+='<div onclick="cfgSelect(\'modelo\','+fi+','+x.mi+')" style="'+_cfgItem(mActive)+'">'+x.m.name+'</div>'; }); html+='</div>'; }
+      if(exp){ html+='<div style="margin-left:20px;border-left:1px solid var(--border-card);padding-left:6px;">'; mods.forEach(function(x){ var mActive=(sel.level==='modelo'&&sel.fam===fi&&sel.mod===x.mi); html+='<div onclick="cfgSelect(\'modelo\','+fi+','+x.mi+')" style="'+_cfgItem(mActive)+'display:flex;justify-content:space-between;gap:8px;">'+x.m.name+'<span style="color:var(--text-muted);font-weight:500;font-size:11px;font-variant-numeric:tabular-nums;">'+x.m.code+'</span></div>'; }); html+='</div>'; }
       html+='</div>';
     });
     el.innerHTML=html;
   }
-  function renderCfgNode(){ var el=document.getElementById('v-cfg-node'); if(!el)return; var sel=_cfgSel; var key=cfgKey(sel); var title,crumb,guideBox='';
-    if(sel.level==='general'){ title='Prompt general'; crumb='Aplica a todas las referencias.'; }
-    else if(sel.level==='familia'){ var fam=_cfgFamilias[sel.fam]; title=fam.name; crumb='Familia · hereda del prompt general.'; }
-    else { var fam=_cfgFamilias[sel.fam]; var m=fam.modelos[sel.mod]; title=m.name; crumb='Modelo ('+m.code+') · '+fam.name+' · hereda de general + familia.'; guideBox='<div style="margin-top:24px;border:1px solid var(--border-card);border-radius:10px;padding:16px 18px;background:var(--bg-surface);"><div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;">Guía aplicable (fuente de verdad · solo lectura)</div><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;"><div style="font-size:14px;font-weight:700;color:var(--text-ink);">Guía de «'+m.name+'»</div><button onclick="alert(\'Resumen de la guía de '+m.name+' — solo lectura (se edita en el módulo de Guías).\')" style="background:none;border:none;color:var(--green);font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:\'Inter\',system-ui,sans-serif;">Ver resumen<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div></div>'; }
-    var meta=_cfgMeta[key]; var metaHtml='<div style="font-size:12px;color:var(--text-muted);margin:6px 0 22px;">'+(meta?('Última modificación: <strong style="color:var(--text-body);">'+meta+'</strong>'):'Sin cambios todavía.')+'</div>';
+  function renderCfgNode(){ var el=document.getElementById('v-cfg-node'); if(!el)return; var sel=_cfgSel; var key=cfgKey(sel); var titleHtml, guideLink='';
+    if(sel.level==='general'){ titleHtml='Prompt general'; }
+    else if(sel.level==='familia'){ titleHtml=_cfgFamilias[sel.fam].name; }
+    else { var fam=_cfgFamilias[sel.fam]; var m=fam.modelos[sel.mod]; titleHtml=m.name+' <span style="font-size:14px;font-weight:500;color:var(--text-muted);font-variant-numeric:tabular-nums;">'+m.code+'</span>'; guideLink='<button onclick="openCfgGuia('+sel.fam+','+sel.mod+')" style="flex-shrink:0;background:none;border:none;color:var(--green);font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:\'Inter\',system-ui,sans-serif;">Ver resumen de la guía<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>'; }
+    var meta=_cfgMeta[key]; var metaHtml=meta?('<div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Última modificación: <strong style="color:var(--text-body);">'+meta+'</strong></div>'):'';
     var promptVal=(_cfgPrompts[key]||'').replace(/</g,'&lt;');
     var ph=(sel.level==='general')?'Reglas transversales…':(sel.level==='familia'?'Reglas propias de esta familia (además de las heredadas)…':'Reglas/excepciones de este modelo: vocabulario válido, sinónimos, matices…');
-    el.innerHTML='<div style="font-size:20px;font-weight:700;color:var(--text-ink);">'+title+'</div><div style="font-size:13px;color:var(--text-muted);margin-top:4px;">'+crumb+'</div>'+metaHtml
-      +'<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;">Prompt de este nivel</div>'
-      +'<textarea id="v-cfg-textarea" rows="12" placeholder="'+ph+'" style="width:100%;border:1px solid var(--border-input);border-radius:10px;padding:14px 16px;font-size:13px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;resize:vertical;line-height:1.6;">'+promptVal+'</textarea>'
-      +guideBox
+    el.innerHTML='<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;"><div style="font-size:20px;font-weight:700;color:var(--text-ink);">'+titleHtml+'</div>'+guideLink+'</div>'+metaHtml
+      +'<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;margin:22px 0 8px;">Prompt de este nivel</div>'
+      +'<textarea id="v-cfg-textarea" rows="14" placeholder="'+ph+'" style="width:100%;border:1px solid var(--border-input);border-radius:10px;padding:14px 16px;font-size:13px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;resize:vertical;line-height:1.6;">'+promptVal+'</textarea>'
       +'<div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;"><button id="v-cfg-save" onclick="cfgSavePrompt()" class="btn btn-primary" style="height:44px;">Guardar cambios</button></div>';
   }
+  function _cfgGuiaSec(t,d){ return '<div style="margin-bottom:16px;"><div style="font-size:12px;font-weight:700;color:var(--text-ink);margin-bottom:3px;">'+t+'</div><div style="font-size:12px;color:var(--text-muted);line-height:1.5;">'+d+'</div></div>'; }
+  function openCfgGuia(fi,mi){ var fam=_cfgFamilias[fi]; var m=fam.modelos[mi]; var b=document.getElementById('cfg-guia-body'); if(b){ b.innerHTML='<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px;">Guía de estilo · '+fam.name+'</div><div style="font-size:20px;font-weight:700;color:var(--text-ink);margin-bottom:3px;">'+m.name+' <span style="font-size:13px;color:var(--text-muted);font-weight:500;">'+m.code+'</span></div><div style="font-size:12px;color:var(--text-muted);margin-bottom:22px;line-height:1.5;">Fuente de verdad. Se edita en el módulo de <strong>Guías</strong>; aquí es solo consulta.</div>'+_cfgGuiaSec('Designación','Concatenación de atributos en el orden de la guía + términos SEO obligatorios.')+_cfgGuiaSec('Descripción','Atributos que deben aparecer en el texto + semántica SEO exigida.')+_cfgGuiaSec('Ficha técnica','Atributos básicos y específicos exigidos, con su obligatoriedad.')+_cfgGuiaSec('Multimedia','Categorías de imagen y nº mínimo por categoría + mínimo total.'); } document.getElementById('guia-modal').classList.add('open'); }
+  function closeCfgGuia(){ var g=document.getElementById('guia-modal'); if(g)g.classList.remove('open'); }
   function cfgSavePrompt(){ var ta=document.getElementById('v-cfg-textarea'); if(ta)_cfgPrompts[cfgKey(_cfgSel)]=ta.value; _cfgMeta[cfgKey(_cfgSel)]=_cfgNow(); renderCfgNode(); }
   function fmtNum(n){ return n.toLocaleString('es-ES'); }
 
