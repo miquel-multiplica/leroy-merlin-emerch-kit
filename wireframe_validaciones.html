@@ -587,6 +587,7 @@
     <div class="grid" style="max-width:none; padding:0 40px;">
       <button onclick="go('v-hub')" style="background:none;border:none;color:var(--green);font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',system-ui,sans-serif;padding:0;margin-bottom:14px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Volver</button>
       <div style="font-size:28px;font-weight:700;color:var(--text-ink);margin-bottom:24px;">Reglas del motor de validaciones</div>
+      <div id="v-cfg-motorbar" style="margin-bottom:22px;"></div>
       <div style="display:flex;gap:24px;align-items:flex-start;">
         <div style="width:340px;flex-shrink:0;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:12px;">
           <input id="v-cfg-search" oninput="cfgSearch(this.value)" placeholder="Buscar familia o modelo…" style="width:100%;border:1px solid var(--border-input);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Inter',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;margin-bottom:10px;">
@@ -595,6 +596,12 @@
         <div style="flex:1;min-width:0;max-width:840px;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:24px 26px;"><div id="v-cfg-node"></div></div>
       </div>
     </div>
+  </div>
+</div>
+<div class="modal-overlay" id="v-motor-hist-modal">
+  <div class="modal-box" style="width:600px; max-width:92vw; padding:28px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><div style="font-size:20px;font-weight:700;color:var(--text-ink);">Historial de versiones del motor</div><button onclick="closeMotorHistory()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div id="v-motor-hist-list"></div>
   </div>
 </div>
 <div class="modal-overlay" id="guia-modal" onclick="if(event.target===this)closeCfgGuia()">
@@ -756,12 +763,20 @@
   var _cfgExpanded={};
   var _cfgSearch='';
   var _cfgMeta={ 'general':'12 ago 2026, 10:24' };
+  var _motorVer='v1.4';
+  var _motorPub='12 ago 2026, 09:10';
+  var _motorDirty=false;
+  var _motorHistory=[
+    {v:'v1.4', when:'12 ago 2026, 09:10', note:'Ajustes de ortografía y vocabulario en Herramientas.'},
+    {v:'v1.3', when:'28 jul 2026, 16:40', note:'Regla de unidades normalizadas y sinónimos de color.'},
+    {v:'v1.2', when:'10 jul 2026, 11:05', note:'Prompt general inicial y concatenación de la designación.'}
+  ];
   function cfgSearch(v){ _cfgSearch=(v||'').toLowerCase(); renderCfgTree(); }
   function _cfgNow(){ var d=new Date(); return d.toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'})+', '+d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}); }
   function cfgKey(sel){ if(sel.level==='general')return 'general'; if(sel.level==='familia')return 'fam:'+sel.fam; return 'mod:'+sel.fam+':'+sel.mod; }
   function cfgSelect(level,fam,mod){ _cfgSel={level:level,fam:(fam==null?_cfgSel.fam:fam),mod:(mod==null?_cfgSel.mod:mod)}; renderConfig(); }
   function cfgToggleFam(i){ _cfgExpanded[i]=!_cfgExpanded[i]; renderConfig(); }
-  function renderConfig(){ renderCfgTree(); renderCfgNode(); }
+  function renderConfig(){ renderMotorBar(); renderCfgTree(); renderCfgNode(); }
   function _cfgItem(active){ return 'display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;'+(active?'background:var(--success-bg);color:var(--green);font-weight:700;':'color:var(--text-body);'); }
   function renderCfgTree(){ var el=document.getElementById('v-cfg-tree'); if(!el)return; var sel=_cfgSel; var q=_cfgSearch;
     var html='<div onclick="cfgSelect(\'general\')" style="'+_cfgItem(sel.level==='general')+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>Prompt general</div>';
@@ -788,7 +803,13 @@
   function _cfgGuiaSec(t,d){ return '<div style="margin-bottom:16px;"><div style="font-size:12px;font-weight:700;color:var(--text-ink);margin-bottom:3px;">'+t+'</div><div style="font-size:12px;color:var(--text-muted);line-height:1.5;">'+d+'</div></div>'; }
   function openCfgGuia(fi,mi){ var fam=_cfgFamilias[fi]; var m=fam.modelos[mi]; var t=document.getElementById('cfg-guia-title'), su=document.getElementById('cfg-guia-sub'); if(t)t.innerHTML=m.name+' <span style="font-size:13px;color:var(--text-muted);font-weight:500;">'+m.code+'</span>'; if(su)su.innerHTML='Guía de estilo · '+fam.name+' · <span style="color:var(--text-muted);">contenido de ejemplo (se edita en Guías)</span>'; var list=document.getElementById('cfg-guia-attrs'); if(list){ var attrs=[['Tipo de producto','ATT_22088'],['Material principal','ATT_10840'],['Color','ATT_04261'],['Dimensiones (en cm)','ATT_00053'],['Lugar de uso','ATT_13826'],['Tipo de instalación','ATT_01758'],['Acabado del producto','ATT_10842'],['Estilo internacional','ATT_25415']]; var h=''; attrs.forEach(function(a,i){ if(i>0)h+='<div style="border-top:1px solid var(--border-card);"></div>'; h+='<div style="display:flex;align-items:center;gap:12px;padding:11px 0;"><span style="font-size:14px;color:var(--text-body);flex:1;">'+a[0]+'</span><span style="font-size:12px;color:var(--text-muted);font-variant-numeric:tabular-nums;">'+a[1]+'</span></div>'; }); list.innerHTML=h; } document.getElementById('guia-modal').classList.add('open'); }
   function closeCfgGuia(){ var g=document.getElementById('guia-modal'); if(g)g.classList.remove('open'); }
-  function cfgSavePrompt(){ var ta=document.getElementById('v-cfg-textarea'); if(ta)_cfgPrompts[cfgKey(_cfgSel)]=ta.value; _cfgMeta[cfgKey(_cfgSel)]=_cfgNow(); renderCfgNode(); }
+  function cfgSavePrompt(){ var ta=document.getElementById('v-cfg-textarea'); if(ta)_cfgPrompts[cfgKey(_cfgSel)]=ta.value; _cfgMeta[cfgKey(_cfgSel)]=_cfgNow(); _motorDirty=true; renderMotorBar(); renderCfgNode(); }
+  function renderMotorBar(){ var el=document.getElementById('v-cfg-motorbar'); if(!el)return; var dirty=_motorDirty?'<span style="background:#fbf4d8;border:1px solid #e8d488;color:#7a5a00;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;">Cambios sin publicar</span>':''; el.innerHTML='<div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:14px 18px;flex-wrap:wrap;"><span style="background:var(--success-bg);color:var(--green);border-radius:8px;padding:5px 11px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;">Motor '+_motorVer+'</span><span style="font-size:12px;color:var(--text-muted);">publicado '+_motorPub+'</span>'+dirty+'<div style="margin-left:auto;display:flex;align-items:center;gap:16px;"><button onclick="openMotorHistory()" style="background:none;border:none;color:var(--green);font-size:13px;font-weight:700;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;">Ver historial</button><button onclick="motorPublish()"'+(_motorDirty?'':' disabled')+' class="btn btn-primary" style="height:40px;'+(_motorDirty?'':'opacity:0.45;cursor:default;')+'">Publicar nueva versión</button></div></div>'; }
+  function motorPublish(){ if(!_motorDirty)return; var n=parseFloat(_motorVer.slice(1)); n=Math.round((n+0.1)*10)/10; _motorVer='v'+n.toFixed(1); _motorPub=_cfgNow(); _motorHistory.unshift({v:_motorVer, when:_motorPub, note:'Cambios en prompts/reglas publicados.'}); _motorDirty=false; renderMotorBar(); }
+  function openMotorHistory(){ renderMotorHistList(); document.getElementById('v-motor-hist-modal').classList.add('open'); }
+  function closeMotorHistory(){ document.getElementById('v-motor-hist-modal').classList.remove('open'); }
+  function motorRestore(v){ _motorVer=v; _motorPub=_cfgNow(); _motorDirty=false; closeMotorHistory(); renderMotorBar(); }
+  function renderMotorHistList(){ var el=document.getElementById('v-motor-hist-list'); if(!el)return; el.innerHTML=_motorHistory.map(function(h,i){ var cur=(h.v===_motorVer); return '<div style="display:flex;align-items:flex-start;gap:14px;padding:14px 0;'+(i>0?'border-top:1px solid var(--border-card);':'')+'"><span style="background:'+(cur?'var(--success-bg)':'#f0f0ee')+';color:'+(cur?'var(--green)':'var(--text-muted)')+';border-radius:8px;padding:5px 11px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0;">'+h.v+'</span><div style="flex:1;min-width:0;"><div style="font-size:13px;color:var(--text-body);line-height:1.45;">'+h.note+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:3px;">'+h.when+(cur?' · versión actual':'')+'</div></div>'+(cur?'':'<button onclick="motorRestore(\''+h.v+'\')" style="flex-shrink:0;background:#fff;border:1px solid var(--border-card);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;color:var(--green);cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;">Restaurar</button>')+'</div>'; }).join(''); }
   function fmtNum(n){ return n.toLocaleString('es-ES'); }
 
   // ─────────── HUB ───────────
