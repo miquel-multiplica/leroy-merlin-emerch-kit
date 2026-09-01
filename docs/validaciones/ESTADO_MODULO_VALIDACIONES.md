@@ -62,6 +62,7 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 - **Obligatorios de la guía:** ¿solo los atributos de la **ficha técnica**, o también los que la guía exige en **designación/descripción**? ¿qué gravedad si faltan estos últimos?
 - **Health Score (Javier):** ¿se **calcula al lanzar la auditoría** o lo **actualizáis vosotros**? ¿nos dais **fecha/hora de última actualización** por referencia?
 - **"No publicable":** además de faltar **designación/descripción**, ¿hay otros mínimos (p. ej. **por debajo del mínimo de imágenes**) que hagan que una ficha no debería estar publicada?
+- **Jerarquía sobre el modelo:** ¿cuál es el nivel inmediatamente **superior al modelo** (arquetipo de guía) en vuestra estructura — la **familia** (merchandising), la **categoría web (PLP)** u otra cosa? Lo necesitamos para organizar el **panel del motor** (prompt general ▸ nivel intermedio ▸ modelo).
 
 **Para la sesión de trabajo:**
 - **Escala de criticidad:** qué **tipo de error → qué nivel**, y cuáles llegan a **"No publicable"**.
