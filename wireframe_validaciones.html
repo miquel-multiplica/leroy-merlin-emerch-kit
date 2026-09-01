@@ -380,6 +380,10 @@
   #guia-modal.open { pointer-events: auto; background: rgba(0,0,0,0.45); }
   #guia-modal .modal-box { transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); }
   #guia-modal.open .modal-box { transform: translateX(0); }
+  #v-motor-hist-modal { display:flex !important; justify-content:flex-end; pointer-events:none; background:transparent; transition:background .25s ease; }
+  #v-motor-hist-modal.open { pointer-events:auto; background:rgba(0,0,0,0.45); }
+  #v-motor-hist-modal .modal-box { transform:translateX(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); }
+  #v-motor-hist-modal.open .modal-box { transform:translateX(0); }
   .modal-box {
     background: #fff;
     border-radius: 12px;
@@ -599,7 +603,7 @@
   </div>
 </div>
 <div class="modal-overlay" id="v-motor-hist-modal">
-  <div class="modal-box" style="width:600px; max-width:92vw; padding:28px;">
+  <div class="modal-box" style="width:480px; max-width:92vw; height:100vh; max-height:100vh; border-radius:0; padding:28px 30px; overflow-y:auto;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><div style="font-size:20px;font-weight:700;color:var(--text-ink);">Historial de versiones del motor</div><button onclick="closeMotorHistory()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div id="v-motor-hist-list"></div>
   </div>
