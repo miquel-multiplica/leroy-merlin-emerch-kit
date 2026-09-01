@@ -262,11 +262,11 @@ La modal ofrece **tres informes** (los dos por audiencia son **independientes**,
 **Cómo encaja con lo nuestro:** su **"un error por fila" ≈ nuestra matriz de trabajo**, pero **mínimo**. Nuestro **export interno TIP** = ese formato **enriquecido** con *owner · severidad · categoría · acción correctiva · guía · 1P/3P · seller*, conservando la columna **Campo/ubicación** (designación/descripción/**ficha técnica**) aunque en la UI de la matriz la ocultemos (redundante con el diagnóstico). **La granularidad encaja con la audiencia** (no son dos botones de formato sueltos): el **seller corrige por producto** → su export va **por referencia** (agregado por SKU, como "resultados", filtrado a **sus** refs y solo lo suyo — completitud/atributos, sin coherencia interna). El **TIP trabaja alerta a alerta** (marca falsos positivos, enruta, pivota por owner/severidad/tipo) → su export va **por alerta** (la matriz enriquecida). *Opcional:* el export interno puede incluir además un **resumen por referencia**, pero es secundario.
 
 ### 5 · Configuración del motor (admin)
-Gestión del "cerebro" del motor, no solo listas:
-- **Prompt** + **documentos .md** que lo alimentan (criterios, casuísticas, ejemplos), **por sección/tipología**.
-- **Vocabulario/listas:** excepciones ortográficas, tabla de colores (+equivalencias), materiales (desambiguación tipo "teca"), abreviaturas/símbolos.
-- **Versionado / trazabilidad:** cada versión queda registrada y se sabe con cuál se generó cada informe (para mantenerlo "explicable y repetible").
-- **Loop de mejora:** un falso positivo revisado en la pantalla 3 llega aquí como propuesta para afinar el prompt/.md.
+Gestión del "cerebro" del motor, no solo listas. **Ya prototipado** como panel **"Reglas del motor de validaciones"** (ver detalle de UX en `ESTADO_MODULO_VALIDACIONES.md`):
+- **Prompt por nivel, jerárquico:** **Prompt general** (reglas duras transversales) ▸ **Familia** ▸ **Modelo**, en un árbol navegable con buscador. **Lo específico gana** sobre lo general. Cada nivel tiene su textarea de prompt y un enlace al **resumen de la guía** aplicable (referencia de solo lectura; el motor **nunca reedita la guía**, y **una guía solo aplica a sus modelos**). *(El nivel intermedio se prototipa como "familia" a modo de hipótesis — pendiente confirmar cuál es el nivel real sobre el modelo.)*
+- **Vocabulario/listas:** excepciones ortográficas, tabla de colores (+equivalencias), materiales (desambiguación tipo "teca"), abreviaturas/símbolos. *(Aún no maquetado como sección propia dentro del panel.)*
+- **Versionado / trazabilidad:** el motor tiene **versión** (badge "Motor vX" en las auditorías). Editar un nivel lo deja como **"cambio sin publicar"** (marcado en el árbol); al **publicar una nueva versión** se pide un **nombre/título** y queda registrada con **autor, fecha y los niveles tocados**, con **historial** (y restaurar). Cada informe sabe con qué versión se generó ("explicable y repetible").
+- **Loop de mejora:** un falso positivo revisado en la pantalla 3 llega aquí como propuesta para afinar el prompt/.md. **En el MVP** la cola de propuestas es un **archivo/export**, no una conexión directa que reedite el prompt (ver §5.14). **Reglas por proveedor:** pregunta futura.
 
 ### Flujos clave
 
