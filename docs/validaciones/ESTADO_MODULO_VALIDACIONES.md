@@ -36,25 +36,26 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 - **Configuración** (admin): **enlace** (verde, icono ajustes) junto a "Nueva auditoría" → panel admin (pantalla vacía de momento, "próximamente").
 
 ## Pendiente con cliente (decisiones/datos) — detalle en §5 del análisis
-1. Acceso a datos (BigQuery 1P): campos expuestos + mapeo PLP↔referencias.
+1. ✅ **Acceso a datos (BQ 1P)** — como en guías; universo = **modelos con guía eMerch**; expone atributos, seller/proveedor. **Solo publicadas**; **campo ADM sí** (fuente complementaria). *(Falta el detalle fino de campos/mapeo PLP↔refs al integrar.)*
 2. Motor actual: walkthrough y si ya usa LLM.
-3. Recurrencia: casi seguro **manual** (el usuario relanza cuando quiere, sin automatización). Confirmar cómo se articulan hub, ejecuciones, histórico y comparación de periodos.
-4. Granularidad/formato del informe.
-5. Cómo se sube el perímetro "Listado" (la lista de productos a auditar): ¿una lista de **URLs de fichas (PDP)**, como en el deck del cliente, o un **CSV de referencias/SKUs**, como en el prototipo? Alinear el formato.
-6. Significado de las letras de gama (A/M/S/C/K/B): qué es cada una y **cuántas hay**.
-7. Atributos obligatorios: ¿obligatorio para **publicar** (→ Bloqueante → «No publicable»), u obligatorio **según la guía** pero la ficha sigue viva (→ Crítica/Leve)? De ahí en qué caja cae. Severidad ≠ prioridad (grave ≠ urgente).
-8. Alcance BQ (lo planteó Susana): ¿referencias no publicadas? + ¿expone el campo ADM?
-9. Owner de "Estructura de designación": Seller (dato) vs. TIP (título).
-10. Normalización del Health Score base (solo ~5/10 puntos auditables en MVP).
-11. Health Score: ¿calculado por nosotros o ingerido de origen?
+3. Recurrencia: **manual** (relanzan cuando quieren). Quieren **histórico**: evolución del Health Score por auditoría + correcciones en el tiempo → **nos piden proponerlo**.
+4. Formato/granularidad del informe → nos piden **propuesta**, partiendo de su PDF.
+5. "Listado": **empezar con CSV de referencias**; a futuro, conectar y elegir modelo (auto-auditoría).
+6. ✅ **Gama** — 14 valores reales (M,A,B,C,D,E,S,Z,T,L,R,P,K,V), **uno por referencia**. Aplicado en el proto.
+7. ⚠️ **Atributos obligatorios reencuadrados.** La obligatoriedad de la guía se marca en los **atributos de ficha técnica** → faltar uno = **Crítica/Leve** (calidad de ficha viva), **no** "candidata a despublicar". *(Pendiente: si "obligatorio de guía" incluye también los atributos que la guía exige en designación/descripción, y con qué severidad si faltan.)*
+8. ✅ **Alcance BQ** — **solo publicadas**; **ADM expuesto** (complementario).
+9. ✅ **Owner de estructura de designación = TIP** (aplicar en proto).
+10. Normalización del Health Score en MVP → ver 11.
+11. ✅ **Health Score = viene dado** (nos pasan el valor; contacto **Javier Hernán**). **Fleco en el proto:** quitar "provisional en gris + recálculo por falsos positivos" → mostrar su valor + tendencia. **Pendiente (Javier):** ¿se calcula en vivo al auditar (snapshot) o es un valor pre-calculado?
 12. Granularidad de exports (asunción): seller = por referencia, TIP = por alerta.
-13. Modelo de estados a 4 cajas — **validado con cliente (le gustaron las cajitas)**. Bordes menores nuestros: que «3+ alertas» solo-leves no infle «críticos»; y cómo cuentan las «No publicable» en el Health Score (dependen de que BQ traiga las no publicadas — asunción: BQ filtra lo que necesitemos).
-14. Flujo falsos positivos → admin (¿informe descargable vs. conexión directa?) + copy de los modales de falsos positivos y de "¿Marcar como revisado?".
-15. Re-auditoría: modelo del loop y transiciones de estado (cancelar una re-auditoría NO crea borrador; vuelve a Revisada).
-16. ¿Qué tipos de check admiten falso positivo? No decidido. Hipótesis del proto: solo los de juicio (discrepancias, ortografía, SEO, administrativa); las ausencias objetivas no. Confirmar si todos deben admitirlo. Principio: la IA no prescribe el falso positivo, lo detecta el humano.
-17. Datos del falso positivo en bloque: que el motor exponga el **disparador** (término/patrón que origina la alerta = clave de agrupación) y la jerarquía **Familia → Modelo (arquetipo de la guía) → Referencia** + el **seller** por referencia, y **cómo calcula la equivalencia** (exacta vs IA). Sin esos datos el bloque no es fiable.
-18. Nombre final del concepto: ¿"Auditorías" o "Validaciones"? (decidir el naming del flujo).
-19. Subsección: **descartada de momento** (solo "Sección").
+13. **Modelo de 4 cajas** — cajitas OK visualmente, pero **publicar = oferta + imagen** (regla de plataforma) y **despublicar es MANUAL** (emerchand/TIP). **Hay fichas publicadas que no deberían estarlo** → la 4ª caja pasa de "No publicable" a **"Candidata a despublicar"** (recomendación, no estado). El reparto en tiers depende de la escala (ver 20).
+14. Flujo falsos positivos → admin (export vs. otro método) — **lo tratan en un meet**. Piden el **link del prototipo**.
+15. Re-auditoría: modelo del loop y transiciones (cancelar re-auditoría NO crea borrador; vuelve a Revisada).
+16. ¿Qué tipos de check admiten falso positivo? **No decidido → meet.** (Hipótesis proto: solo los de juicio.)
+17. Datos del falso positivo en bloque (disparador + Familia→Modelo→Referencia + seller + equivalencia) — **lo tratan en un meet**.
+18. Nombre final del concepto: ¿"Auditorías" o "Validaciones"?
+19. Subsección: descartada (solo "Sección").
+20. ⚠️ **Escala de criticidad SIN DEFINIR** — el cliente pide *"establecer una escala de criticidad"*: qué **tipo de error → qué tier**, y cuáles llegan a **"candidata a despublicar"**. Es el **núcleo del módulo**; nuestra Bloqueante/Crítica/Leve es **propuesta**. Probablemente **sesión de trabajo**.
 
 ## Pendiente de prototipo (por maquetar)
 - ~~**Estado *En curso***~~: **resuelto** — vista de progreso (contador · % · barra · Cancelar).
