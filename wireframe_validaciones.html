@@ -782,8 +782,7 @@
     var promptVal=(_cfgPrompts[key]||'').replace(/</g,'&lt;');
     var ph=(sel.level==='general')?'Reglas transversales…':(sel.level==='familia'?'Reglas propias de esta familia (además de las heredadas)…':'Reglas/excepciones de este modelo: vocabulario válido, sinónimos, matices…');
     el.innerHTML='<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;"><div style="font-size:20px;font-weight:700;color:var(--text-ink);">'+titleHtml+'</div>'+guideLink+'</div>'+metaHtml
-      +'<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;margin:22px 0 8px;">Prompt de este nivel</div>'
-      +'<textarea id="v-cfg-textarea" rows="14" placeholder="'+ph+'" style="width:100%;border:1px solid var(--border-input);border-radius:10px;padding:14px 16px;font-size:13px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;resize:vertical;line-height:1.6;">'+promptVal+'</textarea>'
+      +'<textarea id="v-cfg-textarea" rows="14" placeholder="'+ph+'" style="margin-top:22px;width:100%;border:1px solid var(--border-input);border-radius:10px;padding:14px 16px;font-size:13px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;resize:vertical;line-height:1.6;">'+promptVal+'</textarea>'
       +'<div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;"><button id="v-cfg-save" onclick="cfgSavePrompt()" class="btn btn-primary" style="height:44px;">Guardar cambios</button></div>';
   }
   function _cfgGuiaSec(t,d){ return '<div style="margin-bottom:16px;"><div style="font-size:12px;font-weight:700;color:var(--text-ink);margin-bottom:3px;">'+t+'</div><div style="font-size:12px;color:var(--text-muted);line-height:1.5;">'+d+'</div></div>'; }
