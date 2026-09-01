@@ -53,6 +53,8 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 15. Re-auditoría: modelo del loop y transiciones de estado (cancelar una re-auditoría NO crea borrador; vuelve a Revisada).
 16. ¿Qué tipos de check admiten falso positivo? No decidido. Hipótesis del proto: solo los de juicio (discrepancias, ortografía, SEO, administrativa); las ausencias objetivas no. Confirmar si todos deben admitirlo. Principio: la IA no prescribe el falso positivo, lo detecta el humano.
 17. Datos del falso positivo en bloque: que el motor exponga el **disparador** (término/patrón que origina la alerta = clave de agrupación) y la jerarquía **Familia → Modelo (arquetipo de la guía) → Referencia** + el **seller** por referencia, y **cómo calcula la equivalencia** (exacta vs IA). Sin esos datos el bloque no es fiable.
+18. Nombre final del concepto: ¿"Auditorías" o "Validaciones"? (decidir el naming del flujo).
+19. ¿"Subsección" además de "Sección" como criterio de auditoría? (valorar).
 
 ## Pendiente de prototipo (por maquetar)
 - ~~**Estado *En curso***~~: **resuelto** — vista de progreso (contador · % · barra · Cancelar).
