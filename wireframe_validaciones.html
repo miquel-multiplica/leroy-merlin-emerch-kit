@@ -586,7 +586,7 @@
   <div class="page-body">
     <div class="grid" style="max-width:none; padding:0 40px;">
       <button onclick="go('v-hub')" style="background:none;border:none;color:var(--green);font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:'Inter',system-ui,sans-serif;padding:0;margin-bottom:14px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Volver</button>
-      <div style="font-size:28px;font-weight:700;color:var(--text-ink);margin-bottom:24px;">Configuración del motor</div>
+      <div style="font-size:28px;font-weight:700;color:var(--text-ink);margin-bottom:24px;">Reglas del motor de validaciones</div>
       <div style="display:flex;gap:24px;align-items:flex-start;">
         <div style="width:340px;flex-shrink:0;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:12px;">
           <input id="v-cfg-search" oninput="cfgSearch(this.value)" placeholder="Buscar familia o modelo…" style="width:100%;border:1px solid var(--border-input);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Inter',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;margin-bottom:10px;">
@@ -769,7 +769,7 @@
       html+='<div style="margin-top:2px;"><div style="display:flex;align-items:center;">'
         +'<button onclick="cfgToggleFam('+fi+')" style="background:none;border:none;cursor:pointer;padding:6px;display:flex;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate('+(exp?'90deg':'0deg')+');transition:transform .15s;"><polyline points="9 18 15 12 9 6"/></svg></button>'
         +'<div onclick="cfgSelect(\'familia\','+fi+')" style="flex:1;'+_cfgItem(famActive)+'">'+fam.name+'</div></div>';
-      if(exp){ html+='<div style="margin-left:20px;border-left:1px solid var(--border-card);padding-left:6px;">'; mods.forEach(function(x){ var mActive=(sel.level==='modelo'&&sel.fam===fi&&sel.mod===x.mi); html+='<div onclick="cfgSelect(\'modelo\','+fi+','+x.mi+')" style="'+_cfgItem(mActive)+'">'+x.m.name+' <span style="color:var(--text-muted);font-weight:500;font-size:11px;font-variant-numeric:tabular-nums;">'+x.m.code+'</span></div>'; }); html+='</div>'; }
+      if(exp){ html+='<div style="margin-left:20px;border-left:1px solid var(--border-card);padding-left:6px;">'; mods.forEach(function(x){ var mActive=(sel.level==='modelo'&&sel.fam===fi&&sel.mod===x.mi); html+='<div onclick="cfgSelect(\'modelo\','+fi+','+x.mi+')" style="'+_cfgItem(mActive)+'">'+'<span style="color:var(--text-muted);font-weight:500;font-size:11px;font-variant-numeric:tabular-nums;margin-right:7px;">'+x.m.code+'</span>'+x.m.name+'</div>'; }); html+='</div>'; }
       html+='</div>';
     });
     el.innerHTML=html;
@@ -1165,7 +1165,7 @@
   function slotLoading(msg){ var h=selHeader(false); document.getElementById('v-detect-slot').innerHTML='<div class="sku-count-card">'+h.html+'<div class="sku-loading" style="justify-content:flex-start;background:none;border:none;box-shadow:none;padding:16px 0 0;"><div class="sku-spinner"></div><span>'+(msg||'Consultando el catálogo de Leroy Merlin…')+'</span></div></div>'; }
   var _vFakeCats=[{name:'Iluminación exterior',url:'https://www.leroymerlin.es/productos/iluminacion-exterior.html'},{name:'Grifería de cocina',url:'https://www.leroymerlin.es/productos/griferia-de-cocina.html'},{name:'Suelos laminados',url:'https://www.leroymerlin.es/productos/suelos-laminados.html'},{name:'Radiadores y calefacción',url:'https://www.leroymerlin.es/productos/radiadores-calefaccion.html'},{name:'Mamparas de ducha',url:'https://www.leroymerlin.es/productos/mamparas-de-ducha.html'},{name:'Persianas y estores',url:'https://www.leroymerlin.es/productos/persianas-estores.html'}];
   var _vUrlPick=0, _vUrlName='';
-  function currentTitle(){ if(_vTipo==='Categoría') return _vUrlName||'Categoría web'; if(_vTipo==='Listado') return _vListName||'seleccion_referencias.csv'; if(_vSelOpt&&_vSelOpt.name) return _vSelOpt.name+((_vTipo==='Modelo'&&_vSelOpt.code)?(' · '+_vSelOpt.code):''); return _vValor||''; }
+  function currentTitle(){ if(_vTipo==='Categoría') return _vUrlName||'Categoría web'; if(_vTipo==='Listado') return _vListName||'seleccion_referencias.csv'; if(_vSelOpt&&_vSelOpt.name) return _vSelOpt.name+((_vTipo==='Modelo'&&_vSelOpt.code)?(' <span style="font-weight:500;color:var(--text-muted);font-variant-numeric:tabular-nums;">'+_vSelOpt.code+'</span>'):''); return _vValor||''; }
   function slotResult(){ _vDetectNum=_vSkuBase[_vTipo]||500; if(_vTipo==='Vendor'&&_vCatalogo==='1P')_vDetectNum=Math.round(_vDetectNum*0.7); else if(_vTipo==='Vendor'&&_vCatalogo==='3P')_vDetectNum=Math.round(_vDetectNum*0.3);
     var h=selHeader(true);
     var lbl=(_vTipo==='Listado')?'Referencias válidas del CSV subido.':'Se leerán directamente del catálogo (BigQuery).';
