@@ -69,6 +69,7 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 - **Obligatorios de la guía:** ¿solo los atributos de la **ficha técnica**, o también los que la guía exige en **designación/descripción**? ¿qué gravedad si faltan estos últimos?
 - **Health Score (Javier):** ¿se **calcula al lanzar la auditoría** o lo **actualizáis vosotros**? ¿nos dais **fecha/hora de última actualización** por referencia?
 - **"No publicable":** además de faltar **designación/descripción**, ¿hay otros mínimos (p. ej. **por debajo del mínimo de imágenes**) que hagan que una ficha no debería estar publicada?
+- **Flujo de los exports (quién los dispara):** partimos el informe en dos por owner (seller = completitud+imágenes; TIP = coherencia+estructura). El informe entra por el **TIP**, que crea la subtarea en Jira y asigna. ¿**Quién dispara/envía el export del seller** (el e-merch, el TIP, sale directo al proveedor)? *(Nota nuestra: aunque los exports sean distintos, **el equipo de Leroy tiene acceso a ambos**.)*
 - **Jerarquía sobre el modelo:** ¿cuál es el nivel inmediatamente **superior al modelo** (arquetipo de guía) en vuestra estructura — la **familia** (merchandising), la **categoría web (PLP)** u otra cosa? Lo necesitamos para organizar el **panel del motor** (prompt general ▸ nivel intermedio ▸ modelo).
 
 **Para la sesión de trabajo:**
