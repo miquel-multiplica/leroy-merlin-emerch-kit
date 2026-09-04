@@ -3360,7 +3360,7 @@
     </div>
 
     <!-- Detalle de errores por SKU -->
-    <div style="margin-top:44px;">
+    <div id="order-errors-section" style="margin-top:44px;">
       <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:16px; justify-content:space-between;">
         <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
           <div style="font-size:16px; font-weight:700; color:var(--text-ink); flex-shrink:0;">SKU's sin descripción generada</div>
@@ -3449,6 +3449,7 @@
     if (encurso) encurso.style.display = 'block';
     if (resultado) resultado.style.display = 'none';
     if (errorBlock) errorBlock.style.display = 'none';
+    var errSec = document.getElementById('order-errors-section'); if (errSec) errSec.style.display = 'block';
     var oCancel = document.getElementById('order-cancel-btn'); if (oCancel) oCancel.style.display = 'inline-flex';
     var oBar = document.getElementById('order-bar'); if (oBar) oBar.style.background = 'var(--green)';
     animateOrder(610, 1120);
@@ -3464,7 +3465,9 @@
     var resultado = document.getElementById('order-resultado-block');
     var errorBlock = document.getElementById('order-error-block');
     var draftBlock = document.getElementById('order-draft-block');
+    var errSec = document.getElementById('order-errors-section');
     if (draftBlock) draftBlock.style.display = 'none';
+    if (errSec) errSec.style.display = (mode === 'error') ? 'none' : 'block';
     if (mode === 'resultado') {
       if (badge) { badge.innerHTML = 'Completada'; badge.style.background = 'var(--success-bg)'; badge.style.borderColor = 'var(--success-border)'; badge.style.color = 'var(--green)'; }
       if (encurso) encurso.style.display = 'none';
