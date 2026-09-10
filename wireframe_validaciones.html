@@ -709,6 +709,16 @@
     </div>
   </div>
 </div>
+<div class="modal-overlay" id="v-reabrir-modal">
+  <div class="modal-box" style="width:520px; max-width:92vw; padding:32px;">
+    <div style="font-size:20px; font-weight:700; color:var(--text-ink); margin-bottom:16px;">¿Reabrir la revisión?</div>
+    <div style="font-size:13px; color:var(--text-muted); margin-bottom:22px; line-height:1.55;">La auditoría volverá a <strong style="color:var(--text-body);">Pendiente de revisión</strong> para que puedas marcar nuevos falsos positivos. Tendrás que volver a marcarla como revisada, y los informes que ya hayas exportado quedarán desactualizados.</div>
+    <div style="display:flex; gap:12px; justify-content:flex-end;">
+      <button onclick="closeReabrirConfirm()" style="background:#fff; border:1px solid var(--border-input); border-radius:8px; height:44px; padding:0 20px; font-size:14px; font-weight:600; font-family:'Inter',system-ui,sans-serif; cursor:pointer; color:var(--text-body);">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmReabrir()" style="height:44px;">Reabrir revisión</button>
+    </div>
+  </div>
+</div>
 
 <div class="modal-overlay" id="v-export-modal">
   <div class="modal-box" style="position:relative; width:580px; max-width:92vw; padding:32px;"><button onclick="closeExport()" style="position:absolute; top:16px; right:16px; background:none; border:none; cursor:pointer; color:var(--text-muted); padding:4px; display:flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -1033,7 +1043,7 @@
     renderMatriz();
     bottom.style.display='flex';
     if(review){ bottom.innerHTML='<button class="btn btn-primary" style="margin-left:auto;" onclick="openRevisarConfirm()">Marcar como revisado<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>'; }
-    else { bottom.innerHTML='<div style="margin-left:auto;display:flex;gap:12px;"><button onclick="alert(\'Re-auditar sobre el mismo perímetro — próximamente\')" style="background:#fff;border:1px solid var(--green);border-radius:8px;height:44px;padding:0 20px;font-size:14px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--green);display:inline-flex;align-items:center;gap:8px;">'+IC_REF+'Re-auditar</button><button class="btn btn-primary" onclick="openExport()" style="height:44px;">'+IC_DL+'Exportar informes</button></div>'; }
+    else { bottom.innerHTML='<button onclick="openReabrirConfirm()" style="background:none;border:none;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;display:inline-flex;align-items:center;gap:6px;padding:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Reabrir revisión</button><div style="margin-left:auto;display:flex;gap:12px;"><button onclick="alert(\'Re-auditar sobre el mismo perímetro — próximamente\')" style="background:#fff;border:1px solid var(--green);border-radius:8px;height:44px;padding:0 20px;font-size:14px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--green);display:inline-flex;align-items:center;gap:8px;">'+IC_REF+'Re-auditar</button><button class="btn btn-primary" onclick="openExport()" style="height:44px;">'+IC_DL+'Exportar informes</button></div>'; }
   }
   function renderHs(a, review){ var hsColor=a.hs>=75?'var(--green)':(a.hs>=55?'var(--warning-text)':'#c61112'); var lblTxt=review?'Health Score · provisional':'Health Score'; var tip=review?'Health Score provisional: se recalculará al depurar los falsos positivos. Escala de 100 puntos (parte auditable del modelo).':'Health Score ya depurado de falsos positivos. Escala de 100 puntos (parte auditable del modelo, pág. 39).'; var numStyle='font-size:40px; font-weight:700; line-height:1; color:'+(review?'#9e9e9e':hsColor)+';'; var lblStyle=review?'color:var(--text-muted); font-weight:400;':'color:var(--text-secondary); font-weight:700;'; return '<div style="display:flex; align-items:baseline; gap:6px; justify-content:flex-end;"><span style="'+numStyle+'">'+a.hs+'</span><span style="align-self:center; width:1px; height:28px; background:var(--border-card); margin:0 8px;"></span><span style="align-self:center; display:flex; align-items:center; gap:6px; font-size:12px; text-align:left; line-height:1.25; max-width:130px; '+lblStyle+'"><span>'+lblTxt+'</span><span class="lm-tooltip lm-tooltip-below" data-tooltip="'+tip.replace(/"/g,'&quot;')+'" style="display:inline-flex; color:var(--text-secondary); flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span></span></div>'; }
   function infSalud(a, review){ var total=a.refs||0;
@@ -1158,6 +1168,10 @@
   function closeRevisarConfirm(){ document.getElementById('v-revisar-modal').classList.remove('open'); }
   function confirmRevisar(){ closeRevisarConfirm(); marcarRevisado(); }
   function marcarRevisado(){ var a=_audits.filter(function(x){return x.id===_infId;})[0]; if(!a) return; a.estado='revisado'; a.fecha='Ahora'; renderAudits(); document.getElementById('v-inf-badge').innerHTML=estadoBadge(a.estado); renderInforme(a); }
+  function openReabrirConfirm(){ document.getElementById('v-reabrir-modal').classList.add('open'); }
+  function closeReabrirConfirm(){ document.getElementById('v-reabrir-modal').classList.remove('open'); }
+  function confirmReabrir(){ closeReabrirConfirm(); reabrirRevision(); }
+  function reabrirRevision(){ var a=_audits.filter(function(x){return x.id===_infId;})[0]; if(!a) return; a.estado='por-revisar'; a.fecha='Ahora'; renderAudits(); document.getElementById('v-inf-badge').innerHTML=estadoBadge(a.estado); renderInforme(a); }
   var _expRows=[
     {ref:'REF-3412', prod:'Silla de escritorio ergonómica', tipo:'Completitud', ubic:'Ficha técnica', diag:'Falta el atributo obligatorio "Material de tapizado" (ATT_10840) para la categoría Muebles de oficina.', accion:'Informar el atributo Material de tapizado (p. ej. malla sintética, cuero, tela).', owner:'Seller', seg:'3P', modelo:'MOD_201405 · Silla de oficina'},
     {ref:'REF-9901', prod:'Zapatillas running Sprint', tipo:'Imágenes', ubic:'Multimedia', diag:'Solo 1 imagen cargada; el mínimo de la guía Calzado son 4.', accion:'Subir al menos 3 imágenes (ángulo lateral, suela, perspectiva frontal).', owner:'Seller', seg:'1P', modelo:'MOD_268784 · Calzado deportivo'},
