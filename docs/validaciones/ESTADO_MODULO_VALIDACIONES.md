@@ -64,6 +64,25 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 19. Subsección: descartada (solo "Sección").
 20. ⚠️ **Escala de criticidad SIN DEFINIR** — el cliente pide *"establecer una escala de criticidad"*: qué **tipo de error → qué tier**, y cuáles llegan a **"candidata a despublicar"**. Es el **núcleo del módulo**; nuestra Bloqueante/Crítica/Leve es **propuesta**. Probablemente **sesión de trabajo**.
 
+### Confirmado en el doc de dudas y respuestas (`Dudas y repsuestas doc validaciones.pdf`)
+Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza a nuestro análisis). **Confirma decisiones:**
+- ✅ **Separar los exports por owner** — *"aquí se mezclan cosas del TIP y del seller, ¿no sería mejor separar?"* → **"correcto"** (pág. 31).
+- ✅ **Reglas de owner** (pág. 6): el **seller/proveedor SIEMPRE es owner de falta de datos**; toda la **congruencia es del TIP** (contrasta). En **1P** el TIP modifica previa confirmación con el seller; en **3P** el TIP no juega → **marketplace** llama al seller (de ahí la utilidad de identificar 1P/3P).
+- ✅ **PDF defensivo** (pág. 32): no pasarle la guía entera, solo el trozo que aplique; solo ve sus familias; proteger la estrategia de familia; darle solo lo que no cumple; *"el orden de las imágenes no hace falta"*.
+- ✅ **Estándar de imágenes** (pág. 7): está en la **guía eMerch** (módulo con **tipo de imagen + nº mínimo**) → confirma que la regla es *categoría + mínimo*, **no** #FFFFFF/1500px (eso era del brief, no de la guía). A los sellers de marketplace **hoy no se les envía** ese estándar.
+- ✅ **Atributos en conjunto** (pág. 7): no distinguen básicos/específicos a nivel de dato → auditar juntos; el report detecta los valores faltantes en los att seleccionados por seller/proveedor.
+- ✅ **Bloque 4 (impacto en negocio)** (pág. 33): *"+18%/−14% NO son reales"* → verde, se afinaría con analítica (Función 4).
+- ✅ **Re-auditoría manual** (pág. 37-38): lanzar una nueva auditoría manual sobre la previa; la automática, fases posteriores. Ámbito de la re-auditoría = el de la auditoría previa (seller / categoría web / modelo).
+- ✅ **Panel admin del motor** (pág. 2): necesario para alimentar el prompt (casuísticas nuevas cada semana, vocabulario, *"admins por sección o tipología"*).
+- ✅ **CSV del seller incluye 1P/3P** (pág. 33): *"el sku, el nombre del proveedor/seller, identificación de gama 1P y 3P, los att sin completitud de dato"* → devuelto al CSV del seller.
+- ✅ **Health Score** (págs. 8-9): scoring /10 = Orphan 1,5 · Designación+Descripción+Atributos 3,5 · Reviews 3 · Imágenes 2. **Reviews** no lo auditamos → HS parcial en MVP.
+- ✅ **Descartado / fase 2** ya reflejado: crawling y 3P, contenido premium (Contentful, ~90k refs, api/headless), análisis visual de imagen (color/medidas), categorización en navegación (la hace **ADEO**), evolutivo/rankings.
+
+**Matices nuevos (para tener en cuenta, no urgentes):**
+- **Agregación por modelo** — Fer la ve mejor que por PLP (pág. 5).
+- **Multi-documento por proveedor** — todas las refs de su gama y luego **N documentos por categoría/sección** (pág. 5).
+- **Roles/permisos** — harán falta roles para ver **solo 1P o solo 3P**; el **validador de gama** (equipo ecommerce, **no** info de producto ni emerchants) es el **usuario principal** de la herramienta (pág. 1).
+
 ### Preguntas redactadas al cliente
 **Por escrito (confirmables):**
 - **Obligatorios de la guía:** ¿solo los atributos de la **ficha técnica**, o también los que la guía exige en **designación/descripción**? ¿qué gravedad si faltan estos últimos?
@@ -81,12 +100,14 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 - ~~**Estado *En curso***~~: **resuelto** — vista de progreso (contador · % · barra · Cancelar).
 - ~~**Estado *Error***~~: **resuelto** — caja de aviso (conexión perdida, lo analizado no se pierde) + **Reintentar**.
 - ~~**Revisado vs. Finalizada**~~: **resuelto** — fusionados en **Revisada**.
-- ~~**Generar exports**~~: **resuelto** — modal "Generar informes" con 3 informes + Descargar. *Falta el detalle real del contenido de cada informe/CSV.*
+- ~~**Generar exports**~~: **resuelto** — modal "Generar informes" con 3 informes; contenido real construido (ver más abajo).
 - ~~**Cancelar auditoría En curso**~~: **resuelto** — desde hub y ficha (→ Borrador); pestaña Borradores.
 - ~~**Falsos positivos en bloque**~~: **resuelto** — modal *"Selecciona el motivo…"* (resumen colapsable + referencia enlazada) + sub-vista *"Marcar falso positivo en bloque"* (Familia→Modelo→Referencia): original fija, modelos con separador *Otros modelos*, filtro por seller, estados del scope card (aviso vs. verde + lápiz), botón dinámico *"Marcar N falsos positivos"*, restaurar en bloque. *(Elegibilidad de checks sin confirmar — §5.16; dependencia de datos — §5.17.)*
 - ~~**Health Score provisional**~~: **resuelto** — en **gris** (sin flecha, también en filas del hub) mientras *Pendiente de revisión*; **color + bold** en *Revisada*; **tooltip estilado**.
-- **Detalle/contenido real de los exports** (informe seller/proveedor PDF, CSVs, informe interno TIP, informe de falsos positivos): **mapeado en §4** del análisis, **falta maquetarlo**.
-- **Re-auditoría** + comparación **Corregidos / Persisten / Nuevos** (hoy es un placeholder/alert). **Ojo:** las **transiciones de estado en re-auditoría** están pendientes (§5.15) — **cancelar una re-auditoría NO debe crear borrador** (vuelve a *Revisada*, informe previo intacto); el borrador solo aplica a primeras auditorías. En código, el cancelar deberá ramificar según *¿hay ejecución previa completada?*.
+- ~~**Detalle/contenido real de los exports**~~: **resuelto** — **PDF del seller** descargable (html2pdf, estilo guía eMerch: cabecera de salud + por referencia con **acción + regla concreta inline**, con **vista previa**), **CSV reales** (seller / interno TIP / falsos positivos) con la plantilla de columnas del ejemplo del cliente. Owner:Seller en el del seller (completitud+imágenes, **con 1P/3P en el CSV** —pág. 33— pero **sin** en el PDF), Owner:TIP en el interno. **Bloque 4 (impacto en negocio) fuera** (verde, depende de Función 4).
+- ~~**Re-auditoría — lanzar nueva ejecución**~~: **resuelto** — **Re-auditar** (botón del informe + kebab del hub) **lanza una auditoría NUEVA** con el **mismo perímetro y fecha nueva** (En curso); la Revisada original **queda intacta** (modelo *"fila nueva por ejecución"*, confirmado con cliente: re-auditoría **manual** sobre la previa). Como es una fila separada, **cancelar la re-auditoría no afecta a la original** (se resuelve solo la duda de §5.15).
+- **Re-auditoría — comparación** **Corregidos / Persisten / Nuevos**: **pendiente** (cuando la nueva ejecución termine, mostrar el evolutivo contra la anterior).
+- ~~**Reabrir una Revisada**~~: **resuelto** — textlink **"Reabrir revisión"** en el pie del informe Revisada → confirmación (avisa de que vuelve a *Pendiente de revisión* y desactualiza los exports) → reactiva las acciones de falso positivo y el botón "Marcar como revisado". Ciclo: Revisada → (Reabrir) → Pendiente → (Marcar como revisado) → Revisada.
 - ~~**Panel de Configuración del motor (admin)**~~: **resuelto** — panel "Reglas del motor de validaciones" (árbol General ▸ Familia ▸ Modelo, editor de prompt por nivel, resumen de guía, última modificación con autor, **versionado** con publicar/nombrar/historial/restaurar y seguimiento de cambios sin publicar). *Pendiente: confirmar el nivel real sobre el modelo (¿familia?); contenido real de los prompts; cómo aterriza la cola de falsos positivos (archivo).*
 - **Flujo falsos positivos → admin**: cómo se materializa (¿informe de falsos positivos descargable vs. conexión directa?) — ver §5.14. De ello depende el copy de los modales de falsos positivos y de "¿Marcar como revisado?".
 
