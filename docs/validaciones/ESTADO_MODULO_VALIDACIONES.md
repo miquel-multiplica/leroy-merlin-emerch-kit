@@ -53,7 +53,7 @@ El **motor lo diseña e implementa el equipo**; estos docs no dan su arquitectur
 8. ✅ **Alcance BQ** — **solo publicadas**; **ADM expuesto** (complementario).
 9. ✅ **Owner de estructura de designación = TIP** (aplicar en proto).
 10. Normalización del Health Score en MVP → ver 11.
-11. ✅ **Health Score = viene dado** (nos pasan el valor; contacto **Javier Hernán**). **Fleco en el proto:** quitar "provisional en gris + recálculo por falsos positivos" → mostrar su valor + tendencia. **Pendiente (Javier):** ¿se calcula en vivo al auditar (snapshot) o es un valor pre-calculado?
+11. ⚠️ **Health Score — EN DUDA, pendiente de ver con cliente.** En principio **viene dado** (nos pasan el valor; contacto **Javier Hernán**), pero **no tenemos claras las implicaciones** de eso sobre lo que estamos construyendo: si el valor es externo y no lo recalculamos nosotros, queda por resolver qué relación guarda con los hallazgos de la auditoría, con los falsos positivos descartados y con el tratamiento "provisional" que hoy tiene el proto. **No tocar el proto hasta hablarlo con el cliente.** Preguntas abiertas: ¿se calcula en vivo al auditar (snapshot) o es pre-calculado? ¿nos dan fecha/hora de última actualización por referencia? ¿qué se muestra si el HS no refleja lo que la auditoría acaba de encontrar?
 12. Granularidad de exports (asunción): seller = por referencia, TIP = por alerta.
 13. **Modelo de 4 cajas** — cajitas OK visualmente, pero **publicar = oferta + imagen** (regla de plataforma) y **despublicar es MANUAL** (emerchand/TIP). **Hay fichas publicadas que no deberían estarlo** → **se mantiene el nombre "No publicable"**, pero su lectura es: *publicada que no debería estarlo* (recomendación para despublicar manualmente, no un estado automático de plataforma). El reparto en tiers depende de la escala (ver 20).
 14. Flujo falsos positivos → panel del administrador (con el export o con otro método): **pendiente**; nos pidieron el **enlace del prototipo** para verlo. *(No es reunión.)*
@@ -103,7 +103,7 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
 - ~~**Generar exports (modal)**~~: **resuelto** — modal "Generar informes" con 3 informes + acciones. *(El contenido real de cada informe está **a medias** — ver abajo.)*
 - ~~**Cancelar auditoría En curso**~~: **resuelto** — desde hub y ficha (→ Borrador); pestaña Borradores.
 - ~~**Falsos positivos en bloque**~~: **resuelto** — modal *"Selecciona el motivo…"* (resumen colapsable + referencia enlazada) + sub-vista *"Marcar falso positivo en bloque"* (Familia→Modelo→Referencia): original fija, modelos con separador *Otros modelos*, filtro por seller, estados del scope card (aviso vs. verde + lápiz), botón dinámico *"Marcar N falsos positivos"*, restaurar en bloque. *(Elegibilidad de checks sin confirmar — §5.16; dependencia de datos — §5.17.)*
-- ~~**Health Score provisional**~~: **resuelto** — en **gris** (sin flecha, también en filas del hub) mientras *Pendiente de revisión*; **color + bold** en *Revisada*; **tooltip estilado**.
+- ⚠️ **Health Score provisional** — **montado, pero su validez está en duda.** El proto lo trata en **gris** (sin flecha, también en filas del hub) mientras *Pendiente de revisión*, y en **color + bold** en *Revisada*, con **tooltip estilado**. Ese comportamiento asume que el HS se recalcula con la revisión; si el valor **viene dado de fuera**, la premisa puede no sostenerse. **Pendiente de la conversación con cliente (§5.11) antes de cambiar nada.**
 - ⚠️ **Contenido real de los exports — A MEDIAS (no cerrado).** Es el pendiente de prototipo más claro que **depende solo de nosotros**.
   - **CSV** (seller / interno TIP / falsos positivos): **hechos y validados** (columnas según la plantilla del cliente; Owner:Seller lleva completitud+imágenes **con 1P/3P** —pág. 33—; Owner:TIP lleva coherencia+estructura).
   - **PDF del seller**: **construido pero SIN VALIDAR en navegador real.** Está hecho con **html2pdf** (estilo guía eMerch: cabecera de salud + por referencia con acción + regla concreta inline, con vista previa), **pero solo se ha probado en jsdom** (cableado y datos, NO la generación del PDF) → **puede salir en blanco o sin pulir**. Ya hubo un bug de PDF en blanco (contenedor fuera de pantalla) que se intentó arreglar renderizando on-screen detrás; **falta confirmar que el fix funciona de verdad**.
@@ -117,6 +117,35 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
 - **Flujo falsos positivos → admin**: cómo se materializa (¿informe de falsos positivos descargable vs. conexión directa?) — ver §5.14. De ello depende el copy de los modales de falsos positivos y de "¿Marcar como revisado?".
 
 *(Nota: **no** hacemos "detalle de referencia" interno. Igual que el artefacto del cliente, la referencia **enlaza a la ficha real de Leroy (PDP en vivo)**, que es la fuente de verdad para revisar falsos positivos.)*
+
+## Next steps (orden de trabajo)
+
+> Mapeados, **no ejecutados**. Este es el orden acordado para retomar el módulo.
+
+### 1. Revisar el flujo de falso positivo — el paso de coincidencias
+**Problema detectado:** hoy el paso de revisar coincidencias es **opcional**, y no debería serlo. Al abrir el modal, `_fpSelRefs` arranca en `[fid]` (solo la referencia original); el aviso ámbar *"Hay N referencias más con el mismo error en M modelos"* con **Revisarlas →** se puede ignorar, y al pulsar el CTA se marca **una sola**. El "no decidir" se resuelve en silencio como "solo esta": es un **default oculto disfrazado de aviso informativo**.
+
+**Dirección:** que revisar coincidencias forme parte del proceso, no un desvío que se abre o no.
+
+**Matiz a resolver antes de maquetar** — la palanca no es *opcional vs. obligatorio*, sino **cuál es la unidad del falso positivo: la referencia o el disparador**:
+- Dos pasos obligatorios **con coincidencias desmarcadas** = pantalla vacía de paso, friction pura; el usuario aprende a atravesarla.
+- Dos pasos obligatorios **premarcando todo** = se asume la unidad "disparador" e invierte el riesgo hacia la **propagación masiva** de un descarte.
+- Alternativa (una sola pantalla, decisión explícita): sustituir el aviso por **dos radios sin preselección** — *Solo esta referencia* / *Esta y las N coincidencias en M modelos — Revisar selección →* — con el **CTA deshabilitado hasta elegir**. Fuerza la decisión consciente sin imponer pantalla, y la sub-vista sigue disponible para afinar.
+
+**Dos cautelas:**
+- El bloque **depende de datos sin confirmar** (§5.17: ¿el motor expone disparador, jerarquía Familia→Modelo→Referencia y equivalencia?). Hoy, al ser opcional, si el motor no puede el aviso desaparece y el flujo aguanta. **Hacerlo obligatorio lo acopla duro a datos que quizá no existan.**
+- **Pregunta de fondo:** si un disparador falla en N referencias, ¿es un falso positivo o una **regla mal calibrada**? Descartarlas en bloque trata el síntoma; el arreglo vive en el **panel del motor** (§5.14). Quizá el paso no deba terminar en *"marcar N falsos positivos"* sino en *"esto parece un fallo de regla → proponer al admin"*.
+
+### 2. Continuar con el PDF y los exports
+Retomar el único pendiente que **depende solo de nosotros** (ver *Contenido real de los exports* más arriba): (1) **verificar el PDF del seller en navegador real / headless** — hoy solo probado en jsdom, con un bug de PDF en blanco cuyo fix está **sin confirmar**; (2) según resultado, afinar html2pdf o **cambiar de enfoque** (print-to-PDF con hoja de estilo / jsPDF con texto seleccionable); (3) **pulir** diseño y datos (hoy: seller dummy, html2canvas frágil, diseño sin rematar).
+
+### 3. Cerrar el Health Score con cliente
+Ver §5.11: **en duda**. No tocar el tratamiento del proto hasta esa conversación.
+
+### 4. Pendientes de gestión (no de maquetación)
+- Enviar las **5 preguntas por escrito** (bloque *Preguntas redactadas al cliente*).
+- Agendar la **sesión de trabajo**: escala de criticidad + elegibilidad y datos de falsos positivos.
+- Compartir el **enlace del prototipo** para lo de falsos positivos → admin (§5.14).
 
 ## Infra / repo
 - **GitHub Pages** vía **GitHub Actions** (`concurrency: cancel-in-progress: false` + `workflow_dispatch`). Deploy **encolado por incidencia de GitHub** (ago 2026); se publica solo al resolverse. Código a salvo en `main`.
