@@ -18,6 +18,9 @@ Se abren directamente en el navegador. Se sirven además vía GitHub Pages:
 - [docs/PRODUCT.md](docs/PRODUCT.md) — contexto de producto del sistema completo (Guías de Estilo).
 - [docs/diseno/DESIGN_LEROY_GUIAS_ESTILOS.md](docs/diseno/DESIGN_LEROY_GUIAS_ESTILOS.md) — convenciones de design system.
 
+### Guías de estilo
+- [docs/guias/PUBLICACION_GUIAS.md](docs/guias/PUBLICACION_GUIAS.md) — publicar o no publicar guías: respuestas de desarrollo y preguntas abiertas con el cliente.
+
 ### Descripciones
 - [docs/descripciones/FUNCIONAL_DESCRIPCIONES.md](docs/descripciones/FUNCIONAL_DESCRIPCIONES.md) — documentación funcional del módulo.
 - [docs/descripciones/PROPUESTA_RECORTES_DESCRIPCIONES.md](docs/descripciones/PROPUESTA_RECORTES_DESCRIPCIONES.md) — análisis de recortes (sin decisiones tomadas).
@@ -39,6 +42,7 @@ Se abren directamente en el navegador. Se sirven además vía GitHub Pages:
 ├─ wireframe_validaciones.html
 ├─ docs/
 │  ├─ PRODUCT.md
+│  ├─ guias/
 │  ├─ descripciones/
 │  ├─ validaciones/
 │  └─ diseno/
