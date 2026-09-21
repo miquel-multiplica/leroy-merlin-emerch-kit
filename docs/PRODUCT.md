@@ -20,8 +20,23 @@ Sin una herramienta centralizada, los equipos de contenido trabajan de forma dis
 | Rol | Necesidad |
 |-----|-----------|
 | **Editor de contenido** | Completar guías de estilo por modelo de producto (designación, descripción, atributos, multimedia) |
-| **Responsable de catálogo** | Publicar guías, gestionar el estado de los modelos y validar entregas de CSVs de cliente |
+| **Responsable de catálogo** | Gestionar el estado de los modelos y validar entregas de CSVs de cliente |
 | **Administrador** | Gestionar usuarios y permisos, importar el catálogo maestro de datos |
+
+### Matriz de roles y permisos (implementada)
+
+*Confirmada por desarrollo el 2026-09-21. Es la que está en producto; los roles de la tabla anterior son la lectura funcional de negocio.*
+
+| Rol | Gestión de usuarios | Crear/editar guías propias | Validar/eliminar propias | Acceso a otras guías | Exportar informes |
+|---|---|---|---|---|---|
+| **Administrador General** | Full | Sí | Sí | Full (ver/editar) | Sí |
+| **e-Merch** | No | Sí | Sí | Solo visualización | Sí |
+| **TIP** | No | No | No | Solo visualización | Sí (solo validaciones) |
+| **3P Marketplace** | No | No | No | Solo visualización | No |
+
+**3P Marketplace es un rol interno** (el equipo de Leroy que gestiona marketplace), **no el proveedor externo**. Confirmado el 2026-09-21. El seller/proveedor **no accede a la herramienta**: recibe su informe en PDF/CSV desde Validaciones.
+
+**Hoy no hay capa de visibilidad:** *"todo el mundo ve todo, completado y pendiente"*. La columna **Acceso a otras guías** no distingue entre guías completadas y pendientes — se ven todas.
 
 ---
 
@@ -46,7 +61,7 @@ Son los datos estructurales sobre los que trabaja toda la aplicación. Se import
 
 | Entidad | Descripción |
 |---------|-------------|
-| **Guide** | Guía de estilo. Tiene nombre, sección, trimestre (`Q1`–`Q4`) y estado (`DRAFT` / `PUBLISHED` / `ARCHIVED`) |
+| **Guide** | Guía de estilo. Tiene nombre, sección y trimestre (`Q1`–`Q4`). **Su estado es Pendiente / Completada**, derivado del estado de sus modelos. ⚠️ *El `DRAFT / PUBLISHED / ARCHIVED` que documentaba esta tabla ya no existe: `draft` pasó a significar **pendiente** y `published` a **completada** (confirmado por desarrollo, 2026-09-21). No hay ningún campo de publicación ni de visibilidad.* |
 | **GuideModel** | Cada modelo asignado a una guía. Tiene un estado automático (`PENDING` / `COMPLETED`) |
 | **GuideModelStepItem** | Items que forman la plantilla de designación o descripción: pueden ser atributos del catálogo o texto libre |
 | **GuideModelStepMeta** | Ejemplos de texto (hasta 3) y SEO text para designación y descripción |
@@ -163,15 +178,17 @@ El usuario configura:
 
 ---
 
-### 4. Validación y publicación
+### 4. Validación y completitud
 
 #### Validación interna
 
-Antes de publicar, el sistema comprueba que todos los modelos de la guía tengan estado `COMPLETED` y que la multimedia esté correctamente definida.
+El sistema comprueba que todos los modelos de la guía tengan estado `COMPLETED` y que la multimedia esté correctamente definida.
 
-#### Publicación
+#### Completitud
 
-El responsable cambia el estado de la guía a `PUBLISHED`. A partir de ese momento la guía es la referencia oficial para ese conjunto de modelos y trimestre.
+⚠️ **Corregido el 2026-09-21 con desarrollo.** No existe un paso de publicación: la guía pasa a **Completada** de forma **automática** cuando sus modelos lo están, y **desde ese momento la ven todos** — igual que ya veían las pendientes. No hay flag de visibilidad ni gesto manual de publicar, y no hay versionado: **solo existe una versión de cada guía**.
+
+> **Cambio solicitado por el cliente (sin construir).** Añadir un segundo eje, **Publicada / No publicada**, independiente de la completitud, para que cada creador controle si su guía la ve el resto. Implicaciones ya confirmadas con desarrollo: publicar sería **solo un flag de visibilidad** (no altera permisos de validar ni de descargar), **no habría versionado** y **no se avisaría a nadie** al despublicar o editar una guía en uso. Pendiente de respuesta del cliente: gobernanza, si se puede publicar una guía incompleta, qué pasa el día de la migración y si un modelo puede seguir estando en varias guías.
 
 #### Exportación
 
@@ -214,7 +231,7 @@ Cada llamada queda registrada en `AiCallLog` con: prompt enviado, respuesta reci
 - **La multimedia es por guía, no por modelo**: todos los modelos de una guía comparten las mismas reglas de multimedia.
 - **El catálogo es de solo lectura desde el frontend**: los modelos, atributos y SKUs solo se pueden consultar, no modificar desde la interfaz.
 - **La reimportación del catálogo es aditiva (upsert)**: no borra datos existentes.
-- **Duplicación de guías**: copia toda la estructura (modelos, designación, descripción, atributos, multimedia) con estado `DRAFT`.
+- **Duplicación de guías**: copia toda la estructura (modelos, designación, descripción, atributos, multimedia); la copia nace **pendiente** (el antiguo `DRAFT`).
 - **Paginación offset-limit** en todos los listados.
 - **JWT con refresh token**: el `accessToken` tiene vida corta; el `refreshToken` permite renovarlo sin relogin.
 
