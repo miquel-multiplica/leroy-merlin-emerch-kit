@@ -396,21 +396,32 @@
     max-width: 90vw;
   }
 
-  /* --- Documento imprimible (informe del seller) — A4 apaisado, una hoja por bloque --- */
+  /* --- Documento imprimible (informe del seller) — A4 apaisado, patrón de la guía eMerch --- */
   #print-root{ display:none; }
   .pdf-doc{ font-family:'Inter',system-ui,sans-serif; color:#1c1c1a; }
-  .pdf-sheet{ width:1047px; min-height:718px; box-sizing:border-box; padding:34px 38px; background:#fff; display:flex; flex-direction:column; }
-  .pdf-secgrid{ column-count:2; column-gap:26px; }
-  .pdf-sec{ break-inside:avoid; page-break-inside:avoid; -webkit-column-break-inside:avoid; margin-bottom:20px; }
+  .pdf-cover{ position:relative; width:1047px; min-height:718px; box-sizing:border-box; padding:56px 60px 44px 64px; background:#fff; display:flex; flex-direction:column; }
+  .pdf-cover::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:12px; background:#78be20; }
+  .pdf-flow{ width:1047px; table-layout:fixed; border-collapse:collapse; background:#fff; }
+  .pdf-flow td{ vertical-align:top; }
+  .pdf-flow td.pdf-barcell{ padding:0; }
+  .pdf-bar{ display:flex; align-items:center; height:50px; background:#494f60; color:#fff; }
+  .pdf-bar-g{ width:12px; align-self:stretch; background:#78be20; flex-shrink:0; }
+  .pdf-bar-t{ font-size:18px; font-weight:700; padding-left:22px; }
+  .pdf-bar-r{ margin-left:auto; padding-right:26px; font-size:10.5px; color:#d7d9df; }
+  .pdf-bodycell{ padding:24px 46px 8px 50px; }
+  .pdf-cols{ }
+  .pdf-footcell{ padding:6px 46px 14px 50px; }
+  .pdf-logo{ height:38px; width:auto; display:block; }
+  .pdf-sec{ break-inside:avoid; page-break-inside:avoid; margin-bottom:22px; }
   .pdf-card{ break-inside:avoid; page-break-inside:avoid; }
+  .pdf-doc, .pdf-doc *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
   @media print{
     @page{ size:A4 landscape; margin:0; }
     html, body{ background:#fff !important; }
     body > *{ display:none !important; }
     body > #print-root{ display:block !important; }
-    .pdf-sheet{ width:297mm; min-height:210mm; padding:14mm 16mm; }
-    .pdf-cover{ page-break-after:always; break-after:page; }
-    .pdf-close{ page-break-before:always; break-before:page; }
+    .pdf-cover{ width:auto; min-height:0; height:210mm; padding:26mm 20mm 16mm 22mm; page-break-after:always; break-after:page; }
+    .pdf-flow{ width:100%; }
   }
   .lm-check{ -webkit-appearance:none; appearance:none; width:20px; height:20px; min-width:20px; border:1.5px solid #bcbcbc; border-radius:6px; background:#fff; cursor:pointer; position:relative; margin:0; flex-shrink:0; transition:background .12s,border-color .12s; }
   .lm-check:hover{ border-color:#8a8a8a; }
@@ -743,7 +754,7 @@
     <div style="font-size:20px; font-weight:700; color:var(--text-ink); margin-bottom:6px;">Generar informes</div>
     <div style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Los dos informes por audiencia son <strong>independientes</strong> (nunca se comparten). El <strong>informe de falsos positivos</strong> es interno, para afinar el motor.</div>
     <div style="display:flex; flex-direction:column; gap:12px;">
-      <div style="border:1px solid var(--border-input); border-radius:10px; padding:14px 16px;"><div style="min-width:0;"><div style="font-size:14px; font-weight:700; color:var(--text-ink); margin-bottom:3px;">Informe seller / proveedor</div><div style="font-size:12px; color:var(--text-muted); line-height:1.5;">PDF defensivo + CSV — solo lo que no cumple de <strong>sus</strong> referencias. Sin guía completa ni parte interna.</div></div><div style="display:flex; align-items:center; gap:10px; margin-top:14px; padding-top:13px; border-top:1px solid var(--border-card);"><label for="v-seller-pick" style="font-size:12px; color:var(--text-muted); flex-shrink:0;">Proveedor</label><select id="v-seller-pick" onchange="setSellerPick(this.value)" title="Proveedor del informe" style="height:40px;font-size:12.5px;padding:0 30px 0 10px;border:1px solid var(--border-input);border-radius:8px;background-color:#fff;color:var(--text-ink);font-family:'Inter',system-ui,sans-serif;-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2714%27%20height=%2714%27%20viewBox=%270%200%2024%2024%27%20fill=%27none%27%20stroke=%27%238a8a8a%27%20stroke-width=%272%27%20stroke-linecap=%27round%27%20stroke-linejoin=%27round%27%3E%3Cpolyline%20points=%276%209%2012%2015%2018%209%27/%3E%3C/svg%3E);background-repeat:no-repeat;background-position:right 10px center;max-width:190px;"></select><div style="display:flex; gap:8px; align-items:center; margin-left:auto;"><button onclick="openSellerPreview()" style="background:none; border:none; color:var(--green); font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter',system-ui,sans-serif; padding:0 4px;">Vista previa</button><button onclick="downloadSellerCsv()" style="background:#fff; border:1px solid var(--border-card); border-radius:8px; height:40px; padding:0 13px; font-size:13px; font-weight:600; color:var(--text-body); cursor:pointer; font-family:'Inter',system-ui,sans-serif;">CSV</button><button onclick="downloadSellerPdf()" class="btn btn-primary" style="height:40px; gap:7px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div></div></div>
+      <div style="border:1px solid var(--border-input); border-radius:10px; padding:14px 16px;"><div style="min-width:0;"><div style="font-size:14px; font-weight:700; color:var(--text-ink); margin-bottom:3px;">Informe seller / proveedor</div><div style="font-size:12px; color:var(--text-muted); line-height:1.5;">PDF defensivo + CSV — solo lo que no cumple de <strong>sus</strong> referencias. Sin guía completa ni parte interna.</div></div><div style="display:flex; align-items:center; gap:10px; margin-top:14px; padding-top:13px; border-top:1px solid var(--border-card);"><div id="v-seller-pickwrap" style="display:flex; align-items:center; gap:10px;"><label for="v-seller-pick" style="font-size:12px; color:var(--text-muted); flex-shrink:0;">Proveedor</label><select id="v-seller-pick" onchange="setSellerPick(this.value)" title="Proveedor del informe" style="height:40px;font-size:12.5px;padding:0 30px 0 10px;border:1px solid var(--border-input);border-radius:8px;background-color:#fff;color:var(--text-ink);font-family:'Inter',system-ui,sans-serif;-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2714%27%20height=%2714%27%20viewBox=%270%200%2024%2024%27%20fill=%27none%27%20stroke=%27%238a8a8a%27%20stroke-width=%272%27%20stroke-linecap=%27round%27%20stroke-linejoin=%27round%27%3E%3Cpolyline%20points=%276%209%2012%2015%2018%209%27/%3E%3C/svg%3E);background-repeat:no-repeat;background-position:right 10px center;max-width:190px;"></select></div><div style="display:flex; gap:8px; align-items:center; margin-left:auto;"><button onclick="openSellerPreview()" style="background:none; border:none; color:var(--green); font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter',system-ui,sans-serif; padding:0 4px;">Vista previa</button><button onclick="downloadSellerCsv()" style="background:#fff; border:1px solid var(--border-card); border-radius:8px; height:40px; padding:0 13px; font-size:13px; font-weight:600; color:var(--text-body); cursor:pointer; font-family:'Inter',system-ui,sans-serif;">CSV</button><button onclick="downloadSellerPdf()" class="btn btn-primary" style="height:40px; gap:7px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div></div></div>
       <div style="display:flex; align-items:center; gap:16px; border:1px solid var(--border-input); border-radius:10px; padding:14px 16px;"><div style="flex:1; min-width:0;"><div style="font-size:14px; font-weight:700; color:var(--text-ink); margin-bottom:3px;">Informe interno TIP / ecommerce</div><div style="font-size:12px; color:var(--text-muted); line-height:1.5;">Matriz completa de coherencia, con el detalle para corregir o enrutar (1P → TIP, 3P → Marketplace).</div></div><button onclick="downloadTipCsv()" class="btn btn-primary" style="flex-shrink:0; height:40px; gap:7px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar CSV</button></div>
       <div style="height:1px; background:var(--border-card); margin:4px 0;"></div>
       <div style="display:flex; align-items:center; gap:16px; border:1px solid var(--border-input); border-radius:10px; padding:14px 16px;"><div style="flex:1; min-width:0;"><div style="font-size:14px; font-weight:700; color:var(--text-ink); margin-bottom:3px;">Informe de falsos positivos <span style="font-weight:600; color:var(--text-muted); font-size:12px;">· Excel o CSV</span></div><div style="font-size:12px; color:var(--text-muted); line-height:1.5;">Motivos y comentarios de las alertas descartadas, por tipo y regla. Insumo interno para el <strong>Motor de validaciones</strong> (admin).</div></div><button onclick="downloadFpCsv()" class="btn btn-primary" style="flex-shrink:0; height:40px; gap:7px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar CSV</button></div>
@@ -1042,13 +1053,13 @@
   function ownerChip(o){ var tip=o==='TIP'; return '<span style="display:inline-flex;background:'+(tip?'var(--info-bg)':'var(--bg-parchment)')+';color:'+(tip?'#1a6c8a':'var(--text-muted)')+';border-radius:999px;padding:2px 9px;font-size:11px;font-weight:600;white-space:nowrap;">'+o+'</span>'; }
   function ppTag(pp){ return '<span class="v-tag" style="background:'+(pp==='1P'?'var(--success-bg)':'var(--bg-parchment)')+';color:'+(pp==='1P'?'var(--green)':'var(--text-muted)')+';">'+pp+'</span>'; }
   function statCard(label, valueHtml, sub){ return '<div style="flex:1; min-width:150px; border:1px solid var(--border-card); border-radius:10px; padding:14px 16px; background:#fff;"><div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">'+label+'</div><div style="font-size:22px; font-weight:700; color:var(--text-ink); line-height:1.1;">'+valueHtml+'</div>'+(sub?'<div style="font-size:11px; color:var(--text-muted); margin-top:5px;">'+sub+'</div>':'')+'</div>'; }
-  function openInforme(id){ var a=_audits.filter(function(x){return x.id===id;})[0]; if(!a) return; _infId=id; _infFOwner=''; _infFSeller=''; _infFSev=''; _infFTipo=''; _infFPp=''; _infFSeccion=''; _infFSearch=''; _infSort='sev'; _infFpView=false; _infPage=1; _infFindings=[]; var _idc=0; var _pushF=function(o,pin){ var c=_fpClone(o); c.id=++_idc; c.pin=pin||0; _infFindings.push(c); }; FP_HEROES.forEach(function(h,hx){ _pushF(h,hx+1); }); for(var _tp in FP_CFG){ if(!FP_CFG[_tp].bulk) continue; var _cfg=FP_CFG[_tp], _tpl=FP_TPL[_tp]; var _have=0; for(var _q=0;_q<_infFindings.length;_q++){ if(_infFindings[_q].tipo===_tp)_have++; } for(var _j=_have;_j<_cfg.count;_j++){ var _md=_cfg.modelos[_j % _cfg.modelos.length]; var _o=_fpClone(_tpl); _o.familia=_cfg.familia; _o.guia=_md.name; _o.modelo=_md.code; _o.seller=(_cfg.sellers?_cfg.sellers[Math.floor(_j/_cfg.modelos.length)%_cfg.sellers.length]:_o.seller); _o.ref=String(_md.refBase+100+_j); _pushF(_o,0); } } var _fill=_INF_SAMPLE.filter(function(t){return !FP_CFG.hasOwnProperty(t.tipo);}); var _target=Math.max(_infFindings.length+24, a.alertas||0); var _fi=0; while(_infFindings.length<_target){ var _t2=_fill[_fi%_fill.length]; var _o2=_fpClone(_t2); _o2.familia=(FAMILIA_OF[_o2.guia]||_o2.seccion||'—'); _o2.ref=String(30000000+_infFindings.length); _o2.modelo='MOD_F'+(1000+_infFindings.length); _pushF(_o2,0); _fi++; }
+  function openInforme(id){ var a=_audits.filter(function(x){return x.id===id;})[0]; if(!a) return; _infId=id; _infFOwner=''; _infFSeller=''; _infFSev=''; _infFTipo=''; _infFPp=''; _infFSeccion=''; _infFSearch=''; _infSort='sev'; _infFpView=false; _infPage=1; _infFindings=[]; var _idc=0; var _pushF=function(o,pin){ var c=_fpClone(o); c.id=++_idc; c.pin=pin||0; _infFindings.push(c); }; FP_HEROES.forEach(function(h,hx){ _pushF(h,hx+1); }); for(var _tp in FP_CFG){ if(!FP_CFG[_tp].bulk) continue; var _cfg=FP_CFG[_tp], _tpl=FP_TPL[_tp]; var _have=0; for(var _q=0;_q<_infFindings.length;_q++){ if(_infFindings[_q].tipo===_tp)_have++; } for(var _j=_have;_j<_cfg.count;_j++){ var _md=_cfg.modelos[_j % _cfg.modelos.length]; var _o=_fpClone(_tpl); _o.familia=_cfg.familia; _o.guia=_md.name; _o.modelo=_md.code; _o.seller=(_cfg.sellers?_cfg.sellers[Math.floor(_j/_cfg.modelos.length)%_cfg.sellers.length]:_o.seller); _o.ref=String(_md.refBase+100+_j); _pushF(_o,0); } } var _fill=_INF_SAMPLE.filter(function(t){return !FP_CFG.hasOwnProperty(t.tipo);}); var _target=Math.max(_infFindings.length+24, a.alertas||0); var _fi=0; while(_infFindings.length<_target){ var _t2=_fill[_fi%_fill.length]; var _o2=_fpClone(_t2); _o2.familia=(FAMILIA_OF[_o2.guia]||_o2.seccion||'—'); _o2.ref=String(30000000+_infFindings.length); _o2.modelo='MOD_F'+(1000+_infFindings.length); _pushF(_o2,0); _fi++; } _applyPerimetro();
     var _pp=a.perimetro.split('·'); var nombre=_pp.slice(1).join('·').trim()||a.perimetro; var _pcode=(a.tipo==='Modelo'&&_pp.length>1)?_pp[0].trim():'';
-    document.getElementById('v-inf-title').innerHTML=nombre+(_pcode?' <span style="font-size:18px;font-weight:500;color:var(--text-muted);font-variant-numeric:tabular-nums;">'+_pcode+'</span>':'');
+    document.getElementById('v-inf-title').innerHTML='<span style="font-variant-numeric:tabular-nums;">'+audCode(a)+'</span>';
     var _crumb=document.getElementById('v-inf-crumb'); if(_crumb) _crumb.textContent=a.perimetro;
     document.getElementById('v-inf-badge').innerHTML=estadoBadge(a.estado);
     var _sep='<span style="margin:0 12px; color:var(--text-tertiary);">·</span>';
-    document.getElementById('v-inf-meta').innerHTML='<span style="font-weight:600; color:var(--text-body);">'+'Auditoría de '+audTipoLabel(a.tipo).toLowerCase()+'</span>'+_sep+'Auditado '+(a.fecha||'—').toLowerCase()+_sep+'por '+(a.creador||'—')+_sep+'motor v1.4';
+    document.getElementById('v-inf-meta').innerHTML='<span style="font-weight:600; color:var(--text-body);">'+a.perimetro+(_pcode?'':'')+'</span>'+_sep+(a.fecha||'—')+_sep+(a.creador||'—')+_sep+'motor v1.4';
     go('v-informe'); renderInforme(a); }
   function renderInforme(a){ var e=a.estado, body=document.getElementById('v-inf-body'), bottom=document.getElementById('v-inf-bottom');
     var hsEl=document.getElementById('v-inf-hs');
@@ -1056,7 +1067,7 @@
     if(e==='error'){ if(hsEl)hsEl.innerHTML=''; body.innerHTML='<div style="background:#fff; border:1px solid var(--border-card); border-radius:12px; padding:24px 26px;"><div style="display:flex; align-items:center; flex-wrap:wrap; gap:16px;"><div style="display:flex; align-items:flex-start; gap:10px; background:#fdeaea; border:1px solid #f8bcbb; border-radius:8px; padding:12px 14px; flex:1; min-width:280px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c61112" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><div style="font-size:13px; color:var(--text-body); line-height:1.5;"><strong>No se pudo completar la auditoría.</strong> Se perdió la conexión con el catálogo a mitad del proceso. Lo ya analizado no se ha perdido; reintenta para completar el resto.</div></div><button onclick="vAudRelanzar('+a.id+')" class="btn btn-primary" style="height:44px; font-size:14px; padding:0 22px; display:inline-flex; align-items:center; gap:7px; flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Reintentar</button></div></div>'; bottom.style.display='none'; bottom.innerHTML=''; return; }
     var review=(e==='por-revisar');
     if(hsEl) hsEl.innerHTML=renderHs(a,review);
-    body.innerHTML=infSalud(a,review)+infDist(a)+infImpacto(a)+'<div id="v-inf-matriz"></div>';
+    body.innerHTML='<div style="border:1px solid var(--border-card); border-radius:12px; background:#fff; margin-bottom:28px; overflow:hidden;">'+infSalud(a,review)+infDist(a)+infImpacto(a)+'</div>'+'<div id="v-inf-matriz"></div>';
     renderMatriz();
     bottom.style.display='flex';
     if(review){ bottom.innerHTML='<button class="btn btn-primary" style="margin-left:auto;" onclick="openRevisarConfirm()">Marcar como revisado<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>'; }
@@ -1066,14 +1077,16 @@
   function infSalud(a, review){ var total=a.refs||0;
     var noPub=Math.round(total*0.05), crit=Math.round(total*0.28), sinErr=Math.round(total*0.30), adv=Math.max(0,total-sinErr-crit-noPub);
     var discr=Math.round(total*0.335), orto=Math.round(total*0.15);
-    function kpi(num,label,color,tip){ return '<div style="position:relative; flex:1; min-width:140px; display:flex; align-items:center; gap:11px; border:1px solid var(--border-card); border-radius:8px; padding:13px 15px; background:#fff;"><div style="width:3px; height:34px; border-radius:2px; background:'+color+'; flex-shrink:0;"></div><div style="min-width:0;"><div style="font-size:22px; font-weight:700; color:'+((color==='#c61112'||color==='#7a0d0d')?color:'var(--text-ink)')+'; line-height:1;">'+fmtNum(num)+'</div><div style="font-size:11px; color:var(--text-muted); margin-top:5px;">'+label+'</div></div><span class="lm-tooltip" data-tooltip="'+tip.replace(/"/g,'&quot;')+'" style="position:absolute; top:8px; right:8px; color:var(--text-tertiary); display:inline-flex;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span></div>'; }
-    return '<div style="display:flex; gap:10px; flex-wrap:wrap; align-items:stretch; margin-bottom:28px;">'
-      +kpi(total,'Total de referencias','var(--text-tertiary)','Total de referencias analizadas en la auditoría.')
+    function kpi(num,label,color,tip){ return '<div style="position:relative; flex:1 1 0; min-width:0; display:flex; align-items:center; gap:9px; border:1px solid var(--border-card); border-radius:8px; padding:11px 12px; background:#fff;"><div style="width:3px; height:30px; border-radius:2px; background:'+color+'; flex-shrink:0;"></div><div style="min-width:0;"><div style="font-size:22px; font-weight:700; color:'+((color==='#c61112'||color==='#7a0d0d')?color:'var(--text-ink)')+'; line-height:1; font-size:19px;">'+fmtNum(num)+'</div><div style="font-size:10.5px; color:var(--text-muted); margin-top:4px; line-height:1.3;">'+label+'</div></div><span class="lm-tooltip" data-tooltip="'+tip.replace(/"/g,'&quot;')+'" style="position:absolute; top:8px; right:8px; color:var(--text-tertiary); display:inline-flex;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span></div>'; }
+    var totalBlock='<div style="flex-shrink:0; padding-right:22px;"><div style="font-size:30px; font-weight:700; color:var(--text-ink); line-height:1;">'+fmtNum(total)+'</div>'
+      +'<div style="font-size:12px; color:var(--text-muted); margin-top:6px;">referencias</div></div>';
+    return '<div style="padding:16px 20px; display:flex; gap:8px; flex-wrap:nowrap; align-items:center;">'
+      +totalBlock
       +kpi(sinErr,'Sin errores','var(--green)','Referencias sin ninguna alerta: designación ≥35 car., descripción ≥80 car., y sin discrepancias ni faltas.')
       +kpi(adv,'Con errores leves','#b8860b','1–2 alertas, todas leves (formato, estructura o ortografía). Ni engañan ni impiden publicar.')
       +kpi(crit,'Con errores críticos','#7a0d0d','Al menos una incoherencia (contradicción entre designación, descripción y ficha técnica) o 3+ alertas acumuladas. Publicada, pero puede confundir al usuario.')
       +kpi(noPub,'No publicable','#c61112','Le falta contenido esencial (designación, descripción o atributos obligatorios): no alcanza mínimos y no llega a publicarse.')
-      +'<div style="width:1px; align-self:stretch; background:var(--border-card); margin:0 5px;"></div>'
+      +'<div style="width:1px; align-self:stretch; background:var(--border-card); margin:2px 3px;"></div>'
       +kpi(discr,'Con discrepancias','#a0341f','Referencias con al menos una discrepancia designación ↔ descripción ↔ ficha técnica (color, material, medidas, nº de elementos).')
       +kpi(orto,'Con faltas de ortografía','#1a6c8a','Referencias con al menos una falta ortográfica en designación o descripción.')
       +'</div>'; }
@@ -1089,7 +1102,7 @@
     var rows=d.map(function(x){ var cnt=Math.round(total*x.pct), pctTxt=(x.pct*100).toFixed(1).replace(/\.0$/,'')+'%';
       return '<tr><td style="font-size:13px;color:var(--text-ink);">'+x.cat+'</td><td style="font-size:13px;font-variant-numeric:tabular-nums;">'+fmtNum(cnt)+'</td><td style="font-size:13px;font-variant-numeric:tabular-nums;">'+pctTxt+'</td><td style="font-size:13px;"><span style="display:inline-flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:'+x.color+';display:inline-block;flex-shrink:0;"></span><span style="font-weight:600;">'+x.prio+'</span> · <span style="color:var(--text-muted);">'+x.motivo+'</span></span></td><td style="font-size:13px;color:var(--text-body);">'+x.owner+'</td></tr>'; }).join('');
     var chevRot=_infImpOpen?' style="transform:rotate(180deg);"':'';
-    return '<div style="border:1px solid var(--border-card); border-radius:12px; background:#fff; margin-bottom:28px; overflow:hidden;"><button onclick="toggleImpacto()" style="width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 20px; background:none; border:none; cursor:pointer; font-family:\'Inter\',system-ui,sans-serif;"><span style="font-size:14px; font-weight:700; color:var(--text-ink);">Impacto por categoría de error</span><svg id="v-inf-imp-chev"'+chevRot+' width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button><div id="v-inf-imp-body" style="display:'+(_infImpOpen?'block':'none')+'; padding:4px 20px 20px;"><div style="background:var(--bg-surface); overflow-x:auto; border:1px solid var(--border-card); border-radius:12px;"><table class="desc-table" style="width:100%; min-width:820px;"><thead><tr><th style="width:32%;">Categoría de error</th><th style="width:12%;">Referencias afectadas</th><th style="width:13%;">% del perímetro</th><th style="width:31%;">Prioridad de resolución</th><th style="width:12%;">Owner</th></tr></thead><tbody>'+rows+'</tbody></table></div></div></div>'; }
+    return '<div style="border-top:1px solid var(--border-card); background:#fff; overflow:hidden;"><button onclick="toggleImpacto()" style="width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 20px; background:none; border:none; cursor:pointer; font-family:\'Inter\',system-ui,sans-serif;"><span style="font-size:14px; font-weight:700; color:var(--text-ink);">Impacto por categoría de error</span><svg id="v-inf-imp-chev"'+chevRot+' width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button><div id="v-inf-imp-body" style="display:'+(_infImpOpen?'block':'none')+'; padding:4px 20px 20px;"><div style="background:var(--bg-surface); overflow-x:auto; border:1px solid var(--border-card); border-radius:12px;"><table class="desc-table" style="width:100%; min-width:820px;"><thead><tr><th style="width:32%;">Categoría de error</th><th style="width:12%;">Referencias afectadas</th><th style="width:13%;">% del perímetro</th><th style="width:31%;">Prioridad de resolución</th><th style="width:12%;">Owner</th></tr></thead><tbody>'+rows+'</tbody></table></div></div></div>'; }
   function toggleImpacto(){ _infImpOpen=!_infImpOpen; var b=document.getElementById('v-inf-imp-body'); var c=document.getElementById('v-inf-imp-chev'); if(b) b.style.display=_infImpOpen?'block':'none'; if(c) c.style.transform=_infImpOpen?'rotate(180deg)':''; }
   function distSect(title, rows, topGap){ var body=rows.map(function(r){ var w=Math.min(100,Math.round(r[1]/32*100)); return '<div style="padding:7px 0;"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:5px;"><span style="font-size:12px;color:var(--text-body);line-height:1.25;">'+r[0]+'</span><span style="font-size:11px;color:var(--text-muted);white-space:nowrap;flex-shrink:0;"><span style="font-weight:700;color:var(--text-ink);">'+Math.round(r[1])+'%</span> · '+fmtNum(r[2])+'</span></div><div style="height:7px;background:var(--bg-parchment);border-radius:99px;overflow:hidden;"><div style="width:'+w+'%;height:100%;background:'+(r[3]||'var(--green-mid)')+';border-radius:99px;"></div></div></div>'; }).join(''); return '<div style="'+(topGap?'margin-top:34px;':'')+'"><div style="font-size:13px;font-weight:700;color:var(--text-ink);padding-bottom:8px;border-bottom:1px solid var(--border-card);margin-bottom:4px;">'+title+'</div>'+body+'</div>'; }
   function distCol(inner){ return '<div style="flex:1; min-width:260px;">'+inner+'</div>'; }
@@ -1103,7 +1116,7 @@
     var lg=function(col,txt){return '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:'+col+';display:inline-block;"></span>'+txt+'</span>';};
     var legend='<div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text-muted);">'+lg(SEVC.b,'Bloqueante')+lg(SEVC.c,'Crítica')+lg(SEVC.l,'Leve')+'</div>';
     var chevRot=_infDistOpen?' style="transform:rotate(180deg);"':'';
-    return '<div style="border:1px solid var(--border-card); border-radius:12px; background:#fff; margin-bottom:12px; overflow:hidden;"><button onclick="toggleDist()" style="width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 20px; background:none; border:none; cursor:pointer; font-family:\'Inter\',system-ui,sans-serif;"><span style="font-size:14px; font-weight:700; color:var(--text-ink);">Distribución de errores</span><svg id="v-inf-dist-chev"'+chevRot+' width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button><div id="v-inf-dist-body" style="display:'+(_infDistOpen?'block':'none')+'; padding:4px 20px 20px;">'+legend+'<div style="display:flex; gap:36px; flex-wrap:wrap;">'+distCol(distSect('Designación',desig))+distCol(distSect('Descripción',desc))+distCol(distSect('Ficha técnica',ficha)+distSect('Multimedia',multi,true))+'</div></div></div>'; }
+    return '<div style="border-top:1px solid var(--border-card); background:#fff; overflow:hidden;"><button onclick="toggleDist()" style="width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 20px; background:none; border:none; cursor:pointer; font-family:\'Inter\',system-ui,sans-serif;"><span style="font-size:14px; font-weight:700; color:var(--text-ink);">Distribución de errores</span><svg id="v-inf-dist-chev"'+chevRot+' width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button><div id="v-inf-dist-body" style="display:'+(_infDistOpen?'block':'none')+'; padding:4px 20px 20px;">'+legend+'<div style="display:flex; gap:36px; flex-wrap:wrap;">'+distCol(distSect('Designación',desig))+distCol(distSect('Descripción',desc))+distCol(distSect('Ficha técnica',ficha)+distSect('Multimedia',multi,true))+'</div></div></div>'; }
   function toggleDist(){ _infDistOpen=!_infDistOpen; var b=document.getElementById('v-inf-dist-body'); var c=document.getElementById('v-inf-dist-chev'); if(b) b.style.display=_infDistOpen?'block':'none'; if(c) c.style.transform=_infDistOpen?'rotate(180deg)':''; }
   function fselG(varName,val,groups,ph){ var o='<option value="">'+ph+'</option>'+groups.map(function(g){return '<optgroup label="'+g[0]+'">'+g[1].map(function(t){return '<option value="'+t.replace(/"/g,'&quot;')+'"'+(val===t?' selected':'')+'>'+t+'</option>';}).join('')+'</optgroup>';}).join(''); return '<div style="position:relative;"><select onchange="'+varName+'=this.value; _infPage=1; renderMTabla();" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'+o+'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'; }
   function fsel(varName,val,pairs,ph){ var o='<option value="">'+ph+'</option>'+pairs.map(function(p){return '<option value="'+p[0]+'"'+(val===p[0]?' selected':'')+'>'+p[1]+'</option>';}).join(''); return '<div style="position:relative;"><select onchange="'+varName+'=this.value; _infPage=1; renderMTabla();" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'+o+'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'; }
@@ -1215,13 +1228,19 @@
   function downloadTipCsv(){ _downloadBlob('informe-interno-tip.csv', _rowsToCsv(_expRows.filter(function(r){return r.owner==='TIP';}),true), 'text/csv;charset=utf-8;'); }
   function downloadFpCsv(){ var head=['Referencia','Modelo','Tipo de error','Motivo del falso positivo','Comentario','Regla / check','Severidad','Revisor','Fecha']; var sample=[['REF-9901','MOD_268784 · Calzado','Ortografía','Término técnico válido','«Sprint» es el nombre de la línea, no una falta','spellcheck','Leve','Ana García','2 sep 2026'],['REF-2005','MOD_200074 · Aislante','Material','Sinónimo válido','«termorreflectante» es equivalente aceptado','vocab:material','Leve','Ana García','2 sep 2026']]; var lines=[head.map(_csvEsc).join(';')]; sample.forEach(function(r){ lines.push(r.map(_csvEsc).join(';')); }); _downloadBlob('informe-falsos-positivos.csv', '﻿'+lines.join('\r\n'), 'text/csv;charset=utf-8;'); }
   var _sellerPick=null;
+  function audSellerName(a){ if(!a || a.tipo!=='Vendor') return null; var t=(a.perimetro||''); var i=t.indexOf('·'); return (i>=0?t.slice(i+1):t).trim()||null; }
+  function _applyPerimetro(){ var a=_audits.filter(function(x){return x.id===_infId;})[0]; var sn=audSellerName(a); if(!sn) return;
+    _infFindings.forEach(function(f){ f.seller=sn; }); }
   function sellerFindings(name){ return _infFindings.filter(function(f){ return !f.fp && f.owner==='Seller' && (!name || f.seller===name); }); }
   function sellerNames(){ var m={}; _infFindings.forEach(function(f){ if(!f.fp && f.owner==='Seller') m[f.seller]=(m[f.seller]||0)+1; });
     return Object.keys(m).sort(function(a,b){ return m[b]-m[a]; }); }
   function currentSeller(){ var ns=sellerNames(); if(_sellerPick && ns.indexOf(_sellerPick)>=0) return _sellerPick; return ns[0]||'—'; }
   function setSellerPick(v){ _sellerPick=v; var pv=document.getElementById('v-seller-preview-body'); if(pv && pv.innerHTML) pv.innerHTML=sellerDocHtml(); }
-  function renderSellerPicker(){ var el=document.getElementById('v-seller-pick'); if(!el) return; var ns=sellerNames(); var cur=currentSeller();
-    el.innerHTML=ns.map(function(n){ var c=sellerFindings(n).length; return '<option value="'+n+'"'+(n===cur?' selected':'')+'>'+n+' ('+c+')</option>'; }).join(''); }
+  function renderSellerPicker(){ var w=document.getElementById('v-seller-pickwrap'); if(!w) return; var ns=sellerNames(); var cur=currentSeller();
+    if(ns.length<=1){ w.innerHTML='<span style="font-size:12px;color:var(--text-muted);">Proveedor</span><span style="font-size:13px;font-weight:600;color:var(--text-ink);">'+(ns[0]||'—')+'</span>'; return; }
+    var opts=ns.map(function(n){ var c=sellerFindings(n).length; return '<option value="'+n+'"'+(n===cur?' selected':'')+'>'+n+' ('+c+')</option>'; }).join('');
+    w.innerHTML='<label for="v-seller-pick" style="font-size:12px; color:var(--text-muted); flex-shrink:0;">Proveedor</label>'
+      +'<select id="v-seller-pick" onchange="setSellerPick(this.value)" title="Proveedor del informe" style="height:40px;font-size:12.5px;padding:0 30px 0 10px;border:1px solid var(--border-input);border-radius:8px;background-color:#fff;color:var(--text-ink);font-family:\'Inter\',system-ui,sans-serif;-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2714%27%20height=%2714%27%20viewBox=%270%200%2024%2024%27%20fill=%27none%27%20stroke=%27%238a8a8a%27%20stroke-width=%272%27%20stroke-linecap=%27round%27%20stroke-linejoin=%27round%27%3E%3Cpolyline%20points=%276%209%2012%2015%2018%209%27/%3E%3C/svg%3E);background-repeat:no-repeat;background-position:right 10px center;max-width:190px;">'+opts+'</select>'; }
   var GUIA_SECS=['Designación','Descripción','Atributos','Multimedia'];
   var GUIA_REGLA={
     'Designación':'La guía define la estructura de la designación por concatenación de los atributos de la tipología, con un mínimo de 35 caracteres.',
@@ -1236,68 +1255,89 @@
     if(t.indexOf('descripción')>=0||u.indexOf('descripción')>=0) return 'Descripción';
     return 'Atributos'; }
   function sellerSlug(n){ return (n||'seller').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
-  function sellerCsvName(){ return 'informe-seller-'+sellerSlug(currentSeller())+'.csv'; }
-  function auditRef(){ var a=_audits.filter(function(x){return x.id===_infId;})[0]; return 'A-2026-0902-'+((a&&a.id)||'1'); }
+  function sellerCsvName(){ return 'informe-seller-'+sellerSlug(currentSeller())+'-'+auditRef().replace('#','')+'.csv'; }
+  function audCode(a){ return '#'+(1000+((a&&a.id)||0)); }
+  function auditRef(){ return audCode(_audits.filter(function(x){return x.id===_infId;})[0]); }
+  var PDF_SEV={bloqueante:{c:'#c0392b',t:'Bloqueante'},critica:{c:'#8e2820',t:'Crítica'},mejora:{c:'#b7791f',t:'Leve'}};
+  var PDF_LOGO='<svg viewBox="0 0 570 466" xmlns="http://www.w3.org/2000/svg" fill="none" class="pdf-logo" role="img" aria-label="Leroy Merlin"> <path fill-rule="evenodd" clip-rule="evenodd" d="M61.0161 405.43H509.183L285.098 181.348L61.0161 405.43Z" fill="#78BE20"/> <path fill-rule="evenodd" clip-rule="evenodd" d="M50.6761 395.777L85.4934 361.301L73.772 349.579L52.0542 371.3L12.7558 331.999L0 344.754L50.6761 395.777ZM65.5006 300.284L74.119 308.903L92.0464 290.975L102.734 301.315L84.4624 319.243L95.8368 330.277L117.902 308.212L128.242 318.555L93.0775 353.713L42.0577 302.697L77.222 267.536L87.5654 277.876L65.5006 300.284ZM178.918 267.876L144.444 257.88C148.582 250.296 146.513 239.952 139.62 233.059C132.035 225.475 119.28 225.822 110.658 234.437L84.8028 260.292L135.823 311.315L148.578 298.212L107.215 256.845L115.83 248.571C119.28 244.78 125.486 244.78 128.932 248.571C132.379 252.021 132.379 257.88 128.589 261.673L121.005 269.254L165.131 281.666L178.918 267.876ZM207.532 187.551C200.295 179.97 190.983 175.833 182.021 175.489C172.712 175.489 163.75 178.936 155.819 186.867C139.616 203.069 141.341 224.097 156.166 238.921C163.75 246.505 172.712 250.639 182.021 250.639C190.983 250.986 200.292 247.54 208.22 239.609C224.079 223.406 222.701 202.376 207.532 187.551ZM198.223 229.265C193.399 234.093 187.883 235.124 182.021 233.056C178.231 231.678 174.093 228.921 170.299 224.781C160.303 215.128 157.887 205.132 165.818 197.204C170.643 192.376 176.162 191.345 182.021 193.413C185.811 194.792 189.605 197.548 193.742 201.688C203.395 211.341 206.151 221.337 198.223 229.265ZM223.044 160.318L213.735 131.36L228.563 116.192L241.315 165.49L261.312 185.482L248.212 198.585L228.563 178.592L181.334 163.768L195.467 149.631L222.701 159.974L223.044 160.318ZM459.198 335.792L509.874 284.769L496.421 271.326L445.404 322.346L459.198 335.792ZM263.724 140.665L303.369 121.71L274.411 151.012L286.132 163.077L337.156 112.057L320.95 95.8484L282.342 114.467L301.648 76.5462L285.098 60L234.078 111.02L245.8 122.741L275.102 93.4393L256.14 133.085L263.724 140.665ZM352.324 147.906L343.705 156.524L363.008 176.177L352.667 186.517L333.021 167.215L321.984 178.245L345.777 202.032L335.427 212.372L298.888 175.486L349.911 124.81L386.45 161.352L376.11 171.696L352.324 147.906ZM401.618 278.566L436.095 313.037L447.817 301.315L426.096 279.945L465.397 240.296L452.645 227.543L401.618 278.566ZM538.829 313.728L522.63 367.85L557.787 332.689L569.853 344.754L518.836 395.777L502.977 379.572L516.764 324.071L481.947 358.888L470.222 347.167L521.248 296.147L538.829 313.728ZM391.969 268.91L401.622 234.093C409.209 238.227 419.549 236.509 426.79 229.265C434.027 221.681 434.027 208.925 425.415 200.307L397.835 172.73L346.811 223.75L359.908 236.849L400.931 195.479L410.931 205.475C414.724 209.266 414.724 215.128 411.278 218.578C407.828 222.368 401.618 222.022 398.175 218.578L388.866 209.266L377.835 254.773L391.969 268.91Z" fill="black"/> </svg>';
   function sellerDocHtml(){
     var name=currentSeller(); var fs=sellerFindings(name);
-    var GREEN='#4e8c2a',INK='#1c1c1a',MUT='#6f6f69',BOR='#e6e6e1';
-    var refs={}; fs.forEach(function(f){ refs[f.ref]=1; }); var nRefs=0; for(var k in refs)nRefs++;
+    var GREEN='#4e8c2a',INK='#1c1c1a',MUT='#6f6f69',BOR='#e6e6e1',LIME='#78be20';
     var aud=_audits.filter(function(x){return x.id===_infId;})[0]||{};
     var perim=aud.perimetro||'Perímetro auditado';
-    // ---- portada ----
-    var cover='<div class="pdf-sheet pdf-cover">'
-      +'<div style="font-size:11px;font-weight:800;letter-spacing:.1em;color:'+GREEN+';text-transform:uppercase;">Leroy Merlin · eMerch</div>'
-      +'<div style="margin-top:26px;font-size:15px;color:'+MUT+';">Informe de calidad de catálogo</div>'
-      +'<div style="font-size:42px;font-weight:800;color:'+INK+';line-height:1.12;margin-top:6px;max-width:80%;">'+perim+'</div>'
-      +'<div style="margin-top:14px;font-size:19px;font-weight:600;color:'+INK+';">'+name+'</div>'
-      +'<div style="margin-top:4px;font-size:13px;color:'+MUT+';">2 de septiembre de 2026 · Auditoría '+auditRef()+'</div>'
-      +'<div style="display:flex;gap:10px;margin-top:40px;max-width:640px;">'
-      +'<div style="flex:1;border:1px solid '+BOR+';border-radius:10px;padding:14px 16px;"><div style="font-size:26px;font-weight:800;color:'+INK+';line-height:1;">'+nRefs.toLocaleString('es-ES')+'</div><div style="font-size:11.5px;color:'+MUT+';margin-top:4px;">referencias con acciones</div></div>'
-      +'<div style="flex:1;border:1px solid '+BOR+';border-radius:10px;padding:14px 16px;"><div style="font-size:26px;font-weight:800;color:'+INK+';line-height:1;">'+fs.length.toLocaleString('es-ES')+'</div><div style="font-size:11.5px;color:'+MUT+';margin-top:4px;">puntos a corregir</div></div>'
-      +'<div style="flex:1;border:1px solid '+BOR+';border-radius:10px;padding:14px 16px;"><div style="font-size:26px;font-weight:800;color:'+GREEN+';line-height:1;">'+(aud.hs||'—')+'%</div><div style="font-size:11.5px;color:'+MUT+';margin-top:4px;">Health Score</div></div>'
+    var esVendor=(audSellerName(aud)===name);
+    var refs={}; fs.forEach(function(f){ refs[f.ref]=1; }); var nRefs=0; for(var k in refs)nRefs++;
+    var RANK={bloqueante:3,critica:2,mejora:1};
+    var peor={}; fs.forEach(function(f){ var r=RANK[f.sev]||1; if(!peor[f.ref]||r>peor[f.ref]) peor[f.ref]=r; });
+    var nBlo=0,nCri=0,nLev=0; for(var r0 in peor){ var v=peor[r0]; if(v===3)nBlo++; else if(v===2)nCri++; else nLev++; }
+    var num=function(n){ return n.toLocaleString('es-ES'); };
+    var meta=(esVendor?'Auditoría de proveedor':('Auditoría de '+perim))+' · 2 de septiembre de 2026 · '+auditRef();
+    // ---------- PORTADA (patrón de la guía: barra verde izq., título, filete, logo abajo dcha.) ----------
+    var kpi=function(v,l,c){ return '<div style="flex:1;border:1px solid '+BOR+';border-radius:10px;padding:13px 16px;">'
+      +'<div style="font-size:25px;font-weight:800;line-height:1;color:'+(c||INK)+';">'+v+'</div>'
+      +'<div style="font-size:11.5px;color:'+MUT+';margin-top:5px;">'+l+'</div></div>'; };
+    var tiles=[['5,6%','más ventas de media con la información técnica completa'],
+               ['1 de 5','devoluciones ocurre porque el producto no coincide con la ficha'],
+               ['87%','de los compradores decide la compra por la información de producto'],
+               ['6','imágenes por producto espera de media un comprador']]
+      .map(function(t){ return '<div style="flex:1;min-width:0;">'
+        +'<div style="font-size:23px;font-weight:800;color:'+GREEN+';line-height:1;">'+t[0]+'</div>'
+        +'<div style="font-size:11px;color:'+INK+';line-height:1.4;margin-top:6px;">'+t[1]+'</div></div>'; }).join('');
+    var cover='<div class="pdf-cover">'
+      +'<div style="font-size:40px;font-weight:800;color:'+INK+';line-height:1.1;">'+name+'</div>'
+      +'<div style="font-size:15px;font-weight:700;color:'+INK+';margin-top:8px;">Informe de calidad de catálogo</div>'
+      +'<div style="width:34px;height:3px;background:'+LIME+';margin:18px 0;"></div>'
+      +'<div style="font-size:13px;color:'+MUT+';">'+meta+'</div>'
+      +'<div style="display:flex;gap:10px;margin-top:38px;max-width:680px;">'
+      + kpi(num(nRefs),'referencias con acciones')
+      + [[nBlo,'bloqueantes',PDF_SEV.bloqueante.c],[nCri,'críticas',PDF_SEV.critica.c],[nLev,'leves',PDF_SEV.mejora.c]]
+          .filter(function(x){ return x[0]>0; })
+          .map(function(x){ return kpi(num(x[0]),x[1],x[2]); }).join('')
+      + kpi((aud.hs||'—')+'%','Health Score',GREEN)
       +'</div>'
-      +'<div style="margin-top:auto;font-size:12px;color:'+MUT+';line-height:1.6;max-width:70%;">Este informe recoge únicamente los puntos de tu responsabilidad: completitud de datos e imágenes. Está organizado según las secciones de la guía eMerch.</div>'
+      +'<div style="margin-top:34px;border-top:1px solid '+BOR+';padding-top:18px;">'
+      +'<div style="font-size:12px;font-weight:700;color:'+INK+';margin-bottom:12px;">Por qué merece la pena</div>'
+      +'<div style="display:flex;gap:26px;">'+tiles+'</div></div>'
+      +'<div style="margin-top:auto;display:flex;justify-content:flex-end;padding-top:24px;">'+PDF_LOGO+'</div>'
       +'</div>';
-    // ---- secciones de guia: RESUMEN AGREGADO (el detalle fila a fila vive en el CSV) ----
+    // ---------- SECCIONES ----------
     var secs=GUIA_SECS.map(function(sec){
       var items=fs.filter(function(f){ return guiaSeccion(f)===sec; });
       if(!items.length) return '';
-      var refsSec={}; items.forEach(function(f){ refsSec[f.ref]=1; }); var nr=0; for(var k in refsSec)nr++;
+      var refsSec={}; items.forEach(function(f){ refsSec[f.ref]=1; }); var nr=0; for(var k3 in refsSec)nr++;
       var byTipo={},ordT=[];
-      items.forEach(function(f){ if(!byTipo[f.tipo]){ byTipo[f.tipo]={accion:f.accion,refs:{}}; ordT.push(f.tipo); } byTipo[f.tipo].refs[f.ref]=1; });
-      ordT.sort(function(x,y){ return Object.keys(byTipo[y].refs).length-Object.keys(byTipo[x].refs).length; });
-      var filas=ordT.map(function(t){ var n=Object.keys(byTipo[t].refs).length;
-        return '<div class="pdf-card" style="border-top:1px solid '+BOR+';padding:8px 0;display:flex;gap:12px;align-items:baseline;">'
-          +'<div style="flex:1;min-width:0;"><div style="font-size:12.5px;font-weight:700;color:'+INK+';">'+t+'</div>'
-          +'<div style="font-size:12px;color:'+INK+';line-height:1.45;margin-top:2px;"><strong style="color:'+GREEN+';">Acción:</strong> '+byTipo[t].accion+'</div></div>'
-          +'<div style="flex-shrink:0;text-align:right;"><div style="font-size:17px;font-weight:800;color:'+INK+';line-height:1;font-variant-numeric:tabular-nums;">'+n.toLocaleString('es-ES')+'</div>'
-          +'<div style="font-size:10.5px;color:'+MUT+';">'+(n===1?'referencia':'referencias')+'</div></div></div>'; }).join('');
-      return '<div class="pdf-sec"><div style="display:flex;align-items:baseline;gap:10px;border-bottom:2px solid '+GREEN+';padding-bottom:6px;">'
-        +'<div style="font-size:17px;font-weight:800;color:'+INK+';">'+sec+'</div>'
-        +'<div style="font-size:12px;font-weight:600;color:'+MUT+';margin-left:auto;">'+nr.toLocaleString('es-ES')+' '+(nr===1?'referencia':'referencias')+'</div></div>'
-        +'<div style="font-size:11.5px;color:'+MUT+';font-style:italic;line-height:1.45;margin:8px 0 2px;">'+GUIA_REGLA[sec]+'</div>'
+      items.forEach(function(f){ if(!byTipo[f.tipo]){ byTipo[f.tipo]={accion:f.accion,sev:f.sev,refs:{}}; ordT.push(f.tipo); } byTipo[f.tipo].refs[f.ref]=1; });
+      var RK={bloqueante:3,critica:2,mejora:1};
+      ordT.sort(function(x,y){ var d=(RK[byTipo[y].sev]||1)-(RK[byTipo[x].sev]||1); if(d) return d;
+        return Object.keys(byTipo[y].refs).length-Object.keys(byTipo[x].refs).length; });
+      var filas=ordT.map(function(t){ var o=byTipo[t]; var n=Object.keys(o.refs).length; var sv=PDF_SEV[o.sev]||PDF_SEV.mejora;
+        return '<div class="pdf-card" style="border-top:1px solid '+BOR+';padding:9px 0;display:flex;gap:22px;align-items:baseline;">'
+          +'<div style="width:300px;flex-shrink:0;">'
+          +'<span style="font-size:12.5px;font-weight:700;color:'+INK+';">'+t+'</span> '
+          +'<span style="font-size:10.5px;color:'+sv.c+';font-weight:600;">'+sv.t+'</span></div>'
+          +'<div style="flex:1;min-width:0;font-size:12px;color:'+INK+';line-height:1.45;"><strong style="color:'+GREEN+';">Acción:</strong> '+o.accion+'</div>'
+          +'<div style="width:80px;flex-shrink:0;text-align:right;font-size:16px;font-weight:800;color:'+INK+';font-variant-numeric:tabular-nums;">'+num(n)+'</div>'
+          +'</div>'; }).join('');
+      return '<div class="pdf-sec"><div style="display:flex;align-items:baseline;gap:10px;border-bottom:2px solid '+LIME+';padding-bottom:6px;">'
+        +'<div style="font-size:16px;font-weight:800;color:'+INK+';">'+sec+'</div>'
+        +'<div style="font-size:11.5px;font-weight:600;color:'+MUT+';margin-left:auto;">'+num(nr)+' referencias</div></div>'
+        +'<div style="font-size:11px;color:'+MUT+';font-style:italic;line-height:1.45;margin:7px 0 2px;">'+GUIA_REGLA[sec]+'</div>'
         +filas+'</div>'; }).join('');
-    var body='<div class="pdf-sheet">'
-      +'<div style="font-size:22px;font-weight:800;color:'+INK+';margin-bottom:2px;">Qué hay que corregir</div>'
-      +'<div style="font-size:13px;color:'+MUT+';margin-bottom:16px;">Agrupado por las secciones de la guía eMerch. El listado de referencias, una a una, está en el CSV que acompaña a este informe.</div>'
-      +'<div class="pdf-secgrid">'+secs+'</div></div>';
-    // ---- cierre ----
-    var tiles=[['5,6%','más ventas de media en fichas con la información técnica completa'],
-               ['1 de 5','devoluciones se produce porque el producto no coincide con la ficha'],
-               ['87%','de los compradores decide la compra por la información de producto'],
-               ['6','imágenes por producto espera de media un comprador']]
-      .map(function(t){ return '<div style="flex:1;min-width:0;border:1px solid '+BOR+';border-radius:10px;padding:14px 16px;">'
-        +'<div style="font-size:30px;font-weight:800;color:'+GREEN+';line-height:1;">'+t[0]+'</div>'
-        +'<div style="font-size:12px;color:'+INK+';line-height:1.45;margin-top:7px;">'+t[1]+'</div></div>'; }).join('');
-    var close='<div class="pdf-sheet pdf-close"><div style="font-size:22px;font-weight:800;color:'+INK+';margin-bottom:4px;">Por qué merece la pena</div>'
-      +'<div style="font-size:13px;color:'+MUT+';margin-bottom:18px;">Completar la ficha no es un trámite administrativo: cambia cómo se encuentra y cómo se compra tu producto.</div>'
-      +'<div style="display:flex;gap:12px;">'+tiles+'</div>'
-      +'<div style="font-size:12.5px;color:'+INK+';line-height:1.5;margin-top:14px;">La información insuficiente es una de las principales causas de abandono antes de comprar.</div>'
-      +'<div style="margin-top:auto;border-top:1px solid '+BOR+';padding-top:12px;font-size:12px;color:'+MUT+';line-height:1.6;">'
-      +'<strong style="color:'+INK+';">Cómo corregirlo.</strong> Sube los cambios desde tu panel de proveedor o con la plantilla de upload. '
-      +'El detalle referencia a referencia está en <strong style="color:'+INK+';">'+sellerCsvName()+'</strong>, que acompaña a este informe y corresponde a la misma auditoría ('+auditRef()+'). '
-      +'Para dudas sobre atributos o imágenes, contacta con tu responsable e-merch.</div></div>';
-    return '<div class="pdf-doc">'+cover+body+close+'</div>';
+    var cierre='<div class="pdf-sec" style="margin-top:6px;border-top:1px solid '+BOR+';padding-top:16px;">'
+      +'<div style="font-size:16px;font-weight:800;color:'+INK+';margin-bottom:8px;">Cómo corregirlo</div>'
+      +'<div style="font-size:12px;color:'+INK+';line-height:1.65;max-width:78%;">'
+      +'Sube los cambios desde tu panel de proveedor o con la plantilla de upload. '
+      +'El detalle referencia a referencia está en <strong>'+sellerCsvName()+'</strong>, que acompaña a este informe y corresponde a la misma auditoría ('+auditRef()+'). '
+      +'Para cualquier duda, contacta con tu responsable e-merch.</div></div>';
+    // tabla: thead y tfoot se repiten en cada página impresa; el cuerpo fluye sin dejar huecos
+    var flow='<table class="pdf-flow"><thead><tr><td class="pdf-barcell">'
+      +'<div class="pdf-bar"><span class="pdf-bar-g"></span><span class="pdf-bar-t">Qué hay que corregir</span>'
+      +'<span class="pdf-bar-r">'+name+' · '+auditRef()+'</span></div></td></tr></thead>'
+      +'<tfoot><tr><td class="pdf-footcell"><div style="display:flex;justify-content:flex-end;">'+PDF_LOGO+'</div></td></tr></tfoot>'
+      +'<tbody><tr><td class="pdf-bodycell">'
+      +'<div style="font-size:12.5px;color:'+MUT+';margin-bottom:16px;">Por secciones de la guía eMerch. El listado de referencias, una a una, está en el CSV que acompaña a este informe.</div>'
+      +'<div class="pdf-cols">'+secs+'</div>'+cierre+'</td></tr></tbody></table>';
+    return '<div class="pdf-doc">'+cover+flow+'</div>';
   }
   function downloadSellerPdf(){
     var root=document.getElementById('print-root'); if(!root){ alert('No se encuentra el contenedor de impresión.'); return; }
@@ -1323,20 +1363,21 @@
     var isDraft=(_vTab==='borradores');
     var thead=document.getElementById('v-hub-thead');
     if(thead) thead.innerHTML = isDraft
-      ? '<tr><th style="width:34%;">Perímetro</th><th style="width:12%;">Referencias</th><th style="width:22%;">Última ejecución</th><th style="width:18%;">Creador</th><th style="width:14%;"></th></tr>'
-      : '<tr><th style="width:23%;">Perímetro</th><th style="width:10%;">Referencias</th><th style="width:10%;">Health Score</th><th style="width:8%;">Alertas</th><th style="width:16%;">Estado</th><th style="width:12%;">Última ejecución</th><th style="width:11%;">Creador</th><th style="width:10%;"></th></tr>';
-    if(rows.length===0){ tbody.innerHTML='<tr><td colspan="'+(isDraft?5:8)+'" style="padding:48px;text-align:center;color:var(--text-muted);font-size:14px;">No hay auditorías que coincidan.</td></tr>'; return; }
+      ? '<tr><th style="width:7%;">ID</th><th style="width:38%;">Perímetro</th><th style="width:8%;">Referencias</th><th style="width:11%;">Fecha</th><th style="width:12%;">Creador</th><th style="width:24%;"></th></tr>'
+      : '<tr><th style="width:6%;">ID</th><th style="width:24%;">Perímetro</th><th style="width:8%;">Referencias</th><th style="width:9%;">Health Score</th><th style="width:7%;">Alertas</th><th style="width:13%;">Estado</th><th style="width:9%;">Fecha</th><th style="width:9%;">Creador</th><th style="width:15%;"></th></tr>';
+    if(rows.length===0){ tbody.innerHTML='<tr><td colspan="'+(isDraft?6:9)+'" style="padding:48px;text-align:center;color:var(--text-muted);font-size:14px;">No hay auditorías que coincidan.</td></tr>'; return; }
     tbody.innerHTML=rows.map(function(r){ var _rp=r.perimetro.split('·'); var nombre=_rp.slice(1).join('·').trim()||r.perimetro; var rcode=(r.tipo==='Modelo'&&_rp.length>1)?_rp[0].trim():''; var nEsc=nombre.replace(/"/g,'&quot;');
       var cPer='<td><div style="min-width:0;"><div style="font-size:13px;color:var(--text-ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+nEsc+'">'+nombre+(rcode?' <span style="font-weight:500;color:var(--text-muted);font-variant-numeric:tabular-nums;">· '+rcode+'</span>':'')+'</div><div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+audTipoLabel(r.tipo)+'</div></div></td>';
+      var cId='<td><span onclick="event.stopPropagation();vAudInforme('+r.id+')" title="Abrir el informe" style="font-size:13px;font-weight:600;color:var(--text-secondary-dark);font-variant-numeric:tabular-nums;cursor:pointer;">'+audCode(r)+'</span></td>';
       var cRefs='<td style="font-size:13px;color:var(--text-body);">'+fmtNum(r.refs)+'</td>';
       var cFecha='<td style="font-size:13px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+r.fecha+'</td>';
       var cCreador='<td style="font-size:13px;color:var(--text-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="'+r.creador+'">'+r.creador+'</td>';
       var cActions='<td style="text-align:right;overflow:visible;">'+audActions(r)+'</td>';
-      if(isDraft) return '<tr>'+cPer+cRefs+cFecha+cCreador+cActions+'</tr>';
+      if(isDraft) return '<tr>'+cId+cPer+cRefs+cFecha+cCreador+cActions+'</tr>';
       var cHs='<td>'+(r.hs>0?'<div style="display:flex;align-items:center;gap:8px;">'+(r.estado==='por-revisar'?hsBadge(r.hs,true):hsBadge(r.hs)+tendArrow(r.tend))+'</div>':'<span style="color:var(--text-muted);">—</span>')+'</td>';
       var cAlert='<td style="font-size:13px;color:var(--text-body);">'+(r.hs>0?(r.alertas>0?'<span style="font-weight:600;color:#c61112;">'+fmtNum(r.alertas)+'</span>':'0'):'<span style="color:var(--text-muted);">—</span>')+'</td>';
       var cEstado='<td>'+(r.estado==='en-curso'?'<div style="display:flex;align-items:center;gap:8px;">'+estadoBadge(r.estado)+'<span style="font-size:14px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+(r.prog!=null?r.prog:0)+'%</span></div>':estadoBadge(r.estado))+'</td>';
-      return '<tr>'+cPer+cRefs+cHs+cAlert+cEstado+cFecha+cCreador+cActions+'</tr>';
+      return '<tr>'+cId+cPer+cRefs+cHs+cAlert+cEstado+cFecha+cCreador+cActions+'</tr>';
     }).join('');
   }
 
