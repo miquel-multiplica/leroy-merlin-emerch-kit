@@ -133,7 +133,7 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
     - **Selector de proveedor** en el modal de informes: el informe es **por proveedor** (el perímetro tiene varios) y se elige cuál.
     - **Datos reales**: ya no usa el array dummy `_expRows`; se alimenta de `_infFindings` filtrando `owner: Seller` + proveedor.
   - **Generación: `window.print()` con `@page { size: A4 landscape }`** — **fuera html2pdf/html2canvas**. Se abandonó tras tres intentos fallidos (PDF en blanco por `z-index:-1` detrás del fondo de página; luego contenido desplazado y cortado). Print-to-PDF **no rasteriza**, así que esa familia de bugs desaparece, el **texto queda seleccionable** y no depende de un CDN externo. Contrapartida: se descarga desde el diálogo de impresión ("Guardar como PDF"), un clic más.
-  - **Falta**: **validarlo en navegador** (saltos de página reales, que se impriman los fondos) y **pulir** el diseño con el cliente delante.
+  - **Estado:** dado por bueno **a falta de validar con cliente**. Lo único que queda por nuestra parte es **comprobar la impresión real en navegador** (saltos de página, que se impriman los fondos, que el logo fijo no pise la última fila).
   - **Bloque 4 (impacto en negocio) fuera** (verde, depende de Función 4).
 - ~~**Re-auditoría — lanzar nueva ejecución**~~: **resuelto** — **Re-auditar** (botón del informe + kebab del hub) **abre el funnel de nueva auditoría con el mismo perímetro ya seleccionado** (tipo + valor), en lugar de lanzarla a ciegas: así se puede revisar o ajustar el perímetro antes de ejecutar. Al lanzarla se crea una auditoría **NUEVA** con el **mismo perímetro y fecha nueva** (En curso); la Revisada original **queda intacta** (modelo *"fila nueva por ejecución"*, confirmado con cliente: re-auditoría **manual** sobre la previa). Como es una fila separada, **cancelar la re-auditoría no afecta a la original** (se resuelve solo la duda de §5.15).
 - **Re-auditoría — sin evolutivo (decidido):** las re-auditorías son **ejecuciones independientes, NO vinculadas** entre sí (cada una es una auditoría fresca del mismo perímetro con su fecha). Por tanto **no hay comparación automática Corregidos / Persisten / Nuevos** en la herramienta → **fuera de alcance**. *(El evolutivo semanal que el cliente hace hoy queda fuera de este alcance / futuro o por otra vía.)* **No hay nada que prototipar aquí.**
@@ -143,22 +143,58 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
 
 *(Nota: **no** hacemos "detalle de referencia" interno. Igual que el artefacto del cliente, la referencia **enlaza a la ficha real de Leroy (PDP en vivo)**, que es la fuente de verdad para revisar falsos positivos.)*
 
-## Next steps (orden de trabajo)
+## Estado a 22 de septiembre de 2026
 
-> Mapeados, **no ejecutados**. Este es el orden acordado para retomar el módulo.
->
-> *Hecho el 2026-09-21: el flujo de falso positivo (coincidencias como paso obligatorio + caso de un solo paso). Ver `Pendiente de prototipo`.*
+> Foto consolidada para retomar. Tres bloques: lo que **depende del cliente**, lo que **depende de nosotros** y lo que está **sin diseñar**.
 
-### 1. Continuar con el PDF y los exports
-El PDF se **rehizo el 2026-09-21** (apaisado, estructura de guía, resumen agregado, print-to-PDF — ver *Contenido real de los exports*). Queda: (1) **validarlo en navegador** — saltos de página y que se impriman los fondos; (2) **pulir el diseño** con el cliente; (3) revisar si el **CSV del seller** debe cablearse también a `_infFindings` (hoy sigue saliendo de `_expRows`).
+### 🟢 Cerrado esta semana
 
-### 2. Cerrar el Health Score con cliente
-Ver §5.11: **en duda**. No tocar el tratamiento del proto hasta esa conversación.
+- **Flujo del falso positivo**: revisar coincidencias pasa de desvío opcional a **paso obligatorio**, con caso de un solo paso cuando no hay coincidencias.
+- **Informe**: acciones en cabecera (xs) + barra flotante al hacer scroll; pestañas en vez de acordeones; tarjeta única de cifras; matriz sin selector de orden (fija por severidad); columna **ID** en el hub con la convención de Descripciones (`#1000+id`).
+- **Borradores**: sin ficha por ninguna vía; *Continuar* abre el funnel con el perímetro. **Re-auditar** también pasa por el funnel.
+- **PDF del seller**: rediseñado contra la guía eMerch y **dado por bueno a falta de validar con cliente**. Portada como resumen de salud, bloques *Modelos a corregir* y *Qué hay que corregir*, print-to-PDF, sin mención a la guía.
+- **Modal de informes**: una tarjeta por destinatario, filas por entregable, sin vista previa.
 
-### 3. Pendientes de gestión (no de maquetación)
-- Enviar las **5 preguntas por escrito** (bloque *Preguntas redactadas al cliente*).
-- Agendar la **sesión de trabajo**: escala de criticidad + elegibilidad y datos de falsos positivos.
-- Compartir el **enlace del prototipo** para lo de falsos positivos → admin (§5.14).
+---
+
+### 🔴 Pendiente de cliente — bloquea decisiones
+
+| # | Qué | Por qué bloquea |
+|---|---|---|
+| **1** | **Escala de criticidad** (§5.20) | Es el **núcleo del módulo**. Qué tipo de error cae en qué tier y cuáles llegan a *No publicable*. Nuestra Bloqueante/Crítica/Leve es **propuesta**, y de ella dependen las cajitas del informe, el orden de la matriz y las cifras del PDF. **Requiere sesión de trabajo.** |
+| **2** | **Health Score** (§5.11) | Cuatro preguntas encadenadas: **(a)** ¿nos lo dais por referencia? Sin eso no se puede componer el de ningún alcance. **(b)** ¿snapshot o pre-calculado? **(c)** ¿fecha de última actualización? **(d)** ¿sobre qué universo se calcula el del proveedor? Su deck lo sitúa junto a *SKUs conformes*, lo que indica **todo su catálogo**, no solo lo que falla. **(e)** Nos faltan **SKUs auditados** y **SKUs conformes**, dos de las cuatro cifras de su propia cabecera. Contacto: **Javier Hernán**. |
+| **3** | **Falsos positivos — elegibilidad** (§5.16) | ¿Qué tipos de check admiten marcarse como falso positivo? Hipótesis del proto: solo los de juicio, no las ausencias objetivas. **Sin confirmar.** |
+| **4** | **Falsos positivos — datos del bloque** (§5.17) | ¿El motor puede exponer **disparador**, jerarquía **Familia→Modelo→Referencia** y **seller**? ¿Cómo se calcula la equivalencia? Si no puede, el paso 2 del flujo se queda sin datos que enseñar. |
+| **5** | **Jerarquía sobre el modelo** (§5) | ¿Familia, categoría web u otra cosa? Bloquea cerrar el árbol del panel del motor, prototipado con «familia» como hipótesis. |
+| **6** | **Atributos obligatorios de la guía** (§5.7) | ¿Solo los de ficha técnica, o también los que la guía exige en designación y descripción? ¿Con qué gravedad si faltan estos últimos? |
+| **7** | **Ficha «No publicable»** | Además de faltar designación o descripción, ¿hay otros mínimos —por ejemplo estar por debajo del mínimo de imágenes— que la hagan candidata a despublicar? |
+| **8** | **Quién dispara el export del seller** | El informe entra por el TIP, que crea la subtarea en Jira. ¿Lo envía el e-merch, el TIP, o sale directo al proveedor? |
+| **9** | **Flujo de falsos positivos → admin** (§5.14) | ¿Informe descargable o conexión directa con el motor? De ello depende el copy de los modales de falso positivo y de *Marcar como revisado*. Pidieron el **enlace del prototipo** para verlo. |
+| **10** | **Validar el PDF del seller** | Nuevo. El documento está terminado a falta de que lo vean: portada, estructura, tono y las cifras de negocio, que son **placeholder** hasta que analítica dé datos propios. |
+
+### 🟡 Dudas nuestras, sin resolver
+
+- **Vocabulario de severidad en el PDF.** Se unificó a *no publicables · críticos · leves* (eje de **estado**), pero *No publicable* es un juicio interno —*publicada que no debería estarlo*— y va en un documento que sale a un proveedor. Pendiente de ver cómo lo recibe el cliente.
+- **El Health Score que mostramos no es del proveedor.** Sale de `aud.hs`, que es el de la auditoría entera. Coincide cuando el perímetro *es* ese proveedor; en una auditoría de gama le enseñaríamos el score de la gama. Hay que calcularlo sobre sus referencias.
+- **Cuánto desglose admite el informe del seller.** Solo hay ~11 tipos de error con `owner: Seller`; los demás son del TIP por la regla que confirmó el cliente. Para más detalle habría que **bajar al atributo concreto** (*qué* atributo falta, *qué* categoría de imagen), que es lo que el cliente pidió literalmente.
+- **La lista de modelos afectados no está acotada.** Con 11 se lee bien; con 80 sería una cola larga de modelos con 1 referencia. Falta decidir si se corta a los N primeros.
+
+### 🔵 Pendiente de nosotros — depende solo de nuestro trabajo
+
+1. **Validar la impresión del PDF en navegador.** Es lo más urgente y **no se puede verificar por código**: saltos de página entre los dos bloques, que los fondos se impriman (`print-color-adjust`), y que el logo fijo no pise la última fila de ninguna tabla.
+2. **Cablear el CSV del seller a datos reales.** Sigue saliendo de `_expRows`, un array dummy de 7 filas, mientras el PDF ya usa `_infFindings`. **Hoy no cuadran entre sí**, y el PDF le dice explícitamente al proveedor que abra ese CSV. Es la incoherencia más visible que queda.
+3. **Enviar las preguntas por escrito** (bloque *Preguntas redactadas al cliente*) y **agendar la sesión de trabajo** de la escala de criticidad.
+4. **Compartir el enlace del prototipo** para lo de falsos positivos → admin.
+
+### ⚪ Sin diseñar — flujos y casuísticas
+
+- **Qué pasa con una auditoría cuya guía cambia o se despublica.** Enlaza con el eje *Publicar/No publicar* de Guías: no hay versionado ni aviso, así que una auditoría puede quedar huérfana de la guía contra la que se hizo. Sin flujo definido.
+- **Histórico y evolutivo.** El cliente lo pidió (*«evolución del Health Score y correcciones en el tiempo»*) y nos pidió proponerlo. Decidido que las re-auditorías son **ejecuciones independientes sin comparación**, así que el evolutivo **no tiene hoy ninguna pantalla**.
+- **Un modelo en varias guías.** Técnicamente posible; si ocurre, no hay regla de cuál manda al auditar. Sin resolver ni en Guías ni aquí.
+- **Roles y permisos 1P/3P.** El cliente los pidió explícitamente (*«harán falta roles para ver solo 1P o solo 3P»*) y el **validador de gama** es el usuario principal. No hay nada prototipado.
+- **Multi-documento por proveedor.** Matiz que salió en las respuestas: todas las referencias de su gama y luego **N documentos por categoría o sección**. Hoy generamos uno solo.
+- **Agregación por modelo vs. por PLP.** Fer la ve mejor por modelo. Sin aterrizar.
+- **Estados de error del export.** Qué ve el usuario si la generación de un informe falla. No contemplado.
 
 ## Infra / repo
 - **GitHub Pages** vía **GitHub Actions** (`concurrency: cancel-in-progress: false` + `workflow_dispatch`). Deploy **encolado por incidencia de GitHub** (ago 2026); se publica solo al resolverse. Código a salvo en `main`.
