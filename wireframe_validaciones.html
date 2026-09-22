@@ -1340,6 +1340,9 @@
     var modList=Object.keys(mods).map(function(m){ var n=0; for(var q in mods[m].refs)n++; return {name:m, n:n, sev:mods[m].sev}; })
       .sort(function(x,y){ return y.n-x.n; });
     var nMods=modList.length;
+    // modelos revisados del proveedor: en el sistema real sale de la consulta; aquí se deriva estable
+    var hm=0; for(var cm=0;cm<name.length;cm++) hm=(hm*17+name.charCodeAt(cm))%89;
+    var nModsRev=nMods+(hm%4);
     var amb=sellerAmbito(aud);
     var meta='2 de septiembre de 2026 · '+auditRef()+(amb?' · '+amb:'');
     var kpi=function(v,l,bar){ return '<div style="flex:1;display:flex;align-items:center;gap:11px;border:1px solid '+BOR+';border-radius:10px;padding:10px 14px;">'
@@ -1365,8 +1368,8 @@
       +'<div style="width:34px;height:3px;background:'+LIME+';margin:18px 0 30px;"></div>'
       +'<div style="display:flex;gap:10px;align-items:center;">'
       +'<div style="flex-shrink:0;padding-right:24px;">'
-      +'<div style="font-size:26px;font-weight:800;line-height:1;color:'+INK+';">'+num(nMods)+'</div>'
-      +'<div style="font-size:11.5px;color:'+MUT+';margin-top:6px;">modelos afectados</div></div>'
+      +'<div style="font-size:26px;font-weight:800;line-height:1;color:'+INK+';">'+num(nModsRev)+'</div>'
+      +'<div style="font-size:11.5px;color:'+MUT+';margin-top:6px;">modelos revisados</div></div>'
       +'<div style="flex-shrink:0;padding-right:24px;border-left:1px solid '+BOR+';padding-left:24px;">'
       +'<div style="font-size:26px;font-weight:800;line-height:1;color:'+INK+';">'+num(nTotal)+'</div>'
       +'<div style="font-size:11.5px;color:'+MUT+';margin-top:6px;">referencias auditadas</div></div>'
