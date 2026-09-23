@@ -165,25 +165,32 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
   - ¿Sobre qué universo se calcula **el del proveedor**? Su deck lo sitúa junto a *SKUs conformes*, lo que indica todo su catálogo y no solo lo que falla.
   - Nos faltan **SKUs auditados** y **SKUs conformes**, dos de las cuatro cifras de su propia cabecera.
 - **Falsos positivos, elegibilidad** (§5.16) — ¿qué tipos de check admiten marcarse como falso positivo? Hipótesis del proto: solo los de juicio, no las ausencias objetivas.
-- **Falsos positivos, datos del bloque** (§5.17) — ¿el motor puede exponer **disparador**, jerarquía Familia→Modelo→Referencia y **seller**? ¿Cómo se calcula la equivalencia? Si no puede, el paso 2 del flujo se queda sin datos que enseñar.
+- **Falsos positivos, datos del bloque** (§5.17) — parcialmente resuelto:
+  - **El seller está confirmado**: cada referencia lleva el suyo vinculado en la tabla.
+  - **La equivalencia es jerárquica**: las reglas —de la guía o del motor— aplican **de lo más genérico a lo más específico** (familia, luego modelo), y pueden existir a distintos niveles. Dos referencias pueden compartir disparador a nivel de familia pero no de modelo.
+  - **Queda abierto** cómo expone el motor el **disparador** concreto y la jerarquía Familia→Modelo→Referencia, y depende del retrabajo del motor.
+- **Retrabajo del motor** — los devs plantean separar **lo determinista, que viene de la guía**, de lo que no, y poder **añadir reglas que no dependan de la interpretación de un LLM**. Afecta directamente a qué disparadores se pueden exponer y agrupar. **Pendiente de conversación.**
 - **Jerarquía sobre el modelo** — ¿familia, categoría web u otra cosa? Bloquea cerrar el árbol del panel del motor, hoy prototipado con «familia» como hipótesis.
 - **Atributos obligatorios de la guía** (§5.7) — ¿solo los de ficha técnica, o también los que la guía exige en designación y descripción? ¿Con qué gravedad si faltan estos últimos?
 - **Ficha «No publicable»** — además de faltar designación o descripción, ¿hay otros mínimos (por ejemplo, por debajo del mínimo de imágenes) que la hagan candidata a despublicar?
 - **A quién dirige el PDF su línea de contacto** — el documento cierra con *«contacta con tu responsable e-merch»*. Nos dijeron que en **3P el TIP no juega** y que es **marketplace** quien llama al seller, así que ese copy puede estar mal para la mitad de los casos. *(La pregunta anterior —quién dispara y envía el export— se retira: el botón solo descarga; quién lo hace llegar y por qué canal ocurre fuera de la herramienta y no condiciona el diseño.)*
-- **Flujo de falsos positivos → admin** (§5.14) — ¿informe descargable o conexión directa con el motor? De ello depende el copy de los modales de falso positivo y de *Marcar como revisado*. Pidieron el enlace del prototipo para verlo.
+- **Flujo de falsos positivos → admin** (§5.14) — **descartada la conexión directa**: será un archivo, no una integración que reedite el prompt. Queda por ver **qué se podrá modificar del motor y cómo**, lo que depende del retrabajo. Pidieron el enlace del prototipo para verlo.
 - **Validar el PDF del seller** — portada, estructura, tono, y las cifras de negocio, que son **placeholder** hasta que analítica dé datos propios.
 
 ### Dudas nuestras, sin resolver
 
 - **Vocabulario de severidad en el PDF** — se unificó a *no publicables · críticos · leves*, el eje de estado. Pero *No publicable* es un juicio interno —*publicada que no debería estarlo*— y va en un documento que sale a un proveedor.
-- **El Health Score que mostramos no es del proveedor** — sale de `aud.hs`, el de la auditoría entera. Coincide cuando el perímetro *es* ese proveedor; en una auditoría de gama le enseñaríamos el score de la gama. Hay que calcularlo sobre sus referencias.
-- **Cuánto desglose admite el informe del seller** — solo hay unos 11 tipos de error con `owner: Seller`; los demás son del TIP por la regla que confirmó el cliente. Para más detalle habría que bajar al **atributo concreto** (qué atributo falta, qué categoría de imagen), que es lo que el cliente pidió literalmente.
-- **La lista de modelos afectados no está acotada** — con 11 se lee bien; con 80 sería una cola larga de modelos con una sola referencia. Falta decidir si se corta a los N primeros.
+
+### Resuelto el 22-23 de septiembre
+
+- **Health Score del proveedor** — deja de mostrarse el de la auditoría. Se calcula sobre **sus** referencias, como media ponderada de su reparto (conforme 100 · leve 70 · crítica 50 · no publicable 30). En *Gama A*, cuya auditoría marca 72, cada proveedor tiene ya el suyo: Saint-Gobain 84, Grohe 75, Roca 60.
+- **Desglose del informe del seller** — decidido: el **PDF es agregado** y dice qué falta; el **detalle referencia a referencia vive en el CSV**. No hace falta bajar al atributo concreto en el documento.
+- **Lista de modelos** — a **dos columnas** (`column-count:2` con medianil), de modo que con pocos modelos ocupa la mitad del ancho y con muchos no genera una cola larga.
+- **CSV cableados a datos reales** — los tres salen ya de `_infFindings`: el del seller filtrado a sus hallazgos (1.978 filas, las mismas que anuncia el PDF), el del TIP con columna Seller para enrutar, y el de falsos positivos con **los que se hayan marcado de verdad** en la matriz, con motivo, comentario y disparador. Los tres llevan el ID de auditoría en el nombre. Eliminado `_expRows`, el array dummy que causaba la incoherencia.
 
 ### Pendiente de nosotros
 
-- **Validar la impresión del PDF en navegador** — lo más urgente, y **no se puede verificar por código**: saltos de página entre los dos bloques, que se impriman los fondos (`print-color-adjust`) y que el logo fijo no pise la última fila de ninguna tabla.
-- **Cablear el CSV del seller a datos reales** — sigue saliendo de `_expRows`, un array dummy de 7 filas, mientras el PDF ya usa `_infFindings`. Hoy **no cuadran entre sí**, y el PDF le dice explícitamente al proveedor que abra ese CSV.
+- **Validar la impresión del PDF en navegador** — no se puede verificar por código: saltos de página entre los dos bloques, que se impriman los fondos (`print-color-adjust`) y que el logo fijo no pise la última fila de ninguna tabla.
 - **Enviar las preguntas por escrito** y **agendar la sesión de trabajo** de la escala de criticidad.
 - **Compartir el enlace del prototipo** para lo de falsos positivos → admin.
 
