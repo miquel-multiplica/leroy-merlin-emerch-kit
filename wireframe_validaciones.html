@@ -410,6 +410,7 @@
   .pdf-bar-r{ margin-left:auto; padding-right:26px; font-size:10.5px; color:#d7d9df; }
   .pdf-bodycell{ padding:0 46px 8px 50px; }
   .pdf-cols{ }
+  .pdf-modcols{ column-count:2; column-gap:44px; column-fill:auto; }
   .pdf-footcell{ padding:6px 46px 14px 50px; }
   .pdf-logo{ height:38px; width:auto; display:block; }
   .pdf-pagelogo{ position:absolute; right:38px; bottom:26px; }
@@ -1250,21 +1251,42 @@
   function closeReabrirConfirm(){ document.getElementById('v-reabrir-modal').classList.remove('open'); }
   function confirmReabrir(){ closeReabrirConfirm(); reabrirRevision(); }
   function reabrirRevision(){ var a=_audits.filter(function(x){return x.id===_infId;})[0]; if(!a) return; a.estado='por-revisar'; a.fecha='Ahora'; renderAudits(); document.getElementById('v-inf-badge').innerHTML=estadoBadge(a.estado); renderInforme(a); }
-  var _expRows=[
-    {ref:'REF-3412', prod:'Silla de escritorio ergonómica', tipo:'Completitud', ubic:'Ficha técnica', diag:'Falta el atributo obligatorio "Material de tapizado" (ATT_10840) para la categoría Muebles de oficina.', accion:'Informar el atributo Material de tapizado (p. ej. malla sintética, cuero, tela).', owner:'Seller', seg:'3P', modelo:'MOD_201405 · Silla de oficina'},
-    {ref:'REF-9901', prod:'Zapatillas running Sprint', tipo:'Imágenes', ubic:'Multimedia', diag:'Solo 1 imagen cargada; no se alcanza el mínimo de imágenes de la guía.', accion:'Subir las imágenes que faltan (ángulo lateral, suela, perspectiva frontal).', owner:'Seller', seg:'1P', modelo:'MOD_268784 · Calzado deportivo'},
-    {ref:'REF-7120', prod:'Taladro percutor 750 W', tipo:'Completitud', ubic:'Ficha técnica', diag:'Atributo obligatorio "Voltaje" (ATT_00596) vacío.', accion:'Informar el atributo Voltaje.', owner:'Seller', seg:'3P', modelo:'MOD_200233 · Taladros'},
-    {ref:'REF-2005', prod:'Aislante termorreflectante', tipo:'Imágenes', ubic:'Multimedia', diag:'Tiene 2 imágenes; faltan categorías de imagen de la guía (p. ej. Packshot).', accion:'Subir las imágenes de las categorías que faltan.', owner:'Seller', seg:'1P', modelo:'MOD_200074 · Aislante termoreflectante'},
-    {ref:'REF-8921', prod:'Taladro inalámbrico Pro 20V', tipo:'Discrepancia', ubic:'Título ↔ Ficha técnica', diag:'El título indica "20V" pero la ficha especifica "18V".', accion:'Unificar el voltaje entre título y ficha técnica.', owner:'TIP', seg:'1P', modelo:'MOD_200233 · Taladros'},
-    {ref:'REF-5541', prod:'Smart TV 55" 4K UHD', tipo:'Discrepancia', ubic:'Descripción ↔ Ficha', diag:'La descripción menciona "incluye soporte de pared" pero la ficha dice "soporte no incluido".', accion:'Rectificar la descripción o el atributo Soporte incluido.', owner:'TIP', seg:'3P', modelo:'MOD_258713 · Televisores'},
-    {ref:'REF-9314', prod:'Pintura mate blanca 4 L', tipo:'Estructura', ubic:'Designación', diag:'Falta el color en el título.', accion:'Reescribir la designación incluyendo el color.', owner:'TIP', seg:'1P', modelo:'MOD_193014 · Pintura interior'}
-  ];
   function _csvEsc(v){ v=(''+v).replace(/"/g,'""'); return /[",;\n]/.test(v)?'"'+v+'"':v; }
-  function _rowsToCsv(rows,includeSeg){ var head=['Referencia','Producto','Tipo de error','Ubicación del error','Diagnóstico del sistema','Acciones correctivas','Owner']; if(includeSeg)head.push('1P / 3P'); head.push('Modelo'); var lines=[head.map(_csvEsc).join(';')]; rows.forEach(function(r){ var cols=[r.ref,r.prod,r.tipo,r.ubic,r.diag,r.accion,r.owner]; if(includeSeg)cols.push(r.seg); cols.push(r.modelo); lines.push(cols.map(_csvEsc).join(';')); }); return '﻿'+lines.join('\r\n'); }
   function _downloadBlob(name,text,mime){ try{ var b=new Blob([text],{type:mime}); var u=URL.createObjectURL(b); var a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function(){URL.revokeObjectURL(u);},1500); }catch(e){ alert('No se pudo generar el archivo en este entorno.'); } }
-  function downloadSellerCsv(){ _downloadBlob('informe-seller.csv', _rowsToCsv(_expRows.filter(function(r){return r.owner==='Seller';}),true), 'text/csv;charset=utf-8;'); }
-  function downloadTipCsv(){ _downloadBlob('informe-interno-tip.csv', _rowsToCsv(_expRows.filter(function(r){return r.owner==='TIP';}),true), 'text/csv;charset=utf-8;'); }
-  function downloadFpCsv(){ var head=['Referencia','Modelo','Tipo de error','Motivo del falso positivo','Comentario','Regla / check','Severidad','Revisor','Fecha']; var sample=[['REF-9901','MOD_268784 · Calzado','Ortografía','Término técnico válido','«Sprint» es el nombre de la línea, no una falta','spellcheck','Leve','Ana García','2 sep 2026'],['REF-2005','MOD_200074 · Aislante','Material','Sinónimo válido','«termorreflectante» es equivalente aceptado','vocab:material','Leve','Ana García','2 sep 2026']]; var lines=[head.map(_csvEsc).join(';')]; sample.forEach(function(r){ lines.push(r.map(_csvEsc).join(';')); }); _downloadBlob('informe-falsos-positivos.csv', '﻿'+lines.join('\r\n'), 'text/csv;charset=utf-8;'); }
+  var SEV_LBL={bloqueante:'Bloqueante',critica:'Crítica',mejora:'Leve'};
+  // Los CSV salen de los hallazgos reales de la auditoría, los mismos que alimentan el informe y el PDF.
+  function _findingsToCsv(rows, withSeller){
+    var head=['Referencia','Producto','Tipo de error','Ubicación del error','Diagnóstico del sistema','Acciones correctivas','Severidad','Owner','1P / 3P','Modelo'];
+    if(withSeller) head.splice(9,0,'Seller');
+    var lines=[head.map(_csvEsc).join(';')];
+    rows.forEach(function(f){
+      var cols=[f.ref, f.guia||'', f.tipo, f.ubic, f.diag, f.accion, (SEV_LBL[f.sev]||f.sev||''), f.owner, f.pp||''];
+      if(withSeller) cols.push(f.seller||'');
+      cols.push(f.modelo||'');
+      lines.push(cols.map(_csvEsc).join(';'));
+    });
+    return '﻿'+lines.join('\r\n');
+  }
+  function downloadSellerCsv(){
+    var name=currentSeller();
+    var rows=_infFindings.filter(function(f){ return !f.fp && f.owner==='Seller' && f.seller===name; });
+    _downloadBlob(sellerCsvName(), _findingsToCsv(rows,false), 'text/csv;charset=utf-8;');
+  }
+  function downloadTipCsv(){
+    var rows=_infFindings.filter(function(f){ return !f.fp && f.owner==='TIP'; });
+    _downloadBlob('informe-interno-tip-'+auditRef().replace('#','')+'.csv', _findingsToCsv(rows,true), 'text/csv;charset=utf-8;');
+  }
+  function downloadFpCsv(){
+    var head=['Referencia','Modelo','Tipo de error','Ubicación','Severidad','Motivo del falso positivo','Comentario','Disparador','Seller','Revisor','Fecha'];
+    var rows=_infFindings.filter(function(f){ return f.fp; });
+    var lines=[head.map(_csvEsc).join(';')];
+    rows.forEach(function(f){
+      lines.push([f.ref, f.modelo||'', f.tipo, f.ubic, (SEV_LBL[f.sev]||f.sev||''),
+        (f.motivos&&f.motivos.length?f.motivos.join(' · '):(f.motivo||'')), f.comment||'',
+        f.bulkTrigger||'', f.seller||'', 'Ana García', '2 sep 2026'].map(_csvEsc).join(';'));
+    });
+    _downloadBlob('falsos-positivos-'+auditRef().replace('#','')+'.csv', '﻿'+lines.join('\r\n'), 'text/csv;charset=utf-8;');
+  }
   var _sellerPick=null;
   function audSellerName(a){ if(!a || a.tipo!=='Vendor') return null; var t=(a.perimetro||''); var i=t.indexOf('·'); return (i>=0?t.slice(i+1):t).trim()||null; }
   function _applyPerimetro(){ var a=_audits.filter(function(x){return x.id===_infId;})[0]; var sn=audSellerName(a); if(!sn) return;
@@ -1330,6 +1352,9 @@
     // modelos revisados del proveedor: en el sistema real sale de la consulta; aquí se deriva estable
     var hm=0; for(var cm=0;cm<name.length;cm++) hm=(hm*17+name.charCodeAt(cm))%89;
     var nModsRev=nMods+(hm%4);
+    // Health Score del proveedor: media ponderada de sus referencias según su estado.
+    // Conforme 100 · leve 70 · crítica 50 · no publicable 30. En el sistema real vendrá dado por referencia.
+    var hsSeller = nTotal ? Math.round((nOk*100 + nLev*70 + nCri*50 + nBlo*30)/nTotal) : 0;
     var amb=sellerAmbito(aud);
     var meta='2 de septiembre de 2026 · '+auditRef()+(amb?' · '+amb:'');
     var kpi=function(v,l,bar){ return '<div style="flex:1;display:flex;align-items:center;gap:11px;border:1px solid '+BOR+';border-radius:10px;padding:10px 14px;">'
@@ -1367,7 +1392,7 @@
       +'</div>'
       +'<div style="margin-top:18px;padding:22px 0 24px;border-top:1px solid '+BOR+';border-bottom:1px solid '+BOR+';display:flex;align-items:baseline;gap:14px;">'
       +'<div style="flex-shrink:0;display:flex;align-items:baseline;gap:8px;">'
-      +'<span style="font-size:24px;font-weight:800;line-height:1;color:'+GREEN+';">'+(aud.hs||'—')+'</span>'
+      +'<span style="font-size:24px;font-weight:800;line-height:1;color:'+GREEN+';">'+hsSeller+'</span>'
       +'<span style="font-size:12.5px;font-weight:700;color:'+INK+';">Health Score de tu catálogo</span></div>'
       +'<div style="flex:1;font-size:11.5px;color:'+MUT+';line-height:1.5;">Mide sobre 100 la calidad de la información de tus fichas. Sube al corregir los puntos de este informe.</div></div>'
       +'<div style="margin-top:40px;display:flex;gap:44px;align-items:flex-start;">'
@@ -1411,16 +1436,16 @@
         +'<table style="width:100%;border-collapse:collapse;"><thead><tr>'
         + th('Tipo de error','32%') + th('Referencias','12%') + th('Severidad','13%') + th('Acción','43%')
         +'</tr></thead><tbody>'+filas+'</tbody></table></div>'; }).join('');
-    var modBlock='<div class="pdf-sec">'
-      +'<table style="width:100%;border-collapse:collapse;"><thead><tr>'
-      +'<th style="width:30%;text-align:left;font-size:11px;font-weight:600;color:'+MUT+';padding:0 0 7px;border-bottom:1px solid '+BOR+';">Modelo</th>'
-      +'<th style="width:70%;text-align:left;font-size:11px;font-weight:600;color:'+MUT+';padding:0 0 7px;border-bottom:1px solid '+BOR+';">Referencias</th>'
-      +'</tr></thead><tbody>'
-      + modList.map(function(m){
-          var td='padding:8px 0;border-bottom:1px solid '+BOR+';vertical-align:top;';
-          return '<tr class="pdf-card"><td style="'+td+'font-size:12.5px;font-weight:700;color:'+INK+';padding-right:14px;">'+m.name+'</td>'
-            +'<td style="'+td+'font-size:13px;font-weight:500;color:'+INK+';font-variant-numeric:tabular-nums;">'+num(m.n)+'</td></tr>'; }).join('')
-      +'</tbody></table></div>';
+    var modRow=function(n,v,head){ var st=head
+      ? 'font-size:11px;font-weight:600;color:'+MUT+';padding:0 0 7px;border-bottom:1px solid '+BOR+';'
+      : 'font-size:12.5px;padding:8px 0;border-bottom:1px solid '+BOR+';';
+      return '<div class="pdf-card" style="display:flex;gap:16px;align-items:baseline;'+st+'">'
+        +'<div style="flex:1;min-width:0;'+(head?'':'font-weight:700;color:'+INK+';')+'">'+n+'</div>'
+        +'<div style="width:62px;flex-shrink:0;'+(head?'':'font-weight:500;color:'+INK+';font-variant-numeric:tabular-nums;')+'">'+v+'</div></div>'; };
+    var modBlock='<div class="pdf-sec"><div class="pdf-modcols">'
+      + modRow('Modelo','Referencias',true)
+      + modList.map(function(m){ return modRow(m.name, num(m.n), false); }).join('')
+      +'</div></div>';
     var banda=function(t){ return '<thead><tr><td class="pdf-barcell">'
       +'<div class="pdf-bar"><span class="pdf-bar-g"></span><span class="pdf-bar-t">'+t+'</span>'
       +'<span class="pdf-bar-r">'+name+' · '+auditRef()+'</span></div></td></tr></thead>'; };
