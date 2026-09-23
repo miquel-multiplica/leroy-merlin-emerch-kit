@@ -119,7 +119,7 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
 - ~~**Flujo del falso positivo — coincidencias obligatorias**~~: **resuelto (2026-09-21)** — el paso de revisar coincidencias pasa de **desvío opcional** a **paso 2 de un proceso**, con lista desplegada de entrada, *"Seleccionar todas"* y confirmación sin marcar como salida válida; **un solo paso** cuando no hay coincidencias. Ver el detalle en *Qué hay montado*. *(Sigue dependiendo de §5.17: si el motor no puede exponer disparador/jerarquía/equivalencia, el paso 2 no tiene datos que enseñar y el flujo vuelve a ser de un paso.)*
 - ⚠️ **Health Score provisional** — **montado, pero su validez está en duda.** El proto lo trata en **gris** (sin flecha, también en filas del hub) mientras *Pendiente de revisión*, y en **color + bold** en *Revisada*, con **tooltip estilado**. Ese comportamiento asume que el HS se recalcula con la revisión; si el valor **viene dado de fuera**, la premisa puede no sostenerse. **Pendiente de la conversación con cliente (§5.11) antes de cambiar nada.**
 - ⚠️ **Contenido real de los exports — PDF del seller rehecho (2026-09-21), pendiente de validar en navegador.**
-  - **CSV** (seller / interno TIP / falsos positivos): **hechos y validados** (columnas según la plantilla del cliente; Owner:Seller lleva completitud+imágenes **con 1P/3P** —pág. 33—; Owner:TIP lleva coherencia+estructura).
+  - **CSV** (seller / interno TIP / falsos positivos): **hechos y validados** (columnas según la plantilla del cliente; Owner:Seller lleva completitud+imágenes **con 1P/3P** —pág. 33—; Owner:TIP lleva coherencia+estructura). Los dos que no son de falsos positivos abren con el **bloque de identidad** `Referencia · Producto · Modelo · Nombre del modelo`: *Producto* es la **designación comercial de la referencia** —como en la plantilla del cliente— y el código y el nombre del modelo van en columnas separadas y contiguas.
   - **PDF del seller — rediseñado de cero contra la guía eMerch** (`docs de cliente/guia-gua-emerch-60.pdf`), que es la referencia del "debe ser". Su maqueta se leyó rasterizando el PDF, no solo su texto: **barra verde `#78be20`** vertical en el borde izquierdo de la portada, **banda `#494f60`** de borde a borde en las páginas interiores con un bloque verde al inicio, y **logo abajo a la derecha**:
     - **Formato: A4 apaisado**, tipo slide, con **tres hojas**: portada · qué hay que corregir · por qué merece la pena.
     - **Portada** propia, con el **perímetro como elemento dominante** (42px), proveedor, fecha e **ID de auditoría**, y tres cifras (referencias con acciones · puntos a corregir · Health Score, este último ya tomado del registro de auditoría, no hardcodeado).
@@ -133,26 +133,39 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
     - **Selector de proveedor** en el modal de informes: el informe es **por proveedor** (el perímetro tiene varios) y se elige cuál.
     - **Datos reales**: ya no usa el array dummy `_expRows`; se alimenta de `_infFindings` filtrando `owner: Seller` + proveedor.
   - **Generación: `window.print()` con `@page { size: A4 landscape }`** — **fuera html2pdf/html2canvas**. Se abandonó tras tres intentos fallidos (PDF en blanco por `z-index:-1` detrás del fondo de página; luego contenido desplazado y cortado). Print-to-PDF **no rasteriza**, así que esa familia de bugs desaparece, el **texto queda seleccionable** y no depende de un CDN externo. Contrapartida: se descarga desde el diálogo de impresión ("Guardar como PDF"), un clic más.
-  - **Estado:** dado por bueno **a falta de validar con cliente**. Lo único que queda por nuestra parte es **comprobar la impresión real en navegador** (saltos de página, que se impriman los fondos, que el logo fijo no pise la última fila).
+  - **Franja de footer reservada por página**: un `tfoot` que se repite en cada hoja impresa deja 24 mm libres abajo, de modo que el logo fijo **no puede pisar** la última fila de una tabla; si un bloque no cabe, salta a la página siguiente. Además, más aire entre bloques.
+  - **Estado:** **impresión validada en navegador (2026-09-23)** — saltos de página, fondos y logo fijo correctos. Queda solo **validarlo con cliente**.
   - **Bloque 4 (impacto en negocio) fuera** (verde, depende de Función 4).
 - ~~**Re-auditoría — lanzar nueva ejecución**~~: **resuelto** — **Re-auditar** (botón del informe + kebab del hub) **abre el funnel de nueva auditoría con el mismo perímetro ya seleccionado** (tipo + valor), en lugar de lanzarla a ciegas: así se puede revisar o ajustar el perímetro antes de ejecutar. Al lanzarla se crea una auditoría **NUEVA** con el **mismo perímetro y fecha nueva** (En curso); la Revisada original **queda intacta** (modelo *"fila nueva por ejecución"*, confirmado con cliente: re-auditoría **manual** sobre la previa). Como es una fila separada, **cancelar la re-auditoría no afecta a la original** (se resuelve solo la duda de §5.15).
 - **Re-auditoría — sin evolutivo (decidido):** las re-auditorías son **ejecuciones independientes, NO vinculadas** entre sí (cada una es una auditoría fresca del mismo perímetro con su fecha). Por tanto **no hay comparación automática Corregidos / Persisten / Nuevos** en la herramienta → **fuera de alcance**. *(El evolutivo semanal que el cliente hace hoy queda fuera de este alcance / futuro o por otra vía.)* **No hay nada que prototipar aquí.**
 - ~~**Reabrir una Revisada**~~: **resuelto** — textlink **"Reabrir revisión"** en el pie del informe Revisada → confirmación (avisa de que vuelve a *Pendiente de revisión* y desactualiza los exports) → reactiva las acciones de falso positivo y el botón "Marcar como revisado". Ciclo: Revisada → (Reabrir) → Pendiente → (Marcar como revisado) → Revisada.
 - ~~**Panel de Configuración del motor (admin)**~~: **resuelto** — panel "Reglas del motor de validaciones" (árbol General ▸ Familia ▸ Modelo, editor de prompt por nivel, resumen de guía, última modificación con autor, **versionado** con publicar/nombrar/historial/restaurar y seguimiento de cambios sin publicar). *Pendiente: confirmar el nivel real sobre el modelo (¿familia?); contenido real de los prompts; cómo aterriza la cola de falsos positivos (archivo).*
 - **Flujo falsos positivos → admin**: cómo se materializa (¿informe de falsos positivos descargable vs. conexión directa?) — ver §5.14. De ello depende el copy de los modales de falsos positivos y de "¿Marcar como revisado?".
+- ⚠️ **Estados de error y vacíos del modal de informes** — hoy el modal **asume que todo va bien**: pulsas y descarga. Casos a maquetar:
+  - **Proveedor sin hallazgos** — el select lo ofrece pero no tiene nada que corregir. → Fila del PDF deshabilitada con el motivo, no un documento vacío.
+  - **Informe interno TIP vacío** — ningún hallazgo con `owner: TIP` en el alcance. → Mismo tratamiento.
+  - **Sin falsos positivos marcados** — su informe no tiene sentido. → Fila deshabilitada: *«no has marcado ninguno»*. Es el estado **de entrada** de toda auditoría, así que es el vacío más frecuente.
+  - **Auditoría sin proveedores en el alcance** — el selector se queda sin opciones. → Estado vacío de la tarjeta del proveedor.
+  - **Fallo al generar** — la consulta falla o caduca (volúmenes de decenas de miles de filas). → Mensaje de error en la propia fila + **Reintentar**, sin cerrar el modal.
+  - **Impresión cancelada** — el usuario cierra el diálogo del navegador sin guardar. → No es un error: no debe dejar rastro ni marcar el informe como generado.
+  - **Descarga múltiple bloqueada por el navegador** — al bajar varios ficheros seguidos. → Aviso de cómo permitirla.
+  - **Exports desactualizados** — al reabrir una revisión avisamos en el modal, pero la auditoría **no guarda ningún estado** que lo refleje después. → Decidir si se marca (chip *«informes desactualizados»*) o se acepta que el aviso se pierda.
+  - **Estados no exportables** (En curso · Borrador · Error) — hoy el botón no existe, pero conviene dejarlo escrito para que no vuelva.
 
 *(Nota: **no** hacemos "detalle de referencia" interno. Igual que el artefacto del cliente, la referencia **enlaza a la ficha real de Leroy (PDP en vivo)**, que es la fuente de verdad para revisar falsos positivos.)*
 
-## Estado a 22 de septiembre de 2026
+## Estado a 23 de septiembre de 2026
 
 > Foto consolidada para retomar.
 
 ### Cerrado esta semana
 
 - **Flujo del falso positivo** — revisar coincidencias pasa de desvío opcional a paso obligatorio, con caso de un solo paso cuando no hay coincidencias.
-- **Informe** — acciones en cabecera y barra flotante al hacer scroll; pestañas en vez de acordeones; tarjeta única de cifras; matriz sin selector de orden, fija por severidad; columna **ID** en el hub con la convención de Descripciones (`#1000+id`).
+- **Informe** — acciones en cabecera y barra flotante al hacer scroll; pestañas en vez de acordeones; tarjeta única de cifras; columna **ID** en el hub con la convención de Descripciones (`#1000+id`).
+- **Listado de hallazgos** — reorganizado como un único contenedor con **pestañas Correcciones / Falsos positivos**; fuera el toggle y el título "Matriz de correcciones".
 - **Borradores** — sin ficha por ninguna vía; *Continuar* abre el funnel con el perímetro. **Re-auditar** también pasa por el funnel.
 - **PDF del seller** — rediseñado contra la guía eMerch y **dado por bueno a falta de validar con cliente**.
+- **CSV** — cableados a datos reales y con el bloque de identidad corregido.
 - **Modal de informes** — una tarjeta por destinatario, filas por entregable, sin vista previa.
 
 ### Pendiente de cliente
@@ -169,6 +182,7 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
   - **El seller está confirmado**: cada referencia lleva el suyo vinculado en la tabla.
   - **La equivalencia es jerárquica**: las reglas —de la guía o del motor— aplican **de lo más genérico a lo más específico** (familia, luego modelo), y pueden existir a distintos niveles. Dos referencias pueden compartir disparador a nivel de familia pero no de modelo.
   - **Queda abierto** cómo expone el motor el **disparador** concreto y la jerarquía Familia→Modelo→Referencia, y depende del retrabajo del motor.
+- **Designación por referencia en el CSV** — la columna *Producto* de su plantilla lleva el **nombre comercial de la referencia** (*«Taladro Inalámbrico Pro 20V»*). Damos por hecho que el motor la expone, porque es el texto que auditamos, pero conviene confirmarlo con dev.
 - **Retrabajo del motor** — los devs plantean separar **lo determinista, que viene de la guía**, de lo que no, y poder **añadir reglas que no dependan de la interpretación de un LLM**. Afecta directamente a qué disparadores se pueden exponer y agrupar. **Pendiente de conversación.**
 - **Jerarquía sobre el modelo** — ¿familia, categoría web u otra cosa? Bloquea cerrar el árbol del panel del motor, hoy prototipado con «familia» como hipótesis.
 - **Atributos obligatorios de la guía** (§5.7) — ¿solo los de ficha técnica, o también los que la guía exige en designación y descripción? ¿Con qué gravedad si faltan estos últimos?
@@ -176,6 +190,9 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
 - **A quién dirige el PDF su línea de contacto** — el documento cierra con *«contacta con tu responsable e-merch»*. Nos dijeron que en **3P el TIP no juega** y que es **marketplace** quien llama al seller, así que ese copy puede estar mal para la mitad de los casos. *(La pregunta anterior —quién dispara y envía el export— se retira: el botón solo descarga; quién lo hace llegar y por qué canal ocurre fuera de la herramienta y no condiciona el diseño.)*
 - **Flujo de falsos positivos → admin** (§5.14) — **descartada la conexión directa**: será un archivo, no una integración que reedite el prompt. Queda por ver **qué se podrá modificar del motor y cómo**, lo que depende del retrabajo. Pidieron el enlace del prototipo para verlo.
 - **Validar el PDF del seller** — portada, estructura, tono, y las cifras de negocio, que son **placeholder** hasta que analítica dé datos propios.
+- **Versiones de guía bajo una auditoría ya hecha** — una auditoría valida contra la guía **del momento en que corrió**, y la guía es editable (y pronto despublicable). Sin versionado, una auditoría *Revisada* no se puede justificar después, un PDF puede pedir correcciones que ya no aplican y los falsos positivos quedan marcados contra reglas que ya no existen. **¿Queréis que la auditoría guarde la versión de guía con la que corrió, y que se avise cuando la guía haya cambiado desde entonces?** Enlaza con el eje *Publicar/No publicar* de Guías, que va por su lado.
+- **Multi-documento por proveedor** — hoy generamos **un PDF por proveedor** con todas sus referencias del alcance. Un proveedor grande puede acumular miles de puntos repartidos entre secciones, y quien corrige sanitarios no es quien corrige griferías. **¿Queréis poder trocearlo por categoría o sección (N documentos), o un único documento por proveedor?** Si se trocea, hay que decidir además a qué se refiere el **Health Score** de cada trozo: al proveedor entero o a esa porción.
+- **PLP con referencias de varios modelos** — **decidido por nuestra parte**: el documento del seller habla de **modelos y guías**, porque es lo que el proveedor entiende, aunque el perímetro se haya marcado por PLP. Queda la pregunta: **una misma PLP puede contener referencias de modelos distintos — ¿cómo queréis que se agrupe entonces el informe?**
 
 ### Dudas nuestras, sin resolver
 
@@ -187,22 +204,29 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
 - **Desglose del informe del seller** — decidido: el **PDF es agregado** y dice qué falta; el **detalle referencia a referencia vive en el CSV**. No hace falta bajar al atributo concreto en el documento.
 - **Lista de modelos** — a **dos columnas** (`column-count:2` con medianil), de modo que con pocos modelos ocupa la mitad del ancho y con muchos no genera una cola larga.
 - **CSV cableados a datos reales** — los tres salen ya de `_infFindings`: el del seller filtrado a sus hallazgos (1.978 filas, las mismas que anuncia el PDF), el del TIP con columna Seller para enrutar, y el de falsos positivos con **los que se hayan marcado de verdad** en la matriz, con motivo, comentario y disparador. Los tres llevan el ID de auditoría en el nombre. Eliminado `_expRows`, el array dummy que causaba la incoherencia.
+- **Bloque de identidad del CSV, corregido** — la columna *Producto* llevaba el **nombre del modelo**, no el del producto, y el **código del modelo** estaba siete columnas más allá. Ahora: `Referencia · Producto · Modelo · Nombre del modelo · …`, con la designación comercial real y el código y el nombre del modelo **juntos**. Código y nombre van en **columnas separadas** a propósito: el código es la clave estable para agrupar en Excel, el nombre es para leer.
+- **Espaciado y footer del PDF** — más aire entre bloques de *qué corregir*, y una **franja inferior reservada por página** (`tfoot` que se repite en cada hoja) para que ningún bloque quede debajo del logo fijo: si no cabe, salta de página.
+- **Listado con pestañas** — *Correcciones* y *Falsos positivos*, cada una con su cifra. Decisiones tomadas:
+  - Las **cifras son totales** de cada pestaña, no del filtrado; el filtrado lo sigue contando el pie (*1–20 de 340 alertas*).
+  - Los **filtros se comparten** entre pestañas; solo cambia el conjunto base.
+  - Al marcar un falso positivo la fila **se va** de Correcciones (si se quedara, el mismo hallazgo estaría contado dos veces y la pestaña dejaría de significar *lo que queda por corregir*). El feedback lo dan las cifras y un **toast con Deshacer**, que revierte también los marcados en bloque.
+  - **Link verde «Borrar filtros»** a la derecha de la fila de filtros, visible solo cuando hay alguno activo.
+  - Barra de labels de columna en gris claro, paginador fuera de la tarjeta, y separación explícita respecto al bloque de Health Score / Distribución / Impacto.
+- **Acciones bloqueadas con la auditoría Revisada** — *Falso positivo*, *Editar* y *Restaurar* salen **deshabilitados** (fondo gris suave) con tooltip que remite a *Reabrir revisión*, en vez de desaparecer sin explicación.
+- **Editar y restaurar un falso positivo marcado en bloque** — antes era un `window.confirm`. Ahora es un **paso de ámbito dentro de la misma modal** (columna izquierda: el detalle del error), con tres opciones sin subtexto: **solo esta referencia · las N del bloque · elegir cuáles**. *Elegir cuáles* reutiliza la pantalla de selección de coincidencias cargada con el bloque. El título de la acción vive en la **columna izquierda** (fija durante todo el flujo) y el del paso en la derecha, donde ya estaba el *Paso X de Y*.
+  - Consecuencia de diseño: si editas **una sola** referencia de un bloque, esa referencia **se desvincula** del bloque y pasa a tener motivo propio.
+- **Bug de datos** — tres de los hallazgos fijados arriba del listado no tenían referencia y salían como `undefined` en pantalla y en el CSV. Corregido.
 
 ### Pendiente de nosotros
 
-- **Validar la impresión del PDF en navegador** — no se puede verificar por código: saltos de página entre los dos bloques, que se impriman los fondos (`print-color-adjust`) y que el logo fijo no pise la última fila de ninguna tabla.
 - **Enviar las preguntas por escrito** y **agendar la sesión de trabajo** de la escala de criticidad.
 - **Compartir el enlace del prototipo** para lo de falsos positivos → admin.
+- **Repasar los flujos y casuísticas sin diseñar** de la lista de abajo: ninguno está empezado.
 
 ### Sin diseñar: flujos y casuísticas
 
-- **Guía que cambia o se despublica bajo una auditoría ya hecha** — enlaza con el eje *Publicar/No publicar* de Guías: no hay versionado ni aviso, así que una auditoría puede quedar huérfana de la guía contra la que se hizo.
-- **Histórico y evolutivo** — el cliente lo pidió y nos pidió proponerlo. Como las re-auditorías son ejecuciones independientes sin comparación, el evolutivo **no tiene hoy ninguna pantalla**.
-- **Un modelo en varias guías** — técnicamente posible; si ocurre, no hay regla de cuál manda al auditar.
+- ~~**Histórico y evolutivo**~~ — **aparcado (2026-09-23)**: de momento las ejecuciones van por separado. No hay comparación entre re-auditorías ni pantalla de evolutivo, y no se diseña.
 - **Roles y permisos 1P/3P** — el cliente los pidió explícitamente y el **validador de gama** es el usuario principal. Nada prototipado.
-- **Multi-documento por proveedor** — todas las referencias de su gama y luego N documentos por categoría o sección. Hoy generamos uno solo.
-- **Agregación por modelo vs. por PLP** — Fer la ve mejor por modelo. Sin aterrizar.
-- **Estados de error del export** — qué ve el usuario si la generación de un informe falla. No contemplado.
 
 ## Infra / repo
 - **GitHub Pages** vía **GitHub Actions** (`concurrency: cancel-in-progress: false` + `workflow_dispatch`). Deploy **encolado por incidencia de GitHub** (ago 2026); se publica solo al resolverse. Código a salvo en `main`.
