@@ -229,15 +229,16 @@ coincidencia de texto** (si el tipo contiene "imagen", "atributo", "designación
 producción habría que mantenerla a mano o pedirle el área al motor. Quitarla **elimina una
 dependencia más con el motor**.
 
-### Qué se cae de la portada
+### La portada
 
-- **El bloque de impacto de negocio.** Son cifras placeholder a la espera de analítica, y sin
-  nota interna para que parezcan reales. Mientras estén, **el PDF no se puede enviar**: no es un
-  problema de coste, es que el documento está bloqueado por un dato que no depende de nosotros.
-  Propuesta: mantener el bloque con el argumento cualitativo y meter las cifras cuando lleguen.
-- **El Health Score**, si no está confirmado el dato. Aquí el número **sale de la empresa**, y
-  todavía no sabemos definirlo (es la pregunta B8: si se calcula sobre todas sus referencias o
-  solo sobre las que fallan, porque en el segundo caso bajaría cuanto mejor fuese su catálogo).
+**No se recorta.** El bloque de impacto de negocio se queda: sus cifras son **contenido de
+muestra**, como el resto de los datos del prototipo, y se sustituyen cuando analítica dé las
+reales. No condiciona el alcance.
+
+La única pieza abierta es **el Health Score**, y no es una decisión nuestra: depende de la
+pregunta B8 —si se calcula sobre todas las referencias del proveedor o solo sobre las que
+fallan—, ya enviada al cliente. Aquí el número **sale de la empresa**, así que se pinta cuando
+esté confirmado qué significa.
 
 ### Qué se mantiene
 
@@ -359,13 +360,10 @@ de *motivos múltiples + comentario + ámbito editable* a *un motivo + disparado
 | "Qué hay que corregir" agrupado en 4 secciones de la guía, cada una con su cabecera, su contador de referencias y una frase con la regla | **Una sola tabla**, ordenada por severidad y luego por volumen |
 | Orden: sección fija → severidad → volumen | Orden: severidad → volumen |
 | Mapeo tipo de error → sección por coincidencia de texto | — |
-| Portada con 4 cifras, incluida el Health Score | Portada con **3 cifras** |
-| Bloque de impacto con 5 cifras de negocio placeholder | El mismo bloque **sin cifras**, con el argumento cualitativo |
-| Página de Modelos a corregir | Igual |
+| Portada, bloque de impacto y Modelos a corregir | Igual |
 | ID de auditoría y referencia al CSV | Igual |
 
-**Delta: un eje de agregación, un mapeo heurístico y dos bloques de portada.** Y sobre todo:
-el documento **deja de estar bloqueado** por el dato de analítica.
+**Delta: un eje de agregación y un mapeo heurístico.** La portada no se toca.
 
 ### Re-auditar
 
@@ -388,7 +386,7 @@ El MVP se lleva por delante:
 - **2 pestañas de analítica** en el informe
 - **2 de las 3 pantallas** del flujo de falsos positivos, más el modo edición
 - **1 atajo** (re-auditar)
-- **1 eje de agregación del PDF** (las secciones de la guía) y las cifras de negocio de su portada
+- **1 eje de agregación del PDF** (las secciones de la guía)
 
 Lo que queda en pie: funnel de tres tipos → auditoría → informe con cifras, Health Score y
 listado → descartar falsos positivos con motivo y en bloque → reabrir revisión si hace falta →

@@ -220,7 +220,8 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
 
 ### Pendiente de nosotros
 
-- **Enviar las preguntas por escrito** y **agendar la sesión de trabajo** de la escala de criticidad.
+- ~~**Enviar las preguntas por escrito**~~ — **enviadas el 28 de septiembre de 2026** (`PREGUNTAS_CLIENTE.md`). A la espera de respuesta.
+- **Agendar la sesión de trabajo** de la escala de criticidad.
 - **Compartir el enlace del prototipo** para lo de falsos positivos → admin.
 - **Repasar los flujos y casuísticas sin diseñar** de la lista de abajo: ninguno está empezado.
 
