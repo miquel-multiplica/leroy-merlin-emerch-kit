@@ -81,31 +81,28 @@ solo sobre las que fallan. Lo preguntamos porque cambia el significado: si fuera
 fichas con error, el número saldría siempre bajo y —esto es lo importante— **bajaría cuanto
 mejor fuese el catálogo del proveedor**, porque quedarían menos fichas y todas malas.
 
-**B9. Nos faltan dos cifras de esa cabecera.** Nuestro informe contiene los hallazgos, así que
-sabemos qué referencias tienen error, pero no cuántas hay conformes ni el total auditado del
-proveedor. ¿Nos las dais vosotros o las derivamos de BigQuery?
-
 ### Informes al proveedor
 
-**B10. A quién dirigimos al proveedor.** El informe cierra invitándole a contactar con su
+**B9. A quién dirigimos al proveedor.** El informe cierra invitándole a contactar con su
 responsable e-merch. Como nos comentasteis que en 3P el TIP no interviene y es marketplace quien
 habla con el seller, ¿vale ese cierre para todos los casos o cambia según sea 1P o 3P?
 
-**B11. Un documento o varios por proveedor.** Hoy generamos un PDF por proveedor con todas sus
+**B10. Un documento o varios por proveedor.** Hoy generamos un PDF por proveedor con todas sus
 referencias del alcance. Un proveedor grande puede acumular miles de puntos a corregir
 repartidos entre secciones distintas, y quien corrige sanitarios no suele ser quien corrige
 griferías. **¿Preferís un único documento por proveedor, o poder trocearlo por categoría o
 sección?** Si se trocea, hay que decidir además si el Health Score de cada documento se refiere
 al proveedor entero o solo a esa parte.
 
-**B12. Categorías web que mezclan modelos.** Hemos decidido que el documento del proveedor hable
-de modelos y guías, porque es el lenguaje que él entiende, aunque el perímetro de la auditoría
-se haya marcado por categoría web. Queda una duda: **una misma categoría web puede contener
-referencias de modelos distintos — ¿cómo queréis que se agrupe el informe en ese caso?**
+**B11. Categorías web que mezclan modelos.** Hemos decidido (a validar con vosotros) que el
+documento del proveedor hable de modelos y guías, porque es el lenguaje que él entiende, aunque
+el perímetro de la auditoría se haya marcado por categoría web.
+
+**¿Una misma categoría web puede contener referencias de modelos distintos?**
 
 ### Datos
 
-**B13. Designación comercial.** El detalle referencia a referencia se entrega en CSV, y su
+**B12. Designación comercial.** El detalle referencia a referencia se entrega en CSV, y su
 segunda columna es el nombre comercial del producto. Damos por hecho que el motor lo expone,
 porque es precisamente el texto que auditamos, pero preferimos confirmarlo antes de cerrar el
 formato.

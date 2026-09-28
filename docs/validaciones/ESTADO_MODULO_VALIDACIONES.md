@@ -215,6 +215,7 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
 - **Acciones bloqueadas con la auditoría Revisada** — *Falso positivo*, *Editar* y *Restaurar* salen **deshabilitados** (fondo gris suave) con tooltip que remite a *Reabrir revisión*, en vez de desaparecer sin explicación.
 - **Editar y restaurar un falso positivo marcado en bloque** — antes era un `window.confirm`. Ahora es un **paso de ámbito dentro de la misma modal** (columna izquierda: el detalle del error), con tres opciones sin subtexto: **solo esta referencia · las N del bloque · elegir cuáles**. *Elegir cuáles* reutiliza la pantalla de selección de coincidencias cargada con el bloque. El título de la acción vive en la **columna izquierda** (fija durante todo el flujo) y el del paso en la derecha, donde ya estaba el *Paso X de Y*.
   - Consecuencia de diseño: si editas **una sola** referencia de un bloque, esa referencia **se desvincula** del bloque y pasa a tener motivo propio.
+- **Universo de la auditoría, cerrado** — **solo se audita lo que está publicado**. Queda resuelta la duda que planteó Susana (¿entran las referencias que hoy no aparecen en la web?): no entran. Por tanto *SKUs auditados* son las referencias publicadas del proveedor dentro del perímetro, y *SKUs conformes* las que no tienen hallazgos; ambas se derivan contando el perímetro y no hay que pedírselas al cliente.
 - **Bug de datos** — tres de los hallazgos fijados arriba del listado no tenían referencia y salían como `undefined` en pantalla y en el CSV. Corregido.
 
 ### Pendiente de nosotros
