@@ -187,6 +187,74 @@ lista se queda corta y hay que ampliarla.
 
 ---
 
+## 6 · Simplificado: el PDF del proveedor
+
+**El criterio aquí es distinto.** El PDF está maquetado en nuestro prototipo, pero **no está
+construido en producción**: la maquinaria de impresión, las agregaciones y la portada son horas
+de desarrollo que no se han gastado. Que nosotros lo tengamos hecho no lo hace gratis.
+
+Y hay un solape que obliga a ser coherentes: **la pestaña de Distribución que cortamos y la
+página "Qué hay que corregir" calculaban lo mismo** — errores agrupados por sección de la guía,
+contados por tipo y con severidad. Cortar la pestaña pero mantener el desglose en el PDF ahorra
+el gráfico, no el cálculo: alguien tiene que construir esa agregación igual. Así que el eje se
+corta en los dos sitios o no se corta en ninguno.
+
+### Qué se cae
+
+**Las secciones de la guía en "Qué hay que corregir".** Pasa a ser **una sola lista ordenada por
+severidad y luego por volumen**: tipo de error · referencias · severidad · acción.
+
+Tres razones, más allá del ahorro:
+
+1. **Hoy el orden por severidad está roto.** Dentro de cada sección se ordena bien, pero las
+   secciones van en orden fijo (Designación, Descripción, Atributos, Multimedia). Resultado: un
+   **bloqueante de Multimedia aparece después de un leve de Designación**, en un documento cuyo
+   único objetivo es que el proveedor sepa qué arreglar primero.
+2. **La sección es redundante con el nombre del error**: *Sin descripción*, *Ortografía en
+   designación*, *Imágenes por debajo del mínimo*. El área ya va dentro del tipo.
+3. **Arrastra texto que no debería estar ahí.** Cada sección pintaba una frase describiendo la
+   regla de la guía — hablar de la guía en un documento que sale al proveedor es justo lo que se
+   decidió evitar.
+
+Y un beneficio que no es de horas: el mapeo de tipo de error a sección era **una heurística por
+coincidencia de texto** (si el tipo contiene "imagen", "atributo", "designación"…). Frágil, y en
+producción habría que mantenerla a mano o pedirle el área al motor. Quitarla **elimina una
+dependencia más con el motor**.
+
+### Qué se cae de la portada
+
+- **El bloque de impacto de negocio.** Son cifras placeholder a la espera de analítica, y sin
+  nota interna para que parezcan reales. Mientras estén, **el PDF no se puede enviar**: no es un
+  problema de coste, es que el documento está bloqueado por un dato que no depende de nosotros.
+  Propuesta: mantener el bloque con el argumento cualitativo y meter las cifras cuando lleguen.
+- **El Health Score**, si no está confirmado el dato. Aquí el número **sale de la empresa**, y
+  todavía no sabemos definirlo (es la pregunta B8: si se calcula sobre todas sus referencias o
+  solo sobre las que fallan, porque en el segundo caso bajaría cuanto mejor fuese su catálogo).
+
+### Qué se mantiene
+
+La página de **Modelos a corregir**: es el eje que el proveedor entiende y lo que le dice por
+dónde empezar. El **ID de auditoría y la referencia al CSV**, que es lo que hace el documento
+accionable. Y el bloque **Cómo corregirlo**.
+
+### Cómo queda
+
+```
+Portada    proveedor · perímetro · fecha · ID
+           3 cifras (referencias con acciones · bloqueantes · leves)
+           Cómo corregirlo (5 pasos) + el nombre del CSV
+
+Página 2   Modelos a corregir — lista a dos columnas
+
+Página 3   Qué hay que corregir — una lista por severidad
+           tipo de error · referencias · severidad · acción
+```
+
+Sigue diciendo **qué modelos**, **qué falla**, **qué hacer** y **dónde está el detalle**. Lo que
+pierde es la lectura por áreas de la ficha, que es lo mismo que se quitó de la pantalla.
+
+---
+
 ## Comparativa — qué hay hoy y qué queda
 
 > El prototipo con los recortes aplicados está en `wireframe_validaciones_recortado.html`.
@@ -279,6 +347,21 @@ y con el CSV.
 **Delta del flujo completo: de 3 pantallas a 1 panel y 1 confirmación.** Y el dato guardado pasa
 de *motivos múltiples + comentario + ámbito editable* a *un motivo + disparador*.
 
+### PDF del proveedor
+
+| Hoy | MVP |
+|---|---|
+| "Qué hay que corregir" agrupado en 4 secciones de la guía, cada una con su cabecera, su contador de referencias y una frase con la regla | **Una sola tabla**, ordenada por severidad y luego por volumen |
+| Orden: sección fija → severidad → volumen | Orden: severidad → volumen |
+| Mapeo tipo de error → sección por coincidencia de texto | — |
+| Portada con 4 cifras, incluida el Health Score | Portada con **3 cifras** |
+| Bloque de impacto con 5 cifras de negocio placeholder | El mismo bloque **sin cifras**, con el argumento cualitativo |
+| Página de Modelos a corregir | Igual |
+| ID de auditoría y referencia al CSV | Igual |
+
+**Delta: un eje de agregación, un mapeo heurístico y dos bloques de portada.** Y sobre todo:
+el documento **deja de estar bloqueado** por el dato de analítica.
+
 ### Re-auditar
 
 | Hoy | MVP |
@@ -300,6 +383,7 @@ El MVP se lleva por delante:
 - **2 pestañas de analítica** en el informe
 - **2 de las 3 pantallas** del flujo de falsos positivos, más el modo edición
 - **1 atajo** (re-auditar)
+- **1 eje de agregación del PDF** (las secciones de la guía) y las cifras de negocio de su portada
 
 Lo que queda en pie: funnel de dos tipos → auditoría → informe con cifras, Health Score y
 listado → descartar falsos positivos con motivo y en bloque → reabrir revisión si hace falta →
