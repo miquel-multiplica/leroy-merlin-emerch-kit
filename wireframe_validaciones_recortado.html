@@ -537,7 +537,7 @@
       <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
         <div style="position:relative; flex-shrink:0;">
           <select id="v-filter-tipo" onchange="renderAudits()" style="height:40px; border:1px solid var(--border-input); border-radius:8px; padding:0 36px 0 12px; font-size:13px; font-family:'Inter',system-ui,sans-serif; color:var(--text-body); background:#fff; cursor:pointer; field-sizing:content; appearance:none; -webkit-appearance:none;">
-            <option value="">Tipo de perímetro</option><option value="Gama">Gama</option><option value="Vendor">Proveedor / Seller</option><option value="Modelo">Modelo</option><option value="Categoría">Categoría web</option><option value="Seccion">Sección</option><option value="Listado">Listado CSV</option>
+            <option value="">Tipo de perímetro</option><option value="Gama">Gama</option><option value="Vendor">Proveedor / Seller</option><option value="Listado">Listado CSV</option>
           </select>
           <svg style="position:absolute; right:12px; top:50%; transform:translateY(-50%); pointer-events:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
@@ -878,14 +878,14 @@
   var _audits = [
     { id:1, perimetro:'Gama · A', tipo:'Gama', refs:32658, hs:72, tend:1, alertas:21554, fecha:'Hace 2 h', creador:'Ana García', estado:'por-revisar' },
     { id:2, perimetro:'Proveedor · Simon', tipo:'Vendor', refs:4120, hs:81, tend:1, alertas:2719, fecha:'Ayer', creador:'Miquel Soler', estado:'revisado' },
-    { id:3, perimetro:'MOD_202512 · Puerta entrada nogal', tipo:'Modelo', refs:46, hs:64, tend:-1, alertas:30, fecha:'Hace 3 h', creador:'Laura Pons', estado:'en-curso', prog:42 },
+    { id:3, perimetro:'Proveedor · Bosch', tipo:'Vendor', refs:1150, hs:64, tend:-1, alertas:640, fecha:'Hace 3 h', creador:'Laura Pons', estado:'en-curso', prog:42 },
     { id:4, perimetro:'Categoría · Griferías y sanitarios', tipo:'Categoría', refs:8940, hs:77, tend:0, alertas:5900, fecha:'Hace 5 días', creador:'Ana García', estado:'revisado' },
     { id:5, perimetro:'Seller · LuzHogar', tipo:'Vendor', refs:2150, hs:58, tend:1, alertas:1419, fecha:'Hace 1 día', creador:'Miquel Soler', estado:'por-revisar' },
     { id:6, perimetro:'Gama · M', tipo:'Gama', refs:28470, hs:85, tend:1, alertas:18790, fecha:'Hace 10 días', creador:'Laura Pons', estado:'revisado' },
     { id:7, perimetro:'Categoría · Suelos y pavimentos', tipo:'Categoría', refs:1540, hs:49, tend:-1, alertas:1016, fecha:'Hace 4 min', creador:'Ana García', estado:'en-curso', prog:18 },
     { id:8, perimetro:'Categoría · Iluminación LED', tipo:'Categoría', refs:1830, hs:0, tend:0, alertas:0, fecha:'Hace 20 min', creador:'Miquel Soler', estado:'error' },
     { id:9, perimetro:'Listado · Campaña primavera jardín', tipo:'Listado', refs:318, hs:73, tend:1, alertas:196, fecha:'Hace 6 h', creador:'Laura Pons', estado:'por-revisar' },
-    { id:10, perimetro:'Sección · Baño', tipo:'Seccion', refs:2240, hs:70, tend:1, alertas:1480, fecha:'Hace 2 días', creador:'Ana García', estado:'revisado' }
+    { id:10, perimetro:'Gama · Baño', tipo:'Gama', refs:2240, hs:70, tend:1, alertas:1480, fecha:'Hace 2 días', creador:'Ana García', estado:'revisado' }
   ];
   var _audCounter=100;
   var _vTab='todo';
@@ -895,7 +895,7 @@
   function tipoChip(t){ var lbl=t==='Vendor'?'Prov./Seller':t; return '<span style="display:inline-block;background:var(--bg-parchment);border:1px solid var(--border-card);border-radius:6px;padding:1px 8px;font-size:11px;font-weight:600;color:var(--text-muted);flex-shrink:0;">'+lbl+'</span>'; }
   function estadoBadge(e){ var m={'en-curso':['En curso','var(--warning-bg)','var(--warning-border)','var(--warning-text)'],'por-revisar':['Pendiente de revisión','var(--bg-parchment)','var(--border-card)','var(--text-body)'],'revisado':['Revisada','var(--success-bg)','var(--success-border)','var(--green)'],'finalizada':['Finalizada','#fff','var(--border-card)','var(--text-muted)'],'error':['Error','#fdeaea','#f8bcbb','#c61112']}[e]||['Finalizada','#fff','var(--border-card)','var(--text-muted)']; return '<span style="display:inline-flex;align-items:center;background:'+m[1]+';border:1px solid '+m[2]+';border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;color:'+m[3]+';white-space:nowrap;">'+m[0]+'</span>'; }
   function matchesTab(r){ if(_vTab==='todo')return true; if(_vTab==='en-curso')return r.estado==='en-curso'||r.estado==='error'; if(_vTab==='por-revisar')return r.estado==='por-revisar'; if(_vTab==='finalizadas')return r.estado==='revisado'||r.estado==='finalizada'; return true; }
-  function audTipoLabel(t){ return ({Modelo:'Modelo',Gama:'Gama',Vendor:'Proveedor / Seller','Categoría':'Categoría web',Seccion:'Sección',Listado:'Listado CSV'})[t]||t; }
+  function audTipoLabel(t){ return ({Gama:'Gama',Vendor:'Proveedor / Seller',Listado:'Listado CSV'})[t]||t; }
   var CTA_FILL='background:var(--green);border:none;border-radius:6px;height:30px;padding:0 14px;font-size:12px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;color:#fff;cursor:pointer;white-space:nowrap;';
   var CTA_LINE='background:#fff;border:1px solid var(--green);border-radius:6px;height:30px;padding:0 14px;font-size:12px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;color:var(--green);cursor:pointer;white-space:nowrap;';
   var IC_EYE='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
@@ -1410,6 +1410,7 @@
   var _vTipos=[
     { k:'Gama', label:'Gama', sub:'Todas las referencias de una gama', ico:'<svg viewBox="0 0 24 24"><path d="M3 7h18"/><path d="M3 12h18"/><path d="M3 17h18"/></svg>' },
     { k:'Vendor', label:'Proveedor / Seller', sub:'Catálogo de un proveedor (1P) o seller (3P)', ico:'<svg viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg>' },
+    { k:'Listado', label:'Listado CSV', sub:'Subir un fichero con las referencias', ico:'<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' }
   ];
   var _vLists={
     'Modelo':[{name:'Puerta entrada nogal',code:'MOD_202512'},{name:'Aplique de pared industrial',code:'MOD_000000'},{name:'Foco empotrable LED 8W',code:'MOD_445120'},{name:'Suelo laminado roble natural',code:'MOD_889900'},{name:'Ventana PVC oscilobatiente',code:'MOD_202513'},{name:'Armario modular 3 puertas',code:'MOD_334455'},{name:'Grifo monomando cocina',code:'MOD_112233'},{name:'Radiador aluminio 8 elementos',code:'MOD_667788'},{name:'Cortadora de césped eléctrica',code:'MOD_998877'},{name:'Persiana enrollable exterior',code:'MOD_223344'},{name:'Encimera de cuarzo blanco',code:'MOD_778899'},{name:'Mampara de ducha corredera',code:'MOD_556677'},{name:'Toldo motorizado 3,5m',code:'MOD_445566'},{name:'Caldera de condensación 24kW',code:'MOD_334488'}],
@@ -1417,7 +1418,7 @@
     'Vendor':[{name:'Simon',tag:'1P'},{name:'Roca',dual:true},{name:'Grohe',dual:true},{name:'Saint-Gobain',tag:'1P'},{name:'Philips',tag:'1P'},{name:'Bosch',dual:true},{name:'Legrand',tag:'1P'},{name:'Somfy',tag:'1P'},{name:'LuzHogar',tag:'3P'},{name:'IlumStore',tag:'3P'},{name:'ElectroLuz',tag:'3P'},{name:'DecoLight',tag:'3P'},{name:'JardínPro',tag:'3P'},{name:'BañoExpress',tag:'3P'}],
     'Seccion':[{name:'Baño'},{name:'Cocina'},{name:'Jardín'},{name:'Carpintería y madera'},{name:'Ferretería'},{name:'Herramientas'},{name:'Electricidad'},{name:'Fontanería y calefacción'},{name:'Climatización'},{name:'Iluminación'},{name:'Pintura y droguería'},{name:'Revestimientos y suelos'},{name:'Decoración'},{name:'Construcción y aislamiento'}]
   };
-  var _vSkuBase={ 'Modelo':46,'Gama':2480,'Vendor':1150,'Categoría':890,'Seccion':2240,'Listado':640 };
+  var _vSkuBase={ 'Gama':2480,'Vendor':1150,'Listado':640 };
   var _vTipo=null, _vValor=null, _vSelOpt=null, _vListName='', _vCsvAttempt=0, _vUrlAttempt=0, _vEditingName=false, _vDetectNum=0, _vDetected=false, _vDetTimer=null, _vCatalogo=null;
 
   function startNueva(){ var _mvv=document.getElementById('v-nueva-motorver'); if(_mvv)_mvv.textContent=_motorVer; _vTipo=null; _vValor=null; _vSelOpt=null; _vListName=''; _vCsvAttempt=0; _vUrlAttempt=0; _vEditingName=false; _vCatalogo=null; renderTypeButtons(); openTypeModal(); }

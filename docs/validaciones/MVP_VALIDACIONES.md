@@ -46,9 +46,9 @@ solo para organizar el árbol de ese panel.
 
 ## 2 · Fuera: la mitad de los tipos de perímetro
 
-**Qué se queda.** **Proveedor/seller** y **gama**.
+**Qué se queda.** **Proveedor/seller**, **gama** y **listado CSV**.
 
-**Qué se cae.** Categoría web (PLP) y listado.
+**Qué se cae.** Modelo, categoría web (PLP) y sección de tienda.
 
 **Por qué proveedor no es negociable.** No por volumen: **toda la salida del módulo es el
 informe por proveedor**. Si no puedes acotar por proveedor, auditas un perímetro mixto y luego
@@ -58,14 +58,22 @@ y le mandas lo suyo.
 
 **Por qué gama.** Es la unidad de trabajo del validador de gama, que es el usuario principal.
 
-**Por qué se caen esas dos.** La PLP necesita el mapeo categoría↔referencias, que sigue sin
-confirmar, y arrastra el problema de que una misma PLP mezcla modelos. El listado es la vía de
-escape, no el flujo principal.
+**Por qué se queda el listado CSV.** Se cortó en un primer momento por ser la vía de escape y
+no el flujo principal, pero se recuperó (2026-09-28) con un argumento mejor: **subir un fichero
+puede ser más fácil de habilitar que resolver selectores contra el catálogo**. Es la vía que
+menos depende de que la integración esté lista. Matiz para no vendérselo de más: el CSV acota
+*qué* referencias entran, pero **el dato se sigue leyendo del catálogo**, así que no elimina la
+dependencia, solo la reduce a la lectura.
 
-**Lo que hay que decir al presentarlo.** Estos dos son precisamente los que el brief original
-del cliente describía como forma de entrada (URL de PLP y listado de URLs). La vía de entrada
-por selectores ya está acordada, pero conviene decir explícitamente que **la entrada pegando
-URLs se deja para fase 2**, en vez de que lo descubran ellos.
+**Por qué se caen los otros tres.** La PLP necesita el mapeo categoría↔referencias, que sigue sin
+confirmar, y arrastra el problema de que una misma PLP mezcla modelos. Modelo es un alcance
+demasiado fino para el circuito proveedor → informe. Sección de tienda es un eje de tienda
+física, no de catálogo.
+
+**Lo que hay que decir al presentarlo.** La categoría web era una de las dos formas de entrada
+que describía el brief original del cliente (URL de PLP y listado de URLs). La vía por selectores
+ya está acordada, pero conviene decir explícitamente que **la entrada pegando URLs se deja para
+fase 2**, en vez de que lo descubran ellos.
 
 **Bonus.** Deja de bloquear la pregunta **B11** (categorías web que mezclan modelos).
 
@@ -276,20 +284,17 @@ pierde es la lectura por áreas de la ficha, que es lo mismo que se quitó de la
 
 ### Tipos de perímetro
 
-| Hoy — 6 tipos | MVP — 2 tipos |
+| Hoy — 6 tipos | MVP — 3 tipos |
 |---|---|
 | Gama · *todas las referencias de una gama* | ✅ **Gama** |
 | Proveedor / Seller · *catálogo de un proveedor o seller* | ✅ **Proveedor / Seller** |
+| Listado CSV · *subir un fichero con las referencias* | ✅ **Listado CSV** |
 | Modelo · *un modelo concreto* | ❌ |
 | Categoría web · *pegar la URL de su PLP* | ❌ |
 | Sección · *referencias de una sección de tienda física* | ❌ |
-| Listado CSV · *subir un fichero con las referencias* | ❌ |
 
-**Delta: de 6 a 2.** Cada tipo es una consulta y un paso de selección distintos, así que el
+**Delta: de 6 a 3.** Cada tipo es una consulta y un paso de selección distintos, así que el
 ahorro es directo y proporcional.
-
-*Modelo es discutible: es el más barato de los cuatro que se cortan porque su selector ya existe
-para otras cosas. Pero no aporta al circuito proveedor → informe.*
 
 ### Borradores
 
@@ -378,14 +383,14 @@ pierde.
 El MVP se lleva por delante:
 
 - **1 pantalla completa** (panel del motor, con seis bloques dentro)
-- **4 de 6 tipos de perímetro**
+- **3 de 6 tipos de perímetro**
 - **1 estado** con su pestaña y tres acciones
 - **2 pestañas de analítica** en el informe
 - **2 de las 3 pantallas** del flujo de falsos positivos, más el modo edición
 - **1 atajo** (re-auditar)
 - **1 eje de agregación del PDF** (las secciones de la guía) y las cifras de negocio de su portada
 
-Lo que queda en pie: funnel de dos tipos → auditoría → informe con cifras, Health Score y
+Lo que queda en pie: funnel de tres tipos → auditoría → informe con cifras, Health Score y
 listado → descartar falsos positivos con motivo y en bloque → reabrir revisión si hace falta →
 exportar PDF e informes.
 
