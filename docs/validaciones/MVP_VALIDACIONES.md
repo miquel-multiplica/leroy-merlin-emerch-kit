@@ -147,7 +147,8 @@ columnas: el diagnóstico y la corrección ya están en la fila que estás miran
    **Desmarcada por defecto**: marcar en bloque es la acción de más impacto y debe ser
    deliberada. *Ver cuáles* despliega la lista **dentro del panel**, en solo lectura
    (referencia · modelo · producto, con scroll): sin casillas, sin árbol por modelo y sin
-   filtro por seller. Es mirar para ganar confianza antes de descartar 48 de golpe, no
+   filtro por seller. Cada referencia **enlaza a su ficha real en leroymerlin.es**, que es la
+   fuente de verdad para juzgar si la alerta es un error o no. Es mirar para ganar confianza antes de descartar 48 de golpe, no
    seleccionar — que es lo que la separa de la hoja de coincidencias recortada.
 3. Botón primario: *Descartar* / *Descartar 48*.
 
