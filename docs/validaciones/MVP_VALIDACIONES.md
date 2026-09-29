@@ -128,11 +128,13 @@ alertas que sabemos que están mal** — lo que destruye la confianza con el pro
 | Campo | Quién lo pone |
 |---|---|
 | Motivo (valor de lista cerrada) | El usuario, un clic |
+| Texto libre, **solo si el motivo es *Otro*** | El usuario |
 | Disparador que levantó la alerta | El sistema |
 | Identificador de bloque, si se marcó junto a otras | El sistema |
 | Usuario y fecha | El sistema |
 
-Fuera: comentario libre, multi-selección de motivos, ámbito editable referencia a referencia.
+Fuera: el comentario libre para todos los casos, la multi-selección de motivos y el ámbito
+editable referencia a referencia.
 
 ### La interacción
 
@@ -143,7 +145,10 @@ columnas: el diagnóstico y la corrección ya están en la fila que estás miran
 2. **Alcance** — solo si el mismo disparador afectó a más referencias, **una línea**:
    `☐ Aplicar también a las otras 47 referencias donde saltó «izq»` · *ver cuáles*
    **Desmarcada por defecto**: marcar en bloque es la acción de más impacto y debe ser
-   deliberada.
+   deliberada. *Ver cuáles* despliega la lista **dentro del panel**, en solo lectura
+   (referencia · modelo · producto, con scroll): sin casillas, sin árbol por modelo y sin
+   filtro por seller. Es mirar para ganar confianza antes de descartar 48 de golpe, no
+   seleccionar — que es lo que la separa de la hoja de coincidencias recortada.
 3. Botón primario: *Descartar* / *Descartar 48*.
 
 Si no hay coincidencias, la línea de alcance no aparece y el panel es motivo + botón.
@@ -190,8 +195,10 @@ Una sola, cerrada y corta, igual para todos los tipos de error:
 - No aplica a esta categoría
 - Otro
 
-*Otro* no lleva campo de texto. Su frecuencia es en sí misma una señal: si se dispara, es que la
-lista se queda corta y hay que ampliarla.
+*Otro* **abre un campo de texto**, y sin escribir nada no se puede descartar. Un motivo que no se
+puede escribir no captura nada: parece un motivo y no lo es, y el CSV se llena de filas que dicen
+«Otro» sin más. Ese texto va a su propia columna del CSV de falsos positivos. De paso, la
+frecuencia de *Otro* sigue siendo una señal: si se dispara, la lista se queda corta.
 
 ---
 

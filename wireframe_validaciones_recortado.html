@@ -637,7 +637,7 @@
     <div style="font-size:19px; font-weight:700; color:var(--text-ink);">¿Falso positivo?</div>
     <div id="v-fp-ref" style="font-size:13px; color:var(--text-muted); margin:6px 0 22px;"></div>
     <div style="font-size:13px; font-weight:700; color:var(--text-ink); margin-bottom:10px;">Motivo</div>
-    <div id="v-fp-motivos" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+    <div id="v-fp-motivos"></div>
     <div id="v-fp-bulk" style="margin-top:18px;"></div>
     <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:26px;">
       <button onclick="closeFp()" style="background:none; border:none; color:var(--green); font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',system-ui,sans-serif; padding:0 14px; height:44px;">Cancelar</button>
@@ -1098,22 +1098,27 @@
   var FP_MOTIVOS=['Término válido en nuestro vocabulario','Marca o nombre propio','Valores equivalentes','No aplica a esta categoría','Otro'];
   var FP_CHIP="text-align:left;background:#fff;border:1px solid var(--border-input);border-radius:999px;height:34px;padding:0 14px;font-size:12px;font-weight:600;font-family:'Inter',system-ui,sans-serif;cursor:pointer;color:var(--text-body);";
   var FP_CHIP_ON="text-align:left;background:var(--success-bg);border:1px solid var(--green);border-radius:999px;height:34px;padding:0 14px;font-size:12px;font-weight:600;font-family:'Inter',system-ui,sans-serif;cursor:pointer;color:var(--green);";
-  var _fpMot=null, _fpBulkOn=false, _fpRestId=null;
+  var _fpMot=null, _fpOtro='', _fpBulkOn=false, _fpVer=false, _fpRestId=null;
   function fpFind(id){ return _infFindings.filter(function(x){return x.id===id;})[0]; }
   function fpCoincid(f){ if(!fpBulk(f)) return []; return _infFindings.filter(function(x){return !x.fp && x.tipo===f.tipo && x.id!==f.id;}); }
 
   function openFp(fid){ var f=fpFind(fid); if(!f) return;
-    _fpPending=fid; _fpMot=null; _fpBulkOn=false;
+    _fpPending=fid; _fpMot=null; _fpOtro=''; _fpBulkOn=false; _fpVer=false;
     var tr=fpTrigger(f);
     var r=document.getElementById('v-fp-ref');
     if(r) r.innerHTML='<strong style="color:var(--text-body);">'+f.ref+'</strong> · '+f.tipo+(tr?(' · disparador <strong style="color:var(--text-body);">'+tr.term+'</strong>'):'');
     renderFpMot(); renderFpBulk(f); updateFpBtn();
     document.getElementById('v-fp-modal').classList.add('open'); }
-  function closeFp(){ document.getElementById('v-fp-modal').classList.remove('open'); _fpPending=null; _fpMot=null; _fpBulkOn=false; }
-  function fpPick(el){ _fpMot=el.getAttribute('data-m'); renderFpMot(); updateFpBtn(); }
+  function closeFp(){ document.getElementById('v-fp-modal').classList.remove('open'); _fpPending=null; _fpMot=null; _fpOtro=''; _fpBulkOn=false; _fpVer=false; }
+  function fpPick(el){ _fpMot=el.getAttribute('data-m'); if(_fpMot!=='Otro') _fpOtro=''; renderFpMot(); updateFpBtn();
+    if(_fpMot==='Otro'){ var i=document.getElementById('v-fp-otro'); if(i){ try{ i.focus(); }catch(e){} } } }
+  function fpOtroInput(el){ _fpOtro=el.value; updateFpBtn(); }
   function renderFpMot(){ var h=document.getElementById('v-fp-motivos'); if(!h) return;
-    h.innerHTML=FP_MOTIVOS.map(function(m){ var on=(_fpMot===m);
-      return '<button type="button" data-m="'+m.replace(/"/g,'&quot;')+'" onclick="fpPick(this)" style="'+(on?FP_CHIP_ON:FP_CHIP)+'">'+m+'</button>'; }).join(''); }
+    var chips=FP_MOTIVOS.map(function(m){ var on=(_fpMot===m);
+      return '<button type="button" data-m="'+m.replace(/"/g,'&quot;')+'" onclick="fpPick(this)" style="'+(on?FP_CHIP_ON:FP_CHIP)+'">'+m+'</button>'; }).join('');
+    // Un "Otro" que no se puede escribir no captura nada: parece un motivo y no lo es.
+    var otro=(_fpMot==='Otro')?'<input id="v-fp-otro" value="'+(_fpOtro||'').replace(/"/g,'&quot;')+'" oninput="fpOtroInput(this)" placeholder="Escribe el motivo" style="width:100%;margin-top:10px;height:38px;border:1px solid var(--border-input);border-radius:8px;padding:0 12px;font-size:13px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;">':'';
+    h.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:8px;">'+chips+'</div>'+otro; }
   // El bloque se ofrece en una línea, no en una pantalla: lo que comparten esas
   // referencias es el disparador, así que si el motivo aplica al disparador aplica
   // a todas. "Ver cuáles" filtra el listado en vez de abrir una vista nueva.
@@ -1123,20 +1128,30 @@
     h.innerHTML='<label style="display:flex;align-items:flex-start;gap:10px;background:var(--bg-parchment);border-radius:10px;padding:13px 15px;cursor:pointer;">'
       +'<input type="checkbox" class="lm-check" onchange="fpToggleBulk(this)"'+(_fpBulkOn?' checked':'')+'>'
       +'<span style="font-size:13px;color:var(--text-body);line-height:1.5;">Aplicar también a las otras <strong>'+fmtNum(co.length)+' referencias</strong> donde saltó <strong>'+tr.term+'</strong> · '
-      +'<a href="#" onclick="event.preventDefault();event.stopPropagation();fpVerCuales();" style="color:var(--green);font-weight:600;text-decoration:none;">ver cuáles</a></span></label>'; }
+      +'<a href="#" onclick="event.preventDefault();event.stopPropagation();fpVerCuales();" style="color:var(--green);font-weight:600;text-decoration:none;">'+(_fpVer?'ocultar':'ver cuáles')+'</a></span></label>'
+      + (_fpVer?fpListaCoincid(co):''); }
+  // Solo mirar, no seleccionar: es lo que la diferencia de la hoja de coincidencias
+  // que se recortó, que era una pantalla de selección.
+  function fpListaCoincid(co){
+    return '<div style="margin-top:8px;border:1px solid var(--border-card);border-radius:10px;max-height:190px;overflow-y:auto;">'
+      + co.map(function(x,i){ return '<div style="display:flex;align-items:baseline;gap:12px;padding:8px 14px;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
+          +'<span style="font-size:12px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums;min-width:74px;">'+x.ref+'</span>'
+          +'<span style="font-size:11px;color:var(--text-muted);min-width:82px;">'+(x.modelo||'')+'</span>'
+          +'<span style="font-size:12px;color:var(--text-body);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(x.desig||x.guia||'')+'</span></div>'; }).join('')
+      +'</div>'; }
   function fpToggleBulk(el){ _fpBulkOn=!!el.checked; updateFpBtn(); }
-  function fpVerCuales(){ var f=fpFind(_fpPending); if(!f) return; closeFp();
-    _infFTipo=f.tipo; _infFSeller=''; _infFOwner=''; _infFSev=''; _infFSeccion=''; _infFPp=''; _infFSearch='';
-    _infFpView=false; _infPage=1; renderMatriz(); }
+  function fpVerCuales(){ var f=fpFind(_fpPending); if(!f) return; _fpVer=!_fpVer; renderFpBulk(f); }
   function updateFpBtn(){ var b=document.getElementById('v-fp-confirm-btn'); if(!b) return;
     var f=fpFind(_fpPending); var n=(_fpBulkOn&&f)?(fpCoincid(f).length+1):1;
     b.textContent=(n>1)?('Descartar '+fmtNum(n)):'Descartar';
-    b.disabled=!_fpMot; b.style.opacity=_fpMot?'1':'0.45'; b.style.cursor=_fpMot?'pointer':'not-allowed'; }
+    var ok=!!_fpMot && (_fpMot!=='Otro' || !!(_fpOtro||'').trim());
+    b.disabled=!ok; b.style.opacity=ok?'1':'0.45'; b.style.cursor=ok?'pointer':'not-allowed'; }
   function confirmFp(){ var f=fpFind(_fpPending); if(!f||!_fpMot) return;
+    var otro=(_fpOtro||'').trim(); if(_fpMot==='Otro' && !otro) return;
     var tr=fpTrigger(f), ids=[f.id];
     if(_fpBulkOn) fpCoincid(f).forEach(function(x){ ids.push(x.id); });
     var m={}; ids.forEach(function(i){m[i]=1;});
-    _infFindings.forEach(function(t){ if(m[t.id]){ t.fp=true; t.motivo=_fpMot; t.bulkTrigger=(ids.length>1&&tr)?tr.term:null; } });
+    _infFindings.forEach(function(t){ if(m[t.id]){ t.fp=true; t.motivo=_fpMot; t.motivoOtro=(_fpMot==='Otro')?otro:''; t.bulkTrigger=(ids.length>1&&tr)?tr.term:null; } });
     var n=ids.length, undo=ids.slice(); closeFp(); renderMTabla();
     vToast(n>1?(fmtNum(n)+' falsos positivos marcados'):'1 falso positivo marcado', undo); }
 
@@ -1154,7 +1169,7 @@
     var ids=all?_infFindings.filter(function(x){return x.fp && x.bulkTrigger===f.bulkTrigger;}).map(function(x){return x.id;}):[f.id];
     closeFpRest(); doUndoFp(ids); }
   function doUndoFp(ids){ var m={}; ids.forEach(function(i){m[i]=1;});
-    _infFindings.forEach(function(t){ if(m[t.id]){ t.fp=false; t.motivo=null; t.bulkTrigger=null; } });
+    _infFindings.forEach(function(t){ if(m[t.id]){ t.fp=false; t.motivo=null; t.motivoOtro=''; t.bulkTrigger=null; } });
     renderMTabla(); vToast(ids.length>1?(fmtNum(ids.length)+' falsos positivos restaurados'):'1 falso positivo restaurado'); }
 
   // Aviso tras marcar: la fila desaparece del listado, así que el control lo
@@ -1208,12 +1223,12 @@
     _downloadBlob('informe-interno-tip-'+auditRef().replace('#','')+'.csv', _findingsToCsv(rows,true), 'text/csv;charset=utf-8;');
   }
   function downloadFpCsv(){
-    var head=['Referencia','Modelo','Tipo de error','Ubicación','Severidad','Motivo del falso positivo','Comentario','Disparador','Seller','Revisor','Fecha'];
+    var head=['Referencia','Modelo','Tipo de error','Ubicación','Severidad','Motivo del falso positivo','Motivo (texto libre)','Disparador','Seller','Revisor','Fecha'];
     var rows=_infFindings.filter(function(f){ return f.fp; });
     var lines=[head.map(_csvEsc).join(';')];
     rows.forEach(function(f){
       lines.push([f.ref, f.modelo||'', f.tipo, f.ubic, (SEV_LBL[f.sev]||f.sev||''),
-        (f.motivos&&f.motivos.length?f.motivos.join(' · '):(f.motivo||'')), f.comment||'',
+        (f.motivo||''), f.motivoOtro||'',
         f.bulkTrigger||'', f.seller||'', 'Ana García', '2 sep 2026'].map(_csvEsc).join(';'));
     });
     _downloadBlob('falsos-positivos-'+auditRef().replace('#','')+'.csv', '﻿'+lines.join('\r\n'), 'text/csv;charset=utf-8;');
