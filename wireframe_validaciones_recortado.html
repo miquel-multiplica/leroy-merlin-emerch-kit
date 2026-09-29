@@ -633,15 +633,22 @@
 
 <!-- ══════════════════ MODAL · FALSO POSITIVO ══════════════════ -->
 <div class="modal-overlay" id="v-fp-modal">
-  <div class="modal-box" style="width:560px; max-width:92vw; padding:28px;">
-    <div style="font-size:19px; font-weight:700; color:var(--text-ink);">¿Falso positivo?</div>
-    <div id="v-fp-ref" style="font-size:13px; color:var(--text-muted); margin:6px 0 22px;"></div>
-    <div style="font-size:13px; font-weight:700; color:var(--text-ink); margin-bottom:10px;">Motivo</div>
-    <div id="v-fp-motivos"></div>
-    <div id="v-fp-bulk" style="margin-top:18px;"></div>
-    <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:26px;">
-      <button onclick="closeFp()" style="background:none; border:none; color:var(--green); font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',system-ui,sans-serif; padding:0 14px; height:44px;">Cancelar</button>
-      <button id="v-fp-confirm-btn" onclick="confirmFp()" class="btn btn-primary" style="height:44px;">Descartar</button>
+  <div class="modal-box" style="width:1000px; max-width:95vw; max-height:calc(100vh - 96px); padding:0; display:flex; overflow:hidden;">
+    <div style="width:36%; min-width:300px; background:#f5f5f3; border-right:1px solid var(--border-card); padding:28px; overflow-y:auto;">
+      <div style="font-size:20px; font-weight:700; color:var(--text-ink); margin-bottom:18px;">¿Falso positivo?</div>
+      <div style="background:#fff; border:1px solid var(--border-card); border-radius:10px; padding:16px 18px;"><div id="v-fp-summary"></div></div>
+    </div>
+    <div style="flex:1; min-width:0; display:flex; flex-direction:column;">
+      <div style="flex:1; min-height:0; padding:28px; overflow-y:auto;">
+        <div style="font-size:18px; font-weight:700; color:var(--text-ink); margin-bottom:4px;">Motivo</div>
+        <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px; line-height:1.5;">Indica por qué esta alerta no es un error real.</div>
+        <div id="v-fp-motivos"></div>
+        <div id="v-fp-bulk" style="margin-top:20px;"></div>
+      </div>
+      <div style="border-top:1px solid var(--border-card); padding:16px 28px; flex-shrink:0; display:flex; align-items:center; gap:12px;">
+        <button onclick="closeFp()" style="margin-left:auto; background:none; border:none; color:var(--green); font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',system-ui,sans-serif; padding:0 14px; height:44px; display:inline-flex; align-items:center;">Cancelar</button>
+        <button id="v-fp-confirm-btn" onclick="confirmFp()" class="btn btn-primary" style="height:44px;">Descartar</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1099,15 +1106,16 @@
   var FP_CHIP="text-align:left;background:#fff;border:1px solid var(--border-input);border-radius:999px;height:34px;padding:0 14px;font-size:12px;font-weight:600;font-family:'Inter',system-ui,sans-serif;cursor:pointer;color:var(--text-body);";
   var FP_CHIP_ON="text-align:left;background:var(--success-bg);border:1px solid var(--green);border-radius:999px;height:34px;padding:0 14px;font-size:12px;font-weight:600;font-family:'Inter',system-ui,sans-serif;cursor:pointer;color:var(--green);";
   var _fpMot=null, _fpOtro='', _fpBulkOn=false, _fpVer=false, _fpRestId=null;
+  function fpKV(l,v){ return '<div style="display:flex;gap:12px;padding:3px 0;font-size:12px;line-height:1.45;"><span style="color:var(--text-muted);min-width:92px;flex-shrink:0;">'+l+'</span><span style="color:var(--text-ink);flex:1;">'+v+'</span></div>'; }
+  function fpSummaryHtml(f){ var tr=fpTrigger(f); var ia=(tr&&tr.ia)?' <span style="background:var(--info-bg);color:#1a6c8a;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;" title="Alerta detectada por un check de IA (no determinista). El falso positivo lo decide el revisor.">IA</span>':''; var reflink='<a href="https://www.leroymerlin.es/productos/ref-'+f.ref+'.html" target="_blank" rel="noopener" style="font-size:16px;font-weight:700;color:var(--green);text-decoration:none;font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;gap:5px;">'+f.ref+'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>'; return reflink+'<div style="font-size:12px;color:var(--text-muted);margin-top:3px;">'+f.guia+' ('+f.modelo+')</div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0;"><span style="font-size:17px;line-height:1;">'+(f.emoji||'')+'</span><span style="font-size:13px;font-weight:700;color:var(--text-ink);">'+f.tipo+'</span>'+sevChip(f.sev)+'</div><div style="border-top:1px solid var(--border-card);padding-top:14px;">'+fpKV('diagnóstico',f.diag)+fpKV('corrección',f.accion)+(tr?fpKV('disparador','<strong style="color:var(--text-ink);">'+tr.term+'</strong>'+ia):'')+fpKV('owner',f.owner)+'</div>'; }
+  function fpSumToggle(ctx){ var b=document.getElementById('v-fpsum-body-'+ctx); var c=document.getElementById('v-fpsum-chev-'+ctx); if(!b) return; var op=b.style.display==='none'; b.style.display=op?'block':'none'; if(c)c.style.transform=op?'rotate(180deg)':''; }
+  function renderFpSummary(f){ var el=document.getElementById('v-fp-summary'); if(el) el.innerHTML=fpSummaryHtml(f); }
   function fpFind(id){ return _infFindings.filter(function(x){return x.id===id;})[0]; }
   function fpCoincid(f){ if(!fpBulk(f)) return []; return _infFindings.filter(function(x){return !x.fp && x.tipo===f.tipo && x.id!==f.id;}); }
 
   function openFp(fid){ var f=fpFind(fid); if(!f) return;
     _fpPending=fid; _fpMot=null; _fpOtro=''; _fpBulkOn=false; _fpVer=false;
-    var tr=fpTrigger(f);
-    var r=document.getElementById('v-fp-ref');
-    if(r) r.innerHTML='<strong style="color:var(--text-body);">'+f.ref+'</strong> · '+f.tipo+(tr?(' · disparador <strong style="color:var(--text-body);">'+tr.term+'</strong>'):'');
-    renderFpMot(); renderFpBulk(f); updateFpBtn();
+    renderFpSummary(f); renderFpMot(); renderFpBulk(f); updateFpBtn();
     document.getElementById('v-fp-modal').classList.add('open'); }
   function closeFp(){ document.getElementById('v-fp-modal').classList.remove('open'); _fpPending=null; _fpMot=null; _fpOtro=''; _fpBulkOn=false; _fpVer=false; }
   function fpPick(el){ _fpMot=el.getAttribute('data-m'); if(_fpMot!=='Otro') _fpOtro=''; renderFpMot(); updateFpBtn();

@@ -138,8 +138,10 @@ editable referencia a referencia.
 
 ### La interacción
 
-**Marcar.** Botón *Falso positivo* en la fila → **panel pequeño** (no la modal grande a dos
-columnas: el diagnóstico y la corrección ya están en la fila que estás mirando), con:
+**Marcar.** Botón *Falso positivo* en la fila → la **misma modal a dos columnas** que el flujo
+completo: a la izquierda el detalle del hallazgo (referencia enlazada a su ficha, modelo, tipo,
+severidad, diagnóstico, corrección, disparador y owner), fijo. Lo que se simplifica es la
+derecha:
 
 1. **Motivo** — lista cerrada, selección única, un clic.
 2. **Alcance** — solo si el mismo disparador afectó a más referencias, **una línea**:
@@ -166,7 +168,7 @@ elimina un flujo entero (modo edición, paso de ámbito, atrás, guardar cambios
 
 ### Qué se cae respecto al flujo actual
 
-- La modal de 1100px a dos columnas con el resumen del hallazgo.
+- Los pasos: la derecha deja de ser un asistente y pasa a ser una sola pantalla.
 - El paso 2 de *Revisar coincidencias*: árbol Familia→Modelo→Referencia, expandir/colapsar,
   filtro por seller, contadores y *Seleccionar todas*.
 - El catálogo de motivos distinto por tipo de error.
@@ -335,7 +337,7 @@ y con el CSV.
 
 | Hoy | MVP |
 |---|---|
-| Modal de 1100 px a dos columnas: resumen del hallazgo a la izquierda, pasos a la derecha | **Panel pequeño** sobre la fila |
+| Modal a dos columnas: resumen del hallazgo a la izquierda, **pasos** a la derecha | Misma modal a dos columnas, **sin pasos**: la derecha es una sola pantalla |
 | **Paso 1 · Motivo**: catálogo distinto según el tipo de error, multi-selección, comentario libre y caja informativa de coincidencias | **Motivo**: lista cerrada igual para todos, selección única, sin comentario |
 | **Paso 2 · Revisar coincidencias** (obligatorio si las hay): árbol Familia→Modelo→Referencia, bloques desplegables, filtro por seller, "Seleccionar todas", contadores, enlaces a PDP | **Una línea**: `☐ Aplicar también a las otras 47 donde saltó «izq»` + enlace *ver cuáles* que filtra el listado |
 | Indicador "Paso 1 de 2" y botón "← Atrás" | Sin pasos |
