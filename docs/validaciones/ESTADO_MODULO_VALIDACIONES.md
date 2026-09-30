@@ -265,6 +265,53 @@ Lo único que queda desalineado es el vocabulario interno: en la matriz y en el 
 se etiqueta **Bloqueante**, y en la tarjeta **No publicable**. Es el mismo nivel con dos nombres,
 uno de gravedad y otro de consecuencia. Funciona, pero conviene decidir si se unifica.
 
+### El motor, tras leer su repo (30 de septiembre)
+
+Jordi compartió `jordimx/description-engine`. Es un monorepo: `ciceron` (core agnóstico) +
+capabilities (`validador-fichas`, `lm-emerch-ia`, `demo-descriptions`) + `apps/demo` como host.
+Las conclusiones de diseño quedaron escritas **en su repo**, en `DESIGN_INSIGHTS.md`, para que las
+tenga delante quien decida allí. Aquí va lo que nos condiciona a nosotros.
+
+**Lo que el motor hace hoy.** 15 validaciones deterministas sobre tres textos —designación,
+descripción y designación administrativa—: estructura, coherencia entre designación y
+descripción (color, material, dimensiones, cantidad), unidades, ortografía por lista cerrada de
+~110 erratas, y coherencia con el campo administrativo. Sin LLM todavía. Nota por ficha: media de
+las 15, umbral 90.
+
+**Lo que no ve, y nos afecta de lleno.** `ProductRecord` transporta solo esos tres textos:
+**ni atributos ni multimedia**. Eso deja fuera las comprobaciones que nacen de la guía de estilo.
+De los 20 tipos de error del prototipo, **9 no se pueden calcular hoy** — y entre ellos **4 de
+los 6 bloqueantes**: atributos obligatorios faltantes, atributos básicos faltantes, imágenes por
+debajo del mínimo y falta categoría de imagen.
+
+Importa porque **la cifra de *No publicable*** del informe que se envía al proveedor **se apoya
+sobre todo en esos cuatro**. Es el argumento central del documento.
+
+**La salida probable.** Esas comprobaciones **ya existen en el módulo de Guías**, que valida CSV
+de proveedor contra la guía y devuelve `MISSING_MANDATORY`, `INVALID_VALUE`, `INVALID_MEDIA_TYPE`
+y `MISSING_MEDIA`. La lógica está; lo que cambia es que allí se aplica a un fichero subido y aquí
+haría falta contra el catálogo vivo. La decisión —reutilizar lo de Guías o hacer crecer el
+contrato del motor— es de Jordi, y ya sabe que le falta.
+
+**Y no lleva proveedor.** El schema tiene ref, gama, sección, subsección, tipo, subtipo, modelo,
+idModelo y segmento 1P/3P, pero **no proveedor ni seller**. Todo nuestro módulo gira alrededor
+del informe por proveedor. O el host lo une, o el contrato crece.
+
+**Dos cosas que salen bien sin haberlas buscado:**
+
+- **Los pesos ya existen.** `DeterministicCheck extends Criterion` y el total se calcula con
+  `weightedTotal` usando `weight ?? 1`; `validador-fichas` simplemente no los asigna. Aplicar la
+  escala que trae Leroy el jueves es **asignar quince números, no construir nada**. Lo único que
+  falta es el corte duro, que el core no tiene.
+- **`idModelo` frente a `modelo`** —identificador estable frente a nombre para mostrar— es la
+  misma decisión que tomamos en las columnas del CSV, tomada por separado.
+
+**Lo que esto le hace al recorte.** El MVP cortó el panel del motor por coste y porque el modelo
+de reglas iba a rehacerse. El efecto secundario es que **se llevó por delante justo lo que peor
+teníamos modelado**, así que hoy **el prototipo recortado está más cerca de lo construible que el
+completo**. No fue previsión, pero es el mejor argumento para defender el MVP — mejor que las
+horas.
+
 ### El panel del motor del prototipo completo — pendiente de rehacer
 
 Al leer el repo del motor (2026-09-30) se vio que **el modelo que prototipamos no es el suyo**.
@@ -329,6 +376,11 @@ revisor— y no depende de que el catálogo esté cerrado.
   porcentaje de alertas resultaron falsos positivos en una ejecución real, y cuántos venían de
   checks deterministas frente a los de IA? De ese número depende si el flujo de falsos positivos
   es una función central o una casilla marginal.
+- **Las reglas de la guía en el motor** — atributos obligatorios y mínimos de multimedia. De esto
+  dependen 9 de nuestros 20 tipos de error y 4 de los 6 bloqueantes.
+- **El proveedor en el contrato del motor.** Sin él, el perímetro por proveedor —el eje del
+  módulo— no se puede resolver.
+- **Los pesos y el corte duro.** Cuando estén, nuestras severidades y su nota serán el mismo dato.
 
 ### Sin diseñar: flujos y casuísticas
 

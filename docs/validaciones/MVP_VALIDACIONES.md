@@ -274,6 +274,26 @@ pierde es la lectura por áreas de la ficha, que es lo mismo que se quitó de la
 
 ---
 
+## Un efecto secundario del recorte que conviene saber
+
+Al leer el repo del motor (30 de septiembre) se vio que **el panel de configuración que cortamos
+estaba modelado sobre un supuesto equivocado**: lo prototipamos como un editor de prompt por nodo
+de un árbol General ▸ Familia ▸ Modelo, y el motor no funciona así — una regla es una instancia
+parametrizada de un catálogo, y los niveles del schema son gama, sección, subsección, tipo y
+subtipo.
+
+Así que el recorte se llevó por delante justo lo que peor teníamos resuelto. **El prototipo
+recortado está hoy más cerca de lo construible que el completo.** No fue previsión —se cortó por
+coste y porque el modelo de reglas iba a rehacerse—, pero es mejor argumento para defender el MVP
+que las horas.
+
+Lo que **no** arregla el recorte, porque no depende del alcance sino de qué puede calcular el
+motor: **9 de los 20 tipos de error del prototipo no se pueden computar hoy**, incluidos 4 de los
+6 bloqueantes, porque el contrato del motor no transporta atributos ni multimedia. Afecta igual a
+las dos versiones. El detalle, en `ESTADO_MODULO_VALIDACIONES.md`.
+
+---
+
 ## Comparativa — qué hay hoy y qué queda
 
 > El prototipo con los recortes aplicados está en `wireframe_validaciones_recortado.html`.
