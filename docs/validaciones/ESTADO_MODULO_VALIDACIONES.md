@@ -230,6 +230,35 @@ nuestra propuesta por defecto.
   confirmar el jueves**, porque si lo que quieren es corregir la guía, esto cambia de owner y
   sale del informe del proveedor. *A confirmar el jueves que el enfoque les cuadra.*
 
+### Taxonomía de niveles — nuestra posición, pendiente de confirmar
+
+Jordi propuso (30 de septiembre) separar los errores en tres niveles y poner una **regla de corte
+aparte de la nota**: si hay alguno del nivel alto, la ficha no se publica. Hoy su motor funciona
+con la media: nota ≥ 90 → publicable, lo que deja pasar fichas con un fallo grave. Separar la
+nota (calidad) de la puerta (publicabilidad) lo arregla sin tener que ponderar la media.
+
+Converge con la escala que Leroy aprobó, así que lo que queda es **acordar qué implica cada
+nivel**. Nuestro corte, sobre un eje de completitud:
+
+| Nivel | Qué es | Qué implica |
+|---|---|---|
+| **Bloqueante** | **Falta algo.** Sin designación, sin descripción, sin atributos obligatorios, por debajo del mínimo de imágenes. La ficha está incompleta. | **No publicable** |
+| **Crítica** | **Algo se contradice.** Título «gris» y descripción «antracita»; «120 cm» en el título y 100 en el atributo. La ficha está completa pero es incorrecta. | Publicada, corrección prioritaria |
+| **Leve** | **Forma.** Ortografía, unidades, longitud, estilo. | Publicada |
+
+**Por qué este corte y no otro:** Leroy definió «no publicable» exactamente así —faltar
+designación o descripción, o que existan pero tengan 2 o 5 caracteres—. Todo ausencia, ninguna
+contradicción. La puerta va sobre **la completitud**, no sobre el riesgo de compra.
+
+*La duda honesta que se asume:* una discrepancia de medidas puede generar más devoluciones que
+una descripción ausente. Se elige completitud porque es objetiva, automatizable y defendible
+ante un proveedor sin entrar a valorar.
+
+**Consecuencia en el informe, en cola.** Si la puerta es esa, **«No publicable» deja de ser una
+categoría propia y pasa a ser la consecuencia de tener un bloqueante**. Hoy son dos cifras
+separadas en la tarjeta del informe —*Con errores críticos* y *No publicable*— y probablemente
+haya que fusionarlas. No se toca hasta que Jordi y Leroy confirmen la taxonomía.
+
 ### Pendiente de cliente
 
 - **Cómo se agrupan los falsos positivos** — sin respuesta, y es de lo que depende todo el
