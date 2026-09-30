@@ -107,6 +107,27 @@ segunda columna es el nombre comercial del producto. Damos por hecho que el moto
 porque es precisamente el texto que auditamos, pero preferimos confirmarlo antes de cerrar el
 formato.
 
+## C · Nuevas, surgidas de vuestras respuestas del 30 de septiembre
+
+La numeración de arriba se mantiene para que podáis seguir el hilo de lo ya respondido.
+
+**C1. Los umbrales de longitud.** Nos decís que una designación o descripción que existe pero
+tiene 2 o 5 caracteres hace la ficha **no publicable**. Hoy tenemos 35 y 80 caracteres como
+mínimo de guía, y por debajo lo tratamos como error **leve**. ¿Cuál es el umbral de no
+publicable, y hay algún grado entre los dos o es un salto directo de leve a no publicable?
+
+**C2. Atributos que la guía exige en la descripción.** Cuando la descripción no menciona un
+atributo que la guía exige para esa tipología, ¿la corrección es siempre sobre la descripción, o
+puede significar que **la guía está pidiendo algo que no aplica a ese modelo**?
+
+Lo preguntamos porque cambia quién corrige: si el fallo es de la ficha, el trabajo es del
+proveedor o del equipo de contenido; si es de la guía, es del equipo de e-Merch. Y en el segundo
+caso ese hallazgo **no debería aparecer en el informe del proveedor**, porque él no puede hacer
+nada con él.
+
+Es la misma duda que la del atributo que aparece en la designación sin estar marcado como
+obligatorio: en los dos casos la alerta puede estar señalando la guía y no el producto.
+
 ## Dos cosas que no son preguntas
 
 - Nos pedisteis el **enlace del prototipo** para ver el flujo de falsos positivos y cómo

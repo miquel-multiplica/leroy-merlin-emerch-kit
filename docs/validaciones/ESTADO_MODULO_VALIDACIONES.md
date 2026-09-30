@@ -265,6 +265,24 @@ Lo único que queda desalineado es el vocabulario interno: en la matriz y en el 
 se etiqueta **Bloqueante**, y en la tarjeta **No publicable**. Es el mismo nivel con dos nombres,
 uno de gravedad y otro de consecuencia. Funciona, pero conviene decidir si se unifica.
 
+### El panel del motor del prototipo completo — pendiente de rehacer
+
+Al leer el repo del motor (2026-09-30) se vio que **el modelo que prototipamos no es el suyo**.
+Nuestro panel es un **editor de prompt por nodo** de un árbol General ▸ Familia ▸ Modelo. La
+realidad del motor es otra: *«una regla NO es lógica libre: es una instancia parametrizada de un
+tipo del catálogo»*, y lo que sí está implementado son overrides de (criterio, reason, ámbito).
+Los niveles tampoco coinciden — el cliente dice **sección**, y el schema trae gama, sección,
+subsección, tipo y subtipo.
+
+Además **le falta la cola de falsos positivos**: no hay revisión ni conversión a regla, que es
+justamente donde se cierra el bucle de aprendizaje. En el recortado no aplica, porque el panel
+está fuera del MVP.
+
+**Hay que rehacerlo, pero no ahora**: depende de que Jordi aterrice el catálogo de tipos de regla
+y los niveles de ámbito. Cuando toque, **empezaría por la cola de falsos positivos y no por el
+editor de reglas**: es lo único de ese panel que tiene datos reales detrás —los descartes del
+revisor— y no depende de que el catálogo esté cerrado.
+
 ### Pendiente de cliente
 
 - **Cómo se agrupan los falsos positivos** — sin respuesta, y es de lo que depende todo el
@@ -284,6 +302,10 @@ uno de gravedad y otro de consecuencia. Funciona, pero conviene decidir si se un
 - **A quién dirige el PDF su línea de contacto** — el jueves, con Marketplace.
 - **Los diccionarios de su artefacto**: ¿están validados? Algunas abreviaturas aceptadas parecen
   confusas para el usuario final. *Pregunta nueva, para el jueves.*
+- **Los umbrales de longitud** (C1) y **los atributos que la guía exige en la descripción** (C2),
+  ambas redactadas en `PREGUNTAS_CLIENTE.md`. La segunda tiene el mismo fondo que el check nuevo:
+  la alerta puede estar señalando la guía y no el producto, y eso cambia quién corrige y si sale
+  o no en el informe del proveedor.
 
 ### Decisiones nuestras, abiertas
 
