@@ -330,6 +330,51 @@ y los niveles de ámbito. Cuando toque, **empezaría por la cola de falsos posit
 editor de reglas**: es lo único de ese panel que tiene datos reales detrás —los descartes del
 revisor— y no depende de que el catálogo esté cerrado.
 
+### El panel de administración del motor — fase 2, pero con consecuencias hoy
+
+Conversación del 2026-09-30 sobre qué debería tener ese panel. **Nada de esto es MVP**: es para
+que Leroy pueda evolucionar el motor más adelante. Se recoge para no perderlo y porque una parte
+sí condiciona lo que hay que capturar ya.
+
+**Tres trabajos distintos**, que hoy se mezclan en uno: **resolver** lo que llega, **ver** qué
+está activo y qué hace, y **revertir**. Lo que prototipamos nosotros no hacía ninguno de los
+tres: era un editor de prompts.
+
+**Un descarte tiene tres salidas, no dos.** Además de *convertir en regla* e *ignorar*, falta la
+más frecuente: **corregir el diccionario**. Si alguien descarta «adhesibo» porque es una marca,
+lo correcto no es silenciar la alerta sino quitar la entrada del diccionario de erratas. La
+diferencia importa: el override crea ceguera acotada, corregir el diccionario arregla el origen y
+el check sigue funcionando. El motor tiene diccionarios de colores, materiales, erratas,
+abreviaturas y unidades, así que **la cola de falsos positivos es también la cola de mejora de
+los diccionarios**.
+
+**Principio propuesto:** en Validaciones, una regla debería **nacer de un descarte, nunca de la
+nada** — porque aquí una regla solo quita comprobaciones, y creada por intuición es ceguera sin
+causa. Los diccionarios son lo contrario: conocimiento, y ahí sí tiene sentido editarlos. *(En
+Descripciones no aplica igual: allí las reglas moldean lo que se genera, no silencian nada, y por
+eso el §5 de Jordi sí contempla crearlas desde cero.)*
+
+**Ver las reglas no es listarlas.** Lo que hace falta saber de una regla es **cuánto silencia**:
+si desactivas una que apaga 1.240 alertas, vuelven 1.240. Eso mide su peso, no si está bien
+puesta — que una regla silencie mucho significa que el fenómeno es transversal, no que se creara
+ancha. **Lo que sí delata una regla corta es la reincidencia**: que el mismo (disparador, motivo)
+vuelva a la cola cuando ya existe una regla. Entonces el ámbito se quedó pequeño, y el sistema
+puede detectarlo solo y proponer subirlo de nivel.
+
+Desactivar antes que borrar: es reversible y no pierde el rastro.
+
+**Y una métrica que solo puede dar este panel:** alertas levantadas, descartadas y su porcentaje,
+auditoría tras auditoría. Es la tasa real de falsos positivos del motor, que teníamos como
+pregunta abierta para desarrollo. Si baja con el tiempo, el bucle funciona; si no baja, los
+descartes no se están convirtiendo en nada útil.
+
+**Lo único con consecuencia inmediata** era qué tiene que capturar el MVP para que ese panel se
+pueda construir después, porque no puede inventar datos que no se guardaron. Faltaba una cosa:
+**de qué auditoría vino cada descarte**. Añadida como columna `Auditoría` a los dos CSV internos
+—el del TIP y el de falsos positivos—; en el del proveedor no, porque el ID ya va en el nombre
+del fichero y en la portada del PDF. Sin esa columna se pierden la **corroboración** entre
+auditorías distintas y la **reincidencia**.
+
 ### Pendiente de cliente
 
 - **Cómo se agrupan los falsos positivos** — sin respuesta, y es de lo que depende todo el

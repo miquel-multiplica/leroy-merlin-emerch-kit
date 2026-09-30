@@ -1225,11 +1225,11 @@
     // 'Producto' es la designacion comercial de la referencia; 'Modelo' su codigo y
     // 'Nombre del modelo' su nombre: separados para poder filtrar por codigo en Excel.
     var head=['Referencia','Producto','Modelo','Nombre del modelo','Sección','Categoría web','Tipo de error','Ubicación del error','Diagnóstico del sistema','Acciones correctivas','Severidad','Owner','1P / 3P'];
-    if(withSeller) head.push('Seller');
+    if(withSeller) head.push('Seller','Auditoría');
     var lines=[head.map(_csvEsc).join(';')];
     rows.forEach(function(f){
       var cols=[f.ref, f.desig||'', f.modelo||'', f.guia||'', secOf(f), categWeb(f), f.tipo, f.ubic, f.diag, f.accion, (SEV_LBL[f.sev]||f.sev||''), f.owner, f.pp||''];
-      if(withSeller) cols.push(f.seller||'');
+      if(withSeller) cols.push(f.seller||'', auditRef());
       lines.push(cols.map(_csvEsc).join(';'));
     });
     return '﻿'+lines.join('\r\n');
@@ -1244,13 +1244,13 @@
     _downloadBlob('informe-interno-tip-'+auditRef().replace('#','')+'.csv', _findingsToCsv(rows,true), 'text/csv;charset=utf-8;');
   }
   function downloadFpCsv(){
-    var head=['Referencia','Modelo','Sección','Categoría web','Tipo de error','Ubicación','Severidad','Motivo del falso positivo','Motivo (texto libre)','Disparador','Seller','Revisor','Fecha'];
+    var head=['Referencia','Modelo','Sección','Categoría web','Tipo de error','Ubicación','Severidad','Motivo del falso positivo','Motivo (texto libre)','Disparador','Seller','Auditoría','Revisor','Fecha'];
     var rows=_infFindings.filter(function(f){ return f.fp; });
     var lines=[head.map(_csvEsc).join(';')];
     rows.forEach(function(f){
       lines.push([f.ref, f.modelo||'', secOf(f), categWeb(f), f.tipo, f.ubic, (SEV_LBL[f.sev]||f.sev||''),
         (f.motivo||''), f.motivoOtro||'',
-        f.bulkTrigger||'', f.seller||'', 'Ana García', '2 sep 2026'].map(_csvEsc).join(';'));
+        f.bulkTrigger||'', f.seller||'', auditRef(), 'Ana García', '2 sep 2026'].map(_csvEsc).join(';'));
     });
     _downloadBlob('falsos-positivos-'+auditRef().replace('#','')+'.csv', '﻿'+lines.join('\r\n'), 'text/csv;charset=utf-8;');
   }
