@@ -217,14 +217,18 @@ nuestra propuesta por defecto.
 
 ### Check nuevo, ya montado
 
-- **Atributo no obligatorio en designación.** Un atributo que aparece en la designación y **no**
-  está marcado como obligatorio levanta alerta. Es un check inverso: hasta ahora solo
-  detectábamos ausencias. Montado con **owner TIP** y severidad **leve**, porque **la alerta es
-  sobre la guía, no sobre la ficha** — o la guía está incompleta y debería marcarlo obligatorio,
-  o la designación usa algo que no debería, y en los dos casos lo corrige e-Merch.
-  Consecuencia útil: al ser owner TIP **queda fuera del informe del proveedor por el mecanismo
-  que ya existe**, sin reglas nuevas. No admite falso positivo: que un atributo esté marcado
-  obligatorio o no es objetivo, no es un juicio. *A confirmar el jueves que el enfoque les cuadra.*
+- **Atributo de la designación sin informar.** La designación menciona un atributo —un casquillo
+  E27, un acabado cromado— que **no está informado en la ficha**. Montado con **owner Seller** y
+  severidad **leve**, y por tanto **sí sale en el informe del proveedor**. No admite falso
+  positivo: que un atributo esté informado o no es objetivo, no es un juicio.
+
+  *Sobre la lectura de su frase.* Dicen *«un att que esté en la designación y no esté marcado
+  como obligatorio debería ser una alerta»*, y admite dos lecturas que en realidad son los dos
+  extremos de la misma cadena: **la causa** es que la guía no lo exige, y **la consecuencia** es
+  que el seller no lo ha informado. Lo que decide el owner es por qué extremo se actúa. Se montó
+  por el del seller porque es accionable hoy; cambiar la guía es sistémico y lento. **A
+  confirmar el jueves**, porque si lo que quieren es corregir la guía, esto cambia de owner y
+  sale del informe del proveedor. *A confirmar el jueves que el enfoque les cuadra.*
 
 ### Pendiente de cliente
 
