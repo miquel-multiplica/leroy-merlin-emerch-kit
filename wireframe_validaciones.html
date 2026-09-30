@@ -378,10 +378,6 @@
   }
   .modal-overlay.open { display: flex; }
   /* Modal guía como side-panel derecho con slide-in */
-  #guia-modal { display: flex !important; justify-content: flex-end; pointer-events: none; background: transparent; transition: background .25s ease; }
-  #guia-modal.open { pointer-events: auto; background: rgba(0,0,0,0.45); }
-  #guia-modal .modal-box { transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); }
-  #guia-modal.open .modal-box { transform: translateX(0); }
   #v-motor-hist-modal { display:flex !important; justify-content:flex-end; pointer-events:none; background:transparent; transition:background .25s ease; }
   #v-motor-hist-modal.open { pointer-events:auto; background:rgba(0,0,0,0.45); }
   #v-motor-hist-modal .modal-box { transform:translateX(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); }
@@ -648,80 +644,35 @@
     </div>
   </nav>
   <div class="page-body">
-    <div class="grid" style="max-width:none; padding:0 40px;">
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
-        <button onclick="go('v-hub')" title="Volver al hub" style="background:none;border:none;padding:0;cursor:pointer;flex-shrink:0;color:var(--text-ink);display:flex;align-items:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg></button>
-        <div style="font-size:28px;font-weight:700;color:var(--text-ink);">Motor de validaciones</div>
+  <div class="page-body">
+    <div class="grid" style="max-width:none; padding:0 clamp(16px, 2.5vw, 56px);">
+      <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:6px;">
+        <button onclick="go('v-hub')" style="background:none;border:none;cursor:pointer;color:var(--green);font-size:13px;font-weight:600;font-family:'Inter',system-ui,sans-serif;padding:0;">← Validaciones</button>
       </div>
-      <div style="display:flex;gap:24px;align-items:flex-start;">
-        <div style="width:340px;flex-shrink:0;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:12px;">
-          <input id="v-cfg-search" oninput="cfgSearch(this.value)" placeholder="Buscar familia o modelo…" style="width:100%;border:1px solid var(--border-input);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Inter',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;margin-bottom:10px;">
-          <div id="v-cfg-tree"></div>
-        </div>
-        <div style="flex:1;min-width:0;background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:24px 26px;"><div id="v-cfg-node"></div></div>
-        <div id="v-cfg-motorbar" style="width:300px;flex-shrink:0;position:sticky;top:20px;"></div>
+      <div style="font-size:28px; font-weight:700; color:var(--text-ink); margin-bottom:4px;">Motor de validaciones</div>
+      <div id="v-motor-metrics" style="font-size:13px; color:var(--text-muted); margin-bottom:24px;"></div>
+      <div style="border:1px solid var(--border-card); border-radius:12px; background:#fff; margin-bottom:40px;">
+        <div id="v-motor-tabs" style="display:flex; align-items:stretch; gap:4px; padding:0 8px; border-bottom:1px solid var(--border-card);"></div>
+        <div id="v-motor-panel"></div>
       </div>
     </div>
   </div>
 </div>
-<div class="modal-overlay" id="v-motor-pub-modal">
-  <div class="modal-box" style="width:480px; max-width:92vw; padding:28px;">
-    <div id="v-motor-pub-form">
-      <div style="font-size:20px;font-weight:700;color:var(--text-ink);margin-bottom:6px;">Publicar nueva versión</div>
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:18px;line-height:1.5;">Ponle un nombre a la versión (qué has cambiado). Quedará registrada en el historial con tu nombre.</div>
-      <input id="v-motor-pub-name" type="text" placeholder="Ej. Afinado de ortografía en Herramientas" onkeydown="if(event.key===&quot;Enter&quot;)confirmMotorPublish()" style="width:100%;border:1px solid var(--border-input);border-radius:8px;padding:10px 12px;font-size:14px;font-family:'Inter',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;">
-      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;"><button onclick="closeMotorPublish()" style="background:none;border:none;color:var(--green);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',system-ui,sans-serif;padding:0 14px;height:44px;">Cancelar</button><button onclick="confirmMotorPublish()" class="btn btn-primary" style="height:44px;">Publicar</button></div>
+<div class="modal-overlay" id="v-res-modal">
+  <div class="modal-box" style="width:720px; max-width:94vw; max-height:calc(100vh - 96px); padding:0; display:flex; flex-direction:column; overflow:hidden;">
+    <div style="padding:26px 28px 0;">
+      <div id="v-res-title" style="font-size:19px; font-weight:700; color:var(--text-ink);"></div>
+      <div id="v-res-sub" style="font-size:13px; color:var(--text-muted); margin-top:6px;"></div>
     </div>
-    <div id="v-motor-pub-progress" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:22px 0;"><div class="sku-spinner" style="width:30px;height:30px;border-width:3px;"></div><div style="font-size:14px;font-weight:600;color:var(--text-body);">Publicando…</div></div>
-    <div id="v-motor-pub-done" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px 0;"><div style="width:46px;height:46px;border-radius:50%;background:var(--success-bg);display:flex;align-items:center;justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div style="font-size:15px;font-weight:700;color:var(--text-ink);">Motor <span id="v-motor-pub-done-v"></span> publicado</div></div>
-  </div>
-</div>
-<div class="modal-overlay" id="v-motor-restore-modal" style="z-index:10001;">
-  <div class="modal-box" style="width:460px;max-width:92vw;padding:28px;">
-    <div id="v-motor-restore-form">
-      <div style="font-size:20px;font-weight:700;color:var(--text-ink);margin-bottom:6px;">¿Restaurar esta versión?</div>
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.5;">El motor volverá al estado de esta versión y se aplicará a las próximas auditorías. La versión actual se conserva en el historial.</div>
-      <div style="border:1px solid var(--border-card);border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;background:#f9f9f7;"><span id="v-motor-restore-badge" style="flex-shrink:0;background:var(--text-ink);color:#fff;border-radius:8px;padding:5px 11px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;">v0.0</span><div style="min-width:0;"><div id="v-motor-restore-title" style="font-size:14px;font-weight:600;color:var(--text-ink);">—</div><div id="v-motor-restore-meta" style="font-size:12px;color:var(--text-muted);margin-top:2px;">—</div></div></div>
-      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:22px;"><button onclick="closeMotorRestore()" style="background:none;border:none;color:var(--green);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',system-ui,sans-serif;padding:0 14px;height:44px;">Cancelar</button><button onclick="confirmMotorRestore()" class="btn btn-primary" style="height:44px;">Restaurar versión</button></div>
+    <div style="flex:1; min-height:0; overflow-y:auto; padding:22px 28px;">
+      <div id="v-res-evidencia"></div>
+      <div style="font-size:13px; font-weight:700; color:var(--text-ink); margin:24px 0 10px;">Qué hacer</div>
+      <div id="v-res-opts"></div>
+      <div id="v-res-impacto" style="margin-top:16px;"></div>
     </div>
-    <div id="v-motor-restore-progress" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:22px 0;"><div class="sku-spinner" style="width:30px;height:30px;border-width:3px;"></div><div style="font-size:14px;font-weight:600;color:var(--text-body);">Restaurando…</div></div>
-    <div id="v-motor-restore-done" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px 0;"><div style="width:46px;height:46px;border-radius:50%;background:var(--success-bg);display:flex;align-items:center;justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div style="font-size:15px;font-weight:700;color:var(--text-ink);">Versión <span id="v-motor-restore-done-v"></span> restaurada</div></div>
-  </div>
-</div>
-<div class="modal-overlay" id="v-motor-discard-modal">
-  <div class="modal-box" style="width:440px;max-width:92vw;padding:28px;">
-    <div style="font-size:20px;font-weight:700;color:var(--text-ink);margin-bottom:6px;">¿Descartar los cambios sin publicar?</div>
-    <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px;line-height:1.5;">Se perderán <strong id="v-motor-discard-count" style="color:var(--text-body);">…</strong> y esos apartados volverán a la versión publicada. Esta acción no se puede deshacer.</div>
-    <div style="display:flex;gap:12px;justify-content:flex-end;"><button onclick="closeMotorDiscard()" style="background:none;border:none;color:var(--green);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',system-ui,sans-serif;padding:0 14px;height:44px;">Volver</button><button onclick="confirmMotorDiscard()" style="height:44px;background:#c0392b;color:#fff;border:none;border-radius:8px;padding:0 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',system-ui,sans-serif;">Descartar cambios</button></div>
-  </div>
-</div>
-<div class="modal-overlay" id="v-motor-pend-modal" onclick="if(event.target===this)closeMotorPending()">
-  <div class="modal-box" style="width:460px; max-width:92vw; height:100vh; max-height:100vh; border-radius:0; padding:28px 34px; overflow-y:auto;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><div style="font-size:20px;font-weight:700;color:var(--text-ink);">Cambios sin publicar</div><button onclick="closeMotorPending()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
-    <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px;line-height:1.5;">Cambios que entrarán en la próxima versión. Toca uno para ir a editarlo.</div>
-    <div id="v-motor-pend-list"></div>
-  </div>
-</div>
-<div class="modal-overlay" id="v-motor-hist-modal" onclick="if(event.target===this)closeMotorHistory()">
-  <div class="modal-box" style="width:620px; max-width:94vw; height:100vh; max-height:100vh; border-radius:0; padding:28px 34px; overflow-y:auto;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><div style="font-size:20px;font-weight:700;color:var(--text-ink);">Historial de versiones del motor</div><button onclick="closeMotorHistory()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
-    <div id="v-motor-hist-list"></div>
-  </div>
-</div>
-<div class="modal-overlay" id="guia-modal" onclick="if(event.target===this)closeCfgGuia()">
-  <div class="modal-box" style="width:900px; max-width:94vw; height:100vh; max-height:100vh; padding:0; border-radius:0; overflow:hidden; display:flex; flex-direction:column; position:relative; text-align:left;">
-    <div style="padding:22px 28px; border-bottom:1px solid var(--border-card); display:flex; align-items:center; gap:14px; flex-shrink:0;">
-      <div style="width:40px;height:40px;border-radius:8px;background:var(--success-bg);border:1px solid var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-      <div style="flex:1;min-width:0;"><div id="cfg-guia-title" style="font-size:18px;font-weight:700;color:var(--text-ink);"></div><div id="cfg-guia-sub" style="font-size:13px;color:var(--text-muted);margin-top:4px;"></div></div>
-      <button onclick="closeCfgGuia()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div style="flex:1; min-height:0; display:grid; grid-template-columns:1fr 1fr; overflow:hidden;">
-      <div style="overflow-y:auto; padding:24px 28px; display:flex; flex-direction:column; gap:16px;">
-        <div style="background:#f5f5f3;border-radius:12px;padding:20px 22px;"><div style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Semántica SEO</div><div style="display:flex;flex-wrap:wrap;gap:10px;"><span style="background:#e6e6e6;border-radius:100px;padding:7px 16px;font-size:14px;color:var(--text-body);">Tipo de producto</span><span style="background:#e6e6e6;border-radius:100px;padding:7px 16px;font-size:14px;color:var(--text-body);">Uso</span><span style="background:#e6e6e6;border-radius:100px;padding:7px 16px;font-size:14px;color:var(--text-body);">Material</span><span style="background:#e6e6e6;border-radius:100px;padding:7px 16px;font-size:14px;color:var(--text-body);">Color</span><span style="background:#e6e6e6;border-radius:100px;padding:7px 16px;font-size:14px;color:var(--text-body);">Estilo</span><span style="background:#e6e6e6;border-radius:100px;padding:7px 16px;font-size:14px;color:var(--text-body);">Instalación</span></div></div>
-        <div style="background:#f5f5f3;border-radius:12px;padding:20px 22px;"><div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;">Atributos incluidos</div><div id="cfg-guia-attrs"></div></div>
-        <div style="background:#f5f5f3;border-radius:12px;padding:20px 22px;"><div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Multimedia</div><div style="border:1px dashed var(--border-input);border-radius:10px;padding:24px;text-align:center;font-size:12px;color:var(--text-muted);">Sección de imágenes — pendiente de definir</div></div>
-      </div>
-      <div style="overflow-y:auto; padding:24px 28px;"><div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Ejemplos</div><div style="display:flex;flex-direction:column;gap:14px;"><div style="background:#f5f5f3;border-radius:12px;padding:16px 18px;"><div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;">Ejemplo 1</div><div style="font-size:14px;color:var(--text-body);line-height:1.65;">Descripción de ejemplo que concatena los atributos clave del modelo con la semántica SEO exigida por la guía, en el orden y con los términos que marca el estándar eMerch.</div></div><div style="background:#f5f5f3;border-radius:12px;padding:16px 18px;"><div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;">Ejemplo 2</div><div style="font-size:14px;color:var(--text-body);line-height:1.65;">Segunda variante de ejemplo con el mismo esqueleto de atributos, mostrando cómo la guía guía la redacción sin perder los términos obligatorios de posicionamiento.</div></div></div></div>
+    <div style="border-top:1px solid var(--border-card); padding:16px 28px; display:flex; align-items:center; gap:12px;">
+      <button onclick="closeRes()" style="margin-left:auto; background:none; border:none; color:var(--green); font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',system-ui,sans-serif; padding:0 14px; height:44px;">Cancelar</button>
+      <button id="v-res-go" onclick="aplicarRes()" class="btn btn-primary" style="height:44px;">Aplicar</button>
     </div>
   </div>
 </div>
@@ -872,108 +823,246 @@
 <script>
   function go(id){ document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); }); var t=document.getElementById(id); if(t){ t.classList.add('active'); window.scrollTo(0,0); } }
   document.addEventListener('click', function(e){ document.querySelectorAll('.row-menu.open').forEach(function(m){ if(!m.contains(e.target)) m.classList.remove('open'); }); });
-  var _cfgFamilias=[
-    {name:'Puertas y ventanas', modelos:[{name:'Puerta de entrada',code:'MOD_PE01'},{name:'Puerta corredera',code:'MOD_PC02'},{name:'Puerta acorazada',code:'MOD_PA03'},{name:'Ventana corredera',code:'MOD_VC04'}]},
-    {name:'Herramientas', modelos:[{name:'Taladro percutor',code:'MOD_TP11'},{name:'Atornillador',code:'MOD_AT12'},{name:'Lijadora',code:'MOD_LJ13'},{name:'Sierra circular',code:'MOD_SC14'}]},
-    {name:'Iluminación', modelos:[{name:'Aplique exterior',code:'MOD_AE21'},{name:'Farola solar',code:'MOD_FS22'},{name:'Proyector LED',code:'MOD_PL23'}]},
-    {name:'Baño', modelos:[{name:'Inodoro suspendido',code:'MOD_IS31'},{name:'Lavabo mural',code:'MOD_LM32'},{name:'Grifería monomando',code:'MOD_GM33'}]}
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  PANEL DE ADMINISTRACIÓN DEL MOTOR
+  //  Sustituye al editor de prompts por nodo (guardado en la etiqueta git
+  //  `panel-motor-v1`), cuyo modelo no era el del motor real: allí una regla es una
+  //  instancia parametrizada de un catálogo, y lo implementado son overrides de
+  //  (criterio, reason, ámbito). Este panel se construye sobre lo único que sí
+  //  tenemos: los descartes que produce el revisor.
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // La cola se agrupa por (disparador, motivo), y dentro por auditoría, y dentro por
+  // referencia. El grupo es una PROPUESTA de parecido, no una afirmación: por eso se
+  // ve de qué auditorías y revisores viene, y por eso se puede resolver solo una parte.
+  var _qGrupos=[
+    { id:'g1', disp:'«izq»', motivo:'Abreviatura aceptada', check:'Ortografía en designación',
+      reason:'"puerta corredera izq" — «izq» no reconocida (posible falta)', dicc:'Erratas conocidas',
+      auds:[
+        {aud:1001, per:'Gama · A', rev:'Ana García', fecha:'12 sep', sec:'Carpintería y madera',
+         refs:[{r:'18570700',m:'MOD_PE01',d:'Puerta de entrada acabado inox'},{r:'18570741',m:'MOD_PE01',d:'Puerta de entrada 60 cm'},{r:'18571236',m:'MOD_PC02',d:'Puerta corredera 80 cm'},{r:'18571301',m:'MOD_PC02',d:'Puerta corredera acabado roble'},{r:'18572402',m:'MOD_PA03',d:'Puerta acorazada 2 puertas'},{r:'18573503',m:'MOD_VC04',d:'Ventana corredera 120 cm'},{r:'18572406',m:'MOD_PA03',d:'Puerta acorazada 120 cm'},{r:'18570804',m:'MOD_PE01',d:'Puerta de entrada 60 cm'},{r:'18571305',m:'MOD_PC02',d:'Puerta corredera 2 puertas'},{r:'18573510',m:'MOD_VC04',d:'Ventana corredera 80 cm'},{r:'18570812',m:'MOD_PE01',d:'Puerta de entrada acabado roble'},{r:'18572411',m:'MOD_PA03',d:'Puerta acorazada inox'}]},
+        {aud:1004, per:'Categoría · Puertas de interior', rev:'Laura Pons', fecha:'18 sep', sec:'Carpintería y madera',
+         refs:[{r:'18571340',m:'MOD_PC02',d:'Puerta corredera 90 cm'},{r:'18571355',m:'MOD_PC02',d:'Puerta corredera cristal'},{r:'18570890',m:'MOD_PE01',d:'Puerta de entrada blanca'}]},
+        {aud:1009, per:'Proveedor · Simon', rev:'Miquel Soler', fecha:'24 sep', sec:'Carpintería y madera',
+         refs:[{r:'18572430',m:'MOD_PA03',d:'Puerta acorazada 90 cm'}]},
+        {aud:1012, per:'Gama · Iluminación', rev:'Ana García', fecha:'28 sep', sec:'Iluminación',
+         refs:[{r:'44120100',m:'MOD_AE21',d:'Aplique exterior acabado inox'},{r:'44120118',m:'MOD_AE21',d:'Aplique exterior negro'},{r:'44120133',m:'MOD_AE21',d:'Aplique exterior 60 cm'}]}
+      ]},
+    { id:'g2', disp:'«gr»', motivo:'Abreviatura aceptada', check:'Abreviaturas incorrectas',
+      reason:'[Abreviatura] "gr" → debería ser g', dicc:'Abreviaturas',
+      reglaPrevia:{ambito:'Sección · Herramientas', autor:'Laura Pons', fecha:'18 sep'},
+      auds:[
+        {aud:1010, per:'Gama · Fontanería', rev:'Ana García', fecha:'26 sep', sec:'Fontanería y calefacción',
+         refs:[{r:'61200417',m:'MOD_207881',d:'Radiador toallero eléctrico 500 W'},{r:'61200453',m:'MOD_207881',d:'Estufa de pellets 8 kW acero'},{r:'61201204',m:'MOD_RT44',d:'Radiador toallero 80 cm'}]},
+        {aud:1012, per:'Gama · Iluminación', rev:'Ana García', fecha:'28 sep', sec:'Iluminación',
+         refs:[{r:'44121290',m:'MOD_FS22',d:'Farol solar antracita'}]}
+      ]},
+    { id:'g3', disp:'«gris ≈ antracita»', motivo:'Valores equivalentes', check:'Discrepancia de color',
+      reason:'Designación "gris" · descripción "antracita"', dicc:'Colores',
+      auds:[
+        {aud:1001, per:'Gama · A', rev:'Ana García', fecha:'12 sep', sec:'Herramientas',
+         refs:[{r:'81920100',m:'MOD_TP11',d:'Taladro percutor serie Confort'},{r:'81920144',m:'MOD_TP11',d:'Taladro percutor 750 W'},{r:'81921230',m:'MOD_AT12',d:'Atornillador 18 V'}]},
+        {aud:1006, per:'Proveedor · Bosch', rev:'Laura Pons', fecha:'20 sep', sec:'Herramientas',
+         refs:[{r:'81922311',m:'MOD_LJ13',d:'Lijadora orbital 300 W'},{r:'81930118',m:'MOD_SC14',d:'Sierra circular 1200 W'}]}
+      ]},
+    { id:'g4', disp:'«GROHE EUROSMART CE»', motivo:'Marca o nombre propio', check:'Posible designación administrativa',
+      reason:'Designación "GROHE EUROSMART CE" en mayúsculas — ¿nombre interno?', dicc:null,
+      auds:[
+        {aud:1002, per:'Proveedor · Grohe', rev:'Miquel Soler', fecha:'14 sep', sec:'Baño',
+         refs:[{r:'52001400',m:'MOD_GM33',d:'Grifería monomando 2 puertas'},{r:'52001455',m:'MOD_GM33',d:'Grifo de lavabo monomando cromado'}]}
+      ]},
+    { id:'g5', disp:'«de intemperie ≈ exterior»', motivo:'Término válido en nuestro vocabulario', check:'Falta semántica SEO en designación',
+      reason:'No aparece el término SEO "exterior" exigido por la guía', dicc:'Colores',
+      auds:[
+        {aud:1012, per:'Gama · Iluminación', rev:'Ana García', fecha:'28 sep', sec:'Iluminación',
+         refs:[{r:'44120983',m:'MOD_AE21',d:'Aplique de exterior LED negro E27'},{r:'44120999',m:'MOD_PL23',d:'Farol solar de pared antracita'},{r:'44121205',m:'MOD_FS22',d:'Baliza solar 40 cm'}]}
+      ]}
   ];
-  var _cfgPrompts={ 'general':'Reglas transversales del motor (aplican a todas las referencias):\n\n- Ortografía y tipografía correctas (sin palabras duplicadas ni faltas).\n- Unidades normalizadas ("40 cm", no "40cm"); coma decimal.\n- La designación comercial no debe mostrar el nombre interno/administrativo.\n- Coherencia entre designación, descripción y ficha técnica.\n- Vocabulario válido y sinónimos aceptados: se alimentan del informe de falsos positivos.' };
-  var _cfgSel={level:'general',fam:0,mod:0};
-  var _cfgExpanded={};
-  var _cfgSearch='';
-  var _CFG_USER='Ana García';
-  var _cfgMeta={ 'general':'12 ago 2026, 10:24 · Ana García' };
-  var _cfgVocab={
-    orto:{title:'Excepciones ortográficas', seed:'# Excepciones ortográficas\nTérminos que el corrector NO debe marcar como falta. Una por línea:\n`término — por qué no es falta — ámbito (opcional)`\n\nteca — material noble; no es la marca "Teka" — muebles / baño\nwengué — color y madera; extranjerismo aceptado — todo\nIPX4 — código de estanqueidad; va en mayúsculas — iluminación / baño\nmelamina — material; correcto en minúscula — almacenaje'},
-    color:{title:'Colores y equivalencias', seed:'# Colores y equivalencias\nSinónimos de color que se normalizan a su nombre canónico. Una por línea:\n`sinónimo -> color canónico`\n\ngrafito -> gris antracita\nantracita -> gris antracita\nwengué -> marrón oscuro\ncrudo -> beige'},
-    material:{title:'Materiales', seed:'# Materiales\nMateriales reconocidos y su desambiguación (qué son y qué NO son). Una por línea:\n`material — nota de desambiguación`\n\nteca — madera; NO confundir con la marca "Teka"\nMDF — tablero de fibra; escribir en mayúsculas\nroble macizo — material real; no es "efecto roble" (acabado ≠ material)\naluminio — metal; no "aluminizado"'},
-    abrev:{title:'Abreviaturas y símbolos', seed:'# Abreviaturas y símbolos\nAbreviaturas y símbolos admitidos, con cuándo se usan. Una por línea:\n`abreviatura — significado — cuándo se admite`\n\ncm — centímetros — dimensiones\nØ — diámetro — tornillería, tubos, perfiles\nW — vatios — iluminación / electricidad\nIP44 — grado de protección — solo si el fabricante lo indica'}
-  };
-  var _cfgVocabExpanded=false;
-  (function(){ Object.keys(_cfgVocab).forEach(function(k){ if(_cfgPrompts['vocab:'+k]==null)_cfgPrompts['vocab:'+k]=_cfgVocab[k].seed; if(_cfgMeta['vocab:'+k]==null)_cfgMeta['vocab:'+k]='10 ago 2026, 17:32 · Ana García'; }); })();
-  var _motorBaseline={ prompts:Object.assign({},_cfgPrompts), meta:Object.assign({},_cfgMeta) };
-  var _motorVer='v1.4';
-  var _motorRestoreV=null;
-  var _motorPub='12 ago 2026, 09:10';
-  var _motorDirty=false;
-  var _motorDirtyKeys={};
-  var _motorHistory=[
-    {v:'v1.4', when:'12 ago 2026, 09:10', author:'Ana García', title:'Ortografía y vocabulario en Herramientas', levels:['Familia: Herramientas']},
-    {v:'v1.3', when:'28 jul 2026, 16:40', author:'Miquel Soler', title:'Unidades y sinónimos de color', levels:['Prompt general']},
-    {v:'v1.2', when:'10 jul 2026, 11:05', author:'Ana García', title:'Versión inicial', levels:['Prompt general','Familia: Puertas y ventanas']}
+
+  var _qReglas=[
+    { disp:'«uds»', motivo:'Abreviatura aceptada', check:'Abreviaturas incorrectas', ambito:'General', autor:'Ana García', fecha:'2 sep', silencia:1240, origen:52, on:true },
+    { disp:'«inox ≈ acero inoxidable»', motivo:'Valores equivalentes', check:'Discrepancia de material', ambito:'General', autor:'Ana García', fecha:'5 sep', silencia:890, origen:31, on:true },
+    { disp:'«gr»', motivo:'Abreviatura aceptada', check:'Abreviaturas incorrectas', ambito:'Sección · Herramientas', autor:'Laura Pons', fecha:'18 sep', silencia:340, origen:14, on:true },
+    { disp:'«Ø»', motivo:'No aplica a esta categoría', check:'Símbolos extraños', ambito:'Sección · Fontanería y calefacción', autor:'Miquel Soler', fecha:'21 sep', silencia:96, origen:9, on:true },
+    { disp:'«mate ≈ satinado»', motivo:'Valores equivalentes', check:'Discrepancia de color', ambito:'Modelo · MOD_201540', autor:'Laura Pons', fecha:'25 sep', silencia:23, origen:6, on:false }
   ];
-  function cfgSearch(v){ _cfgSearch=(v||'').toLowerCase(); renderCfgTree(); }
-  function _nowDT(){ var d=new Date(); return d.toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'})+', '+d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}); }
-  function _cfgNow(){ return _nowDT()+' · '+_CFG_USER; }
-  function cfgKey(sel){ if(sel.level==='general')return 'general'; if(sel.level==='vocab')return 'vocab:'+sel.voc; if(sel.level==='familia')return 'fam:'+sel.fam; return 'mod:'+sel.fam+':'+sel.mod; }
-  function cfgSelect(level,fam,mod){ _cfgSel={level:level,fam:(fam==null?_cfgSel.fam:fam),mod:(mod==null?_cfgSel.mod:mod)}; renderConfig(); }
-  function cfgToggleFam(i){ _cfgExpanded[i]=!_cfgExpanded[i]; renderConfig(); }
-  function cfgOpenFam(i){ _cfgExpanded[i]=true; cfgSelect('familia',i); }
-  function renderConfig(){ renderMotorBar(); renderCfgTree(); renderCfgNode(); }
-  function _cfgItem(active){ return 'display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;'+(active?'background:var(--success-bg);color:var(--green);font-weight:700;':'color:var(--text-body);'); }
-  function _cfgHasDirty(level,fi,mi){ if(level==='vocabParent'){ for(var vk in _motorDirtyKeys){ if(vk.indexOf('vocab:')===0)return true; } return false; } if(level==='vocabItem')return !!_motorDirtyKeys['vocab:'+fi]; if(level==='general')return !!_motorDirtyKeys['general']; if(level==='familia'){ if(_motorDirtyKeys['fam:'+fi])return true; var pre='mod:'+fi+':'; for(var k in _motorDirtyKeys){ if(k.indexOf(pre)===0)return true; } return false; } return !!_motorDirtyKeys['mod:'+fi+':'+mi]; }
-  function _cfgDot(on){ return on?'<span style="width:8px;height:8px;border-radius:50%;background:#e0850b;flex-shrink:0;margin-left:auto;" title="Cambios sin publicar"></span>':''; }
-  function _cfgDirtySty(on,active){ return (on&&!active)?'font-weight:600;color:var(--text-ink);':''; }
-  function renderCfgTree(){ var el=document.getElementById('v-cfg-tree'); if(!el)return; var sel=_cfgSel; var q=_cfgSearch;
-    var gDirty=_cfgHasDirty('general'), gAct=sel.level==='general';
-    var html='<div onclick="cfgSelect(\'general\')" style="'+_cfgItem(gAct)+_cfgDirtySty(gDirty,gAct)+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>Prompt general'+_cfgDot(gDirty)+'</div>';
-    var vpDirty=_cfgHasDirty('vocabParent');
-    html+='<div style="margin-top:2px;"><div style="display:flex;align-items:center;"><button onclick="cfgToggleVocab()" style="background:none;border:none;cursor:pointer;padding:6px;display:flex;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate('+(_cfgVocabExpanded?'90deg':'0deg')+');transition:transform .15s;"><polyline points="9 18 15 12 9 6"/></svg></button><div onclick="cfgOpenVocab()" style="flex:1;'+_cfgItem(false)+_cfgDirtySty(vpDirty,false)+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Vocabulario y listas'+_cfgDot(vpDirty)+'</div></div>';
-    if(_cfgVocabExpanded){ html+='<div style="margin-left:20px;border-left:1px solid var(--border-card);padding-left:6px;">'; Object.keys(_cfgVocab).forEach(function(vk){ var vAct=(sel.level==='vocab'&&sel.voc===vk); var vd=_cfgHasDirty('vocabItem',vk); html+='<div onclick="cfgSelectVocab(\''+vk+'\')" style="'+_cfgItem(vAct)+_cfgDirtySty(vd,vAct)+'">'+_cfgVocab[vk].title+_cfgDot(vd)+'</div>'; }); html+='</div>'; }
-    html+='</div>';
-    _cfgFamilias.forEach(function(fam,fi){ var famMatch=(!q||fam.name.toLowerCase().indexOf(q)>=0); var mods=[]; fam.modelos.forEach(function(m,mi){ if(!q||famMatch||m.name.toLowerCase().indexOf(q)>=0) mods.push({m:m,mi:mi}); }); if(q && !famMatch && mods.length===0) return; var exp=q?true:_cfgExpanded[fi]; var famActive=(sel.level==='familia'&&sel.fam===fi); var fDirty=_cfgHasDirty('familia',fi);
-      html+='<div style="margin-top:2px;"><div style="display:flex;align-items:center;"><button onclick="cfgToggleFam('+fi+')" style="background:none;border:none;cursor:pointer;padding:6px;display:flex;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate('+(exp?'90deg':'0deg')+');transition:transform .15s;"><polyline points="9 18 15 12 9 6"/></svg></button><div onclick="cfgOpenFam('+fi+')" style="flex:1;'+_cfgItem(famActive)+_cfgDirtySty(fDirty,famActive)+'">'+fam.name+_cfgDot(fDirty)+'</div></div>';
-      if(exp){ html+='<div style="margin-left:20px;border-left:1px solid var(--border-card);padding-left:6px;">'; mods.forEach(function(x){ var mActive=(sel.level==='modelo'&&sel.fam===fi&&sel.mod===x.mi); var mDirty=_cfgHasDirty('modelo',fi,x.mi); html+='<div onclick="cfgSelect(\'modelo\','+fi+','+x.mi+')" style="'+_cfgItem(mActive)+_cfgDirtySty(mDirty,mActive)+'"><span style="color:var(--text-muted);font-weight:500;font-size:11px;font-variant-numeric:tabular-nums;margin-right:7px;">'+x.m.code+'</span>'+x.m.name+_cfgDot(mDirty)+'</div>'; }); html+='</div>'; }
-      html+='</div>';
-    });
-    el.innerHTML=html;
-  }
-  function cfgSelectVocab(key){ _cfgSel={level:'vocab',fam:_cfgSel.fam,mod:_cfgSel.mod,voc:key}; renderConfig(); }
-  function cfgToggleVocab(){ _cfgVocabExpanded=!_cfgVocabExpanded; renderCfgTree(); }
-  function cfgOpenVocab(){ _cfgVocabExpanded=true; cfgSelectVocab(Object.keys(_cfgVocab)[0]); }
-  function renderCfgNode(){ var el=document.getElementById('v-cfg-node'); if(!el)return; var sel=_cfgSel; var key=cfgKey(sel); var titleHtml, guideLink='';
-    if(sel.level==='general'){ titleHtml='Prompt general'; }
-    else if(sel.level==='vocab'){ titleHtml=_cfgVocab[sel.voc].title; }
-    else if(sel.level==='familia'){ titleHtml=_cfgFamilias[sel.fam].name; }
-    else { var fam=_cfgFamilias[sel.fam]; var m=fam.modelos[sel.mod]; titleHtml=m.name+' <span style="font-size:14px;font-weight:500;color:var(--text-muted);font-variant-numeric:tabular-nums;">'+m.code+'</span>'; guideLink='<button onclick="openCfgGuia('+sel.fam+','+sel.mod+')" style="flex-shrink:0;background:none;border:none;color:var(--green);font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:\'Inter\',system-ui,sans-serif;">Ver resumen de la guía<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>'; }
-    var meta=_cfgMeta[key]; var metaHtml=meta?('<div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Última modificación: <strong style="color:var(--text-body);">'+meta+'</strong></div>'):'';
-    var promptVal=(_cfgPrompts[key]||'').replace(/</g,'&lt;');
-    var ph=(sel.level==='vocab')?'Una entrada por línea, en formato Markdown…':(sel.level==='general')?'Reglas transversales…':(sel.level==='familia'?'Reglas propias de esta familia (además de las heredadas)…':'Reglas/excepciones de este modelo: vocabulario válido, sinónimos, matices…');
-    el.innerHTML='<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;"><div style="font-size:20px;font-weight:700;color:var(--text-ink);">'+titleHtml+'</div>'+guideLink+'</div>'+metaHtml
-      +'<textarea id="v-cfg-textarea" oninput="cfgDirtyCheck()" rows="14" placeholder="'+ph+'" style="margin-top:22px;width:100%;border:1px solid var(--border-input);border-radius:10px;padding:14px 16px;font-size:13px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-ink);outline:none;box-sizing:border-box;resize:vertical;line-height:1.6;">'+promptVal+'</textarea>'
-      +'<div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;"><button id="v-cfg-save" onclick="cfgSavePrompt()" class="btn btn-primary" disabled style="height:44px;opacity:0.45;cursor:default;">Guardar cambios</button></div>';
-  }
-  function _cfgGuiaSec(t,d){ return '<div style="margin-bottom:16px;"><div style="font-size:12px;font-weight:700;color:var(--text-ink);margin-bottom:3px;">'+t+'</div><div style="font-size:12px;color:var(--text-muted);line-height:1.5;">'+d+'</div></div>'; }
-  function openCfgGuia(fi,mi){ var fam=_cfgFamilias[fi]; var m=fam.modelos[mi]; var t=document.getElementById('cfg-guia-title'), su=document.getElementById('cfg-guia-sub'); if(t)t.innerHTML=m.name+' <span style="font-size:13px;color:var(--text-muted);font-weight:500;">'+m.code+'</span>'; if(su)su.innerHTML='Guía de estilo · '+fam.name+' · <span style="color:var(--text-muted);">contenido de ejemplo (se edita en Guías)</span>'; var list=document.getElementById('cfg-guia-attrs'); if(list){ var attrs=[['Tipo de producto','ATT_22088'],['Material principal','ATT_10840'],['Color','ATT_04261'],['Dimensiones (en cm)','ATT_00053'],['Lugar de uso','ATT_13826'],['Tipo de instalación','ATT_01758'],['Acabado del producto','ATT_10842'],['Estilo internacional','ATT_25415']]; var h=''; attrs.forEach(function(a,i){ if(i>0)h+='<div style="border-top:1px solid var(--border-card);"></div>'; h+='<div style="display:flex;align-items:center;gap:12px;padding:11px 0;"><span style="font-size:14px;color:var(--text-body);flex:1;">'+a[0]+'</span><span style="font-size:12px;color:var(--text-muted);font-variant-numeric:tabular-nums;">'+a[1]+'</span></div>'; }); list.innerHTML=h; } document.getElementById('guia-modal').classList.add('open'); }
-  function closeCfgGuia(){ var g=document.getElementById('guia-modal'); if(g)g.classList.remove('open'); }
-  function cfgDirtyCheck(){ var ta=document.getElementById('v-cfg-textarea'); var b=document.getElementById('v-cfg-save'); if(!ta||!b)return; var changed=(ta.value!==(_cfgPrompts[cfgKey(_cfgSel)]||'')); b.disabled=!changed; b.style.opacity=changed?'1':'0.45'; b.style.cursor=changed?'pointer':'default'; }
-  function cfgSavePrompt(){ var ta=document.getElementById('v-cfg-textarea'); if(ta)_cfgPrompts[cfgKey(_cfgSel)]=ta.value; _cfgMeta[cfgKey(_cfgSel)]=_cfgNow(); _motorDirty=true; _motorDirtyKeys[cfgKey(_cfgSel)]=true; renderMotorBar(); renderCfgTree(); renderCfgNode(); }
-  function _cfgLevelLabel(key){ if(key==='general')return 'Prompt general'; var p=key.split(':'); if(p[0]==='vocab')return 'Vocabulario: '+(_cfgVocab[p[1]]?_cfgVocab[p[1]].title:p[1]); if(p[0]==='fam')return 'Familia: '+_cfgFamilias[+p[1]].name; if(p[0]==='mod'){ var _m=_cfgFamilias[+p[1]].modelos[+p[2]]; return 'Modelo: '+_m.name+(_m.code?(' · '+_m.code):''); } return key; }
-  function renderMotorBar(){ var el=document.getElementById('v-cfg-motorbar'); if(!el)return; var keys=Object.keys(_motorDirtyKeys); var n=keys.length;
-    var div='<div style="border-top:1px solid var(--border-card);margin:16px 0;"></div>';
-    var hist='<button onclick="openMotorHistory()" style="margin-top:6px;background:none;border:none;color:var(--green);font-size:13px;font-weight:700;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;display:inline-flex;align-items:center;gap:6px;padding:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Historial</button>';
-    var dirtyBlock=n?(div+'<button onclick="openMotorPending()" style="width:100%;display:flex;align-items:center;gap:9px;background:#fbf4d8;border:1px solid #e8d488;border-radius:8px;padding:9px 12px;cursor:pointer;text-align:left;font-family:\'Inter\',system-ui,sans-serif;"><span style="width:7px;height:7px;border-radius:50%;background:#e0850b;flex-shrink:0;"></span><span style="flex:1;font-size:12.5px;font-weight:700;color:#7a5a00;">'+n+' '+(n===1?'cambio':'cambios')+' sin publicar</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7a5a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button><button onclick="openMotorPublish()" class="btn btn-primary" style="width:100%;height:40px;margin-top:12px;display:flex;align-items:center;justify-content:center;">Publicar nueva versión</button><button onclick="openMotorDiscard()" style="display:block;width:100%;margin-top:8px;background:none;border:none;color:var(--text-muted);font-size:13px;font-weight:600;cursor:pointer;padding:9px 0;font-family:\'Inter\',system-ui,sans-serif;text-align:center;">Cancelar cambios</button>'):'';
-    el.innerHTML='<div style="background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:18px 20px;"><div style="display:flex;align-items:stretch;gap:10px;"><span style="background:var(--text-ink);color:#fff;border-radius:8px;padding:6px 12px;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;display:flex;align-items:center;justify-content:center;">'+_motorVer+'</span><div style="margin-left:auto;text-align:left;"><div style="font-size:12px;color:var(--text-muted);">Publicado <strong style="color:var(--text-body);">'+_motorPub+'</strong></div>'+hist+'</div></div>'+dirtyBlock+'</div>'; }
-  function motorPublish(title){ var keys=Object.keys(_motorDirtyKeys); if(!keys.length)return; var num=parseFloat(_motorVer.slice(1)); num=Math.round((num+0.1)*10)/10; _motorVer='v'+num.toFixed(1); _motorPub=_nowDT(); _motorHistory.unshift({v:_motorVer, when:_motorPub, author:_CFG_USER, title:(title||'Cambios publicados'), levels:keys.map(_cfgLevelLabel)}); _motorBaseline={ prompts:Object.assign({},_cfgPrompts), meta:Object.assign({},_cfgMeta) }; _motorDirty=false; _motorDirtyKeys={}; renderMotorBar(); renderCfgTree(); }
-  function openMotorHistory(){ renderMotorHistList(); document.getElementById('v-motor-hist-modal').classList.add('open'); }
-  function closeMotorHistory(){ document.getElementById('v-motor-hist-modal').classList.remove('open'); }
-  function motorRestore(v){ var old=null; for(var i=0;i<_motorHistory.length;i++){ if(_motorHistory[i].v===v){old=_motorHistory[i];break;} } var num=parseFloat(_motorVer.slice(1)); num=Math.round((num+0.1)*10)/10; _motorVer='v'+num.toFixed(1); _motorPub=_nowDT(); _motorHistory.unshift({v:_motorVer, when:_motorPub, author:_CFG_USER, title:'Restauración de '+v+((old&&old.title)?(' — '+old.title):''), levels:['Se restauró el estado de la versión '+v]}); _motorDirty=false; _motorDirtyKeys={}; closeMotorHistory(); renderMotorBar(); renderCfgTree(); }
-  function renderMotorHistList(){ var el=document.getElementById('v-motor-hist-list'); if(!el)return; el.innerHTML=_motorHistory.map(function(h,i){ var cur=(h.v===_motorVer); var badgeSty='background:'+(cur?'var(--text-ink)':'#f0f0ee')+';color:'+(cur?'#fff':'var(--text-muted)')+';border-radius:8px;padding:0 11px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0;display:flex;align-items:center;justify-content:center;'; var lv=(h.levels&&h.levels.length)?h.levels.map(function(x){return '<div style="font-size:13px;color:var(--text-body);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--text-muted);">•</span><span>'+x+'</span></div>';}).join(''):'<div style="font-size:13px;color:var(--text-muted);">—</div>'; return '<div style="border-top:'+(i>0?'1px solid var(--border-card)':'none')+';"><div onclick="motorHistToggle('+i+')" style="display:flex;align-items:stretch;gap:12px;padding:14px 0;cursor:pointer;"><span style="'+badgeSty+'">'+h.v+'</span><div style="flex:1;min-width:0;display:flex;align-items:center;gap:12px;"><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;color:var(--text-ink);">'+(h.title||'Cambios publicados')+'</div><div style="font-size:12px;color:var(--text-muted);margin-top:7px;">'+h.when+' · '+(h.author||'—')+(cur?' · versión actual':'')+'</div></div>'+(cur?'':'<button onclick="event.stopPropagation();openMotorRestore(\''+h.v+'\')" style="flex-shrink:0;background:#fff;border:1px solid var(--border-card);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--green);cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;">Restaurar</button>')+'<span id="v-mhist-chev-'+i+'" style="display:flex;flex-shrink:0;transition:transform .2s;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></div></div><div id="v-mhist-body-'+i+'" style="display:none;"><div style="display:flex;gap:12px;padding:2px 0 14px;"><span style="visibility:hidden;'+badgeSty+'">'+h.v+'</span><div style="flex:1;min-width:0;">'+lv+'</div></div></div></div>'; }).join(''); }
-  function motorHistToggle(i){ var b=document.getElementById('v-mhist-body-'+i); var c=document.getElementById('v-mhist-chev-'+i); if(!b)return; var op=b.style.display==='none'; b.style.display=op?'block':'none'; if(c)c.style.transform=op?'rotate(180deg)':''; }
-  function openMotorPending(){ renderMotorPendList(); document.getElementById('v-motor-pend-modal').classList.add('open'); }
-  function closeMotorPending(){ document.getElementById('v-motor-pend-modal').classList.remove('open'); }
-  function renderMotorPendList(){ var el=document.getElementById('v-motor-pend-list'); if(!el)return; var keys=Object.keys(_motorDirtyKeys); if(!keys.length){ el.innerHTML='<div style="font-size:13px;color:var(--text-muted);padding:8px 0;">No hay cambios sin publicar.</div>'; return; } el.innerHTML=keys.map(function(key,i){ var when=_cfgMeta[key]||''; return '<button onclick="cfgGoToKey(\''+key+'\')" style="width:100%;text-align:left;display:flex;align-items:center;gap:12px;padding:14px 0;background:none;border:none;border-top:1px solid var(--border-card);cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;"><div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;color:var(--text-ink);">'+_cfgLevelLabel(key)+'</div><div style="font-size:12px;color:var(--text-muted);margin-top:3px;">'+(when?('editado '+when):'')+'</div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>'; }).join(''); }
-  function cfgGoToKey(key){ closeMotorPending(); if(key==='general'){ cfgSelect('general'); return; } var p=key.split(':'); if(p[0]==='fam'){ cfgSelect('familia',+p[1]); } else if(p[0]==='mod'){ _cfgExpanded[+p[1]]=true; cfgSelect('modelo',+p[1],+p[2]); } }
-  function openMotorRestore(v){ var h=null; for(var i=0;i<_motorHistory.length;i++){ if(_motorHistory[i].v===v){h=_motorHistory[i];break;} } if(!h)return; _motorRestoreV=v; document.getElementById('v-motor-restore-badge').textContent=h.v; document.getElementById('v-motor-restore-title').textContent=h.title||'Cambios publicados'; document.getElementById('v-motor-restore-meta').textContent=h.when+' · '+(h.author||'—'); document.getElementById('v-motor-restore-form').style.display='block'; document.getElementById('v-motor-restore-progress').style.display='none'; document.getElementById('v-motor-restore-done').style.display='none'; document.getElementById('v-motor-restore-modal').classList.add('open'); }
-  function closeMotorRestore(){ document.getElementById('v-motor-restore-modal').classList.remove('open'); }
-  function confirmMotorRestore(){ document.getElementById('v-motor-restore-form').style.display='none'; document.getElementById('v-motor-restore-progress').style.display='flex'; setTimeout(function(){ motorRestore(_motorRestoreV); document.getElementById('v-motor-restore-progress').style.display='none'; var dv=document.getElementById('v-motor-restore-done-v'); if(dv)dv.textContent=_motorRestoreV; document.getElementById('v-motor-restore-done').style.display='flex'; setTimeout(closeMotorRestore,1100); }, 900); }
-  function openMotorDiscard(){ if(!_motorDirty)return; var el=document.getElementById('v-motor-discard-count'); if(el){ var k=Object.keys(_motorDirtyKeys).length; el.textContent=k+' '+(k===1?'cambio':'cambios'); } document.getElementById('v-motor-discard-modal').classList.add('open'); }
-  function closeMotorDiscard(){ document.getElementById('v-motor-discard-modal').classList.remove('open'); }
-  function confirmMotorDiscard(){ _cfgPrompts=Object.assign({},_motorBaseline.prompts); _cfgMeta=Object.assign({},_motorBaseline.meta); _motorDirty=false; _motorDirtyKeys={}; closeMotorDiscard(); renderConfig(); }
-  function openMotorPublish(){ if(!_motorDirty)return; document.getElementById('v-motor-pub-form').style.display='block'; document.getElementById('v-motor-pub-progress').style.display='none'; document.getElementById('v-motor-pub-done').style.display='none'; var inp=document.getElementById('v-motor-pub-name'); if(inp)inp.value=''; document.getElementById('v-motor-pub-modal').classList.add('open'); if(inp)setTimeout(function(){inp.focus();},60); }
-  function closeMotorPublish(){ document.getElementById('v-motor-pub-modal').classList.remove('open'); }
-  function confirmMotorPublish(){ var inp=document.getElementById('v-motor-pub-name'); var title=(inp&&inp.value.trim())||'Cambios publicados'; document.getElementById('v-motor-pub-form').style.display='none'; document.getElementById('v-motor-pub-progress').style.display='flex'; setTimeout(function(){ motorPublish(title); document.getElementById('v-motor-pub-progress').style.display='none'; var dv=document.getElementById('v-motor-pub-done-v'); if(dv)dv.textContent=_motorVer; document.getElementById('v-motor-pub-done').style.display='flex'; setTimeout(closeMotorPublish,1100); }, 900); }
+
+  var _qDicc=[
+    { n:'Colores', e:142, m:'28 sep · Ana García', d:'Tonos y sus equivalencias. Lo que no está aquí no se compara.' },
+    { n:'Materiales', e:98, m:'20 sep · Laura Pons', d:'Distingue de qué está hecho de para qué sirve.' },
+    { n:'Erratas conocidas', e:110, m:'26 sep · Ana García', d:'Lista cerrada de erratas y tildes habituales del catálogo.' },
+    { n:'Abreviaturas', e:64, m:'18 sep · Laura Pons', d:'Las de la RAE y los plurales correctos de símbolos.' },
+    { n:'Unidades', e:38, m:'2 sep · Ana García', d:'Unidades admitidas y su formato.' },
+    { n:'Símbolos', e:29, m:'2 sep · Ana García', d:'Caracteres permitidos en un texto de producto.' }
+  ];
+
+  var _qTab='pend', _qOpen={}, _qOpenAud={}, _qResId=null, _qResOpt='regla', _qResAmb='', _qResolved={};
+
+  function qDescartes(g){ var n=0; g.auds.forEach(function(a){ n+=a.refs.length; }); return n; }
+  function qSecciones(g){ var m={}; g.auds.forEach(function(a){ m[a.sec]=(m[a.sec]||0)+a.refs.length; }); return m; }
+  function qModelos(g){ var m={}; g.auds.forEach(function(a){ a.refs.forEach(function(r){ m[r.m]=1; }); }); return Object.keys(m).length; }
+  function qPend(){ return _qGrupos.filter(function(g){ return !_qResolved[g.id]; }); }
+
+  function renderConfig(){ renderQMetrics(); renderQTabs(); renderQPanel(); }
+  function setQTab(t){ _qTab=t; renderQTabs(); renderQPanel(); }
+
+  function renderQMetrics(){ var el=document.getElementById('v-motor-metrics'); if(!el) return;
+    var desc=0, auds={}; _qGrupos.forEach(function(g){ desc+=qDescartes(g); g.auds.forEach(function(a){auds[a.aud]=1;}); });
+    var act=_qReglas.filter(function(r){return r.on;}), sil=0; act.forEach(function(r){ sil+=r.silencia; });
+    var nAud=0; for(var k in auds) nAud++;
+    // Sin ratio: los descartes vienen de varias auditorías y las alertas son de una, así
+    // que el porcentaje no tendría denominador. En producción sí, y es la métrica que dice
+    // si el bucle funciona.
+    el.innerHTML='<strong style="color:var(--text-body);">'+fmtNum(desc)+' descartes</strong> de '+nAud+' auditorías · '
+      +qPend().length+' casos por resolver · '+act.length+' reglas activas, que silencian <strong style="color:var(--text-body);">'+fmtNum(sil)+' alertas</strong>'; }
+
+  function renderQTabs(){ var el=document.getElementById('v-motor-tabs'); if(!el) return;
+    var t=function(k,label,n){ var on=(_qTab===k);
+      return '<button onclick="setQTab(\''+k+'\')" style="height:48px;padding:0 18px;background:none;border:none;border-bottom:2px solid '+(on?'var(--green)':'transparent')+';font-family:\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:'+(on?'700':'600')+';color:'+(on?'var(--text-ink)':'var(--text-muted)')+';cursor:pointer;display:inline-flex;align-items:center;gap:8px;">'+label
+        +(n!==null?'<span style="background:var(--bg-parchment);color:'+(on?'var(--text-ink)':'var(--text-body)')+';border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700;">'+n+'</span>':'')+'</button>'; };
+    el.innerHTML=t('pend','Por resolver',qPend().length)+t('reglas','Reglas',_qReglas.length)+t('dicc','Diccionarios',null); }
+
+  function renderQPanel(){ var el=document.getElementById('v-motor-panel'); if(!el) return;
+    if(_qTab==='pend') el.innerHTML=qPendHtml();
+    else if(_qTab==='reglas') el.innerHTML=qReglasHtml();
+    else el.innerHTML=qDiccHtml(); }
+
+  // ── Por resolver ───────────────────────────────────────────────────────────
+  function qPendHtml(){
+    var gs=qPend();
+    if(!gs.length) return '<div style="padding:40px;text-align:center;color:var(--text-muted);font-size:13px;">No hay descartes pendientes de resolver.</div>';
+    return gs.map(function(g,i){
+      var abierto=!!_qOpen[g.id], n=qDescartes(g), secs=qSecciones(g);
+      var secTxt=Object.keys(secs).map(function(s){ return s+' ('+secs[s]+')'; }).join(' · ');
+      var aviso=g.reglaPrevia?'<div style="margin-top:8px;display:inline-flex;align-items:center;gap:8px;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:8px;padding:6px 11px;font-size:12px;color:var(--warning-text);"><strong>Ya existe una regla</strong> para este disparador en '+g.reglaPrevia.ambito+' — vuelve a aparecer fuera de su ámbito.</div>':'';
+      return '<div style="'+(i?'border-top:1px solid var(--border-card);':'')+'">'
+        +'<div style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;">'
+          +'<button onclick="qToggle(\''+g.id+'\')" style="background:none;border:none;cursor:pointer;padding:2px 0 0;color:var(--text-muted);flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .18s ease;'+(abierto?'transform:rotate(90deg);':'')+'"><polyline points="9 18 15 12 9 6"/></svg></button>'
+          +'<div style="flex:1;min-width:0;">'
+            +'<div style="font-size:14px;font-weight:700;color:var(--text-ink);">'+g.disp+' <span style="color:var(--text-muted);font-weight:500;">·</span> '+g.motivo+'</div>'
+            +'<div style="font-size:12px;color:var(--text-muted);margin-top:3px;">'+g.check+' · <strong style="color:var(--text-body);">'+n+' descartes</strong> · '+g.auds.length+' auditorías · '+qModelos(g)+' modelos</div>'
+            +'<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">'+secTxt+'</div>'
+            +aviso
+          +'</div>'
+          +'<button onclick="openRes(\''+g.id+'\')" class="btn btn-primary" style="height:36px;font-size:13px;padding:0 16px;flex-shrink:0;">Resolver</button>'
+        +'</div>'
+        +(abierto?qAudsHtml(g):'')
+      +'</div>'; }).join(''); }
+
+  function qToggle(id){ _qOpen[id]=!_qOpen[id]; renderQPanel(); }
+  function qToggleAud(id){ _qOpenAud[id]=!_qOpenAud[id]; renderQPanel(); }
+
+  function qAudsHtml(g){
+    return '<div style="padding:0 20px 14px 52px;">'+g.auds.map(function(a){
+      var k=g.id+'-'+a.aud, ab=!!_qOpenAud[k];
+      return '<div style="border:1px solid var(--border-card);border-radius:10px;margin-bottom:8px;overflow:hidden;">'
+        +'<div onclick="qToggleAud(\''+k+'\')" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f7f7f8;cursor:pointer;">'
+          +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .18s ease;flex-shrink:0;'+(ab?'transform:rotate(90deg);':'')+'"><polyline points="9 18 15 12 9 6"/></svg>'
+          +'<span style="font-size:12px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums;">#'+a.aud+'</span>'
+          +'<span style="font-size:12px;color:var(--text-body);">'+a.per+'</span>'
+          +'<span style="margin-left:auto;font-size:12px;color:var(--text-muted);">'+a.rev+' · '+a.fecha+' · '+a.refs.length+' refs</span>'
+        +'</div>'
+        +(ab?'<div style="padding:4px 14px 10px;">'+a.refs.map(function(r,i){
+            return '<div style="display:flex;align-items:baseline;gap:12px;padding:7px 0;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
+              +'<a href="https://www.leroymerlin.es/productos/ref-'+r.r+'.html" target="_blank" rel="noopener" style="font-size:12px;font-weight:700;color:var(--green);text-decoration:none;font-variant-numeric:tabular-nums;min-width:74px;">'+r.r+'</a>'
+              +'<span style="font-size:11px;color:var(--text-muted);min-width:82px;">'+r.m+'</span>'
+              +'<span style="font-size:12px;color:var(--text-body);">'+r.d+'</span></div>'; }).join('')+'</div>':'')
+      +'</div>'; }).join('')+'</div>'; }
+
+  // ── Reglas ─────────────────────────────────────────────────────────────────
+  function qReglasHtml(){
+    var rs=_qReglas.slice().sort(function(a,b){ return b.silencia-a.silencia; });
+    return rs.map(function(r,i){
+      return '<div style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;'+(i?'border-top:1px solid var(--border-card);':'')+(r.on?'':'opacity:.55;')+'">'
+        +'<div style="flex:1;min-width:0;">'
+          +'<div style="font-size:14px;font-weight:700;color:var(--text-ink);">'+r.disp+' <span style="color:var(--text-muted);font-weight:500;">·</span> '+r.motivo+'</div>'
+          +'<div style="font-size:12px;color:var(--text-muted);margin-top:3px;">'+r.check+' · ámbito <strong style="color:var(--text-body);">'+r.ambito+'</strong> · '+r.autor+' · '+r.fecha+'</div>'
+          +'<div style="font-size:12px;color:var(--text-body);margin-top:5px;">'+(r.on?'Silencia <strong>'+fmtNum(r.silencia)+' alertas</strong> en la última auditoría':'<span style="color:var(--text-muted);">Desactivada — devolvería '+fmtNum(r.silencia)+' alertas</span>')+' · nació de '+r.origen+' descartes</div>'
+        +'</div>'
+        +'<button onclick="qToggleRegla('+i+')" style="background:#fff;border:1px solid var(--border-input);border-radius:8px;height:34px;padding:0 14px;font-size:12px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);flex-shrink:0;">'+(r.on?'Desactivar':'Activar')+'</button>'
+      +'</div>'; }).join(''); }
+
+  function qToggleRegla(i){ var rs=_qReglas.slice().sort(function(a,b){ return b.silencia-a.silencia; });
+    var r=rs[i]; if(r) r.on=!r.on; renderQMetrics(); renderQPanel(); }
+
+  // ── Diccionarios ───────────────────────────────────────────────────────────
+  function qDiccHtml(){
+    return '<div style="padding:16px 20px 4px;font-size:12.5px;color:var(--text-muted);line-height:1.55;">'
+      +'El motor solo compara lo que está en sus diccionarios: <strong style="color:var(--text-body);">si un color o un material no figura aquí, no se compara y no salta ninguna alerta</strong>. '
+      +'Una ficha sin avisos no siempre está correcta — puede que no se haya podido comprobar. De momento son de solo lectura.</div>'
+      +_qDicc.map(function(d,i){
+      return '<div style="display:flex;align-items:center;gap:16px;padding:14px 20px;'+(i?'border-top:1px solid var(--border-card);':'border-top:1px solid var(--border-card);')+'">'
+        +'<div style="flex:1;min-width:0;"><div style="font-size:13.5px;font-weight:700;color:var(--text-ink);">'+d.n+'</div>'
+        +'<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">'+d.d+'</div></div>'
+        +'<div style="text-align:right;flex-shrink:0;"><div style="font-size:15px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+d.e+'</div>'
+        +'<div style="font-size:11px;color:var(--text-muted);margin-top:2px;">entradas · '+d.m+'</div></div>'
+      +'</div>'; }).join(''); }
+
+  // ── Resolución ─────────────────────────────────────────────────────────────
+  function qFind(id){ return _qGrupos.filter(function(g){return g.id===id;})[0]; }
+  function openRes(id){ var g=qFind(id); if(!g) return;
+    _qResId=id; _qResOpt='regla';
+    var secs=qSecciones(g), ks=Object.keys(secs);
+    _qResAmb=ks.length===1?('Sección · '+ks[0]):'General';
+    renderRes(); document.getElementById('v-res-modal').classList.add('open'); }
+  function closeRes(){ document.getElementById('v-res-modal').classList.remove('open'); _qResId=null; }
+  function setResOpt(o){ _qResOpt=o; renderRes(); }
+  function setResAmb(v){ _qResAmb=v; renderRes(); }
+
+  function renderRes(){ var g=qFind(_qResId); if(!g) return;
+    var n=qDescartes(g), secs=qSecciones(g), ks=Object.keys(secs);
+    document.getElementById('v-res-title').textContent=g.disp+' · '+g.motivo;
+    document.getElementById('v-res-sub').innerHTML=g.check+' · <strong style="color:var(--text-body);">'+n+' descartes</strong> · '+g.auds.length+' auditorías · '+qModelos(g)+' modelos';
+
+    var revs={}; g.auds.forEach(function(a){ revs[a.rev]=1; });
+    var ev='<div style="background:var(--bg-parchment);border-radius:10px;padding:14px 16px;">'
+      +'<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px;">Lo que silenciaría</div>'
+      +'<div style="font-size:12.5px;color:var(--text-ink);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.5;">'+g.reason+'</div></div>'
+      +'<div style="display:flex;gap:28px;margin-top:16px;flex-wrap:wrap;">'
+      +'<div><div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;">Reparto</div>'
+      + ks.map(function(s){ return '<div style="font-size:12.5px;color:var(--text-body);padding:2px 0;">'+s+' <strong>'+secs[s]+'</strong></div>'; }).join('')+'</div>'
+      +'<div><div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;">Quién y cuándo</div>'
+      + g.auds.map(function(a){ return '<div style="font-size:12.5px;color:var(--text-body);padding:2px 0;">#'+a.aud+' · '+a.rev+' · '+a.fecha+'</div>'; }).join('')+'</div></div>';
+    if(g.reglaPrevia) ev+='<div style="margin-top:14px;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--warning-text);line-height:1.5;">'
+      +'<strong>Ya existe una regla</strong> para este disparador, en '+g.reglaPrevia.ambito+' ('+g.reglaPrevia.autor+', '+g.reglaPrevia.fecha+'). Que vuelva a aparecer fuera de ese ámbito sugiere que se quedó corta: quizá deba subir de nivel.</div>';
+    document.getElementById('v-res-evidencia').innerHTML=ev;
+
+    var opt=function(k,titulo,sub,extra){ var on=(_qResOpt===k);
+      return '<button type="button" onclick="setResOpt(\''+k+'\')" style="display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;background:'+(on?'var(--success-bg)':'#fff')+';border:1px solid '+(on?'var(--green)':'var(--border-input)')+';border-radius:10px;padding:14px 16px;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;margin-bottom:10px;">'
+        +'<span style="width:18px;height:18px;border-radius:50%;border:2px solid '+(on?'var(--green)':'var(--border-input)')+';display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">'+(on?'<span style="width:9px;height:9px;border-radius:50%;background:var(--green);"></span>':'')+'</span>'
+        +'<span style="min-width:0;flex:1;"><span style="display:block;font-size:14px;font-weight:600;color:var(--text-ink);">'+titulo+'</span>'
+        +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.5;">'+sub+'</span>'+(on?extra:'')+'</span></button>'; };
+
+    var ambSel='<div style="margin-top:11px;"><select onchange="setResAmb(this.value)" style="height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 10px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;">'
+      +['General'].concat(ks.map(function(s){return 'Sección · '+s;})).map(function(v){ return '<option'+(v===_qResAmb?' selected':'')+'>'+v+'</option>'; }).join('')+'</select></div>';
+
+    var dicc=g.dicc?opt('dicc','Corregir el diccionario','Quitar la entrada de <strong>'+g.dicc+'</strong>. Arregla el origen: el check sigue funcionando para todo lo demás.',''):'';
+    document.getElementById('v-res-opts').innerHTML=
+        opt('regla','Crear regla','Silencia este hallazgo en el ámbito que elijas. Es ceguera acotada: el check deja de avisar ahí.',ambSel)
+      + dicc
+      + opt('ign','Ignorar','El descarte era correcto para esas referencias, pero no generaliza. No se crea nada.','');
+
+    var imp=document.getElementById('v-res-impacto');
+    if(_qResOpt==='regla'){ var est=(_qResAmb==='General')?Math.round(n*34):Math.round(n*11);
+      imp.innerHTML='<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border-card);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--text-body);">'
+        +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+        +'Dejará de avisar en <strong>~'+fmtNum(est)+' referencias</strong> del catálogo.</div>'; }
+    else if(_qResOpt==='dicc'){ imp.innerHTML='<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border-card);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--text-body);">'
+        +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+        +'Afecta a todo el catálogo, pero <strong>no apaga el check</strong>: solo deja de considerar este caso un error.</div>'; }
+    else imp.innerHTML='';
+
+    var b=document.getElementById('v-res-go');
+    b.textContent=(_qResOpt==='regla')?'Crear regla':((_qResOpt==='dicc')?'Corregir diccionario':'Ignorar'); }
+
+  function aplicarRes(){ var g=qFind(_qResId); if(!g) return;
+    var n=qDescartes(g);
+    if(_qResOpt==='regla'){ _qReglas.push({disp:g.disp,motivo:g.motivo,check:g.check,ambito:_qResAmb,autor:'Ana García',fecha:'30 sep',silencia:(_qResAmb==='General')?Math.round(n*34):Math.round(n*11),origen:n,on:true}); }
+    else if(_qResOpt==='dicc'){ _qDicc.forEach(function(d){ if(d.n===g.dicc){ d.e--; d.m='30 sep · Ana García'; } }); }
+    _qResolved[g.id]=_qResOpt;
+    closeRes(); renderConfig();
+    vToast(_qResOpt==='regla'?'Regla creada · '+_qResAmb:(_qResOpt==='dicc'?'Diccionario actualizado':'Descartes ignorados')); }
+
   function fmtNum(n){ return n.toLocaleString('es-ES'); }
 
   // ─────────── HUB ───────────
