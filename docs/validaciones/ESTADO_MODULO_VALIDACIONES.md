@@ -254,10 +254,16 @@ contradicción. La puerta va sobre **la completitud**, no sobre el riesgo de com
 una descripción ausente. Se elige completitud porque es objetiva, automatizable y defendible
 ante un proveedor sin entrar a valorar.
 
-**Consecuencia en el informe, en cola.** Si la puerta es esa, **«No publicable» deja de ser una
-categoría propia y pasa a ser la consecuencia de tener un bloqueante**. Hoy son dos cifras
-separadas en la tarjeta del informe —*Con errores críticos* y *No publicable*— y probablemente
-haya que fusionarlas. No se toca hasta que Jordi y Leroy confirmen la taxonomía.
+**El informe ya está montado así, no hay que cambiar nada.** Las cajas de cifras son *Sin
+errores · Con errores leves · Con errores críticos · No publicable*: tres cubos disjuntos por
+peor severidad más el de las conformes. No existe una caja de «bloqueantes» aparte — **la de No
+publicable ya es ese nivel**, nombrada por su consecuencia en vez de por su gravedad, que además
+se lee mejor: *«1.633 no publicables»* dice qué significa, *«1.633 bloqueantes»* solo dice cuánto
+pesa.
+
+Lo único que queda desalineado es el vocabulario interno: en la matriz y en el CSV esa severidad
+se etiqueta **Bloqueante**, y en la tarjeta **No publicable**. Es el mismo nivel con dos nombres,
+uno de gravedad y otro de consecuencia. Funciona, pero conviene decidir si se unifica.
 
 ### Pendiente de cliente
 
