@@ -1375,11 +1375,11 @@
     // Bloque de identidad primero (referencia + producto + modelo), luego el error.
     // 'Producto' es la designacion comercial de la referencia; 'Modelo' su codigo y
     // 'Nombre del modelo' su nombre: separados para poder filtrar por codigo en Excel.
-    var head=['Referencia','Producto','Modelo','Nombre del modelo','Tipo de error','Ubicación del error','Diagnóstico del sistema','Acciones correctivas','Severidad','Owner','1P / 3P'];
+    var head=['Referencia','Producto','Modelo','Nombre del modelo','Sección','Categoría web','Tipo de error','Ubicación del error','Diagnóstico del sistema','Acciones correctivas','Severidad','Owner','1P / 3P'];
     if(withSeller) head.push('Seller');
     var lines=[head.map(_csvEsc).join(';')];
     rows.forEach(function(f){
-      var cols=[f.ref, f.desig||'', f.modelo||'', f.guia||'', f.tipo, f.ubic, f.diag, f.accion, (SEV_LBL[f.sev]||f.sev||''), f.owner, f.pp||''];
+      var cols=[f.ref, f.desig||'', f.modelo||'', f.guia||'', secOf(f), categWeb(f), f.tipo, f.ubic, f.diag, f.accion, (SEV_LBL[f.sev]||f.sev||''), f.owner, f.pp||''];
       if(withSeller) cols.push(f.seller||'');
       lines.push(cols.map(_csvEsc).join(';'));
     });
@@ -1395,11 +1395,11 @@
     _downloadBlob('informe-interno-tip-'+auditRef().replace('#','')+'.csv', _findingsToCsv(rows,true), 'text/csv;charset=utf-8;');
   }
   function downloadFpCsv(){
-    var head=['Referencia','Modelo','Tipo de error','Ubicación','Severidad','Motivo del falso positivo','Comentario','Disparador','Seller','Revisor','Fecha'];
+    var head=['Referencia','Modelo','Sección','Categoría web','Tipo de error','Ubicación','Severidad','Motivo del falso positivo','Comentario','Disparador','Seller','Revisor','Fecha'];
     var rows=_infFindings.filter(function(f){ return f.fp; });
     var lines=[head.map(_csvEsc).join(';')];
     rows.forEach(function(f){
-      lines.push([f.ref, f.modelo||'', f.tipo, f.ubic, (SEV_LBL[f.sev]||f.sev||''),
+      lines.push([f.ref, f.modelo||'', secOf(f), categWeb(f), f.tipo, f.ubic, (SEV_LBL[f.sev]||f.sev||''),
         (f.motivos&&f.motivos.length?f.motivos.join(' · '):(f.motivo||'')), f.comment||'',
         f.bulkTrigger||'', f.seller||'', 'Ana García', '2 sep 2026'].map(_csvEsc).join(';'));
     });
@@ -1431,6 +1431,47 @@
     if(t.indexOf('designación')>=0||u.indexOf('designación')===0) return 'Designación';
     if(t.indexOf('descripción')>=0||u.indexOf('descripción')>=0) return 'Descripción';
     return 'Atributos'; }
+  // Simula el Health Score que Leroy da por referencia y devuelve la media del conjunto.
+  // Cada referencia puntúa dentro de la banda de su estado, con dispersión estable por nombre.
+  var HS_BANDA={ ok:[88,97], leve:[68,82], critica:[48,62], bloq:[22,38] };
+  function hsMedia(semilla, nOk, nLev, nCri, nBlo){
+    var tot=nOk+nLev+nCri+nBlo; if(!tot) return 0;
+    var h=0, s=String(semilla||''); for(var i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))%9973;
+    var suma=0, k=0;
+    [['ok',nOk],['leve',nLev],['critica',nCri],['bloq',nBlo]].forEach(function(par){
+      var b=HS_BANDA[par[0]], n=par[1]; if(!n) return;
+      // punto medio de la banda desplazado de forma estable: media del tramo, no valor por fila
+      h=(h*31+n)%9973; var off=(h%(b[1]-b[0]+1));
+      suma += n * (b[0]+off*0.5 + (b[1]-b[0])*0.25); k++;
+    });
+    return Math.round(suma/tot);
+  }
+  // Categoria web por referencia. Leroy pidio (2026-09-30) poder filtrar los informes por
+  // proveedor, modelo, categoria y seccion. Seccion la tenemos en el hallazgo; la categoria web
+  // depende del mapeo categoria<->referencias, que sigue sin confirmar: aqui se simula de forma
+  // estable a partir de la seccion y el codigo de modelo.
+  var CATEG_WEB={
+    'Baño':['Griferías de baño','Sanitarios','Mamparas y duchas','Muebles de baño'],
+    'Iluminación':['Iluminación de exterior','Apliques de pared','Lámparas de techo','Iluminación LED'],
+    'Iluminación exterior':['Iluminación de exterior','Balizas y faroles','Proyectores LED'],
+    'Herramientas':['Herramienta eléctrica','Herramienta de mano','Taladros y atornilladores'],
+    'Carpintería':['Puertas de interior','Puertas de entrada','Ventanas'],
+    'Carpintería y madera':['Puertas de interior','Tableros y molduras','Ventanas'],
+    'Fontanería y calefacción':['Radiadores','Calefacción eléctrica','Fontanería'],
+    'Jardín y temporada':['Muebles de jardín','Barbacoas','Riego'],
+    'Pintura y droguería':['Pintura de interior','Pintura de exterior','Esmaltes'],
+    'Pintura':['Pintura de interior','Pintura de exterior','Esmaltes'],
+    'Puertas y ventanas':['Puertas de interior','Puertas de entrada','Ventanas'],
+    'Jardín':['Muebles de jardín','Barbacoas','Riego'],
+    'Climatización':['Radiadores','Calefacción eléctrica','Aire acondicionado']
+  };
+  // No todos los hallazgos traen seccion: algunos vienen con familia. Se unifica aqui.
+  function secOf(f){ return (f && (f.seccion || f.familia || FAMILIA_OF[f.guia])) || ''; }
+  function categWeb(f){ if(!f) return '';
+    var sec=secOf(f), lista=CATEG_WEB[sec];
+    if(!lista) return sec||'';
+    var h=0, s=String(f.modelo||f.guia||''); for(var i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))%997;
+    return lista[h%lista.length]; }
   function sellerSlug(n){ return (n||'seller').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
   function sellerCsvName(){ return 'informe-seller-'+sellerSlug(currentSeller())+'-'+auditRef().replace('#','')+'.csv'; }
   function audCode(a){ return '#'+(1000+((a&&a.id)||0)); }
@@ -1470,9 +1511,11 @@
     // modelos revisados del proveedor: en el sistema real sale de la consulta; aquí se deriva estable
     var hm=0; for(var cm=0;cm<name.length;cm++) hm=(hm*17+name.charCodeAt(cm))%89;
     var nModsRev=nMods+(hm%4);
-    // Health Score del proveedor: media ponderada de sus referencias según su estado.
-    // Conforme 100 · leve 70 · crítica 50 · no publicable 30. En el sistema real vendrá dado por referencia.
-    var hsSeller = nTotal ? Math.round((nOk*100 + nLev*70 + nCri*50 + nBlo*30)/nTotal) : 0;
+    // Health Score: Leroy lo entrega YA CALCULADO POR REFERENCIA (confirmado 2026-09-30),
+    // sobre sus propias reglas de calidad. Nosotros solo promediamos las del alcance, no lo
+    // derivamos de nuestras severidades. Aquí se simula el valor de cada referencia dentro de
+    // la banda que le corresponde por estado, para que la media salga realista y no redonda.
+    var hsSeller = hsMedia(name, nOk, nLev, nCri, nBlo);
     var amb=sellerAmbito(aud);
     var meta='2 de septiembre de 2026 · '+auditRef()+(amb?' · '+amb:'');
     var kpi=function(v,l,bar){ return '<div style="flex:1;display:flex;align-items:center;gap:11px;border:1px solid '+BOR+';border-radius:10px;padding:10px 14px;">'

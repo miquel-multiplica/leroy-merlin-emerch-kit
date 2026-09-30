@@ -1211,11 +1211,11 @@
     // Bloque de identidad primero (referencia + producto + modelo), luego el error.
     // 'Producto' es la designacion comercial de la referencia; 'Modelo' su codigo y
     // 'Nombre del modelo' su nombre: separados para poder filtrar por codigo en Excel.
-    var head=['Referencia','Producto','Modelo','Nombre del modelo','Tipo de error','Ubicación del error','Diagnóstico del sistema','Acciones correctivas','Severidad','Owner','1P / 3P'];
+    var head=['Referencia','Producto','Modelo','Nombre del modelo','Sección','Categoría web','Tipo de error','Ubicación del error','Diagnóstico del sistema','Acciones correctivas','Severidad','Owner','1P / 3P'];
     if(withSeller) head.push('Seller');
     var lines=[head.map(_csvEsc).join(';')];
     rows.forEach(function(f){
-      var cols=[f.ref, f.desig||'', f.modelo||'', f.guia||'', f.tipo, f.ubic, f.diag, f.accion, (SEV_LBL[f.sev]||f.sev||''), f.owner, f.pp||''];
+      var cols=[f.ref, f.desig||'', f.modelo||'', f.guia||'', secOf(f), categWeb(f), f.tipo, f.ubic, f.diag, f.accion, (SEV_LBL[f.sev]||f.sev||''), f.owner, f.pp||''];
       if(withSeller) cols.push(f.seller||'');
       lines.push(cols.map(_csvEsc).join(';'));
     });
@@ -1231,11 +1231,11 @@
     _downloadBlob('informe-interno-tip-'+auditRef().replace('#','')+'.csv', _findingsToCsv(rows,true), 'text/csv;charset=utf-8;');
   }
   function downloadFpCsv(){
-    var head=['Referencia','Modelo','Tipo de error','Ubicación','Severidad','Motivo del falso positivo','Motivo (texto libre)','Disparador','Seller','Revisor','Fecha'];
+    var head=['Referencia','Modelo','Sección','Categoría web','Tipo de error','Ubicación','Severidad','Motivo del falso positivo','Motivo (texto libre)','Disparador','Seller','Revisor','Fecha'];
     var rows=_infFindings.filter(function(f){ return f.fp; });
     var lines=[head.map(_csvEsc).join(';')];
     rows.forEach(function(f){
-      lines.push([f.ref, f.modelo||'', f.tipo, f.ubic, (SEV_LBL[f.sev]||f.sev||''),
+      lines.push([f.ref, f.modelo||'', secOf(f), categWeb(f), f.tipo, f.ubic, (SEV_LBL[f.sev]||f.sev||''),
         (f.motivo||''), f.motivoOtro||'',
         f.bulkTrigger||'', f.seller||'', 'Ana García', '2 sep 2026'].map(_csvEsc).join(';'));
     });
@@ -1248,6 +1248,47 @@
   var PDF_SEV={bloqueante:{c:'#c0392b',t:'Bloqueante'},critica:{c:'#8e2820',t:'Crítica'},mejora:{c:'#b7791f',t:'Leve'}};
   var PDF_LOGO='<svg viewBox="0 0 570 466" xmlns="http://www.w3.org/2000/svg" fill="none" class="pdf-logo" role="img" aria-label="Leroy Merlin"> <path fill-rule="evenodd" clip-rule="evenodd" d="M61.0161 405.43H509.183L285.098 181.348L61.0161 405.43Z" fill="#78BE20"/> <path fill-rule="evenodd" clip-rule="evenodd" d="M50.6761 395.777L85.4934 361.301L73.772 349.579L52.0542 371.3L12.7558 331.999L0 344.754L50.6761 395.777ZM65.5006 300.284L74.119 308.903L92.0464 290.975L102.734 301.315L84.4624 319.243L95.8368 330.277L117.902 308.212L128.242 318.555L93.0775 353.713L42.0577 302.697L77.222 267.536L87.5654 277.876L65.5006 300.284ZM178.918 267.876L144.444 257.88C148.582 250.296 146.513 239.952 139.62 233.059C132.035 225.475 119.28 225.822 110.658 234.437L84.8028 260.292L135.823 311.315L148.578 298.212L107.215 256.845L115.83 248.571C119.28 244.78 125.486 244.78 128.932 248.571C132.379 252.021 132.379 257.88 128.589 261.673L121.005 269.254L165.131 281.666L178.918 267.876ZM207.532 187.551C200.295 179.97 190.983 175.833 182.021 175.489C172.712 175.489 163.75 178.936 155.819 186.867C139.616 203.069 141.341 224.097 156.166 238.921C163.75 246.505 172.712 250.639 182.021 250.639C190.983 250.986 200.292 247.54 208.22 239.609C224.079 223.406 222.701 202.376 207.532 187.551ZM198.223 229.265C193.399 234.093 187.883 235.124 182.021 233.056C178.231 231.678 174.093 228.921 170.299 224.781C160.303 215.128 157.887 205.132 165.818 197.204C170.643 192.376 176.162 191.345 182.021 193.413C185.811 194.792 189.605 197.548 193.742 201.688C203.395 211.341 206.151 221.337 198.223 229.265ZM223.044 160.318L213.735 131.36L228.563 116.192L241.315 165.49L261.312 185.482L248.212 198.585L228.563 178.592L181.334 163.768L195.467 149.631L222.701 159.974L223.044 160.318ZM459.198 335.792L509.874 284.769L496.421 271.326L445.404 322.346L459.198 335.792ZM263.724 140.665L303.369 121.71L274.411 151.012L286.132 163.077L337.156 112.057L320.95 95.8484L282.342 114.467L301.648 76.5462L285.098 60L234.078 111.02L245.8 122.741L275.102 93.4393L256.14 133.085L263.724 140.665ZM352.324 147.906L343.705 156.524L363.008 176.177L352.667 186.517L333.021 167.215L321.984 178.245L345.777 202.032L335.427 212.372L298.888 175.486L349.911 124.81L386.45 161.352L376.11 171.696L352.324 147.906ZM401.618 278.566L436.095 313.037L447.817 301.315L426.096 279.945L465.397 240.296L452.645 227.543L401.618 278.566ZM538.829 313.728L522.63 367.85L557.787 332.689L569.853 344.754L518.836 395.777L502.977 379.572L516.764 324.071L481.947 358.888L470.222 347.167L521.248 296.147L538.829 313.728ZM391.969 268.91L401.622 234.093C409.209 238.227 419.549 236.509 426.79 229.265C434.027 221.681 434.027 208.925 425.415 200.307L397.835 172.73L346.811 223.75L359.908 236.849L400.931 195.479L410.931 205.475C414.724 209.266 414.724 215.128 411.278 218.578C407.828 222.368 401.618 222.022 398.175 218.578L388.866 209.266L377.835 254.773L391.969 268.91Z" fill="black"/> </svg>';
   var PDF_LOGO_SM='<svg viewBox="0 0 570 466" xmlns="http://www.w3.org/2000/svg" fill="none" class="pdf-logo-sm" role="img" aria-label="Leroy Merlin"> <path fill-rule="evenodd" clip-rule="evenodd" d="M61.0161 405.43H509.183L285.098 181.348L61.0161 405.43Z" fill="#78BE20"/> <path fill-rule="evenodd" clip-rule="evenodd" d="M50.6761 395.777L85.4934 361.301L73.772 349.579L52.0542 371.3L12.7558 331.999L0 344.754L50.6761 395.777ZM65.5006 300.284L74.119 308.903L92.0464 290.975L102.734 301.315L84.4624 319.243L95.8368 330.277L117.902 308.212L128.242 318.555L93.0775 353.713L42.0577 302.697L77.222 267.536L87.5654 277.876L65.5006 300.284ZM178.918 267.876L144.444 257.88C148.582 250.296 146.513 239.952 139.62 233.059C132.035 225.475 119.28 225.822 110.658 234.437L84.8028 260.292L135.823 311.315L148.578 298.212L107.215 256.845L115.83 248.571C119.28 244.78 125.486 244.78 128.932 248.571C132.379 252.021 132.379 257.88 128.589 261.673L121.005 269.254L165.131 281.666L178.918 267.876ZM207.532 187.551C200.295 179.97 190.983 175.833 182.021 175.489C172.712 175.489 163.75 178.936 155.819 186.867C139.616 203.069 141.341 224.097 156.166 238.921C163.75 246.505 172.712 250.639 182.021 250.639C190.983 250.986 200.292 247.54 208.22 239.609C224.079 223.406 222.701 202.376 207.532 187.551ZM198.223 229.265C193.399 234.093 187.883 235.124 182.021 233.056C178.231 231.678 174.093 228.921 170.299 224.781C160.303 215.128 157.887 205.132 165.818 197.204C170.643 192.376 176.162 191.345 182.021 193.413C185.811 194.792 189.605 197.548 193.742 201.688C203.395 211.341 206.151 221.337 198.223 229.265ZM223.044 160.318L213.735 131.36L228.563 116.192L241.315 165.49L261.312 185.482L248.212 198.585L228.563 178.592L181.334 163.768L195.467 149.631L222.701 159.974L223.044 160.318ZM459.198 335.792L509.874 284.769L496.421 271.326L445.404 322.346L459.198 335.792ZM263.724 140.665L303.369 121.71L274.411 151.012L286.132 163.077L337.156 112.057L320.95 95.8484L282.342 114.467L301.648 76.5462L285.098 60L234.078 111.02L245.8 122.741L275.102 93.4393L256.14 133.085L263.724 140.665ZM352.324 147.906L343.705 156.524L363.008 176.177L352.667 186.517L333.021 167.215L321.984 178.245L345.777 202.032L335.427 212.372L298.888 175.486L349.911 124.81L386.45 161.352L376.11 171.696L352.324 147.906ZM401.618 278.566L436.095 313.037L447.817 301.315L426.096 279.945L465.397 240.296L452.645 227.543L401.618 278.566ZM538.829 313.728L522.63 367.85L557.787 332.689L569.853 344.754L518.836 395.777L502.977 379.572L516.764 324.071L481.947 358.888L470.222 347.167L521.248 296.147L538.829 313.728ZM391.969 268.91L401.622 234.093C409.209 238.227 419.549 236.509 426.79 229.265C434.027 221.681 434.027 208.925 425.415 200.307L397.835 172.73L346.811 223.75L359.908 236.849L400.931 195.479L410.931 205.475C414.724 209.266 414.724 215.128 411.278 218.578C407.828 222.368 401.618 222.022 398.175 218.578L388.866 209.266L377.835 254.773L391.969 268.91Z" fill="black"/> </svg>';
+  // Simula el Health Score que Leroy da por referencia y devuelve la media del conjunto.
+  // Cada referencia puntúa dentro de la banda de su estado, con dispersión estable por nombre.
+  var HS_BANDA={ ok:[88,97], leve:[68,82], critica:[48,62], bloq:[22,38] };
+  function hsMedia(semilla, nOk, nLev, nCri, nBlo){
+    var tot=nOk+nLev+nCri+nBlo; if(!tot) return 0;
+    var h=0, s=String(semilla||''); for(var i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))%9973;
+    var suma=0, k=0;
+    [['ok',nOk],['leve',nLev],['critica',nCri],['bloq',nBlo]].forEach(function(par){
+      var b=HS_BANDA[par[0]], n=par[1]; if(!n) return;
+      // punto medio de la banda desplazado de forma estable: media del tramo, no valor por fila
+      h=(h*31+n)%9973; var off=(h%(b[1]-b[0]+1));
+      suma += n * (b[0]+off*0.5 + (b[1]-b[0])*0.25); k++;
+    });
+    return Math.round(suma/tot);
+  }
+  // Categoria web por referencia. Leroy pidio (2026-09-30) poder filtrar los informes por
+  // proveedor, modelo, categoria y seccion. Seccion la tenemos en el hallazgo; la categoria web
+  // depende del mapeo categoria<->referencias, que sigue sin confirmar: aqui se simula de forma
+  // estable a partir de la seccion y el codigo de modelo.
+  var CATEG_WEB={
+    'Baño':['Griferías de baño','Sanitarios','Mamparas y duchas','Muebles de baño'],
+    'Iluminación':['Iluminación de exterior','Apliques de pared','Lámparas de techo','Iluminación LED'],
+    'Iluminación exterior':['Iluminación de exterior','Balizas y faroles','Proyectores LED'],
+    'Herramientas':['Herramienta eléctrica','Herramienta de mano','Taladros y atornilladores'],
+    'Carpintería':['Puertas de interior','Puertas de entrada','Ventanas'],
+    'Carpintería y madera':['Puertas de interior','Tableros y molduras','Ventanas'],
+    'Fontanería y calefacción':['Radiadores','Calefacción eléctrica','Fontanería'],
+    'Jardín y temporada':['Muebles de jardín','Barbacoas','Riego'],
+    'Pintura y droguería':['Pintura de interior','Pintura de exterior','Esmaltes'],
+    'Pintura':['Pintura de interior','Pintura de exterior','Esmaltes'],
+    'Puertas y ventanas':['Puertas de interior','Puertas de entrada','Ventanas'],
+    'Jardín':['Muebles de jardín','Barbacoas','Riego'],
+    'Climatización':['Radiadores','Calefacción eléctrica','Aire acondicionado']
+  };
+  // No todos los hallazgos traen seccion: algunos vienen con familia. Se unifica aqui.
+  function secOf(f){ return (f && (f.seccion || f.familia || FAMILIA_OF[f.guia])) || ''; }
+  function categWeb(f){ if(!f) return '';
+    var sec=secOf(f), lista=CATEG_WEB[sec];
+    if(!lista) return sec||'';
+    var h=0, s=String(f.modelo||f.guia||''); for(var i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))%997;
+    return lista[h%lista.length]; }
   function sellerSlug(n){ return (n||'seller').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
   function sellerCsvName(){ return 'informe-seller-'+sellerSlug(currentSeller())+'-'+auditRef().replace('#','')+'.csv'; }
   function audCode(a){ return '#'+(1000+((a&&a.id)||0)); }
@@ -1293,9 +1334,11 @@
     // modelos revisados del proveedor: en el sistema real sale de la consulta; aquí se deriva estable
     var hm=0; for(var cm=0;cm<name.length;cm++) hm=(hm*17+name.charCodeAt(cm))%89;
     var nModsRev=nMods+(hm%4);
-    // Health Score del proveedor: media ponderada de sus referencias según su estado.
-    // Conforme 100 · leve 70 · crítica 50 · no publicable 30. En el sistema real vendrá dado por referencia.
-    var hsSeller = nTotal ? Math.round((nOk*100 + nLev*70 + nCri*50 + nBlo*30)/nTotal) : 0;
+    // Health Score: Leroy lo entrega YA CALCULADO POR REFERENCIA (confirmado 2026-09-30),
+    // sobre sus propias reglas de calidad. Nosotros solo promediamos las del alcance, no lo
+    // derivamos de nuestras severidades. Aquí se simula el valor de cada referencia dentro de
+    // la banda que le corresponde por estado, para que la media salga realista y no redonda.
+    var hsSeller = hsMedia(name, nOk, nLev, nCri, nBlo);
     var amb=sellerAmbito(aud);
     var meta='2 de septiembre de 2026 · '+auditRef()+(amb?' · '+amb:'');
     var kpi=function(v,l,bar){ return '<div style="flex:1;display:flex;align-items:center;gap:11px;border:1px solid '+BOR+';border-radius:10px;padding:10px 14px;">'
