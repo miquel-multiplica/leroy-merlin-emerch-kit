@@ -1044,13 +1044,18 @@
     'Falta semántica SEO en descripción':{ia:true,bulk:true,term:'«de interiores» ≈ «interior»',familia:'Baño',count:9,sellers:['Roca','Sanindusa','Grohe'],modelos:[{name:'Inodoro suspendido',code:'MOD_IS31',refBase:77120100},{name:'Lavabo mural',code:'MOD_LM32',refBase:77121200}]},
     'Discrepancia de dimensiones':{ia:false,bulk:false,term:null,familia:'Puertas y ventanas',count:1,modelos:[{name:'Puerta de entrada',code:'MOD_PE01',refBase:18575000}]},
     'Discrepancia de cantidad':{ia:false,bulk:false,term:null,familia:'Baño',count:1,modelos:[{name:'Mampara de ducha',code:'MOD_MD41',refBase:81926700}]},
-    'Posible designación administrativa':{ia:false,bulk:false,term:null,familia:'Baño',count:1,modelos:[{name:'Grifería monomando',code:'MOD_GM33',refBase:52001400}]}
+    'Posible designación administrativa':{ia:false,bulk:false,term:null,familia:'Baño',count:1,modelos:[{name:'Grifería monomando',code:'MOD_GM33',refBase:52001400}]},
+    // La ortografía siempre admite descarte: un corrector no sabe qué es una marca, un
+    // término técnico o un extranjerismo aceptado. Y con lista cerrada de erratas, el
+    // descarte es el mecanismo por el que la lista se corrige.
+    'Ortografía en descripción':{ia:false,bulk:true,term:'«materal»',familia:'Climatización',count:14,sellers:['Bosch','Saunier Duval','Ferroli'],modelos:[{name:'Calefacción',code:'MOD_207881',refBase:61200400},{name:'Radiador toallero',code:'MOD_RT44',refBase:61201200}]}
   };
   var FP_TPL={
     'Ortografía en designación':{emoji:'🔤',tipo:'Ortografía en designación',ubic:'designación',diag:'"puerta corredera izq" — «izq» no reconocida (posible falta)',accion:'Escribir «izquierda» (o expandir la abreviatura)',owner:'TIP',pp:'1P',seller:'Simon',sev:'mejora'},
     'Discrepancia de color':{emoji:'🎨',tipo:'Discrepancia de color',ubic:'designación ↔ descripción',diag:'Designación "gris" · descripción "antracita"',accion:'Unificar el color en designación y descripción',owner:'TIP',pp:'1P',seller:'Roca',sev:'critica'},
     'Discrepancia de material':{emoji:'🪵',tipo:'Discrepancia de material',ubic:'descripción ↔ ficha técnica',diag:'Descripción "acero" · atributo "inox"',accion:'Unificar el material',owner:'TIP',pp:'1P',seller:'Bosch',sev:'critica'},
     'Falta semántica SEO en designación':{emoji:'🔍',tipo:'Falta semántica SEO en designación',ubic:'designación',diag:'No aparece el término SEO "exterior" exigido por la guía',accion:'Incluir "exterior" en la designación',owner:'TIP',pp:'1P',seller:'Philips',sev:'mejora'},
+    'Ortografía en descripción':{emoji:'🔤',tipo:'Ortografía en descripción',ubic:'descripción',diag:'"materal" \u2014 posible falta ortográfica',accion:'Corregir la falta ortográfica',owner:'TIP',pp:'1P',seller:'Bosch',sev:'mejora'},
     'Falta semántica SEO en descripción':{emoji:'🔍',tipo:'Falta semántica SEO en descripción',ubic:'descripción',diag:'No aparece el término SEO "interior" exigido por la guía',accion:'Incluir "interior" en la descripción',owner:'TIP',pp:'1P',seller:'Roca',sev:'mejora'}
   };
   var FAMILIA_OF={'Puertas de entrada':'Puertas y ventanas','Herramienta de mano':'Herramientas','Electroportátil':'Herramientas','Soluciones de ducha':'Baño','Iluminación exterior':'Iluminación','Herramienta eléctrica':'Herramientas','Mobiliario de jardín':'Jardín','Pintura':'Pintura','Griferías':'Baño','Iluminación interior':'Iluminación','Sanitarios':'Baño','Calefacción':'Climatización'};
