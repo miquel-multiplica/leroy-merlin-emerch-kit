@@ -215,16 +215,16 @@ nuestra propuesta por defecto.
   informe interno. Si el CSV del proveedor tuviera columna de proveedor filtrable, es que
   contiene datos de otros. El suyo sigue sin columna Seller.
 
-### Lo que hay que meter y aún no está
+### Check nuevo, ya montado
 
-- **Un tipo de check nuevo**: un atributo que aparezca en la designación y **no** esté marcado
-  como obligatorio debe levantar alerta. Es un check inverso; hoy solo detectamos ausencias.
-  *Matiz nuestro:* esa alerta es sobre la guía, no sobre la ficha —la corrección la hace
-  e-Merch, no el proveedor—, así que probablemente no deba salir en el informe del proveedor.
-  A confirmar el jueves.
-- **Un segundo umbral de longitud.** Hoy una designación por debajo de 35 caracteres es *leve*.
-  Ellos añaden que una designación de 2 o 5 caracteres hace la ficha **no publicable**. Hacen
-  falta dos umbrales, y decidir si hay algo entre medias.
+- **Atributo no obligatorio en designación.** Un atributo que aparece en la designación y **no**
+  está marcado como obligatorio levanta alerta. Es un check inverso: hasta ahora solo
+  detectábamos ausencias. Montado con **owner TIP** y severidad **leve**, porque **la alerta es
+  sobre la guía, no sobre la ficha** — o la guía está incompleta y debería marcarlo obligatorio,
+  o la designación usa algo que no debería, y en los dos casos lo corrige e-Merch.
+  Consecuencia útil: al ser owner TIP **queda fuera del informe del proveedor por el mecanismo
+  que ya existe**, sin reglas nuevas. No admite falso positivo: que un atributo esté marcado
+  obligatorio o no es objetivo, no es un juicio. *A confirmar el jueves que el enfoque les cuadra.*
 
 ### Pendiente de cliente
 
@@ -236,6 +236,10 @@ nuestra propuesta por defecto.
 - **Si estar por debajo del mínimo de imágenes hace una ficha no publicable** — contestaron con
   otro ejemplo.
 - **La designación comercial** — sin respuesta.
+- **Los umbrales de longitud de designación y descripción.** Hoy por debajo de 35 y 80 caracteres
+  es *leve*. Ellos añaden que una designación de 2 o 5 caracteres hace la ficha **no publicable**,
+  pero no dan el umbral. ¿Cuál es, y hay algún grado entre medias o es un salto directo de leve a
+  no publicable?
 - **Qué tipos de error admiten falso positivo y cuáles no** — nos hace falta el detalle, y
   depende de la escala que traen el jueves.
 - **A quién dirige el PDF su línea de contacto** — el jueves, con Marketplace.
@@ -248,9 +252,12 @@ nuestra propuesta por defecto.
   poder filtrar»*. No piden quitar el PDF, pero ese *«sería suficiente»* debilita el argumento de
   mantenerlo. **Pendiente de validar el jueves**, con una pregunta directa: ¿el proveedor
   necesita un documento que le ordene el trabajo, o se apaña con un fichero que puede filtrar?
-- **Si pedimos la fecha de actualización por referencia.** Se puede implementar en su recarga
-  completa, pero hay que decirlo antes. No bloquea: la fecha de la auditoría es una aproximación
-  razonable.
+- **Si pedimos la fecha de actualización por referencia.** Preguntamos si nos dan fecha y hora
+  del último cálculo de cada Health Score; contestan que hoy no la envían pero que pueden
+  añadirla en su próxima recarga completa. Serviría para poder decir *«Health Score a fecha de
+  X»* y defender el número si un proveedor lo discute. **Valor bajo**: su score se recalcula a
+  diario, así que la fecha de la auditoría —que sí tenemos— nunca se aleja más de un día. Yo lo
+  mencionaría de pasada el jueves, sin convertirlo en una petición formal.
 
 ### Dependencias fuera de Validaciones
 
