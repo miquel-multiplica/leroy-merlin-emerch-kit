@@ -887,13 +887,28 @@
     { disp:'«mate ≈ satinado»', motivo:'Valores equivalentes', check:'Discrepancia de color', ambito:'Modelo · MOD_201540', autor:'Laura Pons', fecha:'25 sep', silencia:23, origen:6, on:false }
   ];
 
+  // Estructura real de packages/validador-fichas/src/dictionaries/ del motor. No son
+  // seis listas planas: cada familia agrupa listas con trabajos distintos, y el tamaño
+  // de cada una dice cuánta cobertura tiene el check que la usa.
   var _qDicc=[
-    { n:'Colores', e:142, m:'28 sep · Ana García', d:'Tonos y sus equivalencias. Lo que no está aquí no se compara.' },
-    { n:'Materiales', e:98, m:'20 sep · Laura Pons', d:'Distingue de qué está hecho de para qué sirve.' },
-    { n:'Erratas conocidas', e:110, m:'26 sep · Ana García', d:'Lista cerrada de erratas y tildes habituales del catálogo.' },
-    { n:'Abreviaturas', e:64, m:'18 sep · Laura Pons', d:'Las de la RAE y los plurales correctos de símbolos.' },
-    { n:'Unidades', e:38, m:'2 sep · Ana García', d:'Unidades admitidas y su formato.' },
-    { n:'Símbolos', e:29, m:'2 sep · Ana García', d:'Caracteres permitidos en un texto de producto.' }
+    { n:'Colores', check:'Discrepancia de color', m:'28 sep · Ana García', listas:[
+      {k:'Colores reconocidos', e:532, d:'Lo que el motor sabe leer como color'},
+      {k:'Grupos de equivalencia', e:12, d:'Tonos que cuentan como el mismo color'},
+      {k:'Mapeo a familia ADEO', e:506, d:'Cada color a su familia del estándar'}]},
+    { n:'Materiales', check:'Discrepancia de material', m:'20 sep · Laura Pons', listas:[
+      {k:'Materiales reconocidos', e:42, d:'Lo que el motor sabe leer como material'},
+      {k:'Grupos de equivalencia', e:10, d:'Acero e inox cuentan como el mismo'},
+      {k:'Partes de producto ignoradas', e:118, d:'Patas, cojines, tiradores: su material no cuenta'},
+      {k:'Términos ambiguos color/material', e:16, d:'«cobre» puede ser las dos cosas'},
+      {k:'Contexto de uso frente a composición', e:129, d:'Distingue «silla de madera» de «broca para madera»'}]},
+    { n:'Ortografía', check:'Erratas conocidas · Abreviaturas', m:'26 sep · Ana García', listas:[
+      {k:'Erratas y tildes', e:113, d:'Lista cerrada. No hay corrector general todavía'},
+      {k:'Abreviaturas incorrectas', e:7, d:'«unds» → uds., «gr» → g'},
+      {k:'Siglas internas del ADM', e:34, d:'No se marcan como errata'}]},
+    { n:'Unidades', check:'Espacio RAE · Falta unidad', m:'2 sep · Ana García', listas:[
+      {k:'Unidades con espacio RAE', e:30, d:'Entre el número y la unidad'},
+      {k:'Conversiones a milímetros', e:18, d:'Permite comparar cm con mm'},
+      {k:'Plurales de símbolo incorrectos', e:11, d:'«kgs» no existe'}]}
   ];
 
   var _qTab='pend', _qOpen={}, _qOpenAud={}, _qResId=null, _qResOpt='regla', _qResAmb='', _qResolved={};
@@ -931,43 +946,50 @@
   function qPendHtml(){
     var gs=qPend();
     if(!gs.length) return '<div style="padding:40px;text-align:center;color:var(--text-muted);font-size:13px;">No hay descartes pendientes de resolver.</div>';
-    return gs.map(function(g,i){
+    var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
+    var head='<thead><tr>'+th('Caso','26%')+th('Check','17%')+th('Descartes','8%','right')+th('Auditorías','9%','right')+th('Modelos','8%','right')+th('Secciones','18%')+th('','14%')+'</tr></thead>';
+    var rows=gs.map(function(g){
       var abierto=!!_qOpen[g.id], n=qDescartes(g), secs=qSecciones(g);
-      var secTxt=Object.keys(secs).map(function(s){ return s+' ('+secs[s]+')'; }).join(' · ');
-      var aviso=g.reglaPrevia?'<div style="margin-top:8px;display:inline-flex;align-items:center;gap:8px;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:8px;padding:6px 11px;font-size:12px;color:var(--warning-text);"><strong>Ya existe una regla</strong> para este disparador en '+g.reglaPrevia.ambito+' — vuelve a aparecer fuera de su ámbito.</div>':'';
-      return '<div style="'+(i?'border-top:1px solid var(--border-card);':'')+'">'
-        +'<div style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;">'
-          +'<button onclick="qToggle(\''+g.id+'\')" style="background:none;border:none;cursor:pointer;padding:2px 0 0;color:var(--text-muted);flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .18s ease;'+(abierto?'transform:rotate(90deg);':'')+'"><polyline points="9 18 15 12 9 6"/></svg></button>'
-          +'<div style="flex:1;min-width:0;">'
-            +'<div style="font-size:14px;font-weight:700;color:var(--text-ink);">'+g.disp+' <span style="color:var(--text-muted);font-weight:500;">·</span> '+g.motivo+'</div>'
-            +'<div style="font-size:12px;color:var(--text-muted);margin-top:3px;">'+g.check+' · <strong style="color:var(--text-body);">'+n+' descartes</strong> · '+g.auds.length+' auditorías · '+qModelos(g)+' modelos</div>'
-            +'<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">'+secTxt+'</div>'
-            +aviso
-          +'</div>'
-          +'<button onclick="openRes(\''+g.id+'\')" class="btn btn-primary" style="height:36px;font-size:13px;padding:0 16px;flex-shrink:0;">Resolver</button>'
-        +'</div>'
-        +(abierto?qAudsHtml(g):'')
-      +'</div>'; }).join(''); }
+      var secTxt=Object.keys(secs).map(function(s2){ return s2+' <strong style="color:var(--text-ink);">'+secs[s2]+'</strong>'; }).join('<br>');
+      var chev='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .18s ease;flex-shrink:0;'+(abierto?'transform:rotate(90deg);':'')+'"><polyline points="9 18 15 12 9 6"/></svg>';
+      var num='font-size:13px;color:var(--text-ink);text-align:right;font-variant-numeric:tabular-nums;';
+      var aviso=g.reglaPrevia?'<div style="margin-top:5px;display:inline-flex;align-items:center;gap:6px;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--warning-text);">Ya hay regla en '+g.reglaPrevia.ambito+' · vuelve fuera de su ámbito</div>':'';
+      return '<tr style="cursor:pointer;" onclick="qToggle(\''+g.id+'\')">'
+        +'<td><div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--text-muted);padding-top:2px;">'+chev+'</span>'
+          +'<span style="min-width:0;"><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+g.disp+'</span>'
+          +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:2px;">'+g.motivo+'</span>'+aviso+'</span></div></td>'
+        +'<td style="font-size:12px;color:var(--text-body);">'+g.check+'</td>'
+        +'<td style="'+num+'font-weight:700;">'+n+'</td>'
+        +'<td style="'+num+'">'+g.auds.length+'</td>'
+        +'<td style="'+num+'">'+qModelos(g)+'</td>'
+        +'<td style="font-size:12px;color:var(--text-muted);line-height:1.5;">'+secTxt+'</td>'
+        +'<td style="text-align:right;"><button onclick="event.stopPropagation();openRes(\''+g.id+'\')" class="btn btn-primary" style="height:32px;font-size:12px;padding:0 14px;">Resolver</button></td></tr>'
+        +(abierto?'<tr><td colspan="7" style="padding:0 20px 16px 46px;background:#fbfbfc;">'+qAudsHtml(g)+'</td></tr>':''); }).join('');
+    return '<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
   function qToggle(id){ _qOpen[id]=!_qOpen[id]; renderQPanel(); }
   function qToggleAud(id){ _qOpenAud[id]=!_qOpenAud[id]; renderQPanel(); }
 
+  // Nivel 2 y 3: la auditoría da el contexto —quién y cuándo—, la referencia permite
+  // verificar en la ficha real.
   function qAudsHtml(g){
-    return '<div style="padding:0 20px 14px 52px;">'+g.auds.map(function(a){
+    var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';font-size:10.5px;">'+t+'</th>'; };
+    var head='<thead><tr>'+th('Auditoría','16%')+th('Perímetro','30%')+th('Revisor','20%')+th('Fecha','12%')+th('Sección','16%')+th('Refs','6%','right')+'</tr></thead>';
+    var rows=g.auds.map(function(a){
       var k=g.id+'-'+a.aud, ab=!!_qOpenAud[k];
-      return '<div style="border:1px solid var(--border-card);border-radius:10px;margin-bottom:8px;overflow:hidden;">'
-        +'<div onclick="qToggleAud(\''+k+'\')" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f7f7f8;cursor:pointer;">'
-          +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .18s ease;flex-shrink:0;'+(ab?'transform:rotate(90deg);':'')+'"><polyline points="9 18 15 12 9 6"/></svg>'
-          +'<span style="font-size:12px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums;">#'+a.aud+'</span>'
-          +'<span style="font-size:12px;color:var(--text-body);">'+a.per+'</span>'
-          +'<span style="margin-left:auto;font-size:12px;color:var(--text-muted);">'+a.rev+' · '+a.fecha+' · '+a.refs.length+' refs</span>'
-        +'</div>'
-        +(ab?'<div style="padding:4px 14px 10px;">'+a.refs.map(function(r,i){
-            return '<div style="display:flex;align-items:baseline;gap:12px;padding:7px 0;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
-              +'<a href="https://www.leroymerlin.es/productos/ref-'+r.r+'.html" target="_blank" rel="noopener" style="font-size:12px;font-weight:700;color:var(--green);text-decoration:none;font-variant-numeric:tabular-nums;min-width:74px;">'+r.r+'</a>'
-              +'<span style="font-size:11px;color:var(--text-muted);min-width:82px;">'+r.m+'</span>'
-              +'<span style="font-size:12px;color:var(--text-body);">'+r.d+'</span></div>'; }).join('')+'</div>':'')
-      +'</div>'; }).join('')+'</div>'; }
+      var chev='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .18s ease;flex-shrink:0;'+(ab?'transform:rotate(90deg);':'')+'"><polyline points="9 18 15 12 9 6"/></svg>';
+      var td='font-size:12px;color:var(--text-body);';
+      return '<tr style="cursor:pointer;" onclick="qToggleAud(\''+k+'\')">'
+        +'<td><span style="display:inline-flex;align-items:center;gap:8px;">'+chev+'<span style="font-size:12px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums;">#'+a.aud+'</span></span></td>'
+        +'<td style="'+td+'">'+a.per+'</td><td style="'+td+'">'+a.rev+'</td><td style="'+td+'">'+a.fecha+'</td>'
+        +'<td style="'+td+'color:var(--text-muted);">'+a.sec+'</td>'
+        +'<td style="'+td+'text-align:right;font-variant-numeric:tabular-nums;">'+a.refs.length+'</td></tr>'
+        +(ab?'<tr><td colspan="6" style="padding:0 0 10px 34px;">'+a.refs.map(function(r,i2){
+            return '<div style="display:flex;align-items:baseline;gap:16px;padding:6px 0;'+(i2?'border-top:1px solid var(--border-card);':'')+'">'
+              +'<a href="https://www.leroymerlin.es/productos/ref-'+r.r+'.html" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:12px;font-weight:700;color:var(--green);text-decoration:none;font-variant-numeric:tabular-nums;width:76px;flex-shrink:0;">'+r.r+'</a>'
+              +'<span style="font-size:11px;color:var(--text-muted);width:86px;flex-shrink:0;">'+r.m+'</span>'
+              +'<span style="font-size:12px;color:var(--text-body);">'+r.d+'</span></div>'; }).join('')+'</td></tr>':''); }).join('');
+    return '<div style="background:#fff;border:1px solid var(--border-card);border-radius:10px;overflow:hidden;margin-top:12px;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
   // ── Reglas ─────────────────────────────────────────────────────────────────
   function qReglasHtml(){
@@ -987,16 +1009,21 @@
 
   // ── Diccionarios ───────────────────────────────────────────────────────────
   function qDiccHtml(){
-    return '<div style="padding:16px 20px 4px;font-size:12.5px;color:var(--text-muted);line-height:1.55;">'
-      +'El motor solo compara lo que está en sus diccionarios: <strong style="color:var(--text-body);">si un color o un material no figura aquí, no se compara y no salta ninguna alerta</strong>. '
-      +'Una ficha sin avisos no siempre está correcta — puede que no se haya podido comprobar. De momento son de solo lectura.</div>'
-      +_qDicc.map(function(d,i){
-      return '<div style="display:flex;align-items:center;gap:16px;padding:14px 20px;'+(i?'border-top:1px solid var(--border-card);':'border-top:1px solid var(--border-card);')+'">'
-        +'<div style="flex:1;min-width:0;"><div style="font-size:13.5px;font-weight:700;color:var(--text-ink);">'+d.n+'</div>'
-        +'<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">'+d.d+'</div></div>'
-        +'<div style="text-align:right;flex-shrink:0;"><div style="font-size:15px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+d.e+'</div>'
-        +'<div style="font-size:11px;color:var(--text-muted);margin-top:2px;">entradas · '+d.m+'</div></div>'
-      +'</div>'; }).join(''); }
+    var aviso='<div style="padding:16px 20px;font-size:12.5px;color:var(--text-muted);line-height:1.55;border-bottom:1px solid var(--border-card);">'
+      +'El motor solo compara lo que está en estas listas: <strong style="color:var(--text-body);">si un color o un material no figura, no se compara y no salta ninguna alerta</strong>. '
+      +'Una ficha sin avisos no siempre está correcta — puede que no se haya podido comprobar. El tamaño de cada lista es, de hecho, la cobertura del check que la usa. De momento son de solo lectura.</div>';
+    return aviso+_qDicc.map(function(d,i){
+      return '<div style="padding:18px 20px;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
+        +'<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px;">'
+          +'<span style="font-size:14px;font-weight:700;color:var(--text-ink);">'+d.n+'</span>'
+          +'<span style="font-size:12px;color:var(--text-muted);">'+d.check+'</span>'
+          +'<span style="margin-left:auto;font-size:11px;color:var(--text-muted);">últ. cambio '+d.m+'</span></div>'
+        +'<table class="desc-table v-mtabla" style="width:100%;"><tbody>'
+        + d.listas.map(function(l){
+            return '<tr><td style="width:36%;font-size:12.5px;font-weight:600;color:var(--text-ink);">'+l.k+'</td>'
+              +'<td style="width:10%;text-align:right;font-size:13px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+l.e+'</td>'
+              +'<td style="font-size:12px;color:var(--text-muted);padding-left:20px;">'+l.d+'</td></tr>'; }).join('')
+        +'</tbody></table></div>'; }).join(''); }
 
   // ── Resolución ─────────────────────────────────────────────────────────────
   function qFind(id){ return _qGrupos.filter(function(g){return g.id===id;})[0]; }
