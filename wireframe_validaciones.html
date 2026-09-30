@@ -1117,8 +1117,8 @@
   function renderHs(a){ var c=a.hs>=75?'var(--green)':(a.hs>=55?'var(--warning-text)':'#c61112');
     return '<div style="display:flex; align-items:baseline; gap:8px;">'
       +'<span style="font-size:23px; font-weight:800; line-height:1; color:'+c+';">'+a.hs+'</span>'
-      +'<span style="font-size:14px; color:var(--text-muted); font-weight:700;">Health Score</span>'
-      +'<span style="font-size:15px; line-height:1; position:relative; top:-1px;">'+tendArrow(a.tend)+'</span></div>'; }
+      +'<span style="font-size:15px; line-height:1;">'+tendArrow(a.tend)+'</span>'
+      +'<span style="font-size:14px; color:var(--text-muted); font-weight:700;">Health Score</span></div>'; }
   function infSalud(a, review){ var total=a.refs||0;
     var noPub=Math.round(total*0.05), crit=Math.round(total*0.28), sinErr=Math.round(total*0.30), adv=Math.max(0,total-sinErr-crit-noPub);
     var discr=Math.round(total*0.335), orto=Math.round(total*0.15);
