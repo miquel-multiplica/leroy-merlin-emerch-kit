@@ -1081,6 +1081,11 @@
   // su capa dice solo lo que cambia — lo que añade y lo que anula. Así la lista
   // general sigue siendo una afirmación legible sobre el catálogo, y abrir una
   // sección nueva no obliga a revisar las 531 entradas de cada lista.
+  // La versión del motor se estampa en el funnel al lanzar una auditoría. Vivía en el
+  // panel de versiones anterior, que desapareció al rehacer el modelo de reglas; el
+  // flujo de publicar y restaurar está pendiente de rehacerse para las capas.
+  var _motorVer='v1.4';
+
   var _rAmb='', _rFVal='', _rOpen=null, _rQ='', _rOpenG={}, _rNuevo=null, _rAviso='';
 
   function rKey(sec){ return sec||'General'; }
