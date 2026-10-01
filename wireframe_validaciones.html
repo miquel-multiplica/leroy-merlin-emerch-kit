@@ -947,7 +947,7 @@
        v:['kg','dam','dal','kl','km','hm','mah','dbi','ah','nm','lx']}]}
   ];
 
-  var _qTab='pend', _qOpen={}, _qOpenAud={}, _qResId=null, _qResOpt='regla', _qResSecs={}, _qResMods={}, _qResolved={};
+  var _qTab='pend', _qOpen={}, _qOpenAud={}, _qResId=null, _qResOpt='regla', _qResSecs={}, _qResolved={}, _resCons=null;
 
   function qDescartes(g){ var n=0; g.auds.forEach(function(a){ n+=a.refs.length; }); return n; }
   // La sección es de la referencia, que la hereda de su modelo. Una auditoría de gama,
@@ -1182,14 +1182,16 @@
     _qResId=id; _qResOpt=g.dicc?'dicc':'regla';
     // Se preseleccionan las secciones donde se ha detectado, pero el revisor puede
     // añadir otras: que no haya salido todavía en Baño no significa que no valga allí.
-    _qResSecs={}; _qResMods={}; Object.keys(qSecciones(g)).forEach(function(x){ _qResSecs[x]=1; });
+    _qResSecs={}; Object.keys(qSecciones(g)).forEach(function(x){ _qResSecs[x]=1; });
     renderRes(); document.getElementById('v-res-modal').classList.add('open'); }
   function closeRes(){ document.getElementById('v-res-modal').classList.remove('open'); _qResId=null; }
   function setResOpt(o){ if(_qResOpt===o) return; _qResOpt=o; renderRes(); }
   function qResSel(){ var o=[]; for(var k in _qResSecs) if(_qResSecs[k]) o.push(k); return o.sort(); }
-  function qResMods(){ var o=[]; for(var k in _qResMods) if(_qResMods[k]) o.push(k); return o.sort(); }
-  function toggleResSec(sec){ _qResSecs[sec]=!_qResSecs[sec]; renderRes(); }
-  function toggleResMod(m){ _qResMods[m]=!_qResMods[m]; renderRes(); }
+  function toggleResSec(sec){ _qResSecs[sec]=!_qResSecs[sec]; renderResCons(); }
+  function renderResCons(){ var g=qFind(_qResId); if(!g) return;
+    var el=document.getElementById('v-res-cons');
+    if(el) el.innerHTML=_resCons?_resCons():'';
+    renderResCta(g); }
 
   function renderRes(){ var g=qFind(_qResId); if(!g) return;
     var n=qDescartes(g), secs=qSecciones(g), ks=Object.keys(secs);
@@ -1220,49 +1222,54 @@
         +(on?'<div style="padding:0 16px 14px 46px;">'+extra+'</div>':'')+'</div>'; };
 
     var cons=function(txt){ return '<div style="font-size:12.5px;color:var(--text-body);line-height:1.55;">'+txt+'</div>'; };
-    var est=function(){ return fmtNum(Math.round(n*11)*qResSel().length+Math.round(n*3)*qResMods().length); };
+    var est=function(){ return fmtNum(Math.round(n*11)*qResSel().length); };
+    var consRegla=function(){ return qResSel().length
+      ? cons('Se crea una regla por sección: la validación se apaga en '+qResSel().join(', ')+' y sigue avisando en el resto. Dejará de avisar en <strong>~'+est()+' referencias</strong>.')
+      : '<div style="font-size:12.5px;color:var(--warning-text);">Elige al menos una sección.</div>'; };
 
     // Casillas con scroll en vez de pastillas: caben todas las secciones y, debajo,
     // los modelos donde se ha detectado — el ámbito de una regla puede ser un modelo.
-    var detSec=qSecciones(g), detMod=qModelosMap(g);
+    var detSec=qSecciones(g);
     var fila=function(on,onch,txt,nota){
       return '<label style="display:flex;align-items:center;gap:9px;padding:6px 12px;cursor:pointer;font-size:12.5px;color:var(--text-body);">'
         +'<input type="checkbox"'+(on?' checked':'')+' onchange="'+onch+'" style="width:15px;height:15px;accent-color:var(--green);cursor:pointer;flex-shrink:0;"/>'
         +'<span style="flex:1;min-width:0;">'+txt+'</span>'
         +(nota?'<span style="font-size:11px;color:var(--text-muted);flex-shrink:0;">'+nota+'</span>':'')+'</label>'; };
     var cab=function(t){ return '<div style="padding:9px 12px 4px;font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;">'+t+'</div>'; };
-    var mods=Object.keys(detMod).sort();
     var lista='<div style="max-height:212px;overflow-y:auto;border:1px solid var(--border-input);border-radius:8px;background:#fff;margin-bottom:11px;">'
       + cab('Secciones')
       + qTodasSecciones().map(function(x){ var esc=x.replace(/'/g,"\\'");
           return fila(!!_qResSecs[x],'toggleResSec(\''+esc+'\')',x,detSec[x]?detSec[x]+(detSec[x]===1?' descarte':' descartes'):''); }).join('')
-      + (mods.length?cab('Modelos donde se ha detectado')
-          + mods.map(function(x){ return fila(!!_qResMods[x],'toggleResMod(\''+x+'\')',x,detMod[x]+(detMod[x]===1?' descarte':' descartes')); }).join(''):'')
       +'</div>'
-      +'<div style="font-size:11.5px;color:var(--text-muted);margin-bottom:9px;">Vienen marcadas las secciones donde se ha detectado. Puedes añadir otras, o acotar a un modelo si el caso solo vale ahí.</div>';
+      +'<div style="font-size:11.5px;color:var(--text-muted);margin-bottom:9px;">Vienen marcadas las secciones donde se ha detectado. Puedes añadir las que sepas que también valen.</div>';
 
     var dicc=opt('dicc','En todo el catálogo', g.dicc
       ? cons('Se añade al diccionario de <strong>'+g.dicc+'</strong>. El motor lo aprende y deja de equivocarse en todas partes, sin dejar de comprobar lo demás.')
       : cons('Esta validación no se apoya en ninguna lista que ampliar, así que se crea una <strong>regla general</strong>: se apaga para este caso en todo el catálogo.'));
 
     document.getElementById('v-res-opts').innerHTML= dicc
-      + opt('regla','Solo en parte del catálogo', lista
-        + ((qResSel().length+qResMods().length)?cons('Se crea una regla por ámbito: la validación se apaga en '+qResSel().concat(qResMods()).join(', ')+' y sigue avisando en el resto. Dejará de avisar en <strong>~'+est()+' referencias</strong>.')
-                           :'<div style="font-size:12.5px;color:var(--warning-text);">Elige al menos una sección o un modelo.</div>'))
+      + opt('regla','Solo en algunas secciones', lista+'<div id="v-res-cons">'+consRegla()+'</div>')
       + opt('ign','Ignorar',
         cons('No se crea nada. El caso queda en <strong>Ignorados</strong> por si reaparece.'));
 
+    // Se guarda para poder refrescar solo la consecuencia al marcar una casilla.
+    _resCons=consRegla;
+    renderResCta(g); }
 
-    var b=document.getElementById('v-res-go');
-    var nAmb=qResSel().length+qResMods().length;
-    b.textContent=(_qResOpt==='regla')?(nAmb>1?'Crear '+nAmb+' reglas':'Crear regla')
-      :((_qResOpt==='dicc')?(g.dicc?'Añadir al diccionario':'Crear regla general'):'Ignorar'); }
+  function renderResCta(g){ var b=document.getElementById('v-res-go'); if(!b) return;
+    var k=qResSel().length;
+    b.textContent=(_qResOpt==='regla')?(k>1?'Crear '+k+' reglas':'Crear regla')
+      :((_qResOpt==='dicc')?(g.dicc?'Añadir al diccionario':'Crear regla general'):'Ignorar');
+    // Sin ámbito elegido no hay nada que crear: que el botón no parezca pulsable.
+    var muerto=(_qResOpt==='regla' && !k);
+    b.style.opacity=muerto?'0.4':'';
+    b.style.cursor=muerto?'not-allowed':''; }
 
   function aplicarRes(){ var g=qFind(_qResId); if(!g) return;
     var n=qDescartes(g);
-    var amb=qResSel().map(function(x){return 'Sección · '+x;}).concat(qResMods().map(function(x){return 'Modelo · '+x;}));
+    var amb=qResSel().map(function(x){return 'Sección · '+x;});
     if(_qResOpt==='regla'){ if(!amb.length) return;
-      amb.forEach(function(a){ _qReglas.push({disp:g.disp,motivo:g.motivo,check:g.check,ambito:a,autor:'Ana García',fecha:'30 sep',silencia:Math.round(n*(a.indexOf('Modelo')===0?3:11)),origen:n,on:true}); }); }
+      amb.forEach(function(a){ _qReglas.push({disp:g.disp,motivo:g.motivo,check:g.check,ambito:a,autor:'Ana García',fecha:'30 sep',silencia:Math.round(n*11),origen:n,on:true}); }); }
     else if(_qResOpt==='dicc'){
       if(g.dicc) _qDicc.forEach(function(d){ if(d.n===g.dicc){ d.e--; d.m='30 sep · Ana García'; } });
       else _qReglas.push({disp:g.disp,motivo:g.motivo,check:g.check,ambito:'General',autor:'Ana García',fecha:'30 sep',silencia:Math.round(n*34),origen:n,on:true}); }
