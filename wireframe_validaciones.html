@@ -1013,7 +1013,10 @@
       var secTxt=Object.keys(secs).map(function(s2){ return s2+' <strong style="color:var(--text-ink);">'+secs[s2]+'</strong>'; }).join('<br>');
       var chev='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .18s ease;flex-shrink:0;'+(abierto?'transform:rotate(90deg);':'')+'"><polyline points="9 18 15 12 9 6"/></svg>';
       var num='font-size:13px;color:var(--text-ink);text-align:right;font-variant-numeric:tabular-nums;';
-      var aviso=g.reglaPrevia?'<div style="margin-top:5px;display:inline-flex;align-items:center;gap:6px;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--warning-text);">Ya hay regla en '+g.reglaPrevia.ambito+' · vuelve fuera de su ámbito</div>':'';
+      // El aviso no es "ojo, ya hay una regla": es que la regla se quedó corta de
+      // ámbito, y lo que lo demuestra es dónde está reapareciendo el caso.
+      var fuera=g.reglaPrevia?Object.keys(qSecciones(g)).filter(function(x){ return g.reglaPrevia.ambito.indexOf(x)<0; }):[];
+      var aviso=g.reglaPrevia?'<div style="margin-top:5px;display:inline-flex;align-items:center;gap:6px;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--warning-text);">Ya hay regla en '+g.reglaPrevia.ambito.replace('Sección · ','')+', pero reaparece en '+(fuera.length===1?fuera[0]:fuera.length+' secciones más')+'</div>':'';
       return '<tr style="cursor:pointer;" onclick="qToggle(\''+g.id+'\')">'
         +'<td><div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--text-muted);padding-top:2px;">'+chev+'</span>'
           +'<span style="min-width:0;"><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+g.disp+'</span>'
@@ -1055,14 +1058,17 @@
   // Una regla NO vive sobre un diccionario: actúan en momentos distintos. El
   // diccionario alimenta al check y cambia lo que detecta; la regla cancela después un
   // hallazgo ya producido. Por eso el diccionario es global y la regla tiene ámbito.
-  var _qFiltroAmb='';
+  var _qFiltroNivel='', _qFiltroVal='';
 
   // La pregunta útil no es "qué reglas se definieron aquí" sino "qué está descartado si
   // audito esto": una regla general también aplica. Por eso el filtro incluye las
   // heredadas de nivel superior y las marca como tales.
-  function qAmbitos(){ var m={}; _qReglas.forEach(function(r){ if(r.ambito!=='General') m[r.ambito]=1; }); return Object.keys(m).sort(); }
-  function qAplica(r){ if(!_qFiltroAmb) return true; if(r.ambito==='General') return true; return r.ambito===_qFiltroAmb; }
-  function setFiltroAmb(v){ _qFiltroAmb=v; renderQPanel(); }
+  function qPartes(a){ var i=a.indexOf(' · '); return (i<0)?[a,'']:[a.slice(0,i),a.slice(i+3)]; }
+  function qNiveles(){ var m={}; _qReglas.forEach(function(r){ if(r.ambito!=='General') m[qPartes(r.ambito)[0]]=1; }); return Object.keys(m); }
+  function qValores(niv){ var m={}; _qReglas.forEach(function(r){ var pr=qPartes(r.ambito); if(pr[0]===niv) m[pr[1]]=1; }); return Object.keys(m).sort(); }
+  function qAplica(r){ if(!_qFiltroNivel) return true; if(r.ambito==='General') return true; return r.ambito===_qFiltroNivel+' · '+_qFiltroVal; }
+  function setFiltroNivel(v){ _qFiltroNivel=v; _qFiltroVal=v?(qValores(v)[0]||''):''; renderQPanel(); }
+  function setFiltroVal(v){ _qFiltroVal=v; renderQPanel(); }
 
   function qReglasHtml(){
     var aviso='<div style="padding:16px 20px;font-size:12.5px;color:var(--text-muted);line-height:1.55;border-bottom:1px solid var(--border-card);">'
@@ -1070,13 +1076,16 @@
       +'A diferencia de una entrada de diccionario, no le enseña nada al motor: el check las sigue detectando y la regla tapa el resultado. '
       +'Si un check acumula muchas reglas, lo que falta es ampliar su diccionario.</div>';
 
-    var ambs=qAmbitos();
-    var filtro='<div style="padding:14px 20px;border-bottom:1px solid var(--border-card);display:flex;align-items:center;gap:10px;">'
+    var sel=function(onch,opts){ return '<div style="position:relative;"><select onchange="'+onch+'(this.value)" style="height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 30px 0 11px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;appearance:none;-webkit-appearance:none;">'+opts
+      +'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'; };
+    var nivs=qNiveles();
+    var optNiv='<option value="">todo el catálogo</option>'+nivs.map(function(nv){ return '<option'+(nv===_qFiltroNivel?' selected':'')+'>'+nv+'</option>'; }).join('');
+    var optVal=_qFiltroNivel?qValores(_qFiltroNivel).map(function(v){ return '<option'+(v===_qFiltroVal?' selected':'')+'>'+v+'</option>'; }).join(''):'';
+    var filtro='<div style="padding:14px 20px;border-bottom:1px solid var(--border-card);display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
       +'<span style="font-size:12.5px;color:var(--text-muted);">Qué está descartado si audito</span>'
-      +'<div style="position:relative;"><select onchange="setFiltroAmb(this.value)" style="height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 30px 0 11px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;appearance:none;-webkit-appearance:none;">'
-      +'<option value="">todo el catálogo</option>'+ambs.map(function(a){ return '<option'+(a===_qFiltroAmb?' selected':'')+'>'+a+'</option>'; }).join('')
-      +'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'
-      +(_qFiltroAmb?'<span style="font-size:12px;color:var(--text-muted);">incluye las generales, que también aplican</span>':'')+'</div>';
+      +sel('setFiltroNivel',optNiv)
+      +(_qFiltroNivel?sel('setFiltroVal',optVal):'')
+      +(_qFiltroNivel?'<span style="font-size:12px;color:var(--text-muted);">incluye las generales, que también aplican</span>':'')+'</div>';
 
     var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
     var head='<thead><tr>'+th('Regla','23%')+th('Check','16%')+th('Ámbito','17%')+th('Descarta','10%','right')+th('Origen','8%','right')+th('Creada por','11%')+th('','15%')+'</tr></thead>';
@@ -1086,7 +1095,7 @@
     var rows=rs.map(function(o){
       var r=o.r, dim=r.on?'':'opacity:.5;';
       var num='text-align:right;font-variant-numeric:tabular-nums;font-size:13px;color:var(--text-ink);';
-      var hered=(_qFiltroAmb && r.ambito==='General')?' <span style="display:inline-block;background:var(--bg-parchment);border-radius:5px;padding:1px 6px;font-size:10.5px;font-weight:600;color:var(--text-muted);">heredada</span>':'';
+      var hered=(_qFiltroNivel && r.ambito==='General')?' <span style="display:inline-block;background:var(--bg-parchment);border-radius:5px;padding:1px 6px;font-size:10.5px;font-weight:600;color:var(--text-muted);">heredada</span>':'';
       return '<tr style="'+dim+'">'
         +'<td><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+r.disp+'</span>'
           +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:2px;">'+r.motivo+'</span></td>'
@@ -1131,10 +1140,12 @@
     document.getElementById('v-dicc-sub').innerHTML=o.d.n+' · '+o.l.d+' · <strong style="color:var(--text-body);">'+o.l.e+' entradas</strong>';
     var vs=o.l.v.filter(function(x){ return !_qDiccQ || x.toLowerCase().indexOf(_qDiccQ)>=0; });
     var body;
+    // Mismo formato para los tres tipos de lista: términos sueltos, grupos y pares.
+    // Mezclar pastillas y filas hacía parecer que eran cosas distintas, y no lo son.
     if(!vs.length) body='<div style="padding:28px;text-align:center;color:var(--text-muted);font-size:13px;">Sin coincidencias.</div>';
-    else if(o.l.t==='chips') body='<div style="display:flex;flex-wrap:wrap;gap:7px;">'+vs.map(function(x){
-        return '<span style="background:var(--bg-parchment);border:1px solid var(--border-card);border-radius:999px;padding:4px 12px;font-size:12.5px;color:var(--text-body);">'+x+'</span>'; }).join('')+'</div>';
-    else body=vs.map(function(x,i){ return '<div style="padding:9px 0;font-size:12.5px;color:var(--text-body);line-height:1.5;'+(i?'border-top:1px solid var(--border-card);':'')+'">'+x+'</div>'; }).join('');
+    else body=vs.map(function(x,i){ return '<div style="display:flex;gap:12px;padding:9px 0;font-size:12.5px;color:var(--text-body);line-height:1.5;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
+        +'<span style="color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;min-width:24px;text-align:right;">'+(i+1)+'</span>'
+        +'<span style="min-width:0;">'+x+'</span></div>'; }).join('');
     document.getElementById('v-dicc-body').innerHTML=body;
     var nota=document.getElementById('v-dicc-nota');
     nota.innerHTML=(o.l.v.length<o.l.e)?'Muestra de '+o.l.v.length+' de las '+o.l.e+' entradas. El contenido completo vive en el motor.':''; }
@@ -1172,7 +1183,7 @@
       +'<div><div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;">Quién y cuándo</div>'
       + g.auds.map(function(a){ return '<div style="font-size:12.5px;color:var(--text-body);padding:2px 0;">#'+a.aud+' · '+a.rev+' · '+a.fecha+'</div>'; }).join('')+'</div></div>';
     if(g.reglaPrevia) ev+='<div style="margin-top:14px;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--warning-text);line-height:1.5;">'
-      +'<strong>Ya existe una regla</strong> para este disparador, en '+g.reglaPrevia.ambito+' ('+g.reglaPrevia.autor+', '+g.reglaPrevia.fecha+'). Que vuelva a aparecer fuera de ese ámbito sugiere que se quedó corta: quizá deba subir de nivel.</div>';
+      +'<strong>La regla que ya existe se queda corta.</strong> '+g.reglaPrevia.autor+' la creó el '+g.reglaPrevia.fecha+' para '+g.reglaPrevia.ambito+', y el caso está reapareciendo en '+Object.keys(qSecciones(g)).filter(function(x){ return g.reglaPrevia.ambito.indexOf(x)<0; }).join(' y ')+'. El fenómeno es más ancho que el ámbito que se le dio.</div>';
     document.getElementById('v-res-evidencia').innerHTML=ev;
 
     // Solo la opción elegida se explica. Las otras dos son un titular de una línea:
@@ -1198,15 +1209,15 @@
     if(!mantenerOpts) document.getElementById('v-res-opts').innerHTML= sinDicc + dicc
       + opt('regla','Solo en un ámbito', ambSel
         + cons('Se crea una regla: el check se apaga ahí y sigue avisando en el resto. Dejará de avisar en <strong>~<span id="v-res-est">'+est()+'</span> referencias</strong>.'))
-      + opt('ign','Ni una cosa ni la otra',
-        cons('Se aparta sin crear nada. Queda en <strong>Ignorados</strong> por si el caso reaparece.'));
+      + opt('ign','Ignorar',
+        cons('No se crea nada. El caso queda en <strong>Ignorados</strong> por si reaparece.'));
 
     // Al cambiar de ámbito no se repintan las opciones (destruiría el <select> abierto):
     // solo se refresca la cifra.
     var e=document.getElementById('v-res-est'); if(e) e.textContent=est();
 
     var b=document.getElementById('v-res-go');
-    b.textContent=(_qResOpt==='regla')?'Crear regla':((_qResOpt==='dicc')?'Añadir al diccionario':'Apartar'); }
+    b.textContent=(_qResOpt==='regla')?'Crear regla':((_qResOpt==='dicc')?'Añadir al diccionario':'Ignorar'); }
 
   function aplicarRes(){ var g=qFind(_qResId); if(!g) return;
     var n=qDescartes(g);
@@ -1214,7 +1225,7 @@
     else if(_qResOpt==='dicc'){ _qDicc.forEach(function(d){ if(d.n===g.dicc){ d.e--; d.m='30 sep · Ana García'; } }); }
     _qResolved[g.id]=_qResOpt;
     closeRes(); renderConfig();
-    vToast(_qResOpt==='regla'?'Regla creada · '+_qResAmb:(_qResOpt==='dicc'?'Añadido al diccionario de '+g.dicc:'Caso apartado')); }
+    vToast(_qResOpt==='regla'?'Regla creada · '+_qResAmb:(_qResOpt==='dicc'?'Añadido al diccionario de '+g.dicc:'Caso ignorado')); }
 
   function fmtNum(n){ return n.toLocaleString('es-ES'); }
 
