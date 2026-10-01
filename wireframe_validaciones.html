@@ -674,20 +674,22 @@
   </div>
 </div>
 <div class="modal-overlay" id="v-res-modal">
-  <div class="modal-box" style="width:720px; max-width:94vw; max-height:calc(100vh - 96px); padding:0; display:flex; flex-direction:column; overflow:hidden;">
-    <div style="padding:26px 28px 0;">
-      <div id="v-res-title" style="font-size:19px; font-weight:700; color:var(--text-ink);"></div>
-      <div id="v-res-sub" style="font-size:13px; color:var(--text-muted); margin-top:6px;"></div>
+  <div class="modal-box" style="width:1100px; max-width:95vw; max-height:calc(100vh - 96px); padding:0; display:flex; overflow:hidden;">
+    <div style="width:40%; min-width:340px; background:#f5f5f3; border-right:1px solid var(--border-card); padding:28px; overflow-y:auto;">
+      <div id="v-res-title" style="font-size:19px; font-weight:700; color:var(--text-ink); line-height:1.35;"></div>
+      <div id="v-res-sub" style="font-size:12.5px; color:var(--text-muted); margin-top:6px;"></div>
+      <div id="v-res-evidencia" style="margin-top:20px;"></div>
     </div>
-    <div style="flex:1; min-height:0; overflow-y:auto; padding:22px 28px;">
-      <div id="v-res-evidencia"></div>
-      <div style="font-size:13px; font-weight:700; color:var(--text-ink); margin:24px 0 10px;">Qué hacer</div>
-      <div id="v-res-opts"></div>
-      <div id="v-res-impacto" style="margin-top:16px;"></div>
-    </div>
+    <div style="flex:1; min-width:0; display:flex; flex-direction:column;">
+      <div style="flex:1; min-height:0; overflow-y:auto; padding:28px;">
+        <div style="font-size:15px; font-weight:700; color:var(--text-ink); margin-bottom:4px;">¿Hasta dónde es cierto?</div>
+        <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:18px; line-height:1.5;">De la respuesta depende qué se crea y a quién afecta.</div>
+        <div id="v-res-opts"></div>
+      </div>
     <div style="border-top:1px solid var(--border-card); padding:16px 28px; display:flex; align-items:center; gap:12px;">
       <button onclick="closeRes()" style="margin-left:auto; background:none; border:none; color:var(--green); font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',system-ui,sans-serif; padding:0 14px; height:44px;">Cancelar</button>
       <button id="v-res-go" onclick="aplicarRes()" class="btn btn-primary" style="height:44px;">Aplicar</button>
+    </div>
     </div>
   </div>
 </div>
@@ -969,7 +971,7 @@
     var t=function(k,label,n){ var on=(_qTab===k);
       return '<button onclick="setQTab(\''+k+'\')" style="height:48px;padding:0 18px;background:none;border:none;border-bottom:2px solid '+(on?'var(--green)':'transparent')+';font-family:\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:'+(on?'700':'600')+';color:'+(on?'var(--text-ink)':'var(--text-muted)')+';cursor:pointer;display:inline-flex;align-items:center;gap:8px;">'+label
         +(n!==null?'<span style="background:var(--bg-parchment);color:'+(on?'var(--text-ink)':'var(--text-body)')+';border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700;">'+n+'</span>':'')+'</button>'; };
-    el.innerHTML=t('pend','Por resolver',qPend().length)+t('reglas','Reglas',_qReglas.length)+t('ign','Ignorados',qIgnorados().length)+t('dicc','Diccionarios',null); }
+    el.innerHTML=t('pend','Por resolver',qPend().length)+t('ign','Ignorados',qIgnorados().length)+t('dicc','Diccionarios',null)+t('reglas','Reglas',_qReglas.length); }
 
   function renderQPanel(){ var el=document.getElementById('v-motor-panel'); if(!el) return;
     if(_qTab==='pend') el.innerHTML=qPendHtml();
@@ -1162,7 +1164,7 @@
 
     var revs={}; g.auds.forEach(function(a){ revs[a.rev]=1; });
     var ev='<div style="background:var(--bg-parchment);border-radius:10px;padding:14px 16px;">'
-      +'<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px;">Lo que silenciaría</div>'
+      +'<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px;">Lo que descartaría</div>'
       +'<div style="font-size:12.5px;color:var(--text-ink);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.5;">'+g.reason+'</div></div>'
       +'<div style="display:flex;gap:28px;margin-top:16px;flex-wrap:wrap;">'
       +'<div><div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;">Reparto</div>'
@@ -1173,37 +1175,35 @@
       +'<strong>Ya existe una regla</strong> para este disparador, en '+g.reglaPrevia.ambito+' ('+g.reglaPrevia.autor+', '+g.reglaPrevia.fecha+'). Que vuelva a aparecer fuera de ese ámbito sugiere que se quedó corta: quizá deba subir de nivel.</div>';
     document.getElementById('v-res-evidencia').innerHTML=ev;
 
-    var opt=function(k,titulo,sub,extra){ var on=(_qResOpt===k);
+    // Solo la opción elegida se explica. Las otras dos son un titular de una línea:
+    // el texto largo multiplicado por tres era lo que hacía ilegible la modal, y la
+    // consecuencia vivía además en una caja al pie, desvinculada de la opción.
+    var opt=function(k,titulo,extra){ var on=(_qResOpt===k);
       return '<div style="background:'+(on?'var(--success-bg)':'#fff')+';border:1px solid '+(on?'var(--green)':'var(--border-input)')+';border-radius:10px;margin-bottom:10px;">'
-        +'<button type="button" onclick="setResOpt(\''+k+'\')" style="display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;background:transparent;border:0;border-radius:10px;padding:14px 16px;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;">'
-        +'<span style="width:18px;height:18px;border-radius:50%;border:2px solid '+(on?'var(--green)':'var(--border-input)')+';display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">'+(on?'<span style="width:9px;height:9px;border-radius:50%;background:var(--green);"></span>':'')+'</span>'
-        +'<span style="min-width:0;flex:1;"><span style="display:block;font-size:14px;font-weight:600;color:var(--text-ink);">'+titulo+'</span>'
-        +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.5;">'+sub+'</span></span></button>'
-        +((on&&extra)?'<div style="padding:0 16px 14px 46px;">'+extra+'</div>':'')+'</div>'; };
+        +'<button type="button" onclick="setResOpt(\''+k+'\')" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;border-radius:10px;padding:14px 16px;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;">'
+        +'<span style="width:18px;height:18px;border-radius:50%;border:2px solid '+(on?'var(--green)':'var(--border-input)')+';display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">'+(on?'<span style="width:9px;height:9px;border-radius:50%;background:var(--green);"></span>':'')+'</span>'
+        +'<span style="min-width:0;flex:1;font-size:14px;font-weight:600;color:var(--text-ink);">'+titulo+'</span></button>'
+        +(on?'<div style="padding:0 16px 14px 46px;">'+extra+'</div>':'')+'</div>'; };
 
-    var ambSel='<select onchange="setResAmb(this.value)" style="height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 10px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;">'
+    var cons=function(txt){ return '<div style="font-size:12.5px;color:var(--text-body);line-height:1.55;">'+txt+'</div>'; };
+    var est=function(){ return fmtNum((_qResAmb==='General')?Math.round(n*34):Math.round(n*11)); };
+
+    var ambSel='<select onchange="setResAmb(this.value)" style="height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 10px;margin-bottom:10px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;">'
       +['General'].concat(ks.map(function(s){return 'Sección · '+s;})).map(function(v){ return '<option'+(v===_qResAmb?' selected':'')+'>'+v+'</option>'; }).join('')+'</select>';
 
-    // La decisión no es "qué mecanismo quiero" sino "hasta dónde es cierto esto". Si es
-    // conocimiento general, va al diccionario y el check aprende. Si solo vale en un
-    // contexto, es una regla con ese ámbito. El mecanismo se deduce de la respuesta.
-    var pregunta='<div style="font-size:12.5px;color:var(--text-body);margin-bottom:14px;line-height:1.55;">¿Hasta dónde es cierto lo que dice el descarte?</div>';
-    var dicc=g.dicc?opt('dicc','Es cierto en todo el catálogo','Se añade al diccionario de <strong>'+g.dicc+'</strong>. El check lo aprende y deja de equivocarse en todas partes, sin dejar de comprobar lo demás.',''):'';
-    var sinDicc=g.dicc?'':'<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;">Este caso no se puede expresar como conocimiento: el check no se apoya en ninguna lista que ampliar. Solo cabe la regla o ignorarlo.</div>';
-    if(!mantenerOpts) document.getElementById('v-res-opts').innerHTML= pregunta + sinDicc
-      + dicc
-      + opt('regla','Solo es cierto en un ámbito concreto','Fuera de ahí el check debe seguir avisando. Se crea una regla que descarta estas alertas solo en ese ámbito.',ambSel)
-      + opt('ign','Ni una cosa ni la otra','El descarte era correcto para esas referencias, pero no se puede generalizar. Se aparta sin crear nada.','');
+    var dicc=g.dicc?opt('dicc','En todo el catálogo',
+      cons('Se añade al diccionario de <strong>'+g.dicc+'</strong>. El motor lo aprende y deja de equivocarse en todas partes, sin dejar de comprobar lo demás.')):'';
+    var sinDicc=g.dicc?'':'<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;">Este check no se apoya en ninguna lista, así que no cabe ampliar un diccionario.</div>';
 
-    var imp=document.getElementById('v-res-impacto');
-    if(_qResOpt==='regla'){ var est=(_qResAmb==='General')?Math.round(n*34):Math.round(n*11);
-      imp.innerHTML='<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border-card);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--text-body);">'
-        +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
-        +'Dejará de avisar en <strong>~'+fmtNum(est)+' referencias</strong> del catálogo.</div>'; }
-    else if(_qResOpt==='dicc'){ imp.innerHTML='<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border-card);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--text-body);">'
-        +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
-        +'Afecta a todo el catálogo, pero <strong>no apaga el check</strong>: deja de considerar este caso un error y sigue comprobando lo demás.</div>'; }
-    else imp.innerHTML='';
+    if(!mantenerOpts) document.getElementById('v-res-opts').innerHTML= sinDicc + dicc
+      + opt('regla','Solo en un ámbito', ambSel
+        + cons('Se crea una regla: el check se apaga ahí y sigue avisando en el resto. Dejará de avisar en <strong>~<span id="v-res-est">'+est()+'</span> referencias</strong>.'))
+      + opt('ign','Ni una cosa ni la otra',
+        cons('Se aparta sin crear nada. Queda en <strong>Ignorados</strong> por si el caso reaparece.'));
+
+    // Al cambiar de ámbito no se repintan las opciones (destruiría el <select> abierto):
+    // solo se refresca la cifra.
+    var e=document.getElementById('v-res-est'); if(e) e.textContent=est();
 
     var b=document.getElementById('v-res-go');
     b.textContent=(_qResOpt==='regla')?'Crear regla':((_qResOpt==='dicc')?'Añadir al diccionario':'Apartar'); }
