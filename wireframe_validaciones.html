@@ -170,6 +170,8 @@
   .lm-tooltip:hover::after, .lm-tooltip:hover::before { opacity: 1; visibility: visible; }
   .lm-tooltip-below::after { bottom:auto; top:130%; left:auto; right:0; transform:none; }
   .lm-tooltip-below::before { bottom:auto; top:130%; left:auto; right:8px; transform:translateY(-100%); border-top-color:transparent; border-bottom-color:#333333; }
+  .lm-tt-abajo::after{ bottom:auto; top:168%; left:0; right:auto; transform:none; }
+  .lm-tt-abajo::before{ bottom:auto; top:168%; left:10px; right:auto; transform:translateY(-100%); border-top-color:transparent; border-bottom-color:#333333; }
   .desc-section-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin: 28px 0 10px; }
   .desc-section-label:first-child { margin-top: 0; }
 
@@ -668,7 +670,7 @@
 <div class="modal-overlay" id="v-dicc-modal">
   <div class="modal-box" style="width:640px; max-width:94vw; max-height:calc(100vh - 96px); padding:0; display:flex; flex-direction:column; overflow:hidden; position:relative;">
     <button class="modal-x" onclick="closeDicc()" aria-label="Cerrar" style="position:absolute;top:13px;right:13px;z-index:3;width:32px;height:32px;border:none;background:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--text-muted);transition:background .12s ease,color .12s ease;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    <div style="padding:26px 52px 18px 28px; border-bottom:1px solid var(--border-card);">
+    <div style="padding:26px 52px 18px 28px; border-bottom:1px solid var(--border-card); position:relative; z-index:2;">
       <div style="display:flex; align-items:baseline; gap:11px; flex-wrap:wrap;">
         <span id="v-dicc-title" style="font-size:19px; font-weight:700; color:var(--text-ink);"></span>
         <span id="v-dicc-info"></span>
@@ -1338,7 +1340,7 @@
       +(l.v.length<l.e?' · <span style="color:var(--warning-text);">viendo una muestra de '+l.v.length+'</span>':'');
 
     document.getElementById('v-dicc-info').innerHTML=l.d
-      ? '<span class="lm-tooltip" data-tooltip="'+l.d.replace(/"/g,'&quot;')+'" style="color:var(--text-muted);align-self:center;cursor:help;">'
+      ? '<span class="lm-tooltip lm-tt-abajo" data-tooltip="'+l.d.replace(/"/g,'&quot;')+'" style="color:var(--text-muted);align-self:center;cursor:help;">'
         +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>'
       : '';
 
