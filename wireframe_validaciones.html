@@ -998,11 +998,11 @@
       +'Se quedan aquí porque <strong style="color:var(--text-body);">si un caso ignorado reaparece una y otra vez, deja de ser una excepción</strong>.</div>';
     if(!gs.length) return aviso+'<div style="padding:34px;text-align:center;color:var(--text-muted);font-size:13px;">No se ha ignorado ningún caso.</div>';
     var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
-    var head='<thead><tr>'+th('Caso','27%')+th('Validación','19%')+th('Descartes','9%','right')+th('Auditorías','9%','right')+th('Secciones','16%')+th('','20%')+'</tr></thead>';
+    var head='<thead><tr>'+th('Caso','18%')+th('Motivo del descarte','16%')+th('Validación','16%')+th('Descartes','9%','right')+th('Auditorías','9%','right')+th('Secciones','14%')+th('','18%')+'</tr></thead>';
     var rows=gs.map(function(g){
       var secs=qSecciones(g);
-      return '<tr><td><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+g.disp+'</span>'
-        +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:2px;">'+g.motivo+'</span></td>'
+      return '<tr><td style="font-size:13px;font-weight:700;color:var(--text-ink);">'+g.disp+'</td>'
+        +'<td style="font-size:12px;color:var(--text-muted);">'+g.motivo+'</td>'
         +'<td style="font-size:12px;color:var(--text-body);">'+g.check+'</td>'
         +'<td style="text-align:right;font-size:13px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+qDescartes(g)+'</td>'
         +'<td style="text-align:right;font-size:13px;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+g.auds.length+'</td>'
@@ -1015,7 +1015,7 @@
     var gs=qPend();
     if(!gs.length) return '<div style="padding:40px;text-align:center;color:var(--text-muted);font-size:13px;">No hay descartes pendientes de resolver.</div>';
     var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
-    var head='<thead><tr>'+th('Caso','26%')+th('Validación','17%')+th('Descartes','8%','right')+th('Auditorías','9%','right')+th('Modelos','8%','right')+th('Secciones','18%')+th('','14%')+'</tr></thead>';
+    var head='<thead><tr>'+th('Caso','16%')+th('','14%')+th('Motivo del descarte','11%')+th('Validación','12%')+th('Descartes','7%','right')+th('Auditorías','7%','right')+th('Modelos','7%','right')+th('Secciones','13%')+th('','13%')+'</tr></thead>';
     var rows=gs.map(function(g){
       var abierto=!!_qOpen[g.id], n=qDescartes(g), secs=qSecciones(g);
       var secTxt=Object.keys(secs).map(function(s2){ return s2+' <strong style="color:var(--text-ink);">'+secs[s2]+'</strong>'; }).join('<br>');
@@ -1023,18 +1023,19 @@
       var num='font-size:13px;color:var(--text-ink);text-align:right;font-variant-numeric:tabular-nums;';
       // El aviso no es "ojo, ya hay una regla": es que la regla se quedó corta de
       // ámbito, y lo que lo demuestra es dónde está reapareciendo el caso.
-      var aviso=g.reglaPrevia?'<div style="margin-top:5px;display:inline-flex;align-items:center;gap:6px;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--warning-text);">Alcance insuficiente</div>':'';
+      var aviso=g.reglaPrevia?'<span style="display:inline-flex;align-items:center;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--warning-text);white-space:nowrap;">Alcance insuficiente</span>':'';
       return '<tr style="cursor:pointer;" onclick="qToggle(\''+g.id+'\')">'
-        +'<td><div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--text-muted);padding-top:2px;">'+chev+'</span>'
-          +'<span style="min-width:0;"><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+g.disp+'</span>'
-          +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:2px;">'+g.motivo+'</span>'+aviso+'</span></div></td>'
+        +'<td><div style="display:flex;align-items:center;gap:10px;"><span style="color:var(--text-muted);display:inline-flex;">'+chev+'</span>'
+          +'<span style="min-width:0;font-size:13px;font-weight:700;color:var(--text-ink);">'+g.disp+'</span></div></td>'
+        +'<td style="padding-right:18px;">'+aviso+'</td>'
+        +'<td style="font-size:12px;color:var(--text-muted);">'+g.motivo+'</td>'
         +'<td style="font-size:12px;color:var(--text-body);">'+g.check+'</td>'
         +'<td style="'+num+'font-weight:700;">'+n+'</td>'
         +'<td style="'+num+'">'+g.auds.length+'</td>'
         +'<td style="'+num+'">'+qModelos(g)+'</td>'
         +'<td style="font-size:12px;color:var(--text-muted);line-height:1.5;">'+secTxt+'</td>'
         +'<td style="text-align:right;"><button onclick="event.stopPropagation();openRes(\''+g.id+'\')" class="btn btn-primary" style="height:32px;font-size:12px;padding:0 14px;">Resolver</button></td></tr>'
-        +(abierto?'<tr><td colspan="7" style="padding:0 20px 16px 46px;background:#fbfbfc;">'+qAudsHtml(g)+'</td></tr>':''); }).join('');
+        +(abierto?'<tr><td colspan="9" style="padding:0 20px 16px 46px;background:#fbfbfc;">'+qAudsHtml(g)+'</td></tr>':''); }).join('');
     return '<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
   function qToggle(id){ _qOpen[id]=!_qOpen[id]; renderQPanel(); }
