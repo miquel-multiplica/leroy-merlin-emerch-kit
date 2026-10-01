@@ -658,6 +658,21 @@
     </div>
   </div>
 </div>
+<div class="modal-overlay" id="v-dicc-modal">
+  <div class="modal-box" style="width:640px; max-width:94vw; max-height:calc(100vh - 96px); padding:0; display:flex; flex-direction:column; overflow:hidden;">
+    <div style="padding:26px 28px 18px; border-bottom:1px solid var(--border-card);">
+      <div id="v-dicc-title" style="font-size:19px; font-weight:700; color:var(--text-ink);"></div>
+      <div id="v-dicc-sub" style="font-size:12.5px; color:var(--text-muted); margin-top:5px;"></div>
+      <div style="position:relative; margin-top:14px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input oninput="diccBuscar(this.value)" placeholder="Buscar en la lista…" style="width:100%;height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 12px 0 34px;font-size:12.5px;font-family:'Inter',system-ui,sans-serif;color:var(--text-body);outline:none;"/></div>
+    </div>
+    <div id="v-dicc-body" style="flex:1; min-height:0; overflow-y:auto; padding:20px 28px;"></div>
+    <div style="border-top:1px solid var(--border-card); padding:14px 28px; display:flex; align-items:center; gap:12px;">
+      <span id="v-dicc-nota" style="font-size:11.5px; color:var(--text-muted);"></span>
+      <button onclick="closeDicc()" class="btn btn-primary" style="margin-left:auto; height:40px;">Cerrar</button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="v-res-modal">
   <div class="modal-box" style="width:720px; max-width:94vw; max-height:calc(100vh - 96px); padding:0; display:flex; flex-direction:column; overflow:hidden;">
     <div style="padding:26px 28px 0;">
@@ -889,26 +904,41 @@
 
   // Estructura real de packages/validador-fichas/src/dictionaries/ del motor. No son
   // seis listas planas: cada familia agrupa listas con trabajos distintos, y el tamaño
-  // de cada una dice cuánta cobertura tiene el check que la usa.
+  // de cada una dice cuánta cobertura tiene el check que la usa. Las muestras de
+  // contenido están copiadas de sus ficheros.
   var _qDicc=[
     { n:'Colores', check:'Discrepancia de color', m:'28 sep · Ana García', listas:[
-      {k:'Colores reconocidos', e:532, d:'Lo que el motor sabe leer como color'},
-      {k:'Grupos de equivalencia', e:12, d:'Tonos que cuentan como el mismo color'},
-      {k:'Mapeo a familia ADEO', e:506, d:'Cada color a su familia del estándar'}]},
+      {id:'c1',k:'Colores reconocidos',e:532,d:'Lo que el motor sabe leer como color',t:'chips',
+       v:['blanco','negro','rojo','azul','verde','amarillo','naranja','rosa','morado','violeta','gris','marrón','beige','dorado','plateado','plata','oro','antracita','grafito','turquesa','coral','burdeos','marfil','nieve','hueso','perla','alabastro','ébano','carbón','cromado','níquel','titanio','caqui','oliva','menta','esmeralda','cobalto','zafiro','granate','teja']},
+      {id:'c2',k:'Grupos de equivalencia',e:12,d:'Tonos que cuentan como el mismo color',t:'grupos',
+       v:['blanco · blanca · marfil · nieve · hueso · perla · alabastro','negro · negra · ébano · antracita · grafito · carbono · carbón','gris · grisáceo · plateado · plata · gris perla · gris claro · gris oscuro · cromado · cromo · inoxidable · inox · acero · zinc · níquel · titanio · metálico','azul · azul marino · celeste · cian · turquesa · índigo · cobalto · zafiro · navy · petróleo','verde · verde botella · oliva · verde militar · menta · esmeralda · lima · caqui','rojo · roja · burdeos · vino · granate · carmesí · coral · terracota · teja']},
+      {id:'c3',k:'Mapeo a familia ADEO',e:506,d:'Cada color a su familia del estándar',t:'pares',
+       v:['antracita → negro','marfil → blanco','cromado → gris','petróleo → azul','terracota → rojo','caqui → verde']}]},
     { n:'Materiales', check:'Discrepancia de material', m:'20 sep · Laura Pons', listas:[
-      {k:'Materiales reconocidos', e:42, d:'Lo que el motor sabe leer como material'},
-      {k:'Grupos de equivalencia', e:10, d:'Acero e inox cuentan como el mismo'},
-      {k:'Partes de producto ignoradas', e:118, d:'Patas, cojines, tiradores: su material no cuenta'},
-      {k:'Términos ambiguos color/material', e:16, d:'«cobre» puede ser las dos cosas'},
-      {k:'Contexto de uso frente a composición', e:129, d:'Distingue «silla de madera» de «broca para madera»'}]},
+      {id:'m1',k:'Materiales reconocidos',e:42,d:'Lo que el motor sabe leer como material',t:'chips',
+       v:['metal','hierro','acero','aluminio','inoxidable','inox','forja','zinc','níquel','titanio','latón','bronce','cobre','cromo','fundición','zamak','madera','mdf','melamina','teca','bambú','roble','nogal','cerezo','haya','pino','aglomerado','contrachapado','plástico','policarbonato','abs','pvc','resina','tela','poliéster','algodón','lino','cuero','piel','cristal','vidrio','cerámica']},
+      {id:'m2',k:'Grupos de equivalencia',e:10,d:'Acero e inox cuentan como el mismo',t:'grupos',
+       v:['metal · hierro · acero · aluminio · inoxidable · inox · forja · zinc · níquel · titanio · latón · bronce · cobre · cromo · fundición · zamak · acero inoxidable','madera · mdf · melamina · teka · teca · bambú · roble · nogal · cerezo · haya · pino · aglomerado · contrachapado · chapa · tablero','plástico · policarbonato · abs · pvc · polietileno · polipropileno · resina','tela · tejido · poliéster · algodón · lino · terciopelo · microfibra · canvas · lona','cuero · piel · polipiel · nubuck · ante · gamuza','cristal · vidrio · vidrio templado · cristal templado']},
+      {id:'m3',k:'Partes de producto ignoradas',e:118,d:'Patas, cojines, tiradores: su material no cuenta',t:'chips',
+       v:['patas','cojines','tiradores','asas','ruedas','bisagras','tornillos','juntas','mango','empuñadura','cerradura','herrajes','remates','molduras','perfiles','cantoneras','topes','soportes','escuadras','guías']},
+      {id:'m4',k:'Términos ambiguos color/material',e:16,d:'«cobre» puede ser las dos cosas',t:'chips',
+       v:['cobre','bronce','plata','oro','níquel','grafito','carbón','marfil','perla','arena','piedra','pizarra','acero','titanio','latón','cristal']},
+      {id:'m5',k:'Contexto de uso frente a composición',e:129,d:'Distingue «silla de madera» de «broca para madera»',t:'pares',
+       v:['broca para madera → uso, no composición','taco para hormigón → uso, no composición','silla de madera → composición','tornillo para metal → uso, no composición','pintura para madera → uso, no composición']}]},
     { n:'Ortografía', check:'Erratas conocidas · Abreviaturas', m:'26 sep · Ana García', listas:[
-      {k:'Erratas y tildes', e:113, d:'Lista cerrada. No hay corrector general todavía'},
-      {k:'Abreviaturas incorrectas', e:7, d:'«unds» → uds., «gr» → g'},
-      {k:'Siglas internas del ADM', e:34, d:'No se marcan como errata'}]},
+      {id:'o1',k:'Erratas y tildes',e:113,d:'Lista cerrada. No hay corrector general todavía',t:'pares',
+       v:['hehexagonal → hexagonal','adheviso → adhesivo','adhesibo → adhesivo','adhesvio → adhesivo','inoxidabe → inoxidable','inoxdiable → inoxidable','regulabe → regulable','plegabe → plegable']},
+      {id:'o2',k:'Abreviaturas incorrectas',e:7,d:'Siete entradas: la cobertura de este check es mínima',t:'pares',
+       v:['unds → uds. · abreviatura de «unidades» según la RAE: con punto, sin «n»','gr → g · el símbolo del gramo según la RAE es «g», sin la «r»','ptas → puertas · «ptas» es la abreviatura RAE de «pesetas»','kgs → kg · los símbolos no llevan plural']},
+      {id:'o3',k:'Siglas internas del ADM',e:34,d:'No se marcan como errata',t:'chips',
+       v:['ref','mod','und','pza','cj','pal','lote','set','kit','std','esp','gen']}]},
     { n:'Unidades', check:'Espacio RAE · Falta unidad', m:'2 sep · Ana García', listas:[
-      {k:'Unidades con espacio RAE', e:30, d:'Entre el número y la unidad'},
-      {k:'Conversiones a milímetros', e:18, d:'Permite comparar cm con mm'},
-      {k:'Plurales de símbolo incorrectos', e:11, d:'«kgs» no existe'}]}
+      {id:'u1',k:'Unidades con espacio RAE',e:30,d:'Entre el número y la unidad',t:'chips',
+       v:['mm','cm','m','km','g','kg','ml','l','W','kW','V','A','Hz','°C','m²','m³','rpm','bar','lm','K']},
+      {id:'u2',k:'Conversiones a milímetros',e:18,d:'Permite comparar cm con mm',t:'pares',
+       v:['cm → 10 mm','m → 1.000 mm','mm → 1 mm','pulgada → 25,4 mm']},
+      {id:'u3',k:'Plurales de símbolo incorrectos',e:11,d:'«kgs» no existe',t:'chips',
+       v:['kgs','grs','cms','mms','mts','lts','uds.s','Ws','Vs']}]}
   ];
 
   var _qTab='pend', _qOpen={}, _qOpenAud={}, _qResId=null, _qResOpt='regla', _qResAmb='', _qResolved={};
@@ -935,12 +965,36 @@
     var t=function(k,label,n){ var on=(_qTab===k);
       return '<button onclick="setQTab(\''+k+'\')" style="height:48px;padding:0 18px;background:none;border:none;border-bottom:2px solid '+(on?'var(--green)':'transparent')+';font-family:\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:'+(on?'700':'600')+';color:'+(on?'var(--text-ink)':'var(--text-muted)')+';cursor:pointer;display:inline-flex;align-items:center;gap:8px;">'+label
         +(n!==null?'<span style="background:var(--bg-parchment);color:'+(on?'var(--text-ink)':'var(--text-body)')+';border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700;">'+n+'</span>':'')+'</button>'; };
-    el.innerHTML=t('pend','Por resolver',qPend().length)+t('reglas','Reglas',_qReglas.length)+t('dicc','Diccionarios',null); }
+    el.innerHTML=t('pend','Por resolver',qPend().length)+t('reglas','Reglas',_qReglas.length)+t('ign','Ignorados',qIgnorados().length)+t('dicc','Diccionarios',null); }
 
   function renderQPanel(){ var el=document.getElementById('v-motor-panel'); if(!el) return;
     if(_qTab==='pend') el.innerHTML=qPendHtml();
     else if(_qTab==='reglas') el.innerHTML=qReglasHtml();
+    else if(_qTab==='ign') el.innerHTML=qIgnHtml();
     else el.innerHTML=qDiccHtml(); }
+
+  // Ignorar no es tirar: un caso apartado que vuelve a aparecer también dice algo, así
+  // que se queda a la vista y se puede devolver a la cola.
+  function qIgnorados(){ return _qGrupos.filter(function(g){ return _qResolved[g.id]==='ign'; }); }
+  function qDevolver(id){ delete _qResolved[id]; renderConfig(); vToast('Devuelto a la cola'); }
+  function qIgnHtml(){
+    var gs=qIgnorados();
+    var aviso='<div style="padding:16px 20px;font-size:12.5px;color:var(--text-muted);line-height:1.55;border-bottom:1px solid var(--border-card);">'
+      +'Descartes que se apartaron sin crear nada: eran correctos para esas referencias, pero no se podían generalizar. '
+      +'Se quedan aquí porque <strong style="color:var(--text-body);">si un caso ignorado reaparece una y otra vez, deja de ser una excepción</strong>.</div>';
+    if(!gs.length) return aviso+'<div style="padding:34px;text-align:center;color:var(--text-muted);font-size:13px;">No se ha ignorado ningún caso.</div>';
+    var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
+    var head='<thead><tr>'+th('Caso','27%')+th('Check','19%')+th('Descartes','9%','right')+th('Auditorías','9%','right')+th('Secciones','16%')+th('','20%')+'</tr></thead>';
+    var rows=gs.map(function(g){
+      var secs=qSecciones(g);
+      return '<tr><td><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+g.disp+'</span>'
+        +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:2px;">'+g.motivo+'</span></td>'
+        +'<td style="font-size:12px;color:var(--text-body);">'+g.check+'</td>'
+        +'<td style="text-align:right;font-size:13px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+qDescartes(g)+'</td>'
+        +'<td style="text-align:right;font-size:13px;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+g.auds.length+'</td>'
+        +'<td style="font-size:12px;color:var(--text-muted);">'+Object.keys(secs).join(' · ')+'</td>'
+        +'<td style="text-align:right;"><button onclick="qDevolver(\''+g.id+'\')" style="background:#fff;border:1px solid var(--border-input);border-radius:8px;height:30px;padding:0 12px;font-size:11.5px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;">Devolver a la cola</button></td></tr>'; }).join('');
+    return aviso+'<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
   // ── Por resolver ───────────────────────────────────────────────────────────
   function qPendHtml(){
@@ -994,35 +1048,55 @@
   // ── Reglas ─────────────────────────────────────────────────────────────────
   // Una regla NO vive sobre un diccionario: actúan en momentos distintos. El
   // diccionario alimenta al check y cambia lo que detecta; la regla cancela después un
-  // hallazgo ya producido (applyBreakdownOverrides re-puntúa un Score ya calculado).
-  // Por eso el diccionario es global y la regla tiene ámbito: la regla es una excepción
-  // a lo que ningún diccionario puede expresar.
+  // hallazgo ya producido. Por eso el diccionario es global y la regla tiene ámbito.
+  var _qFiltroAmb='';
+
+  // La pregunta útil no es "qué reglas se definieron aquí" sino "qué está descartado si
+  // audito esto": una regla general también aplica. Por eso el filtro incluye las
+  // heredadas de nivel superior y las marca como tales.
+  function qAmbitos(){ var m={}; _qReglas.forEach(function(r){ if(r.ambito!=='General') m[r.ambito]=1; }); return Object.keys(m).sort(); }
+  function qAplica(r){ if(!_qFiltroAmb) return true; if(r.ambito==='General') return true; return r.ambito===_qFiltroAmb; }
+  function setFiltroAmb(v){ _qFiltroAmb=v; renderQPanel(); }
+
   function qReglasHtml(){
     var aviso='<div style="padding:16px 20px;font-size:12.5px;color:var(--text-muted);line-height:1.55;border-bottom:1px solid var(--border-card);">'
-      +'Una regla <strong style="color:var(--text-body);">apaga un check</strong> en un ámbito concreto. No es lo mismo que una entrada de diccionario, que hace el check más listo y lo deja funcionando. '
-      +'Se usa cuando el caso no se puede expresar como conocimiento — si un check acumula muchas reglas, lo que falta es ampliar su diccionario.</div>';
+      +'Una regla <strong style="color:var(--text-body);">descarta automáticamente</strong> las alertas que el revisor ya descartó a mano, para que no vuelvan a aparecer. '
+      +'A diferencia de una entrada de diccionario, no le enseña nada al motor: el check las sigue detectando y la regla tapa el resultado. '
+      +'Si un check acumula muchas reglas, lo que falta es ampliar su diccionario.</div>';
+
+    var ambs=qAmbitos();
+    var filtro='<div style="padding:14px 20px;border-bottom:1px solid var(--border-card);display:flex;align-items:center;gap:10px;">'
+      +'<span style="font-size:12.5px;color:var(--text-muted);">Qué está descartado si audito</span>'
+      +'<div style="position:relative;"><select onchange="setFiltroAmb(this.value)" style="height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 30px 0 11px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;appearance:none;-webkit-appearance:none;">'
+      +'<option value="">todo el catálogo</option>'+ambs.map(function(a){ return '<option'+(a===_qFiltroAmb?' selected':'')+'>'+a+'</option>'; }).join('')
+      +'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'
+      +(_qFiltroAmb?'<span style="font-size:12px;color:var(--text-muted);">incluye las generales, que también aplican</span>':'')+'</div>';
+
     var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
-    var head='<thead><tr>'+th('Regla','23%')+th('Check','16%')+th('Ámbito','17%')+th('Silencia','10%','right')+th('Origen','8%','right')+th('Creada por','11%')+th('','15%')+'</tr></thead>';
-    var rs=_qReglas.slice().sort(function(a,b){ return b.silencia-a.silencia; });
-    var rows=rs.map(function(r,i){
-      var dim=r.on?'':'opacity:.5;';
+    var head='<thead><tr>'+th('Regla','23%')+th('Check','16%')+th('Ámbito','17%')+th('Descarta','10%','right')+th('Origen','8%','right')+th('Creada por','11%')+th('','15%')+'</tr></thead>';
+    var rs=_qReglas.map(function(r,idx){ return {r:r,idx:idx}; }).filter(function(o){ return qAplica(o.r); })
+      .sort(function(a,b){ return b.r.silencia-a.r.silencia; });
+    if(!rs.length) return aviso+filtro+'<div style="padding:34px;text-align:center;color:var(--text-muted);font-size:13px;">No hay reglas que apliquen a este ámbito.</div>';
+    var rows=rs.map(function(o){
+      var r=o.r, dim=r.on?'':'opacity:.5;';
       var num='text-align:right;font-variant-numeric:tabular-nums;font-size:13px;color:var(--text-ink);';
+      var hered=(_qFiltroAmb && r.ambito==='General')?' <span style="display:inline-block;background:var(--bg-parchment);border-radius:5px;padding:1px 6px;font-size:10.5px;font-weight:600;color:var(--text-muted);">heredada</span>':'';
       return '<tr style="'+dim+'">'
         +'<td><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+r.disp+'</span>'
           +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:2px;">'+r.motivo+'</span></td>'
         +'<td style="font-size:12px;color:var(--text-body);">'+r.check+'</td>'
-        +'<td style="font-size:12px;color:var(--text-body);">'+r.ambito+'</td>'
+        +'<td style="font-size:12px;color:var(--text-body);">'+r.ambito+hered+'</td>'
         +'<td style="'+num+'font-weight:700;">'+(r.on?fmtNum(r.silencia):'<span style="color:var(--text-muted);font-weight:500;">'+fmtNum(r.silencia)+'</span>')+'<br>'
-          +'<span style="font-size:10.5px;color:var(--text-muted);font-weight:500;">'+(r.on?'alertas':'devolvería')+'</span></td>'
+          +'<span style="font-size:10.5px;color:var(--text-muted);font-weight:500;">'+(r.on?'alertas':'volverían')+'</span></td>'
         +'<td style="'+num+'">'+r.origen+'<br><span style="font-size:10.5px;color:var(--text-muted);">descartes</span></td>'
         +'<td style="font-size:12px;color:var(--text-body);">'+r.autor+'<br><span style="font-size:11px;color:var(--text-muted);">'+r.fecha+'</span></td>'
-        +'<td style="text-align:right;"><button onclick="qToggleRegla('+i+')" style="background:#fff;border:1px solid var(--border-input);border-radius:8px;height:30px;padding:0 12px;font-size:11.5px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;">'+(r.on?'Desactivar':'Activar')+'</button></td></tr>'; }).join('');
-    return aviso+'<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
+        +'<td style="text-align:right;"><button onclick="qToggleRegla('+o.idx+')" style="background:#fff;border:1px solid var(--border-input);border-radius:8px;height:30px;padding:0 12px;font-size:11.5px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;">'+(r.on?'Desactivar':'Activar')+'</button></td></tr>'; }).join('');
+    return aviso+filtro+'<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
-  function qToggleRegla(i){ var rs=_qReglas.slice().sort(function(a,b){ return b.silencia-a.silencia; });
-    var r=rs[i]; if(r) r.on=!r.on; renderQMetrics(); renderQPanel(); }
+  function qToggleRegla(i){ var r=_qReglas[i]; if(r) r.on=!r.on; renderQMetrics(); renderQPanel(); }
 
   // ── Diccionarios ───────────────────────────────────────────────────────────
+  var _qDiccOpen=null, _qDiccQ='';
   function qDiccHtml(){
     var aviso='<div style="padding:16px 20px;font-size:12.5px;color:var(--text-muted);line-height:1.55;border-bottom:1px solid var(--border-card);">'
       +'El motor solo compara lo que está en estas listas: <strong style="color:var(--text-body);">si un color o un material no figura, no se compara y no salta ninguna alerta</strong>. '
@@ -1035,10 +1109,29 @@
           +'<span style="margin-left:auto;font-size:11px;color:var(--text-muted);">últ. cambio '+d.m+'</span></div>'
         +'<table class="desc-table v-mtabla" style="width:100%;"><tbody>'
         + d.listas.map(function(l){
-            return '<tr><td style="width:36%;font-size:12.5px;font-weight:600;color:var(--text-ink);">'+l.k+'</td>'
-              +'<td style="width:10%;text-align:right;font-size:13px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+l.e+'</td>'
-              +'<td style="font-size:12px;color:var(--text-muted);padding-left:20px;">'+l.d+'</td></tr>'; }).join('')
+            return '<tr style="cursor:pointer;" onclick="openDicc(\''+l.id+'\')">'
+              +'<td style="width:34%;font-size:12.5px;font-weight:600;color:var(--text-ink);">'+l.k+'</td>'
+              +'<td style="width:9%;text-align:right;font-size:13px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+l.e+'</td>'
+              +'<td style="font-size:12px;color:var(--text-muted);padding-left:20px;">'+l.d+'</td>'
+              +'<td style="width:9%;text-align:right;"><span style="font-size:12px;font-weight:600;color:var(--green);">Ver</span></td></tr>'; }).join('')
         +'</tbody></table></div>'; }).join(''); }
+
+  function qDiccFind(id){ var out=null; _qDicc.forEach(function(d){ d.listas.forEach(function(l){ if(l.id===id) out={d:d,l:l}; }); }); return out; }
+  function openDicc(id){ _qDiccOpen=id; _qDiccQ=''; renderDicc(); document.getElementById('v-dicc-modal').classList.add('open'); }
+  function closeDicc(){ document.getElementById('v-dicc-modal').classList.remove('open'); _qDiccOpen=null; }
+  function diccBuscar(v){ _qDiccQ=(v||'').toLowerCase(); renderDicc(); }
+  function renderDicc(){ var o=qDiccFind(_qDiccOpen); if(!o) return;
+    document.getElementById('v-dicc-title').textContent=o.l.k;
+    document.getElementById('v-dicc-sub').innerHTML=o.d.n+' · '+o.l.d+' · <strong style="color:var(--text-body);">'+o.l.e+' entradas</strong>';
+    var vs=o.l.v.filter(function(x){ return !_qDiccQ || x.toLowerCase().indexOf(_qDiccQ)>=0; });
+    var body;
+    if(!vs.length) body='<div style="padding:28px;text-align:center;color:var(--text-muted);font-size:13px;">Sin coincidencias.</div>';
+    else if(o.l.t==='chips') body='<div style="display:flex;flex-wrap:wrap;gap:7px;">'+vs.map(function(x){
+        return '<span style="background:var(--bg-parchment);border:1px solid var(--border-card);border-radius:999px;padding:4px 12px;font-size:12.5px;color:var(--text-body);">'+x+'</span>'; }).join('')+'</div>';
+    else body=vs.map(function(x,i){ return '<div style="padding:9px 0;font-size:12.5px;color:var(--text-body);line-height:1.5;'+(i?'border-top:1px solid var(--border-card);':'')+'">'+x+'</div>'; }).join('');
+    document.getElementById('v-dicc-body').innerHTML=body;
+    var nota=document.getElementById('v-dicc-nota');
+    nota.innerHTML=(o.l.v.length<o.l.e)?'Muestra de '+o.l.v.length+' de las '+o.l.e+' entradas. El contenido completo vive en el motor.':''; }
 
   // ── Resolución ─────────────────────────────────────────────────────────────
   function qFind(id){ return _qGrupos.filter(function(g){return g.id===id;})[0]; }
@@ -1050,10 +1143,15 @@
     _qResAmb=ks.length===1?('Sección · '+ks[0]):'General';
     renderRes(); document.getElementById('v-res-modal').classList.add('open'); }
   function closeRes(){ document.getElementById('v-res-modal').classList.remove('open'); _qResId=null; }
-  function setResOpt(o){ _qResOpt=o; renderRes(); }
-  function setResAmb(v){ _qResAmb=v; renderRes(); }
+  function setResOpt(o){ if(_qResOpt===o) return; _qResOpt=o; renderRes(); }
+  // El usuario puede cambiar el ámbito sin volver a pintar la opción: repintar aquí
+  // destruiría el propio <select> que acaba de tocar.
 
-  function renderRes(){ var g=qFind(_qResId); if(!g) return;
+  // Cambiar de ámbito no repinta las opciones: eso destruiría el <select> que el
+  // usuario acaba de abrir. Solo se recalculan el impacto y el botón.
+  function setResAmb(v){ _qResAmb=v; renderRes(true); }
+
+  function renderRes(mantenerOpts){ var g=qFind(_qResId); if(!g) return;
     var n=qDescartes(g), secs=qSecciones(g), ks=Object.keys(secs);
     document.getElementById('v-res-title').textContent=g.disp+' · '+g.motivo;
     document.getElementById('v-res-sub').innerHTML=g.check+' · <strong style="color:var(--text-body);">'+n+' descartes</strong> · '+g.auds.length+' auditorías · '+qModelos(g)+' modelos';
@@ -1072,20 +1170,26 @@
     document.getElementById('v-res-evidencia').innerHTML=ev;
 
     var opt=function(k,titulo,sub,extra){ var on=(_qResOpt===k);
-      return '<button type="button" onclick="setResOpt(\''+k+'\')" style="display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;background:'+(on?'var(--success-bg)':'#fff')+';border:1px solid '+(on?'var(--green)':'var(--border-input)')+';border-radius:10px;padding:14px 16px;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;margin-bottom:10px;">'
+      return '<div style="background:'+(on?'var(--success-bg)':'#fff')+';border:1px solid '+(on?'var(--green)':'var(--border-input)')+';border-radius:10px;margin-bottom:10px;">'
+        +'<button type="button" onclick="setResOpt(\''+k+'\')" style="display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;background:transparent;border:0;border-radius:10px;padding:14px 16px;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;">'
         +'<span style="width:18px;height:18px;border-radius:50%;border:2px solid '+(on?'var(--green)':'var(--border-input)')+';display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">'+(on?'<span style="width:9px;height:9px;border-radius:50%;background:var(--green);"></span>':'')+'</span>'
         +'<span style="min-width:0;flex:1;"><span style="display:block;font-size:14px;font-weight:600;color:var(--text-ink);">'+titulo+'</span>'
-        +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.5;">'+sub+'</span>'+(on?extra:'')+'</span></button>'; };
+        +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.5;">'+sub+'</span></span></button>'
+        +((on&&extra)?'<div style="padding:0 16px 14px 46px;">'+extra+'</div>':'')+'</div>'; };
 
-    var ambSel='<div style="margin-top:11px;"><select onchange="setResAmb(this.value)" style="height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 10px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;">'
-      +['General'].concat(ks.map(function(s){return 'Sección · '+s;})).map(function(v){ return '<option'+(v===_qResAmb?' selected':'')+'>'+v+'</option>'; }).join('')+'</select></div>';
+    var ambSel='<select onchange="setResAmb(this.value)" style="height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 10px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;">'
+      +['General'].concat(ks.map(function(s){return 'Sección · '+s;})).map(function(v){ return '<option'+(v===_qResAmb?' selected':'')+'>'+v+'</option>'; }).join('')+'</select>';
 
-    var dicc=g.dicc?opt('dicc','Corregir el diccionario <span style="font-weight:500;color:var(--text-muted);">· recomendado</span>','Ajustar <strong>'+g.dicc+'</strong>. Arregla el origen: el check sigue funcionando y deja de equivocarse aquí, en todo el catálogo.',''):'';
-    var sinDicc=g.dicc?'':'<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;">Este caso no se puede expresar en un diccionario: el check no se apoya en ninguna lista que ajustar.</div>';
-    document.getElementById('v-res-opts').innerHTML= sinDicc
+    // La decisión no es "qué mecanismo quiero" sino "hasta dónde es cierto esto". Si es
+    // conocimiento general, va al diccionario y el check aprende. Si solo vale en un
+    // contexto, es una regla con ese ámbito. El mecanismo se deduce de la respuesta.
+    var pregunta='<div style="font-size:12.5px;color:var(--text-body);margin-bottom:14px;line-height:1.55;">¿Hasta dónde es cierto lo que dice el descarte?</div>';
+    var dicc=g.dicc?opt('dicc','Es cierto en todo el catálogo','Se añade al diccionario de <strong>'+g.dicc+'</strong>. El check lo aprende y deja de equivocarse en todas partes, sin dejar de comprobar lo demás.',''):'';
+    var sinDicc=g.dicc?'':'<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;">Este caso no se puede expresar como conocimiento: el check no se apoya en ninguna lista que ampliar. Solo cabe la regla o ignorarlo.</div>';
+    if(!mantenerOpts) document.getElementById('v-res-opts').innerHTML= pregunta + sinDicc
       + dicc
-      + opt('regla','Crear regla','Apaga el check en el ámbito que elijas. Úsalo cuando el caso no se pueda resolver ampliando un diccionario.',ambSel)
-      + opt('ign','Ignorar','El descarte era correcto para esas referencias, pero no generaliza. No se crea nada.','');
+      + opt('regla','Solo es cierto en un ámbito concreto','Fuera de ahí el check debe seguir avisando. Se crea una regla que descarta estas alertas solo en ese ámbito.',ambSel)
+      + opt('ign','Ni una cosa ni la otra','El descarte era correcto para esas referencias, pero no se puede generalizar. Se aparta sin crear nada.','');
 
     var imp=document.getElementById('v-res-impacto');
     if(_qResOpt==='regla'){ var est=(_qResAmb==='General')?Math.round(n*34):Math.round(n*11);
@@ -1098,7 +1202,7 @@
     else imp.innerHTML='';
 
     var b=document.getElementById('v-res-go');
-    b.textContent=(_qResOpt==='regla')?'Crear regla':((_qResOpt==='dicc')?'Corregir diccionario':'Ignorar'); }
+    b.textContent=(_qResOpt==='regla')?'Crear regla':((_qResOpt==='dicc')?'Añadir al diccionario':'Apartar'); }
 
   function aplicarRes(){ var g=qFind(_qResId); if(!g) return;
     var n=qDescartes(g);
@@ -1106,7 +1210,7 @@
     else if(_qResOpt==='dicc'){ _qDicc.forEach(function(d){ if(d.n===g.dicc){ d.e--; d.m='30 sep · Ana García'; } }); }
     _qResolved[g.id]=_qResOpt;
     closeRes(); renderConfig();
-    vToast(_qResOpt==='regla'?'Regla creada · '+_qResAmb:(_qResOpt==='dicc'?'Diccionario actualizado':'Descartes ignorados')); }
+    vToast(_qResOpt==='regla'?'Regla creada · '+_qResAmb:(_qResOpt==='dicc'?'Añadido al diccionario de '+g.dicc:'Caso apartado')); }
 
   function fmtNum(n){ return n.toLocaleString('es-ES'); }
 
