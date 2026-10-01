@@ -674,6 +674,7 @@
         <span id="v-dicc-amb"></span>
       </div>
       <div id="v-dicc-sub" style="font-size:12.5px; color:var(--text-muted); margin-top:5px;"></div>
+      <div id="v-dicc-desc" style="font-size:13px; color:var(--text-body); margin-top:9px; line-height:1.55;"></div>
       <div style="position:relative; margin-top:14px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input oninput="diccBuscar(this.value)" placeholder="Buscar en la lista…" style="width:100%;height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 12px 0 34px;font-size:12.5px;font-family:'Inter',system-ui,sans-serif;color:var(--text-body);outline:none;"/></div>
     </div>
@@ -1172,7 +1173,7 @@
       +selVal+clear+'</div>';
 
     var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
-    var head='<thead><tr>'+th('Regla','22%')+th('Tipo','12%')+th('Validación','18%')+th('Entradas','10%')
+    var head='<thead><tr>'+th('Regla','20%')+th('Tipo','12%')+th('Validación','20%')+th('Entradas','10%')
       +(sec?th('Cambia aquí','14%','right'):th('Anuladas en alguna sección','14%','right'))+th('Última edición','14%')+th('','10%')+'</tr></thead>';
     var ls=_rListas.filter(function(l){ return !_rFVal || l.val===_rFVal; })
       .map(function(l,i){ return {l:l,i:i}; })
@@ -1192,8 +1193,7 @@
         cambia=t?'<span style="color:var(--warning-text);font-weight:700;">'+t+'</span>':'<span style="font-size:12px;color:var(--text-muted);">—</span>';
       }
       var nuevo=l.nueva?' <span style="display:inline-block;background:var(--success-bg);border:1px solid var(--green);border-radius:5px;padding:1px 6px;font-size:10.5px;font-weight:600;color:var(--green);">lista nueva</span>':'';
-      return '<tr><td><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+l.k+nuevo+'</span>'
-        +'<span style="display:block;font-size:11.5px;color:var(--text-muted);margin-top:2px;">'+l.d+'</span></td>'
+      return '<tr><td style="font-size:13px;font-weight:700;color:var(--text-ink);">'+l.k+nuevo+'</td>'
         +'<td style="font-size:12px;color:var(--text-body);">'+l.tipo+'</td>'
         +'<td style="font-size:12px;color:var(--text-body);">'+l.val+'</td>'
         +'<td style="font-variant-numeric:tabular-nums;font-size:13px;color:var(--text-ink);font-weight:700;">'+fmtNum(rCuenta(l,sec))+'</td>'
@@ -1336,6 +1336,8 @@
     document.getElementById('v-dicc-sub').innerHTML=l.tipo+' · '+l.val
       +' · '+fmtNum(n)+(grupos?(n===1?' grupo':' grupos'):(n===1?' entrada':' entradas'))+detalle
       +(l.v.length<l.e?' · <span style="color:var(--warning-text);">viendo una muestra de '+l.v.length+'</span>':'');
+
+    document.getElementById('v-dicc-desc').textContent=l.d;
 
     var ef=rEfectivas(l,sec);
     if(_rQ) ef=grupos
