@@ -947,6 +947,7 @@
     // La ortografía siempre admite descarte: un corrector no sabe qué es una marca, un
     // término técnico o un extranjerismo aceptado. Y con lista cerrada de erratas, el
     // descarte es el mecanismo por el que la lista se corrige.
+    'Símbolos extraños':{ia:false,bulk:true,term:'«Ø»',familia:'Baño',count:9,sellers:['Roca','Grohe'],modelos:[{name:'Griferías',code:'MOD_GM33',refBase:52001400},{name:'Sanitarios',code:'MOD_SN31',refBase:62010400}]},
     'Ortografía en descripción':{ia:false,bulk:true,term:'«materal»',familia:'Climatización',count:14,sellers:['Bosch','Saunier Duval','Ferroli'],modelos:[{name:'Calefacción',code:'MOD_207881',refBase:61200400},{name:'Radiador toallero',code:'MOD_RT44',refBase:61201200}]}
   };
   var FP_TPL={
@@ -954,6 +955,7 @@
     'Discrepancia de color':{emoji:'🎨',tipo:'Discrepancia de color',ubic:'designación ↔ descripción',diag:'Designación "crudo" · descripción "blanco"',accion:'Unificar el color en designación y descripción',owner:'TIP',pp:'1P',seller:'Roca',sev:'critica'},
     'Discrepancia de material':{emoji:'🪵',tipo:'Discrepancia de material',ubic:'descripción ↔ ficha técnica',diag:'Descripción "acero" · atributo "inox"',accion:'Unificar el material',owner:'TIP',pp:'1P',seller:'Bosch',sev:'critica'},
     'Falta semántica SEO en designación':{emoji:'🔍',tipo:'Falta semántica SEO en designación',ubic:'designación',diag:'No aparece el término SEO "exterior" exigido por la guía',accion:'Incluir "exterior" en la designación',owner:'TIP',pp:'1P',seller:'Philips',sev:'mejora'},
+    'Símbolos extraños':{emoji:'⌀',tipo:'Símbolos extraños',ubic:'designación',diag:'La designación contiene «Ø», que no está entre los caracteres admitidos',accion:'Sustituir «Ø» por «diámetro» o por el símbolo admitido',owner:'Seller',pp:'1P',seller:'Roca',sev:'mejora'},
     'Ortografía en descripción':{emoji:'🔤',tipo:'Ortografía en descripción',ubic:'descripción',diag:'"materal" \u2014 posible falta ortográfica',accion:'Corregir la falta ortográfica',owner:'TIP',pp:'1P',seller:'Bosch',sev:'mejora'},
     'Falta semántica SEO en descripción':{emoji:'🔍',tipo:'Falta semántica SEO en descripción',ubic:'descripción',diag:'No aparece el término SEO "interior" exigido por la guía',accion:'Incluir "interior" en la descripción',owner:'TIP',pp:'1P',seller:'Roca',sev:'mejora'}
   };
@@ -979,7 +981,7 @@
   function fpBulk(f){ return fpEligible(f) && FP_CFG[f.tipo].bulk; }
   function fpTrigger(f){ if(!fpBulk(f)) return null; var c=FP_CFG[f.tipo]; return {term:c.term,ia:c.ia}; }
   var TIPOS_GRUPOS=[
-    ['Designación',['Sin designación','No sigue la concatenación de la guía','Falta semántica SEO en designación','Posible designación administrativa','Designación corta (mín. 35)','Ortografía en designación','Atributo de la designación sin informar']],
+    ['Designación',['Sin designación','No sigue la concatenación de la guía','Falta semántica SEO en designación','Posible designación administrativa','Designación corta (mín. 35)','Ortografía en designación','Símbolos extraños','Atributo de la designación sin informar']],
     ['Descripción',['Sin descripción','Faltan atributos de la guía','Falta semántica SEO en descripción','Descripción corta (mín. 80)','Ortografía en descripción']],
     ['Ficha técnica',['Atributos obligatorios faltantes','Atributos básicos faltantes','Unidades no normalizadas']],
     ['Multimedia',['Imágenes por debajo del mínimo','Falta categoría de imagen']],
