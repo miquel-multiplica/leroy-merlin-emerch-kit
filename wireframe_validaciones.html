@@ -992,17 +992,32 @@
     return '<div style="background:#fff;border:1px solid var(--border-card);border-radius:10px;overflow:hidden;margin-top:12px;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
   // ── Reglas ─────────────────────────────────────────────────────────────────
+  // Una regla NO vive sobre un diccionario: actúan en momentos distintos. El
+  // diccionario alimenta al check y cambia lo que detecta; la regla cancela después un
+  // hallazgo ya producido (applyBreakdownOverrides re-puntúa un Score ya calculado).
+  // Por eso el diccionario es global y la regla tiene ámbito: la regla es una excepción
+  // a lo que ningún diccionario puede expresar.
   function qReglasHtml(){
+    var aviso='<div style="padding:16px 20px;font-size:12.5px;color:var(--text-muted);line-height:1.55;border-bottom:1px solid var(--border-card);">'
+      +'Una regla <strong style="color:var(--text-body);">apaga un check</strong> en un ámbito concreto. No es lo mismo que una entrada de diccionario, que hace el check más listo y lo deja funcionando. '
+      +'Se usa cuando el caso no se puede expresar como conocimiento — si un check acumula muchas reglas, lo que falta es ampliar su diccionario.</div>';
+    var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
+    var head='<thead><tr>'+th('Regla','23%')+th('Check','16%')+th('Ámbito','17%')+th('Silencia','10%','right')+th('Origen','8%','right')+th('Creada por','11%')+th('','15%')+'</tr></thead>';
     var rs=_qReglas.slice().sort(function(a,b){ return b.silencia-a.silencia; });
-    return rs.map(function(r,i){
-      return '<div style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;'+(i?'border-top:1px solid var(--border-card);':'')+(r.on?'':'opacity:.55;')+'">'
-        +'<div style="flex:1;min-width:0;">'
-          +'<div style="font-size:14px;font-weight:700;color:var(--text-ink);">'+r.disp+' <span style="color:var(--text-muted);font-weight:500;">·</span> '+r.motivo+'</div>'
-          +'<div style="font-size:12px;color:var(--text-muted);margin-top:3px;">'+r.check+' · ámbito <strong style="color:var(--text-body);">'+r.ambito+'</strong> · '+r.autor+' · '+r.fecha+'</div>'
-          +'<div style="font-size:12px;color:var(--text-body);margin-top:5px;">'+(r.on?'Silencia <strong>'+fmtNum(r.silencia)+' alertas</strong> en la última auditoría':'<span style="color:var(--text-muted);">Desactivada — devolvería '+fmtNum(r.silencia)+' alertas</span>')+' · nació de '+r.origen+' descartes</div>'
-        +'</div>'
-        +'<button onclick="qToggleRegla('+i+')" style="background:#fff;border:1px solid var(--border-input);border-radius:8px;height:34px;padding:0 14px;font-size:12px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);flex-shrink:0;">'+(r.on?'Desactivar':'Activar')+'</button>'
-      +'</div>'; }).join(''); }
+    var rows=rs.map(function(r,i){
+      var dim=r.on?'':'opacity:.5;';
+      var num='text-align:right;font-variant-numeric:tabular-nums;font-size:13px;color:var(--text-ink);';
+      return '<tr style="'+dim+'">'
+        +'<td><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+r.disp+'</span>'
+          +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:2px;">'+r.motivo+'</span></td>'
+        +'<td style="font-size:12px;color:var(--text-body);">'+r.check+'</td>'
+        +'<td style="font-size:12px;color:var(--text-body);">'+r.ambito+'</td>'
+        +'<td style="'+num+'font-weight:700;">'+(r.on?fmtNum(r.silencia):'<span style="color:var(--text-muted);font-weight:500;">'+fmtNum(r.silencia)+'</span>')+'<br>'
+          +'<span style="font-size:10.5px;color:var(--text-muted);font-weight:500;">'+(r.on?'alertas':'devolvería')+'</span></td>'
+        +'<td style="'+num+'">'+r.origen+'<br><span style="font-size:10.5px;color:var(--text-muted);">descartes</span></td>'
+        +'<td style="font-size:12px;color:var(--text-body);">'+r.autor+'<br><span style="font-size:11px;color:var(--text-muted);">'+r.fecha+'</span></td>'
+        +'<td style="text-align:right;"><button onclick="qToggleRegla('+i+')" style="background:#fff;border:1px solid var(--border-input);border-radius:8px;height:30px;padding:0 12px;font-size:11.5px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;">'+(r.on?'Desactivar':'Activar')+'</button></td></tr>'; }).join('');
+    return aviso+'<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
   function qToggleRegla(i){ var rs=_qReglas.slice().sort(function(a,b){ return b.silencia-a.silencia; });
     var r=rs[i]; if(r) r.on=!r.on; renderQMetrics(); renderQPanel(); }
@@ -1028,7 +1043,9 @@
   // ── Resolución ─────────────────────────────────────────────────────────────
   function qFind(id){ return _qGrupos.filter(function(g){return g.id===id;})[0]; }
   function openRes(id){ var g=qFind(id); if(!g) return;
-    _qResId=id; _qResOpt='regla';
+    // El diccionario arregla el origen y deja el check funcionando, así que es la
+    // opción por defecto siempre que el caso se pueda expresar como conocimiento.
+    _qResId=id; _qResOpt=g.dicc?'dicc':'regla';
     var secs=qSecciones(g), ks=Object.keys(secs);
     _qResAmb=ks.length===1?('Sección · '+ks[0]):'General';
     renderRes(); document.getElementById('v-res-modal').classList.add('open'); }
@@ -1063,10 +1080,11 @@
     var ambSel='<div style="margin-top:11px;"><select onchange="setResAmb(this.value)" style="height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 10px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;">'
       +['General'].concat(ks.map(function(s){return 'Sección · '+s;})).map(function(v){ return '<option'+(v===_qResAmb?' selected':'')+'>'+v+'</option>'; }).join('')+'</select></div>';
 
-    var dicc=g.dicc?opt('dicc','Corregir el diccionario','Quitar la entrada de <strong>'+g.dicc+'</strong>. Arregla el origen: el check sigue funcionando para todo lo demás.',''):'';
-    document.getElementById('v-res-opts').innerHTML=
-        opt('regla','Crear regla','Silencia este hallazgo en el ámbito que elijas. Es ceguera acotada: el check deja de avisar ahí.',ambSel)
+    var dicc=g.dicc?opt('dicc','Corregir el diccionario <span style="font-weight:500;color:var(--text-muted);">· recomendado</span>','Ajustar <strong>'+g.dicc+'</strong>. Arregla el origen: el check sigue funcionando y deja de equivocarse aquí, en todo el catálogo.',''):'';
+    var sinDicc=g.dicc?'':'<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;">Este caso no se puede expresar en un diccionario: el check no se apoya en ninguna lista que ajustar.</div>';
+    document.getElementById('v-res-opts').innerHTML= sinDicc
       + dicc
+      + opt('regla','Crear regla','Apaga el check en el ámbito que elijas. Úsalo cuando el caso no se pueda resolver ampliando un diccionario.',ambSel)
       + opt('ign','Ignorar','El descarte era correcto para esas referencias, pero no generaliza. No se crea nada.','');
 
     var imp=document.getElementById('v-res-impacto');
@@ -1076,7 +1094,7 @@
         +'Dejará de avisar en <strong>~'+fmtNum(est)+' referencias</strong> del catálogo.</div>'; }
     else if(_qResOpt==='dicc'){ imp.innerHTML='<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border-card);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--text-body);">'
         +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
-        +'Afecta a todo el catálogo, pero <strong>no apaga el check</strong>: solo deja de considerar este caso un error.</div>'; }
+        +'Afecta a todo el catálogo, pero <strong>no apaga el check</strong>: deja de considerar este caso un error y sigue comprobando lo demás.</div>'; }
     else imp.innerHTML='';
 
     var b=document.getElementById('v-res-go');
