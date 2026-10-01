@@ -102,7 +102,7 @@
   .desc-table thead tr { border-bottom: 1px solid var(--border-card); }
   .v-mtabla thead tr { background: #f5f6f7; }
   .v-sub thead tr { background: var(--bg-parchment); }
-  .v-sub th:first-child { padding-left: 12px; }
+  .v-sub th:first-child, .v-sub tbody td:first-child { padding-left: 46px; }
   .v-sub tbody tr:hover { background: transparent; }
   .v-sub tbody td { padding-left: 0; }
   .v-sub tbody tr.v-refs, .v-sub tbody tr.v-refs:hover { background: transparent; border-bottom: none; }
@@ -1049,7 +1049,7 @@
         +'<td style="'+num+'">'+qModelos(g)+'</td>'
         +'<td style="font-size:12px;color:var(--text-muted);line-height:1.5;">'+secTxt+'</td>'
         +'<td style="text-align:right;"><button onclick="event.stopPropagation();openRes(\''+g.id+'\')" class="btn btn-primary" style="height:32px;font-size:12px;padding:0 14px;">Resolver</button></td></tr>'
-        +(abierto?'<tr><td colspan="9" style="padding:0 20px 14px 46px;">'+qAudsHtml(g)+'</td></tr>':''); }).join('');
+        +(abierto?'<tr><td colspan="9" style="padding:0 0 10px 0;">'+qAudsHtml(g)+'</td></tr>':''); }).join('');
     return '<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
   function qToggle(id){ _qOpen[id]=!_qOpen[id]; renderQPanel(); }
@@ -1070,7 +1070,7 @@
         +'<td style="'+td+'color:var(--text-muted);">'+(function(){ var ss=qSecDeAud(a), ks=Object.keys(ss);
             return (ks.length===1)?ks[0]:ks.length+' secciones'; })()+'</td>'
         +'<td style="'+td+'text-align:right;font-variant-numeric:tabular-nums;">'+a.refs.length+'</td></tr>'
-        +(ab?'<tr class="v-refs"><td colspan="6" style="padding:6px 12px 10px 46px;background:var(--bg-parchment);">'+a.refs.map(function(r,i2){
+        +(ab?'<tr class="v-refs"><td colspan="6" style="padding:6px 12px 10px 92px;background:var(--bg-parchment);">'+a.refs.map(function(r,i2){
             return '<div style="display:flex;align-items:baseline;gap:16px;padding:7px 0;'+(i2?'border-top:1px solid var(--border-card);':'')+'">'
               +'<a href="https://www.leroymerlin.es/productos/ref-'+r.r+'.html" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:12px;font-weight:700;color:var(--green);text-decoration:none;font-variant-numeric:tabular-nums;width:76px;flex-shrink:0;">'+r.r+'</a>'
               +'<span style="font-size:11px;color:var(--text-muted);width:86px;flex-shrink:0;">'+r.m+'</span>'
