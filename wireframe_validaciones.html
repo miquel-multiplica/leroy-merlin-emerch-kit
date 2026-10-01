@@ -990,7 +990,7 @@
       +'Se quedan aquí porque <strong style="color:var(--text-body);">si un caso ignorado reaparece una y otra vez, deja de ser una excepción</strong>.</div>';
     if(!gs.length) return aviso+'<div style="padding:34px;text-align:center;color:var(--text-muted);font-size:13px;">No se ha ignorado ningún caso.</div>';
     var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
-    var head='<thead><tr>'+th('Caso','27%')+th('Check','19%')+th('Descartes','9%','right')+th('Auditorías','9%','right')+th('Secciones','16%')+th('','20%')+'</tr></thead>';
+    var head='<thead><tr>'+th('Caso','27%')+th('Validación','19%')+th('Descartes','9%','right')+th('Auditorías','9%','right')+th('Secciones','16%')+th('','20%')+'</tr></thead>';
     var rows=gs.map(function(g){
       var secs=qSecciones(g);
       return '<tr><td><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+g.disp+'</span>'
@@ -1007,7 +1007,7 @@
     var gs=qPend();
     if(!gs.length) return '<div style="padding:40px;text-align:center;color:var(--text-muted);font-size:13px;">No hay descartes pendientes de resolver.</div>';
     var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
-    var head='<thead><tr>'+th('Caso','26%')+th('Check','17%')+th('Descartes','8%','right')+th('Auditorías','9%','right')+th('Modelos','8%','right')+th('Secciones','18%')+th('','14%')+'</tr></thead>';
+    var head='<thead><tr>'+th('Caso','26%')+th('Validación','17%')+th('Descartes','8%','right')+th('Auditorías','9%','right')+th('Modelos','8%','right')+th('Secciones','18%')+th('','14%')+'</tr></thead>';
     var rows=gs.map(function(g){
       var abierto=!!_qOpen[g.id], n=qDescartes(g), secs=qSecciones(g);
       var secTxt=Object.keys(secs).map(function(s2){ return s2+' <strong style="color:var(--text-ink);">'+secs[s2]+'</strong>'; }).join('<br>');
@@ -1058,53 +1058,64 @@
   // Una regla NO vive sobre un diccionario: actúan en momentos distintos. El
   // diccionario alimenta al check y cambia lo que detecta; la regla cancela después un
   // hallazgo ya producido. Por eso el diccionario es global y la regla tiene ámbito.
-  var _qFiltroNivel='', _qFiltroVal='';
+  var _fSec='', _fMod='';
 
   // La pregunta útil no es "qué reglas se definieron aquí" sino "qué está descartado si
   // audito esto": una regla general también aplica. Por eso el filtro incluye las
   // heredadas de nivel superior y las marca como tales.
+  // En real esta relación sale del catálogo; aquí va sembrada para que el segundo
+  // desplegable no pueda ofrecer un modelo que no esté en la sección elegida.
+  var MOD_SEC={ 'MOD_201540':'Baño' };
   function qPartes(a){ var i=a.indexOf(' · '); return (i<0)?[a,'']:[a.slice(0,i),a.slice(i+3)]; }
-  function qNiveles(){ var m={}; _qReglas.forEach(function(r){ if(r.ambito!=='General') m[qPartes(r.ambito)[0]]=1; }); return Object.keys(m); }
-  function qValores(niv){ var m={}; _qReglas.forEach(function(r){ var pr=qPartes(r.ambito); if(pr[0]===niv) m[pr[1]]=1; }); return Object.keys(m).sort(); }
-  function qAplica(r){ if(!_qFiltroNivel) return true; if(r.ambito==='General') return true; return r.ambito===_qFiltroNivel+' · '+_qFiltroVal; }
-  function setFiltroNivel(v){ _qFiltroNivel=v; _qFiltroVal=v?(qValores(v)[0]||''):''; renderQPanel(); }
-  function setFiltroVal(v){ _qFiltroVal=v; renderQPanel(); }
+  function qSecOf(r){ var pr=qPartes(r.ambito); return (pr[0]==='Sección')?pr[1]:((pr[0]==='Modelo')?(MOD_SEC[pr[1]]||''):''); }
+  function qSecciones2(){ var m={}; _qReglas.forEach(function(r){ var x=qSecOf(r); if(x) m[x]=1; }); return Object.keys(m).sort(); }
+  function qModelos2(sec){ var m={}; _qReglas.forEach(function(r){ var pr=qPartes(r.ambito); if(pr[0]==='Modelo' && (!sec || MOD_SEC[pr[1]]===sec)) m[pr[1]]=1; }); return Object.keys(m).sort(); }
+  // Lo que aplica a un perímetro se acumula: lo general, lo de su sección y lo suyo.
+  function qAplica(r){
+    if(r.ambito==='General') return true;
+    var pr=qPartes(r.ambito);
+    if(_fMod) return (pr[0]==='Sección' && pr[1]===MOD_SEC[_fMod]) || (pr[0]==='Modelo' && pr[1]===_fMod);
+    if(_fSec) return qSecOf(r)===_fSec;
+    return true; }
+  // Elegir modelo fija su sección: así no se puede pedir un modelo de Baño dentro
+  // de Herramientas, que era la incompatibilidad posible.
+  function setFSec(v){ _fSec=v; if(_fMod && MOD_SEC[_fMod]!==v) _fMod=''; renderQPanel(); }
+  function setFMod(v){ _fMod=v; if(v) _fSec=MOD_SEC[v]||_fSec; renderQPanel(); }
 
   function qReglasHtml(){
     var aviso='<div style="padding:16px 20px;font-size:12.5px;color:var(--text-muted);line-height:1.55;border-bottom:1px solid var(--border-card);">'
       +'Una regla <strong style="color:var(--text-body);">descarta automáticamente</strong> las alertas que el revisor ya descartó a mano, para que no vuelvan a aparecer. '
-      +'A diferencia de una entrada de diccionario, no le enseña nada al motor: el check las sigue detectando y la regla tapa el resultado. '
-      +'Si un check acumula muchas reglas, lo que falta es ampliar su diccionario.</div>';
+      +'A diferencia de una entrada de diccionario, no le enseña nada al motor: la validación las sigue detectando y la regla tapa el resultado. '
+      +'Si una validación acumula muchas reglas, lo que falta es ampliar su diccionario. '
+      +'Una regla desactivada deja de descartar: sus alertas vuelven a aparecer.</div>';
 
     var sel=function(onch,opts){ return '<div style="position:relative;"><select onchange="'+onch+'(this.value)" style="height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 30px 0 11px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;appearance:none;-webkit-appearance:none;">'+opts
       +'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'; };
-    var nivs=qNiveles();
-    var optNiv='<option value="">todo el catálogo</option>'+nivs.map(function(nv){ return '<option'+(nv===_qFiltroNivel?' selected':'')+'>'+nv+'</option>'; }).join('');
-    var optVal=_qFiltroNivel?qValores(_qFiltroNivel).map(function(v){ return '<option'+(v===_qFiltroVal?' selected':'')+'>'+v+'</option>'; }).join(''):'';
+    var optSec='<option value="">todas las secciones</option>'+qSecciones2().map(function(v){ return '<option'+(v===_fSec?' selected':'')+'>'+v+'</option>'; }).join('');
+    var mods=qModelos2(_fSec);
+    var optMod='<option value="">todos los modelos</option>'+mods.map(function(v){ return '<option'+(v===_fMod?' selected':'')+'>'+v+'</option>'; }).join('');
     var filtro='<div style="padding:14px 20px;border-bottom:1px solid var(--border-card);display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
       +'<span style="font-size:12.5px;color:var(--text-muted);">Qué está descartado si audito</span>'
-      +sel('setFiltroNivel',optNiv)
-      +(_qFiltroNivel?sel('setFiltroVal',optVal):'')
-      +(_qFiltroNivel?'<span style="font-size:12px;color:var(--text-muted);">incluye las generales, que también aplican</span>':'')+'</div>';
+      +sel('setFSec',optSec)+sel('setFMod',optMod)
+      +((_fSec||_fMod)?'<span style="font-size:12px;color:var(--text-muted);">se acumulan: las generales aplican siempre, y las de la sección también dentro de un modelo</span>':'')+'</div>';
 
     var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
-    var head='<thead><tr>'+th('Regla','23%')+th('Check','16%')+th('Ámbito','17%')+th('Descarta','10%','right')+th('Origen','8%','right')+th('Creada por','11%')+th('','15%')+'</tr></thead>';
+    var head='<thead><tr>'+th('Regla','15%')+th('Motivo del descarte','12%')+th('Validación','12%')+th('Ámbito','13%')+th('Alertas que descarta','10%','right')+th('Descartes que la crearon','10%','right')+th('Creada por','9%')+th('Fecha','6%')+th('','13%')+'</tr></thead>';
     var rs=_qReglas.map(function(r,idx){ return {r:r,idx:idx}; }).filter(function(o){ return qAplica(o.r); })
       .sort(function(a,b){ return b.r.silencia-a.r.silencia; });
     if(!rs.length) return aviso+filtro+'<div style="padding:34px;text-align:center;color:var(--text-muted);font-size:13px;">No hay reglas que apliquen a este ámbito.</div>';
     var rows=rs.map(function(o){
       var r=o.r, dim=r.on?'':'opacity:.5;';
       var num='text-align:right;font-variant-numeric:tabular-nums;font-size:13px;color:var(--text-ink);';
-      var hered=(_qFiltroNivel && r.ambito==='General')?' <span style="display:inline-block;background:var(--bg-parchment);border-radius:5px;padding:1px 6px;font-size:10.5px;font-weight:600;color:var(--text-muted);">heredada</span>':'';
       return '<tr style="'+dim+'">'
-        +'<td><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+r.disp+'</span>'
-          +'<span style="display:block;font-size:12px;color:var(--text-muted);margin-top:2px;">'+r.motivo+'</span></td>'
+        +'<td style="font-size:13px;font-weight:700;color:var(--text-ink);">'+r.disp+'</td>'
+        +'<td style="font-size:12px;color:var(--text-muted);">'+r.motivo+'</td>'
         +'<td style="font-size:12px;color:var(--text-body);">'+r.check+'</td>'
-        +'<td style="font-size:12px;color:var(--text-body);">'+r.ambito+hered+'</td>'
-        +'<td style="'+num+'font-weight:700;">'+(r.on?fmtNum(r.silencia):'<span style="color:var(--text-muted);font-weight:500;">'+fmtNum(r.silencia)+'</span>')+'<br>'
-          +'<span style="font-size:10.5px;color:var(--text-muted);font-weight:500;">'+(r.on?'alertas':'volverían')+'</span></td>'
-        +'<td style="'+num+'">'+r.origen+'<br><span style="font-size:10.5px;color:var(--text-muted);">descartes</span></td>'
-        +'<td style="font-size:12px;color:var(--text-body);">'+r.autor+'<br><span style="font-size:11px;color:var(--text-muted);">'+r.fecha+'</span></td>'
+        +'<td style="font-size:12px;color:var(--text-body);">'+r.ambito+'</td>'
+        +'<td style="'+num+'font-weight:700;'+(r.on?'':'color:var(--text-muted);font-weight:500;')+'">'+fmtNum(r.silencia)+'</td>'
+        +'<td style="'+num+'">'+r.origen+'</td>'
+        +'<td style="font-size:12px;color:var(--text-body);">'+r.autor+'</td>'
+        +'<td style="font-size:12px;color:var(--text-muted);white-space:nowrap;">'+r.fecha+'</td>'
         +'<td style="text-align:right;"><button onclick="qToggleRegla('+o.idx+')" style="background:#fff;border:1px solid var(--border-input);border-radius:8px;height:30px;padding:0 12px;font-size:11.5px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;">'+(r.on?'Desactivar':'Activar')+'</button></td></tr>'; }).join('');
     return aviso+filtro+'<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
