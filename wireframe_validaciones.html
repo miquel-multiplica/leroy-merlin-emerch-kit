@@ -658,7 +658,6 @@
         <button onclick="go('v-hub')" style="background:none;border:none;cursor:pointer;color:var(--green);font-size:13px;font-weight:600;font-family:'Inter',system-ui,sans-serif;padding:0;">← Validaciones</button>
       </div>
       <div style="font-size:28px; font-weight:700; color:var(--text-ink); margin-bottom:4px;">Motor de validaciones</div>
-      <div id="v-motor-metrics" style="font-size:13px; color:var(--text-muted); margin-bottom:24px;"></div>
       <div style="border:1px solid var(--border-card); border-radius:12px; background:#fff; margin-bottom:40px;">
         <div id="v-motor-tabs" style="display:flex; align-items:stretch; gap:4px; padding:0 8px; border-bottom:1px solid var(--border-card);"></div>
         <div id="v-motor-panel"></div>
@@ -980,15 +979,8 @@
     _qGrupos.forEach(function(g){ for(var x in qSecciones(g)) m[x]=1; });
     return Object.keys(m).sort(); }
 
-  function renderConfig(){ renderQMetrics(); renderQTabs(); renderQPanel(); }
+  function renderConfig(){ renderQTabs(); renderQPanel(); }
   function setQTab(t){ _qTab=t; renderQTabs(); renderQPanel(); }
-
-  function renderQMetrics(){ var el=document.getElementById('v-motor-metrics'); if(!el) return;
-    var desc=0, auds={}; _qGrupos.forEach(function(g){ desc+=qDescartes(g); g.auds.forEach(function(a){auds[a.aud]=1;}); });
-    var nAud=0; for(var k in auds) nAud++;
-    var ent=0, capas=0; _rListas.forEach(function(l){ ent+=l.e; for(var sec in (l.capas||{})){ var c=l.capas[sec]; capas+=c.add.length+c.off.length; } });
-    el.innerHTML='<strong style="color:var(--text-body);">'+fmtNum(desc)+' descartes</strong> de '+nAud+' auditorías · '
-      +qPend().length+' casos por resolver · <strong style="color:var(--text-body);">'+fmtNum(ent)+' entradas generales</strong> y '+capas+' cambios por sección'; }
 
   function renderQTabs(){ var el=document.getElementById('v-motor-tabs'); if(!el) return;
     var t=function(k,label,n){ var on=(_qTab===k);
@@ -1083,7 +1075,7 @@
   // su capa dice solo lo que cambia — lo que añade y lo que anula. Así la lista
   // general sigue siendo una afirmación legible sobre el catálogo, y abrir una
   // sección nueva no obliga a revisar las 531 entradas de cada lista.
-  var _rAmb='', _rFVal='', _rFTipo='', _rOpen=null, _rQ='';
+  var _rAmb='', _rFVal='', _rFTipo='', _rOpen=null, _rQ='', _rOpenG={};
 
   function rKey(sec){ return sec||'General'; }
   function rCapa(l,sec){ var c=(l.capas&&l.capas[rKey(sec)])||{};
@@ -1098,6 +1090,16 @@
   function rOffEnG(l,g,k){ var o=[]; for(var sec in (l.capas||{})){ if(sec==='General') continue;
       if(rCapa(l,sec).offG.some(function(x){return x.g===g&&x.k===k;})) o.push(sec); } return o; }
   function rCambios(l,sec){ var c=rCapa(l,sec); return c.add.length+c.off.length+c.addG.length+c.offG.length; }
+  // Los grupos no traen nombre: el motor los guarda como listas de sinónimos y el
+  // primer término hace de canónico por convención. Se usa como nombre y como clave.
+  function rToggleG(g){ var k=_rOpen+'|'+g; _rOpenG[k]=!_rOpenG[k]; renderDicc(); }
+  function rAbierto(g){ return !!_rOpenG[_rOpen+'|'+g]; }
+  function rMarcaTxt(x){ var a=0,o=0; x.terms.forEach(function(t){ if(t.origen==='add')a++; if(t.origen==='off')o++;
+      if(t.fuera&&t.fuera.length)o++; });
+    return (a?'<span style="color:var(--green);font-weight:700;">+'+a+'</span>':'')+(a&&o?' ':'')
+      +(o?'<span style="color:var(--warning-text);font-weight:700;">−'+o+'</span>':''); }
+  function rResalta(t,q){ if(!q) return t; var i=t.toLowerCase().indexOf(q); if(i<0) return t;
+    return t.slice(0,i)+'<span style="background:var(--success-bg);border-radius:3px;padding:0 2px;">'+t.slice(i,i+q.length)+'</span>'+t.slice(i+q.length); }
   function rOffDe(l,sec){ var o={}; rCapa(l,sec).off.forEach(function(x){ o[x.k]=x; }); return o; }
   // En cuántas SECCIONES está anulada una entrada general (la capa general no cuenta:
   // ahí ya está anulada para todos). Dos o más es la señal de que la que está mal es
@@ -1259,19 +1261,29 @@
       +' · '+fmtNum(n)+(grupos?(n===1?' grupo':' grupos'):(n===1?' entrada':' entradas'))+detalle
       +(l.v.length<l.e?' · <span style="color:var(--warning-text);">viendo una muestra de '+l.v.length+'</span>':'');
 
-    var ef=rEfectivas(l,sec).filter(function(x){ return !_rQ || x.k.toLowerCase().indexOf(_rQ)>=0; });
+    var ef=rEfectivas(l,sec);
+    if(_rQ) ef=grupos
+      ? ef.map(function(x){ var ts=x.terms.filter(function(o){ return o.t.toLowerCase().indexOf(_rQ)>=0; });
+          return ts.length?{k:x.k,g:x.g,terms:ts}:null; }).filter(Boolean)
+      : ef.filter(function(x){ return x.k.toLowerCase().indexOf(_rQ)>=0; });
     var body;
     if(!ef.length) body='<div style="padding:28px;text-align:center;color:var(--text-muted);font-size:13px;">Sin coincidencias.</div>';
     else if(grupos) body=ef.map(function(x,i){
-      // Un término por línea: es la única forma de poder marcarlos uno a uno.
-      return '<div style="display:flex;gap:12px;padding:11px 0;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
-        +'<span style="color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;min-width:24px;text-align:right;font-size:12.5px;line-height:1.5;">'+(i+1)+'</span>'
-        +'<div style="flex:1;min-width:0;">'+x.terms.map(function(o){
+      // Plegados por defecto: once grupos de hasta veinte términos son demasiado
+      // scroll. Al buscar se abren solos los que casan, que es para lo que se busca.
+      var abierto=_rQ?true:rAbierto(x.g), n=x.terms.length, marcas=rMarcaTxt(x);
+      var chev='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .18s ease;flex-shrink:0;'+(abierto?'transform:rotate(90deg);':'')+'"><polyline points="9 18 15 12 9 6"/></svg>';
+      var cab='<button type="button" onclick="rToggleG(\''+rEsc(x.g)+'\')" style="display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:11px 0;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;text-align:left;">'
+        +chev+'<span style="font-size:13px;font-weight:700;color:var(--text-ink);">'+rResalta(x.g,_rQ)+'</span>'
+        +'<span style="font-size:11.5px;color:var(--text-muted);">'+n+(n===1?' término':' términos')+(_rQ?' con coincidencia':'')+'</span>'
+        +'<span style="margin-left:auto;font-size:12px;">'+marcas+'</span></button>';
+      var cuerpo=abierto?('<div style="padding:0 0 10px 23px;">'+x.terms.map(function(o,j){
             var off=(o.origen==='off');
             var acc=l.fijo?'':(off?rBtn(true,"rReactivarG('"+rEsc(x.g)+"','"+rEsc(o.t)+"')",'Reactivar')
                                  :(o.origen==='add'?'':rBtn(false,"rAnularG('"+rEsc(x.g)+"','"+rEsc(o.t)+"')",'Anular aquí')));
-            return '<div class="r-ent" style="padding:2px 0;">'+rCarriles(o.t,rMarca(o,sec),acc,off)+(off?rFirma(o.meta):'')+'</div>'; }).join('')
-        +'</div></div>'; }).join('');
+            return '<div class="r-ent" style="padding:7px 0;'+(j?'border-top:1px solid var(--border-card);':'')+'">'
+              +rCarriles(rResalta(o.t,_rQ),rMarca(o,sec),acc,off)+(off?rFirma(o.meta):'')+'</div>'; }).join('')+'</div>'):'';
+      return '<div style="'+(i?'border-top:1px solid var(--border-card);':'')+'">'+cab+cuerpo+'</div>'; }).join('');
     else body=ef.map(function(x,i){
       var off=(x.origen==='off');
       var acc=l.fijo?'':(off?rBtn(true,"rReactivar('"+rEsc(x.k)+"')",'Reactivar')
