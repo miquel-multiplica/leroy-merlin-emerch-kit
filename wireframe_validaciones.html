@@ -1144,6 +1144,7 @@
     var c=rCapa(l,sec); return rCuentaGen(l) - c.off.length + c.add.length; }
 
   function setRAmb(v){ _rAmb=v; _rNuevo=null; _rAviso=''; renderQPanel(); }
+  function rIrGeneral(){ _rAmb=''; _rNuevo=null; _rAviso=''; renderQPanel(); renderDicc(); }
   function setRFVal(v){ _rFVal=v; renderQPanel(); }
   function rClearF(){ _rAmb=''; _rFVal=''; renderQPanel(); }
 
@@ -1363,7 +1364,10 @@
         +'<span style="color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;min-width:24px;text-align:right;font-size:12.5px;line-height:1.5;">'+(i+1)+'</span>'
         +'<div style="flex:1;min-width:0;">'+rCarriles(x.k,rMarca(x,sec),acc,off)+rFirma(x.meta)+'</div></div>'; }).join('');
     var barra='';
-    if(!grupos && !(l.fijo&&sec)) barra=(_rNuevo&&!_rNuevo.g)
+    if(l.fijo&&sec) barra='<div style="display:flex;align-items:center;gap:14px;background:var(--bg-parchment);border-radius:8px;padding:12px 15px;margin-bottom:14px;">'
+      +'<span style="font-size:12.5px;color:var(--text-body);line-height:1.5;flex:1;min-width:0;">Esta regla es la misma en todo el catálogo, así que <strong>no se puede cambiar solo en '+sec+'</strong>.</span>'
+      +'<button onclick="rIrGeneral()" style="background:#fff;border:1px solid var(--border-input);border-radius:8px;height:32px;padding:0 13px;font-size:12px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;flex-shrink:0;">Editar en General</button></div>';
+    else if(!grupos) barra=(_rNuevo&&!_rNuevo.g)
       ? '<div style="padding-bottom:10px;border-bottom:1px solid var(--border-card);margin-bottom:4px;">'+rFormHtml(l)+'</div>'
       : '<div style="padding-bottom:11px;">'+rBtnNuevo(null,'+ añadir entrada')+'</div>';
     document.getElementById('v-dicc-body').innerHTML=barra+body;
