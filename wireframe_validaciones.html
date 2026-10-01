@@ -1080,7 +1080,7 @@
   // su capa dice solo lo que cambia — lo que añade y lo que anula. Así la lista
   // general sigue siendo una afirmación legible sobre el catálogo, y abrir una
   // sección nueva no obliga a revisar las 531 entradas de cada lista.
-  var _rAmb='', _rFVal='', _rOpen=null, _rQ='';
+  var _rAmb='', _rFVal='', _rFTipo='', _rOpen=null, _rQ='';
 
   function rKey(sec){ return sec||'General'; }
   function rCapa(l,sec){ var c=l.capas&&l.capas[rKey(sec)]; return c||{add:[],off:[]}; }
@@ -1092,6 +1092,7 @@
   function rSecciones(){ var m={}; _rListas.forEach(function(l){ for(var sec in (l.capas||{})) m[sec]=1; });
     qTodasSecciones().forEach(function(x){ m[x]=1; }); return Object.keys(m).sort(); }
   function rValidaciones(){ var m={}; _rListas.forEach(function(l){ m[l.val]=1; }); return Object.keys(m).sort(); }
+  function rTipos(){ var m={}; _rListas.forEach(function(l){ m[l.tipo]=1; }); return Object.keys(m).sort(); }
 
   // Las entradas tal y como las ve un ámbito, con su procedencia. Es lo que de verdad
   // ejecuta el motor si auditas ahí.
@@ -1110,7 +1111,8 @@
 
   function setRAmb(v){ _rAmb=v; renderQPanel(); }
   function setRFVal(v){ _rFVal=v; renderQPanel(); }
-  function rClearF(){ _rAmb=''; _rFVal=''; renderQPanel(); }
+  function setRFTipo(v){ _rFTipo=v; renderQPanel(); }
+  function rClearF(){ _rAmb=''; _rFVal=''; _rFTipo=''; renderQPanel(); }
 
   function qReglasHtml(){
     var sec=_rAmb;
@@ -1133,14 +1135,21 @@
     var selVal='<div style="position:relative;"><select onchange="setRFVal(this.value)" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'
       +'<option value="">Validación</option>'+rValidaciones().map(function(v){ return '<option'+(v===_rFVal?' selected':'')+'>'+v+'</option>'; }).join('')
       +'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>';
-    var clear=(sec||_rFVal)?'<button onclick="rClearF()" style="margin-left:auto;align-self:center;background:none;border:none;padding:0 2px;height:36px;font-family:\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;white-space:nowrap;">Borrar filtros</button>':'';
+    var optTipo='<option value="">Tipo</option>'+rTipos().map(function(v){ return '<option'+(v===_rFTipo?' selected':'')+'>'+v+'</option>'; }).join('');
+    var selTipo='<div style="position:relative;"><select onchange="setRFTipo(this.value)" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'+optTipo
+      +'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>';
+    var clear=(sec||_rFVal||_rFTipo)?'<button onclick="rClearF()" style="margin-left:auto;align-self:center;background:none;border:none;padding:0 2px;height:36px;font-family:\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;white-space:nowrap;">Borrar filtros</button>':'';
     var filtro='<div style="padding:14px 20px;border-bottom:1px solid var(--border-card);display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
-      +'<span style="font-size:12.5px;color:var(--text-muted);align-self:center;">Lo que aplica en</span>'+selAmb+selVal+clear+'</div>';
+      // La frase solo describe el primer selector. El segundo es un filtro aparte, y
+      // pegado al otro parecía parte de la misma oración.
+      +'<span style="font-size:12.5px;color:var(--text-muted);align-self:center;">Lo que aplica en</span>'+selAmb
+      +'<span style="width:1px;height:22px;background:var(--border-card);margin:0 6px;align-self:center;"></span>'
+      +'<span style="font-size:12.5px;color:var(--text-muted);align-self:center;">Filtrar por</span>'+selVal+selTipo+clear+'</div>';
 
     var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
     var head='<thead><tr>'+th('Regla','22%')+th('Tipo','12%')+th('Validación','18%')+th('Entradas','10%','right')
       +(sec?th('Cambia aquí','14%','right'):th('Anuladas en alguna sección','14%','right'))+th('Última edición','14%')+th('','10%')+'</tr></thead>';
-    var ls=_rListas.filter(function(l){ return !_rFVal || l.val===_rFVal; });
+    var ls=_rListas.filter(function(l){ return (!_rFVal||l.val===_rFVal) && (!_rFTipo||l.tipo===_rFTipo); });
     var rows=ls.map(function(l){
       var c=rCapa(l,sec), num='text-align:right;font-variant-numeric:tabular-nums;font-size:13px;color:var(--text-ink);';
       var cambia='';
