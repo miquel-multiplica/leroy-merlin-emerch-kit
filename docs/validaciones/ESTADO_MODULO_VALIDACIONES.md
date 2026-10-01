@@ -504,6 +504,43 @@ auditorías distintas y la **reincidencia**.
   módulo— no se puede resolver.
 - **Los pesos y el corte duro.** Cuando estén, nuestras severidades y su nota serán el mismo dato.
 
+### El destino de un descarte está cableado — pendiente del panel
+
+Al resolver un falso positivo, el panel escribe en una regla concreta con una operación concreta.
+**Las dos van escritas a mano** en cada caso de la cola (`destino: {lista, op, entrada}`): el
+prototipo no las deduce, las lee. Vale para enseñar el bucle y no escala.
+
+**Por qué no se puede deducir hoy.** Un hallazgo del motor es `{criterion, reason}` y `reason` es
+texto libre —`'[Abreviatura] "gr" → debería ser g'`—. El check sí sabía que había buscado `gr` en
+`ABREV_INCORRECTAS` y lo había encontrado, pero al salir solo escribe la frase. Está pedido a
+Jordi en la **§19 de su `DESIGN_INSIGHTS.md`**: que cada diccionario declare su polaridad —acusa
+o absuelve— y que el hallazgo diga qué lista fue decisiva y con qué término.
+
+**Y falta además dejar elegir.** De los cinco casos de la cola, **cuatro tienen más de una regla
+candidata**, y el panel presenta una sola como si fuera la única salida:
+
+| Caso | Reglas candidatas | Lo que proponemos |
+|---|---|---|
+| «izq» | 3 | Siglas internas del ADM |
+| «gr» | 3 | Abreviaturas incorrectas |
+| «crudo ≈ blanco» | **5** | Familias que cuentan como la misma |
+| «lona ≈ pvc» | 3 | Grupos de equivalencia |
+| «1/2 pulgada» | 1 | Conversiones a milímetros |
+
+No son alternativas teóricas. En «crudo ≈ blanco» caben remapear `crudo` a Blanco —afecta a un
+color— o emparejar Beige ↔ Blanco —afecta a todos los beige frente a todos los blancos—. En
+«lona ≈ pvc», meter `lona` en plásticos es justo lo que rompe su equivalencia con tela; la
+alternativa sería sacarla de tela. El panel ya avisa de ese estropicio **después** de hacerlo,
+pero no ofrece evitarlo.
+
+**Cómo lo montaría:** sin volver a una modal de dos preguntas. Una propuesta por defecto y un
+*«arreglarlo de otra forma»* que despliega las candidatas con su consecuencia escrita. El camino
+normal sigue siendo un clic y la decisión aparece solo cuando alguien la busca. La operación no
+hay que elegirla: sale de la polaridad de la lista que se escoja.
+
+**Cuándo:** después de que Jordi diga qué evidencia puede emitir el motor, porque de eso depende
+si las candidatas se derivan o se siguen declarando.
+
 ### Sin diseñar: flujos y casuísticas
 
 - ~~**Histórico y evolutivo**~~ — **aparcado**: las ejecuciones van por separado.
@@ -511,10 +548,11 @@ auditorías distintas y la **reincidencia**.
   principal. Nada prototipado.
 - **«La guía está mal»** — la vía para escalar una alerta cuyo problema es el documento y no la
   ficha. No es un falso positivo y no vive en el panel del motor. Enlaza con la C2.
-- **Volver de la resolución a la regla** — al resolver un descarte, el toast dice a qué regla ha
-  ido pero no lleva. Hay que ir al tab y poner el ámbito a mano.
+- ~~**Volver de la resolución a la regla**~~ — **hecho** el 1 de octubre: la modal termina en
+  confirmación con un botón *Ver regla* que salta al tab con el ámbito y el filtro puestos.
 - **Ver desde General qué secciones tienen capa** — hoy solo se ve si ya estás en el ámbito. El
   aviso de arriba solo cubre las anulaciones repetidas, no las adiciones.
+- **Elegir a qué regla va un descarte** — ver abajo. Es el pendiente más concreto del panel.
 
 
 ## Infra / repo
