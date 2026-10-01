@@ -154,9 +154,9 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
 
 *(Nota: **no** hacemos "detalle de referencia" interno. Igual que el artefacto del cliente, la referencia **enlaza a la ficha real de Leroy (PDP en vivo)**, que es la fuente de verdad para revisar falsos positivos.)*
 
-## Estado a 30 de septiembre de 2026
+## Estado a 1 de octubre de 2026
 
-> Foto consolidada para retomar. La anterior era del 23 de septiembre.
+> Foto consolidada para retomar. La anterior era del 30 de septiembre.
 
 ### Lo que ha pasado esta semana
 
@@ -166,6 +166,8 @@ Cruce hecho (el doc es la fuente que ya consolidamos; su última página enlaza 
   Han respondido la mayoría; quedan cuatro abiertas.
 - **El jueves hay sesión con ellos**, con gente de Marketplace, y traen los criterios de
   clasificación de cada casuística.
+- **El 1 de octubre se rehízo el panel del motor** sobre el modelo de reglas con ámbito y capas,
+  cargado con el contenido real de los diccionarios del repo. Detalle más abajo.
 
 ### El MVP — seis recortes, ninguno cerrado con cliente
 
@@ -312,56 +314,131 @@ teníamos modelado**, así que hoy **el prototipo recortado está más cerca de 
 completo**. No fue previsión, pero es el mejor argumento para defender el MVP — mejor que las
 horas.
 
-### El panel del motor del prototipo completo — pendiente de rehacer
+### El panel del motor — rehecho el 1 de octubre
 
-Al leer el repo del motor (2026-09-30) se vio que **el modelo que prototipamos no es el suyo**.
-Nuestro panel es un **editor de prompt por nodo** de un árbol General ▸ Familia ▸ Modelo. La
-realidad del motor es otra: *«una regla NO es lógica libre: es una instancia parametrizada de un
-tipo del catálogo»*, y lo que sí está implementado son overrides de (criterio, reason, ámbito).
-Los niveles tampoco coinciden — el cliente dice **sección**, y el schema trae gama, sección,
-subsección, tipo y subtipo.
+Al leer el repo del motor (2026-09-30) se vio que **el modelo que prototipamos no era el suyo**:
+nuestro panel era un editor de prompt por nodo de un árbol General ▸ Familia ▸ Modelo, y lo que
+el motor tiene son overrides de (criterio, reason, ámbito) más una colección de diccionarios. El
+1 de octubre se rehizo entero.
 
-Además **le falta la cola de falsos positivos**: no hay revisión ni conversión a regla, que es
-justamente donde se cierra el bucle de aprendizaje. En el recortado no aplica, porque el panel
-está fuera del MVP.
+**Una sola entidad: la regla.** Diccionario y regla eran la misma cosa vista a dos alturas, y lo
+único que las distinguía era que unas no tenían ámbito. Ahora una regla es *una afirmación que el
+motor consulta al validar*, y lleva:
 
-**Hay que rehacerlo, pero no ahora**: depende de que Jordi aterrice el catálogo de tipos de regla
-y los niveles de ámbito. Cuando toque, **empezaría por la cola de falsos positivos y no por el
-editor de reglas**: es lo único de ese panel que tiene datos reales detrás —los descartes del
-revisor— y no depende de que el catálogo esté cerrado.
+- **Tipo** — Vocabulario, Equivalencia, Correspondencia, Corrección, Contexto.
+- **Validación** a la que alimenta.
+- **Ámbito** — general o sección.
 
-### El panel de administración del motor — fase 2, pero con consecuencias hoy
+Son 15 reglas con **1.580 entradas reales extraídas del repo**: los 531 colores, las 505
+correspondencias a familia ADEO, las 111 erratas, las 98 siglas del ADM, los 117 marcadores de
+composición. Ya no hay ninguna lista inventada ni ninguna muestra parcial.
 
-Conversación del 2026-09-30 sobre qué debería tener ese panel. **Nada de esto es MVP**: es para
-que Leroy pueda evolucionar el motor más adelante. Se recoge para no perderlo y porque una parte
-sí condiciona lo que hay que capturar ya.
+**Dos niveles y capas.** Una sección hereda todo lo general y su capa dice solo lo que cambia:
+lo que **añade** y lo que **anula**. Anular no borra — la entrada se queda tachada con quién,
+cuándo y por qué, y se puede reactivar. La razón es la de siempre: un hueco no tiene autor.
 
-**Tres trabajos distintos**, que hoy se mezclan en uno: **resolver** lo que llega, **ver** qué
-está activo y qué hace, y **revertir**. Lo que prototipamos nosotros no hacía ninguno de los
-tres: era un editor de prompts.
+De ahí sale una lectura nueva que el panel avisa arriba: **una entrada general anulada en dos o
+más secciones no son dos secciones raras, es una entrada general mal puesta**. Es la cola de
+limpieza del vocabulario general.
 
-**Un descarte tiene tres salidas, no dos.** Además de *convertir en regla* e *ignorar*, falta la
-más frecuente: **corregir el diccionario**. Si alguien descarta «adhesibo» porque es una marca,
-lo correcto no es silenciar la alerta sino quitar la entrada del diccionario de erratas. La
-diferencia importa: el override crea ceguera acotada, corregir el diccionario arregla el origen y
-el check sigue funcionando. El motor tiene diccionarios de colores, materiales, erratas,
-abreviaturas y unidades, así que **la cola de falsos positivos es también la cola de mejora de
-los diccionarios**.
+**El término es la unidad dentro de un grupo.** En las reglas de equivalencia, añadir «lona» a
+los plásticos no es una entrada nueva: es un miembro más de uno de los grupos. Los grupos se ven
+plegados, un término por línea al abrirlos, y las capas apuntan a un término dentro de su grupo.
 
-**Principio propuesto:** en Validaciones, una regla debería **nacer de un descarte, nunca de la
-nada** — porque aquí una regla solo quita comprobaciones, y creada por intuición es ceguera sin
-causa. Los diccionarios son lo contrario: conocimiento, y ahí sí tiene sentido editarlos. *(En
-Descripciones no aplica igual: allí las reglas moldean lo que se genera, no silencian nada, y por
-eso el §5 de Jordi sí contempla crearlas desde cero.)*
+**La cola de descartes es el otro trabajo del panel.** Tres pestañas: *Por resolver*, *Ignorados*
+y *Reglas*. Los descartes se agrupan por (disparador, motivo) y cada caso apunta a su regla
+destino y a la operación —añadir o anular—, así que la modal de resolver ya no pregunta por el
+mecanismo: solo **dónde**. Lo que se escribe sale del motivo del descarte.
 
-**Ver las reglas no es listarlas.** Lo que hace falta saber de una regla es **cuánto silencia**:
-si desactivas una que apaga 1.240 alertas, vuelven 1.240. Eso mide su peso, no si está bien
-puesta — que una regla silencie mucho significa que el fenómeno es transversal, no que se creara
-ancha. **Lo que sí delata una regla corta es la reincidencia**: que el mismo (disparador, motivo)
-vuelva a la cola cuando ya existe una regla. Entonces el ámbito se quedó pequeño, y el sistema
-puede detectarlo solo y proponer subirlo de nivel.
+**Lo que no cambió y sigue abierto:** el nivel intermedio entre sección y modelo (pregunta B3,
+pendiente de cliente). Mientras no esté, el panel trabaja con dos niveles y el ámbito de modelo
+está fuera.
 
-Desactivar antes que borrar: es reversible y no pierde el rastro.
+### Lo que el motor no puede hacer todavía
+
+Verificado en `apply-overrides.ts` el 1 de octubre, y es lo que habría que hablar con Jordi:
+
+- El modelo de ámbitos **no es jerárquico, es acumulativo**: `overrides.filter(scopeMatches)`
+  aplica todos los que casan, sin precedencia por especificidad.
+- Solo existen dos niveles, `'all'` y `'model'`. **El nivel sección no existe**, y el comentario
+  del fichero dice que fue deliberado.
+- Un override **solo puede restar**. No hay forma de devolver un hallazgo que otra capa quitó,
+  así que *«en general sí, aquí no»* hoy **no se puede ni expresar**.
+
+Y hay un matiz que conviene que vea: las capas sobre el **vocabulario** y las capas sobre el
+**resultado** no actúan en el mismo momento. *«Carpintería no acepta gris como color válido»*
+cambia la entrada del check y hay que componerla antes de ejecutarlo; *«esta alerta de gris no
+cuenta»* se aplica después. Lo que existe hoy es lo segundo; lo que el panel necesita es lo
+primero, y es un mecanismo nuevo.
+
+### Qué admite descartarse como falso positivo — criterio cerrado
+
+El criterio es el que ya le mandamos al cliente en la A2, llevado hasta el final: **se descarta
+lo que implica un juicio del motor, no las ausencias objetivas**. Operativamente: *si la
+validación no se apoya en ninguna lista, no hay conocimiento que añadir y el descarte no lleva a
+ninguna parte*.
+
+Con ese criterio salieron tres tipos de `FP_CFG` el 1 de octubre, en los dos prototipos:
+
+- **Falta semántica SEO en designación / en descripción** — que la guía exija un término y la
+  ficha no lo diga es una ausencia objetiva. Y una regla de sinónimos sería contraproducente: el
+  requisito SEO es literal porque es lo que la gente escribe en el buscador. Si la alerta está
+  mal, lo que está mal es la guía.
+- **Posible designación administrativa** — es `esTodoMayusculas(designacion)`, una heurística
+  sobre la forma del texto. Sin lista detrás.
+- **Discrepancia de cantidad** — solo compara números.
+
+Quedan **cinco tipos que admiten descarte, y los cinco tienen diccionario detrás**: Ortografía en
+designación, Ortografía en descripción, Discrepancia de color, Discrepancia de material y
+Discrepancia de dimensiones.
+
+**Consecuencia pendiente:** si una alerta de SEO está mal porque la guía pide algo que no aplica,
+hace falta una vía para decirlo —**«la guía está mal»**— que no vive en el panel del motor. Es la
+pregunta C2 y no está diseñada. Antes se colaba disfrazada de falso positivo; ahora se ve el
+hueco.
+
+### Tres cosas encontradas en los diccionarios de color y material
+
+Salieron al cargar el contenido real. Son para Jordi, no son decisiones nuestras:
+
+- **Los dos diccionarios de color se contradicen y no se nota.** `coloresEquiv` resuelve primero
+  por `ADEO_FAMILIA_COLOR` y solo cae a `COLOR_GRUPOS` si alguno de los dos colores no está en el
+  mapeo. Como el mapeo tiene 505 entradas, los grupos casi nunca se consultan — y cuando lo
+  harían, dirían otra cosa: `antracita`, `grafito` y `carbón` están en el grupo del **negro** y en
+  el mapeo son **Gris-plata**.
+- **Un término puede estar en dos grupos de equivalencia.** `salmón` está en el grupo de
+  *naranja* y en el de *rosa*, y `colorGrupo()` devuelve el primero que casa, así que el segundo
+  es letra muerta. Falta decidir si eso debe poder pasar.
+- **Los grupos no tienen nombre canónico declarado.** Son listas de sinónimos y el primer término
+  hace de canónico por convención. Funciona —*blanco, negro, gris…* / *metal, madera, plástico…*—
+  pero si alguien reordena un grupo, cualquier referencia a él por su primer término queda
+  huérfana. Para producción haría falta un id estable.
+
+### El panel de administración — lo pensado el 30 de septiembre
+
+Conversación del 2026-09-30 sobre qué debería tener ese panel. **Nada de esto es MVP.** Lo que se
+construyó el 1 de octubre está arriba; aquí queda el razonamiento del que salió y lo que todavía
+no está hecho.
+
+**Tres trabajos distintos**, que antes se mezclaban en uno: **resolver** lo que llega, **ver** qué
+está activo y qué hace, y **revertir**. Los tres están montados.
+
+**Lo que entonces llamábamos «tres salidas de un descarte»** —convertir en regla, corregir el
+diccionario, ignorar— **se quedó en dos**, porque diccionario y regla resultaron ser lo mismo con
+ámbito distinto. La modal pregunta solo **dónde**, y la tercera salida sigue siendo *ignorar*.
+Lo que sí se mantiene intacto es el fondo del argumento: *corregir el origen deja la validación
+funcionando y taparla no*, que ahora se expresa como la diferencia entre **añadir** conocimiento
+y **anular** una entrada.
+
+**Principio propuesto, y sigue en pie:** en Validaciones una regla debería **nacer de un
+descarte, nunca de la nada**. *(En Descripciones no aplica igual: allí las reglas moldean lo que
+se genera, no silencian nada, y por eso el §5 de Jordi sí contempla crearlas desde cero.)*
+
+**La señal de una regla corta es la reincidencia**, no el volumen: que una entrada silencie mucho
+significa que el fenómeno es transversal. Montado en dos sitios — el aviso *Alcance insuficiente*
+en la cola, y la banda de *entradas generales anuladas en dos o más secciones*.
+
+Desactivar antes que borrar: es reversible y no pierde el rastro. Montado.
 
 **Y una métrica que solo puede dar este panel:** alertas levantadas, descartadas y su porcentaje,
 auditoría tras auditoría. Es la tasa real de falsos positivos del motor, que teníamos como
@@ -432,6 +509,12 @@ auditorías distintas y la **reincidencia**.
 - ~~**Histórico y evolutivo**~~ — **aparcado**: las ejecuciones van por separado.
 - **Roles y permisos 1P/3P** — el cliente los pidió y el validador de gama es el usuario
   principal. Nada prototipado.
+- **«La guía está mal»** — la vía para escalar una alerta cuyo problema es el documento y no la
+  ficha. No es un falso positivo y no vive en el panel del motor. Enlaza con la C2.
+- **Volver de la resolución a la regla** — al resolver un descarte, el toast dice a qué regla ha
+  ido pero no lleva. Hay que ir al tab y poner el ámbito a mano.
+- **Ver desde General qué secciones tienen capa** — hoy solo se ve si ya estás en el ámbito. El
+  aviso de arriba solo cubre las anulaciones repetidas, no las adiciones.
 
 
 ## Infra / repo

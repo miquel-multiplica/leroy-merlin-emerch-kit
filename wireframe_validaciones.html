@@ -1256,11 +1256,12 @@
 
   function renderDicc(){ var l=rFind(_rOpen); if(!l) return; var sec=_rAmb, grupos=rEsGrupos(l);
     document.getElementById('v-dicc-title').textContent=l.k;
-    document.getElementById('v-dicc-amb').innerHTML=sec
-      ? '<span style="display:inline-flex;align-items:center;gap:6px;background:var(--success-bg);border:1px solid var(--green);border-radius:999px;padding:3px 11px;font-size:12px;font-weight:700;color:var(--green);">'
-        +'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>'
-        +sec+'</span>'
-      : '<span style="display:inline-flex;align-items:center;background:var(--bg-parchment);border:1px solid var(--border-card);border-radius:999px;padding:3px 11px;font-size:12px;font-weight:600;color:var(--text-muted);">General</span>';
+    // Sin pastilla: una barra fina y el ámbito en el mismo renglón del título, como
+    // una segunda mitad del encabezado.
+    document.getElementById('v-dicc-amb').innerHTML=
+      '<span style="display:inline-flex;align-items:center;gap:11px;">'
+      +'<span style="width:1px;height:19px;background:var(--border-input);"></span>'
+      +'<span style="font-size:17px;font-weight:600;color:var(--text-muted);">'+(sec||'General')+'</span></span>';
     var n=rCuenta(l,sec), cam=rCambios(l,sec), c=rCapa(l,sec);
     var detalle='';
     if(sec&&cam){ var a=c.add.length+c.addG.length, o=c.off.length+c.offG.length;
