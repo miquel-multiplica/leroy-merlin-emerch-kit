@@ -876,13 +876,13 @@
         {aud:1012, per:'Gama · Iluminación', rev:'Ana García', fecha:'28 sep',
          refs:[{r:'44121290',m:'MOD_FS22',d:'Farol solar antracita',s:'Iluminación'}]}
       ]},
-    { id:'g3', disp:'«gris ≈ antracita»', motivo:'Valores equivalentes', check:'Discrepancia de color',
-      reason:'Designación "gris" · descripción "antracita"', destino:{l:'c2',op:'add',k:'antracita → grupo del gris'},
+    { id:'g3', disp:'«crudo ≈ blanco»', motivo:'Valores equivalentes', check:'Discrepancia de color',
+      reason:'Designación "crudo" · descripción "blanco"', destino:{l:'c5',op:'add',k:'Beige ↔ Blanco'},
       auds:[
         {aud:1001, per:'Gama · A', rev:'Ana García', fecha:'12 sep',
-         refs:[{r:'81920100',m:'MOD_TP11',d:'Taladro percutor serie Confort',s:'Herramientas'},{r:'81920144',m:'MOD_TP11',d:'Taladro percutor 750 W',s:'Herramientas'},{r:'81921230',m:'MOD_AT12',d:'Atornillador 18 V',s:'Herramientas'}]},
-        {aud:1006, per:'Proveedor · Bosch', rev:'Laura Pons', fecha:'20 sep',
-         refs:[{r:'81922311',m:'MOD_LJ13',d:'Lijadora orbital 300 W',s:'Herramientas'},{r:'81930118',m:'MOD_SC14',d:'Sierra circular 1200 W',s:'Herramientas'}]}
+         refs:[{r:'62010400',m:'MOD_SN31',d:'Lavabo sobre encimera 60 cm',s:'Baño'},{r:'62010444',m:'MOD_SN31',d:'Inodoro compacto salida dual',s:'Baño'},{r:'62011530',m:'MOD_SD32',d:'Mampara de ducha 120 cm',s:'Baño'}]},
+        {aud:1006, per:'Proveedor · Roca', rev:'Laura Pons', fecha:'20 sep',
+         refs:[{r:'62011511',m:'MOD_SD32',d:'Plato de ducha de resina 120x80',s:'Baño'},{r:'62010418',m:'MOD_SN31',d:'Mueble de lavabo 2 cajones',s:'Baño'}]}
       ]},
     { id:'g4', disp:'«GROHE EUROSMART CE»', motivo:'Marca o nombre propio', check:'Posible designación administrativa',
       reason:'Designación "GROHE EUROSMART CE" en mayúsculas — ¿nombre interno?', destino:{l:'a1',op:'add',k:'GROHE'}, dicc:null,
@@ -907,11 +907,14 @@
       d:'Lo que el motor sabe leer como color', e:531, m:'28 sep · Ana García', capas:{},
       v:['blanco','negro','rojo','azul','verde','amarillo','naranja','rosa','morado','violeta','gris','marrón','beige','dorado','plateado','plata','oro','antracita','grafito','turquesa','coral','burdeos','marfil','nieve','hueso','perla','alabastro','ébano','carbón','cromado','níquel','titanio','caqui','oliva','menta','esmeralda','cobalto','zafiro','granate','teja']},
     { id:'c2', val:'Discrepancia de color', tipo:'Equivalencia', k:'Grupos de equivalencia',
-      d:'Tonos que cuentan como el mismo color', e:11, m:'28 sep · Ana García', capas:{},
+      d:'Tonos que cuentan como el mismo color. Solo se consulta si alguno de los dos colores no está en el mapeo ADEO', e:11, m:'28 sep · Ana García', capas:{},
       v:['blanco · blanca · marfil · nieve · hueso · perla · alabastro','negro · negra · ébano · antracita · grafito · carbono · carbón','gris · grisáceo · plateado · plata · gris perla · gris claro · gris oscuro · cromado · cromo · inoxidable · inox · acero · zinc · níquel · titanio · metálico','azul · azul marino · celeste · cian · turquesa · índigo · cobalto · zafiro · navy · petróleo','verde · verde botella · oliva · verde militar · menta · esmeralda · lima · caqui','rojo · roja · burdeos · vino · granate · carmesí · coral · terracota · teja']},
     { id:'c3', val:'Discrepancia de color', tipo:'Correspondencia', k:'Mapeo a familia ADEO',
-      d:'Cada color a su familia del estándar. No admite ámbito: es un estándar corporativo', e:505, m:'28 sep · Ana García', fijo:true, capas:{},
+      d:'Cada color a su familia del estándar. Se consulta primero: si los dos colores están aquí, manda su familia. No admite ámbito', e:505, m:'28 sep · Ana García', fijo:true, capas:{},
       v:['antracita → negro','marfil → blanco','cromado → gris','petróleo → azul','terracota → rojo','caqui → verde']},
+    { id:'c5', val:'Discrepancia de color', tipo:'Equivalencia', k:'Familias que cuentan como la misma',
+      d:'Pares de familias ADEO que no se consideran una discrepancia', e:1, m:'28 sep · Ana García', capas:{},
+      v:['Beige ↔ Marrón']},
     { id:'c4', val:'Discrepancia de color', tipo:'Contexto', k:'Partes secundarias',
       d:'El texto se corta aquí: solo se compara el color del producto principal', e:55, m:'28 sep · Ana García', fijo:true, capas:{},
       v:['pata','patas','estructura','marco','borde','pantalla','cabecero','cajón','cajones','puerta','puertas','balda','baldas','tablero','tapa','asiento','respaldo','reposabrazos','cojín','cojines','funda','asa','tirador','tiradores','base','pie','pies','rueda','ruedas','cristal','vidrio','tela','tapizado','tapicería','perfil','perfiles','travesaño','maneta','panel','paneles','encimera']},
@@ -1359,7 +1362,7 @@
   var _infId=null, _infFindings=[], _fpPending=null, _fpSelRefs=[], _infFOwner='', _infFSeller='', _infFSev='', _infFTipo='', _infFPp='', _infFSearch='', _infDistOpen=false, _infImpOpen=false, _infTab=null, _infPage=1, _infSort='sev', _infFpView=false, _infFSeccion='';
   var _INF_SAMPLE=[
     { id:1, ref:'18570749', desig:'Puerta de entrada acorazada blanca 120 cm', modelo:'MOD_202512', guia:'Puertas de entrada', seccion:'Carpintería', emoji:'📐', tipo:'Discrepancia de dimensiones', ubic:'designación ↔ ficha técnica', diag:'Designación "120 cm" · atributo Altura "100 cm"', accion:'Unificar la medida (revisar cuál es correcta)', owner:'TIP', pp:'1P', seller:'Simon', sev:'critica' },
-    { id:2, ref:'18800786', desig:'Juego de destornilladores 6 piezas gris', modelo:'MOD_200485', guia:'Herramienta de mano', seccion:'Herramientas', emoji:'🎨', tipo:'Discrepancia de color', ubic:'designación ↔ descripción', diag:'Designación "gris" · descripción "antracita"', accion:'Unificar el color en ambos', owner:'TIP', pp:'1P', seller:'Roca', sev:'critica' },
+    { id:2, ref:'18800786', desig:'Juego de destornilladores 6 piezas gris', modelo:'MOD_200485', guia:'Herramienta de mano', seccion:'Herramientas', emoji:'🎨', tipo:'Discrepancia de color', ubic:'designación ↔ descripción', diag:'Designación "crudo" · descripción "blanco"', accion:'Unificar el color en ambos', owner:'TIP', pp:'1P', seller:'Roca', sev:'critica' },
     { id:3, ref:'81926777', desig:'Sierra de calar 750 W con maletín', modelo:'MOD_200547', guia:'Electroportátil', seccion:'Herramientas', emoji:'🪵', tipo:'Discrepancia de material', ubic:'descripción ↔ ficha técnica', diag:'Descripción "acero" · atributo Material "aluminio"', accion:'Corregir el material incoherente', owner:'TIP', pp:'1P', seller:'Bosch', sev:'critica' },
     { id:4, ref:'81926783', desig:'Mampara de ducha frontal 3 hojas 120 cm', modelo:'MOD_201071', guia:'Soluciones de ducha', seccion:'Baño', emoji:'🔢', tipo:'Discrepancia de cantidad', ubic:'designación ↔ ficha técnica', diag:'Designación "3 luces" · ficha "2 luces"', accion:'Unificar el nº de elementos', owner:'TIP', pp:'1P', seller:'Grohe', sev:'critica' },
     { id:5, ref:'44120983', desig:'Aplique de exterior LED negro E27', modelo:'MOD_198220', guia:'Iluminación exterior', seccion:'Iluminación', emoji:'🧩', tipo:'No sigue la concatenación de la guía', ubic:'designación', diag:'Orden Estilo+Color+Casquillo no respetado', accion:'Reordenar los atributos según la guía', owner:'TIP', pp:'1P', seller:'Philips', sev:'mejora' },
@@ -1383,7 +1386,7 @@
   ];
   var FP_CFG={
     'Ortografía en designación':{ia:false,bulk:true,term:'«izq»',familia:'Puertas y ventanas',count:38,sellers:['Simon','Cortizo','Veka','Fichet'],modelos:[{name:'Puerta de entrada',code:'MOD_PE01',refBase:18570700},{name:'Puerta corredera',code:'MOD_PC02',refBase:18571200},{name:'Puerta acorazada',code:'MOD_PA03',refBase:18572300},{name:'Ventana corredera',code:'MOD_VC04',refBase:18573400}]},
-    'Discrepancia de color':{ia:true,bulk:true,term:'gris ≈ antracita',familia:'Herramientas',count:12,sellers:['Bosch','Makita','Einhell'],modelos:[{name:'Taladro percutor',code:'MOD_TP11',refBase:81920100},{name:'Atornillador',code:'MOD_AT12',refBase:81921200},{name:'Lijadora',code:'MOD_LJ13',refBase:81922300}]},
+    'Discrepancia de color':{ia:true,bulk:true,term:'crudo ≈ blanco',familia:'Baño',count:12,sellers:['Roca','Gala','Sanindusa'],modelos:[{name:'Sanitarios',code:'MOD_SN31',refBase:62010400},{name:'Soluciones de ducha',code:'MOD_SD32',refBase:62011500}]},
     'Discrepancia de material':{ia:true,bulk:true,term:'acero ≈ inox',familia:'Herramientas',count:8,sellers:['Bosch','Makita','Einhell'],modelos:[{name:'Sierra circular',code:'MOD_SC14',refBase:81930100},{name:'Amoladora',code:'MOD_AM15',refBase:81931200}]},
     'Discrepancia de dimensiones':{ia:false,bulk:false,term:null,familia:'Puertas y ventanas',count:1,modelos:[{name:'Puerta de entrada',code:'MOD_PE01',refBase:18575000}]},
     'Discrepancia de cantidad':{ia:false,bulk:false,term:null,familia:'Baño',count:1,modelos:[{name:'Mampara de ducha',code:'MOD_MD41',refBase:81926700}]},
@@ -1395,7 +1398,7 @@
   };
   var FP_TPL={
     'Ortografía en designación':{emoji:'🔤',tipo:'Ortografía en designación',ubic:'designación',diag:'"puerta corredera izq" — «izq» no reconocida (posible falta)',accion:'Escribir «izquierda» (o expandir la abreviatura)',owner:'TIP',pp:'1P',seller:'Simon',sev:'mejora'},
-    'Discrepancia de color':{emoji:'🎨',tipo:'Discrepancia de color',ubic:'designación ↔ descripción',diag:'Designación "gris" · descripción "antracita"',accion:'Unificar el color en designación y descripción',owner:'TIP',pp:'1P',seller:'Roca',sev:'critica'},
+    'Discrepancia de color':{emoji:'🎨',tipo:'Discrepancia de color',ubic:'designación ↔ descripción',diag:'Designación "crudo" · descripción "blanco"',accion:'Unificar el color en designación y descripción',owner:'TIP',pp:'1P',seller:'Roca',sev:'critica'},
     'Discrepancia de material':{emoji:'🪵',tipo:'Discrepancia de material',ubic:'descripción ↔ ficha técnica',diag:'Descripción "acero" · atributo "inox"',accion:'Unificar el material',owner:'TIP',pp:'1P',seller:'Bosch',sev:'critica'},
     'Falta semántica SEO en designación':{emoji:'🔍',tipo:'Falta semántica SEO en designación',ubic:'designación',diag:'No aparece el término SEO "exterior" exigido por la guía',accion:'Incluir "exterior" en la designación',owner:'TIP',pp:'1P',seller:'Philips',sev:'mejora'},
     'Ortografía en descripción':{emoji:'🔤',tipo:'Ortografía en descripción',ubic:'descripción',diag:'"materal" \u2014 posible falta ortográfica',accion:'Corregir la falta ortográfica',owner:'TIP',pp:'1P',seller:'Bosch',sev:'mejora'},
@@ -1409,7 +1412,7 @@
   function _desigFor(guia,ref){ if(!guia) return ''; var h=0,r=String(ref||''); for(var i=0;i<r.length;i++)h=(h*31+r.charCodeAt(i))%9973; return guia+' '+_DESIG_Q[h%_DESIG_Q.length]; }
   var FP_HEROES=[
     {emoji:'🔤',tipo:'Ortografía en designación',ubic:'designación',diag:'"puerta corredera izq" — «izq» no reconocida (posible falta)',accion:'Escribir «izquierda» (o expandir la abreviatura)',owner:'TIP',pp:'1P',seller:'Simon',sev:'mejora',familia:'Puertas y ventanas',guia:'Puerta de entrada',modelo:'MOD_PE01',ref:'18570700'},
-    {emoji:'🎨',tipo:'Discrepancia de color',ubic:'designación ↔ descripción',diag:'Designación "gris" · descripción "antracita"',accion:'Unificar el color en designación y descripción',owner:'TIP',pp:'1P',seller:'Bosch',sev:'critica',familia:'Herramientas',guia:'Taladro percutor',modelo:'MOD_TP11',ref:'81920100'},
+    {emoji:'🎨',tipo:'Discrepancia de color',ubic:'designación ↔ descripción',diag:'Designación "crudo" · descripción "blanco"',accion:'Unificar el color en designación y descripción',owner:'TIP',pp:'1P',seller:'Roca',sev:'critica',familia:'Baño',guia:'Sanitarios',modelo:'MOD_SN31',ref:'62010400'},
     {emoji:'🔍',tipo:'Falta semántica SEO en designación',ubic:'designación',diag:'No aparece el término SEO "exterior" exigido por la guía',accion:'Incluir "exterior" en la designación',owner:'TIP',pp:'1P',seller:'Philips',sev:'mejora',familia:'Iluminación',guia:'Aplique exterior',modelo:'MOD_AE21',ref:'44120100'},
     {emoji:'📐',tipo:'Discrepancia de dimensiones',ubic:'designación ↔ ficha técnica',diag:'Designación "120 cm" · atributo Altura "100 cm"',accion:'Unificar la medida (revisar cuál es correcta)',owner:'TIP',pp:'1P',seller:'Simon',sev:'critica',familia:'Puertas y ventanas',guia:'Puerta de entrada',modelo:'MOD_PE01',ref:'18575000'},
     {emoji:'🅰️',tipo:'Posible designación administrativa',ubic:'designación',diag:'Designación "GROHE EUROSMART CE" en mayúsculas — ¿nombre interno?',accion:'Confirmar que es la designación comercial válida',owner:'Seller',pp:'1P',seller:'Grohe',sev:'mejora',familia:'Baño',guia:'Grifería monomando',modelo:'MOD_GM33',ref:'52001400'},
