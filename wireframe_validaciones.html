@@ -937,8 +937,8 @@
       d:'El texto se corta aquí: solo se compara el color del producto principal', e:55, m:'28 sep · Ana García', fijo:true, capas:{},
       v:["pata", "patas", "estructura", "marco", "borde", "pantalla", "cabecero", "cajon", "cajones", "puerta", "puertas", "balda", "baldas", "tablero", "tapa", "asiento", "respaldo", "reposabrazos", "cojin", "cojines", "funda", "asa", "tirador", "tiradores", "base", "pie", "pies", "rueda", "ruedas", "cristal", "vidrio", "tela", "tapizado", "tapiceria", "perfil", "perfiles", "travesano", "maneta", "manetas", "panel", "paneles", "encimera", "frontal", "lateral", "zocalo", "grifo", "grifos", "mango", "mangos", "soporte", "soportes", "varilla", "varillas", "barra", "barras"]},
     { id:'m1', val:'Discrepancia de material', tipo:'Vocabulario', k:'Materiales reconocidos',
-      d:'Lo que el motor sabe leer como material', e:41, m:'28 sep · Ana García', capas:{ 'Baño':{add:[],off:[{k:'teka',por:'Miquel Soler',f:'24 sep',m:'aquí Teka es una marca de sanitarios, no la madera'}]},
-              'Climatización':{add:[],off:[{k:'teka',por:'Ana García',f:'26 sep',m:'Teka fabrica calentadores: en esta sección es marca'}]} },
+      d:'Lo que el motor sabe leer como material', e:41, m:'28 sep · Ana García', capas:{ 'Baño':{add:[],off:[{k:'teka',src:'descarte',caso:'teka ≈ marca',aud:1007,f:'24 sep'}]},
+              'Climatización':{add:[],off:[{k:'teka',src:'descarte',caso:'teka ≈ marca',aud:1010,f:'26 sep'}]} },
       v:["madera", "metal", "hierro", "acero", "aluminio", "plastico", "cristal", "vidrio", "tela", "cuero", "piel", "teka", "teca", "bambu", "marmol", "granito", "cemento", "hormigon", "policarbonato", "mdf", "poliester", "algodon", "lino", "rattan", "mimbre", "forja", "inoxidable", "melamina", "porcelana", "ceramica", "terciopelo", "microfibra", "polipiel", "goma", "caucho", "resina", "zamak", "epoxi", "pvc", "pladur", "travertino"]},
     { id:'m2', val:'Discrepancia de material', tipo:'Equivalencia', k:'Grupos de equivalencia',
       d:'Acero e inox cuentan como el mismo', e:9, m:'28 sep · Ana García', capas:{},
@@ -950,7 +950,7 @@
       d:'Lista cerrada. No hay corrector general todavía', e:111, m:'28 sep · Ana García', capas:{ 'Puertas y ventanas':{add:['coredera → corredera','correderza → corredera'],off:[]} },
       v:["hehexagonal → hexagonal", "adheviso → adhesivo", "adhesibo → adhesivo", "adhesvio → adhesivo", "inoxidabe → inoxidable", "inoxdiable → inoxidable", "regulabe → regulable", "plegabe → plegable", "lavabe → lavable", "desmontabe → desmontable", "ajustabe → ajustable", "apilabe → apilable", "manejabe → manejable", "impermeabe → impermeable", "antideslizane → antideslizante", "antideslisante → antideslizante", "ristente → resistente", "resistene → resistente", "aluminoi → aluminio", "estrucutra → estructura", "soporate → soporte", "materail → material", "atorniar → atornillar", "pantala → pantalla", "cristla → cristal", "vidiro → vidrio", "bombila → bombilla", "tornilo → tornillo", "brilo → brillo", "brilante → brillante", "galvanisado → galvanizado", "intalacion → instalación", "instalacion → instalación", "fijacion → fijación", "posicion → posición", "proteccion → protección", "dimension → dimensión", "decoracion → decoración", "aspiracion → aspiración", "iluminacion → iluminación", "seccion → sección", "subseccion → subsección", "electrico → eléctrico", "electrica → eléctrica", "electricos → eléctricos", "electricas → eléctricas", "hidraulico → hidráulico", "hidraulica → hidráulica", "neumatico → neumático", "neumatica → neumática", "termico → térmico", "termica → térmica", "sintetico → sintético", "sintetica → sintética", "acrilico → acrílico", "acrilica → acrílica", "metalico → metálico", "metalica → metálica", "plastico → plástico", "plastica → plástica", "ceramica → cerámica", "ceramico → cerámico", "automatico → automático", "automatica → automática", "ergonomico → ergonómico", "ergonomica → ergonómica", "ecologico → ecológico", "ecologica → ecológica", "practico → práctico", "practica → práctica", "clasico → clásico", "clasica → clásica", "elastico → elástico", "elastica → elástica", "unico → único", "unica → única", "basico → básico", "basica → básica", "minimo → mínimo", "maximo → máximo", "optimo → óptimo", "optima → óptima", "diametro → diámetro", "numero → número", "articulo → artículo", "garantia → garantía", "tuberia → tubería", "tuberias → tuberías", "valvula → válvula", "valvulas → válvulas", "mas → más", "sofas → sofás", "jardin → jardín", "canapes → canapés", "sillon → sillón", "cajon → cajón", "tamano → tamaño", "facil → fácil", "util → útil", "utiles → útiles", "deposito → depósito", "linea → línea", "lineas → líneas", "caracteristicas → características", "caracteristica → característica", "bateria → batería", "baterias → baterías", "lampara → lámpara", "lamparas → lámparas", "bano → baño", "banos → baños"]},
     { id:'o2', val:'Abreviaturas incorrectas', tipo:'Corrección', k:'Abreviaturas incorrectas',
-      d:'Tres entradas en total: la cobertura de esta validación es mínima', e:3, m:'28 sep · Ana García', capas:{ 'Herramientas':{add:[],off:[{k:"gr → g (el símbolo del gramo según la RAE es \"g\", sin la \"r\")",por:'Laura Pons',f:'18 sep',m:'«gr» es abreviatura aceptada en herramienta de mano'}]} },
+      d:'Tres entradas en total: la cobertura de esta validación es mínima', e:3, m:'28 sep · Ana García', capas:{ 'Herramientas':{add:[],off:[{k:"gr → g (el símbolo del gramo según la RAE es \"g\", sin la \"r\")",src:'descarte',caso:'gr',aud:1005,f:'18 sep'}]} },
       v:["unds → uds. (abreviatura de \"unidades\" según la RAE: con punto, sin \"n\")", "gr → g (el símbolo del gramo según la RAE es \"g\", sin la \"r\")", "ptas → \"puertas\" escrita completa (\"ptas\" es la abreviatura RAE de \"pesetas\", no de \"puertas\")"]},
     { id:'o3', val:'Erratas conocidas', tipo:'Vocabulario', k:'Siglas internas del ADM',
       d:'No se marcan como errata', e:98, m:'28 sep · Ana García', capas:{},
@@ -1079,7 +1079,7 @@
   // su capa dice solo lo que cambia — lo que añade y lo que anula. Así la lista
   // general sigue siendo una afirmación legible sobre el catálogo, y abrir una
   // sección nueva no obliga a revisar las 531 entradas de cada lista.
-  var _rAmb='', _rFVal='', _rOpen=null, _rQ='', _rOpenG={};
+  var _rAmb='', _rFVal='', _rOpen=null, _rQ='', _rOpenG={}, _rNuevo=null, _rAviso='';
 
   function rKey(sec){ return sec||'General'; }
   function rCapa(l,sec){ var c=(l.capas&&l.capas[rKey(sec)])||{};
@@ -1125,15 +1125,17 @@
           var offs={}; cap.offG.forEach(function(x){ if(x.g===g) offs[x.k]=x; });
           ts.forEach(function(o){ var d=offs[o.t]; if(d){ o.origen='off'; o.meta=d; } });
           cap.addG.forEach(function(x){ if(x.g===g) ts.push({t:x.k, origen:'add', meta:x}); });
-        } else ts.forEach(function(o){ o.fuera=rOffEnG(l,g,o.t); });
+        } else ts.forEach(function(o){ o.fuera=rOffEnG(l,g,o.t); o.meta=l.meta&&l.meta['General|'+g+'|'+o.t];
+            if(o.meta) o.origen='add'; o.otros=rOtrosGrupos(l,g,o.t); });
         out.push({k:entrada, g:g, terms:ts}); });
       return out; }
     var gOff=rOffDe(l,''), off=sec?rOffDe(l,sec):{};
     l.v.forEach(function(k){
-      if(!sec){ var g=gOff[k]; out.push({k:k, origen:g?'off':'heredada', meta:g, fuera:rOffEn(l,k)}); return; }
+      if(!sec){ var g=gOff[k], mp=l.meta&&l.meta[k];
+        out.push({k:k, origen:g?'off':(mp?'add':'heredada'), meta:g||mp, fuera:rOffEn(l,k)}); return; }
       if(gOff[k]) return;                       // anulada arriba: no se hereda
-      var d=off[k]; out.push({k:k, origen:d?'off':'heredada', meta:d}); });
-    if(sec) rCapa(l,sec).add.forEach(function(k){ out.push({k:k, origen:'add'}); });
+      var d=off[k]; out.push({k:k, origen:d?'off':'heredada', meta:d||(l.meta&&l.meta[k])}); });
+    if(sec) rCapa(l,sec).add.forEach(function(k){ out.push({k:k, origen:'add', meta:l.meta&&l.meta[rKey(sec)+'|'+k]}); });
     return out; }
   function rCuentaGen(l){ return l.e - rCapa(l,'').off.length; }
   function rCuenta(l,sec){
@@ -1141,7 +1143,7 @@
     if(!sec) return rCuentaGen(l);
     var c=rCapa(l,sec); return rCuentaGen(l) - c.off.length + c.add.length; }
 
-  function setRAmb(v){ _rAmb=v; renderQPanel(); }
+  function setRAmb(v){ _rAmb=v; _rNuevo=null; _rAviso=''; renderQPanel(); }
   function setRFVal(v){ _rFVal=v; renderQPanel(); }
   function rClearF(){ _rAmb=''; _rFVal=''; renderQPanel(); }
 
@@ -1198,30 +1200,34 @@
 
   // ── Ver una regla: sus entradas, de dónde viene cada una ───────────────────
   function rFind(id){ return _rListas.filter(function(l){return l.id===id;})[0]; }
-  function openDicc(id){ _rOpen=id; _rQ=''; renderDicc(); document.getElementById('v-dicc-modal').classList.add('open'); }
+  function openDicc(id){ _rOpen=id; _rQ=''; _rNuevo=null; _rAviso=''; renderDicc(); document.getElementById('v-dicc-modal').classList.add('open'); }
   function closeDicc(){ document.getElementById('v-dicc-modal').classList.remove('open'); _rOpen=null; }
   function diccBuscar(v){ _rQ=(v||'').toLowerCase(); renderDicc(); }
 
   // Anular no borra: deja la entrada a la vista, tachada, con quién y por qué.
-  function rAnular(k){ rOff(rFind(_rOpen),_rAmb,k,'Ana García','1 oct','anulada desde el panel'); renderDicc(); renderQPanel(); vToast('Anulada en '+rKey(_rAmb)); }
-  function rOff(l,sec,k,por,f,m){ if(!l) return; var c=rCapaW(l,sec);
-    if(!rOffDe(l,sec)[k]) c.off.push({k:k,por:por,f:f,m:m});
-    l.m=f+' · '+por; }
-  function rAdd(l,sec,k,por,f){ if(!l) return;
-    if(rKey(sec)==='General'){ if(l.v.indexOf(k)<0){ l.v.push(k); l.e++; } if(l.nueva&&l.v.length) l.nueva=false; }
-    else { var c=rCapaW(l,sec); if(c.add.indexOf(k)<0) c.add.push(k); }
-    l.m=f+' · '+por; }
+  function rAnular(k){ rOff(rFind(_rOpen),_rAmb,k,rNota('mano',null,null,'1 oct')); renderDicc(); renderQPanel(); vToast('Anulada en '+rKey(_rAmb)); }
+  // nota = {src:'descarte'|'mano', caso, aud, f}. Solo la llevan las entradas que ha
+  // escrito el panel; las que vienen del motor no tienen ninguna.
+  function rNota(src,caso,aud,f){ return {src:src, caso:caso, aud:aud, f:f}; }
+  function rMeta(l,clave,nota){ if(!l.meta) l.meta={}; l.meta[clave]=nota; }
+  function rOff(l,sec,k,nota){ if(!l) return; var c=rCapaW(l,sec);
+    if(!rOffDe(l,sec)[k]) c.off.push({k:k, src:nota.src, caso:nota.caso, aud:nota.aud, f:nota.f});
+    l.m=nota.f; }
+  function rAdd(l,sec,k,nota){ if(!l) return;
+    if(rKey(sec)==='General'){ if(l.v.indexOf(k)<0){ l.v.push(k); l.e++; } rMeta(l,k,nota); if(l.nueva&&l.v.length) l.nueva=false; }
+    else { var c=rCapaW(l,sec); if(c.add.indexOf(k)<0) c.add.push(k); rMeta(l,rKey(sec)+'|'+k,nota); }
+    l.m=nota.f; }
 
   // Dentro de una lista de grupos se opera sobre un término de un grupo concreto. En
   // general el término entra en la cadena del grupo; en una sección, en su capa.
-  function rAddG(l,sec,g,k,por,f){ if(!l) return;
-    if(rKey(sec)==='General'){ l.v=l.v.map(function(e){ return (rGK(e)===g && e.split(' · ').indexOf(k)<0)?e+' · '+k:e; }); }
-    else { var c=rCapaW(l,sec); if(!c.addG.some(function(x){return x.g===g&&x.k===k;})) c.addG.push({g:g,k:k,por:por,f:f}); }
-    l.m=f+' · '+por; }
-  function rOffG(l,sec,g,k,por,f,m){ if(!l) return; var c=rCapaW(l,sec);
-    if(!c.offG.some(function(x){return x.g===g&&x.k===k;})) c.offG.push({g:g,k:k,por:por,f:f,m:m});
-    l.m=f+' · '+por; }
-  function rAnularG(g,k){ rOffG(rFind(_rOpen),_rAmb,g,k,'Ana García','1 oct','anulada desde el panel'); renderDicc(); renderQPanel(); vToast('«'+k+'» anulada en '+rKey(_rAmb)); }
+  function rAddG(l,sec,g,k,nota){ if(!l) return;
+    if(rKey(sec)==='General'){ l.v=l.v.map(function(e){ return (rGK(e)===g && e.split(' · ').indexOf(k)<0)?e+' · '+k:e; }); rMeta(l,'General|'+g+'|'+k,nota); }
+    else { var c=rCapaW(l,sec); if(!c.addG.some(function(x){return x.g===g&&x.k===k;})) c.addG.push({g:g,k:k,src:nota.src,caso:nota.caso,aud:nota.aud,f:nota.f}); }
+    l.m=nota.f; }
+  function rOffG(l,sec,g,k,nota){ if(!l) return; var c=rCapaW(l,sec);
+    if(!c.offG.some(function(x){return x.g===g&&x.k===k;})) c.offG.push({g:g,k:k,src:nota.src,caso:nota.caso,aud:nota.aud,f:nota.f});
+    l.m=nota.f; }
+  function rAnularG(g,k){ rOffG(rFind(_rOpen),_rAmb,g,k,rNota('mano',null,null,'1 oct')); renderDicc(); renderQPanel(); vToast('«'+k+'» anulada en '+rKey(_rAmb)); }
   function rReactivarG(g,k){ var l=rFind(_rOpen); if(!l) return; var c=rCapaW(l,_rAmb);
     c.offG=c.offG.filter(function(x){ return !(x.g===g&&x.k===k); });
     l.m='1 oct · Ana García'; renderDicc(); renderQPanel(); vToast('«'+k+'» reactivada en '+rKey(_rAmb)); }
@@ -1237,12 +1243,73 @@
     return (o.fuera&&o.fuera.length)?'<span style="font-size:11px;color:var(--warning-text);">anulada en '+o.fuera.length+(o.fuera.length===1?' sección':' secciones')+'</span>':''; }
   function rBtn(on,fn,txt){ return '<button class="r-acc'+(on?' on':'')+'" onclick="'+fn+'" style="background:#fff;border:1px solid var(--border-input);border-radius:7px;height:26px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-'+(on?'body':'muted')+');white-space:nowrap;">'+txt+'</button>'; }
   function rEsc(x){ return x.replace(/'/g,"\\'"); }
+
+  // El formulario lo decide el tipo de regla, no la regla: son cuatro formas para las
+  // quince. En los grupos el destino ya lo da la cabecera desde la que se abre.
+  function rForma(l){
+    if(l.tipo==='Corrección') return {n:2, sep:' → ', ph:['forma incorrecta','forma correcta']};
+    if(l.tipo==='Correspondencia') return {n:2, sep:' → ', ph:['valor','a qué corresponde']};
+    if(l.tipo==='Equivalencia' && !rEsGrupos(l)) return {n:2, sep:' ↔ ', ph:['una','la otra']};
+    return {n:1, sep:'', ph:['término']}; }
+  function rAbrirNuevo(g){ _rNuevo={g:g||null}; _rAviso=''; renderDicc(); }
+  function rCerrarNuevo(){ _rNuevo=null; _rAviso=''; renderDicc(); }
+  // Dónde más aparece un término dentro de la misma regla de grupos. Con el matGrupo
+  // actual del motor solo cuenta el primero, así que estar en dos es un problema.
+  function rOtrosGrupos(l,g,t){ var o=[];
+    l.v.forEach(function(e){ var gk=rGK(e); if(gk!==g && e.split(' · ').indexOf(t)>=0) o.push(gk); });
+    return o; }
+  function rGuardarNuevo(){ var l=rFind(_rOpen); if(!l||!_rNuevo) return;
+    var fo=rForma(l), a=(document.getElementById('v-r-n1').value||'').trim();
+    var b=(fo.n===2)?(document.getElementById('v-r-n2').value||'').trim():'';
+    if(!a || (fo.n===2 && !b)){ _rAviso='Rellena los dos campos.'; renderDicc(); return; }
+    var val=(fo.n===2)?(a+fo.sep+b):a;
+    if(rEsGrupos(l)){
+      var grupo=_rNuevo.g, ya=l.v.filter(function(e){ return rGK(e)===grupo; })[0]||'';
+      if(ya.split(' · ').indexOf(val)>=0 || rCapa(l,_rAmb).addG.some(function(x){return x.g===grupo&&x.k===val;})){
+        _rAviso='«'+val+'» ya está en este grupo.'; renderDicc(); return; }
+      rAddG(l,_rAmb,grupo,val,rNota('mano',null,null,'2 oct'));
+    } else {
+      if(rEfectivas(l,_rAmb).some(function(x){ return x.k===val; })){
+        _rAviso='«'+val+'» ya está en esta regla.'; renderDicc(); return; }
+      rAdd(l,_rAmb,val,rNota('mano',null,null,'2 oct'));
+    }
+    _rNuevo=null; _rAviso=''; renderDicc(); renderQPanel(); vToast('Añadido a '+l.k+' · '+rKey(_rAmb)); }
+
+  // Deshacer lo que uno mismo añadió no es anular: no tapa nada heredado.
+  function rQuitar(k){ var l=rFind(_rOpen); if(!l) return;
+    if(rKey(_rAmb)==='General'){ var i=l.v.indexOf(k); if(i>=0){ l.v.splice(i,1); l.e--; } if(l.meta) delete l.meta[k]; }
+    else { var c=rCapaW(l,_rAmb); c.add=c.add.filter(function(x){ return x!==k; }); }
+    renderDicc(); renderQPanel(); vToast('Entrada quitada'); }
+  function rQuitarG(g,k){ var l=rFind(_rOpen); if(!l) return;
+    if(rKey(_rAmb)==='General'){ l.v=l.v.map(function(e){ if(rGK(e)!==g) return e;
+        return e.split(' · ').filter(function(t){ return t!==k; }).join(' · '); });
+      if(l.meta) delete l.meta['General|'+g+'|'+k]; }
+    else { var c=rCapaW(l,_rAmb); c.addG=c.addG.filter(function(x){ return !(x.g===g&&x.k===k); }); }
+    renderDicc(); renderQPanel(); vToast('Término quitado'); }
+
+  function rFormHtml(l){
+    var fo=rForma(l), inp=function(id,ph){ return '<input id="'+id+'" placeholder="'+ph+'" style="flex:1;min-width:0;height:34px;border:1px solid var(--border-input);border-radius:8px;padding:0 11px;font-size:12.5px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-ink);outline:none;"/>'; };
+    return '<div style="display:flex;align-items:center;gap:8px;padding:10px 0;">'
+      + inp('v-r-n1',fo.ph[0])
+      + (fo.n===2?'<span style="color:var(--text-muted);font-size:13px;">'+fo.sep.trim()+'</span>'+inp('v-r-n2',fo.ph[1]):'')
+      + '<button onclick="rGuardarNuevo()" class="btn btn-primary" style="height:34px;font-size:12px;padding:0 14px;">Añadir</button>'
+      + '<button onclick="rCerrarNuevo()" style="background:none;border:none;color:var(--green);font-size:12.5px;font-weight:700;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;padding:0 8px;height:34px;">Cancelar</button></div>'
+      + (_rAviso?'<div style="font-size:11.5px;color:var(--warning-text);padding-bottom:8px;">'+_rAviso+'</div>':''); }
+  function rBtnNuevo(g,txt){ return '<button onclick="rAbrirNuevo('+(g?"'"+rEsc(g)+"'":'null')+')" style="background:none;border:none;color:var(--green);font-size:12px;font-weight:700;cursor:pointer;font-family:\'Inter\',system-ui,sans-serif;padding:0;white-space:nowrap;">'+txt+'</button>'; }
   function rCarriles(txt,marca,acc,off){
     return '<div style="display:flex;align-items:center;gap:12px;font-size:12.5px;line-height:1.5;">'
       +'<span style="flex:1;min-width:0;'+(off?'text-decoration:line-through;color:var(--text-muted);':'color:var(--text-body);')+'">'+txt+'</span>'
       +'<span style="width:150px;flex-shrink:0;text-align:right;">'+marca+'</span>'
       +'<span style="width:92px;flex-shrink:0;display:inline-flex;justify-content:flex-end;">'+acc+'</span></div>'; }
-  function rFirma(m){ return m?'<div style="font-size:11px;color:var(--text-muted);margin-top:3px;">'+m.por+' · '+m.f+(m.m?' · «'+m.m+'»':'')+'</div>':''; }
+  // Con el matGrupo del motor solo cuenta el primer grupo que casa, así que un término
+  // en dos grupos rompe en silencio una de las dos equivalencias.
+  function rDuplicado(o){ return (o.otros&&o.otros.length)
+    ? '<div style="font-size:11px;color:var(--warning-text);margin-top:3px;">También está en el grupo de <strong>'+o.otros.join('</strong> y <strong>')+'</strong> — el motor solo cuenta el primero</div>' : ''; }
+  function rFirma(m){ if(!m) return '';
+    var txt=(m.src==='descarte')
+      ? 'desde el descarte «'+m.caso+'» · auditoría #'+m.aud
+      : 'añadida a mano';
+    return '<div style="font-size:11px;color:var(--text-muted);margin-top:3px;">'+txt+' · '+m.f+'</div>'; }
 
   function renderDicc(){ var l=rFind(_rOpen); if(!l) return; var sec=_rAmb, grupos=rEsGrupos(l);
     document.getElementById('v-dicc-title').textContent=l.k;
@@ -1276,21 +1343,30 @@
         +chev+'<span style="font-size:13px;font-weight:700;color:var(--text-ink);">'+rResalta(x.g,_rQ)+'</span>'
         +'<span style="font-size:11.5px;color:var(--text-muted);">'+n+(n===1?' término':' términos')+(_rQ?' con coincidencia':'')+'</span>'
         +'<span style="margin-left:auto;font-size:12px;">'+marcas+'</span></button>';
+      var nuevoAqui=(_rNuevo&&_rNuevo.g===x.g);
+      var pie=(abierto&&!l.fijo)?'<div style="padding:0 0 10px 23px;">'
+        +(nuevoAqui?rFormHtml(l):rBtnNuevo(x.g,'+ añadir término'))+'</div>':'';
       var cuerpo=abierto?('<div style="padding:0 0 10px 23px;">'+x.terms.map(function(o,j){
             var off=(o.origen==='off');
-            var acc=l.fijo?'':(off?rBtn(true,"rReactivarG('"+rEsc(x.g)+"','"+rEsc(o.t)+"')",'Reactivar')
-                                 :(o.origen==='add'?'':rBtn(false,"rAnularG('"+rEsc(x.g)+"','"+rEsc(o.t)+"')",'Anular aquí')));
+            var acc=(l.fijo&&sec)?'':(off?rBtn(true,"rReactivarG('"+rEsc(x.g)+"','"+rEsc(o.t)+"')",'Reactivar')
+                                 :(o.origen==='add'?rBtn(true,"rQuitarG('"+rEsc(x.g)+"','"+rEsc(o.t)+"')",'Quitar')
+                                 :rBtn(false,"rAnularG('"+rEsc(x.g)+"','"+rEsc(o.t)+"')",'Anular aquí')));
             return '<div class="r-ent" style="padding:7px 0;'+(j?'border-top:1px solid var(--border-card);':'')+'">'
-              +rCarriles(rResalta(o.t,_rQ),rMarca(o,sec),acc,off)+(off?rFirma(o.meta):'')+'</div>'; }).join('')+'</div>'):'';
-      return '<div style="'+(i?'border-top:1px solid var(--border-card);':'')+'">'+cab+cuerpo+'</div>'; }).join('');
+              +rCarriles(rResalta(o.t,_rQ),rMarca(o,sec),acc,off)+rFirma(o.meta)+rDuplicado(o)+'</div>'; }).join('')+'</div>'):'';
+      return '<div style="'+(i?'border-top:1px solid var(--border-card);':'')+'">'+cab+cuerpo+pie+'</div>'; }).join('');
     else body=ef.map(function(x,i){
       var off=(x.origen==='off');
-      var acc=l.fijo?'':(off?rBtn(true,"rReactivar('"+rEsc(x.k)+"')",'Reactivar')
-                           :(x.origen==='add'?'':rBtn(false,"rAnular('"+rEsc(x.k)+"')",'Anular aquí')));
+      var acc=(l.fijo&&sec)?'':(off?rBtn(true,"rReactivar('"+rEsc(x.k)+"')",'Reactivar')
+                           :(x.origen==='add'?rBtn(true,"rQuitar('"+rEsc(x.k)+"')",'Quitar')
+                           :rBtn(false,"rAnular('"+rEsc(x.k)+"')",'Anular aquí')));
       return '<div class="r-ent" style="display:flex;gap:12px;padding:9px 0;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
         +'<span style="color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;min-width:24px;text-align:right;font-size:12.5px;line-height:1.5;">'+(i+1)+'</span>'
-        +'<div style="flex:1;min-width:0;">'+rCarriles(x.k,rMarca(x,sec),acc,off)+(off?rFirma(x.meta):'')+'</div></div>'; }).join('');
-    document.getElementById('v-dicc-body').innerHTML=body;
+        +'<div style="flex:1;min-width:0;">'+rCarriles(x.k,rMarca(x,sec),acc,off)+rFirma(x.meta)+'</div></div>'; }).join('');
+    var barra='';
+    if(!grupos && !(l.fijo&&sec)) barra=(_rNuevo&&!_rNuevo.g)
+      ? '<div style="padding-bottom:10px;border-bottom:1px solid var(--border-card);margin-bottom:4px;">'+rFormHtml(l)+'</div>'
+      : '<div style="padding-bottom:11px;">'+rBtnNuevo(null,'+ añadir entrada')+'</div>';
+    document.getElementById('v-dicc-body').innerHTML=barra+body;
     var nota=document.getElementById('v-dicc-nota');
     var ns=[];
     if(l.fijo) ns.push('Esta regla no admite ámbito: es la misma en todo el catálogo.');
@@ -1398,10 +1474,11 @@
   function aplicarRes(){ var g=qFind(_qResId); if(!g) return;
     var n=qDescartes(g);
     var dst=g.destino, dl=dst?rFind(dst.l):null, secs=qResSel();
+    var nota=rNota('descarte', g.disp.replace(/^«|»$/g,''), g.auds[0].aud, '1 oct');
     var escribe=function(sec){ if(!dl||!dst) return;
-      if(dst.op==='addG') rAddG(dl,sec,dst.g,dst.k,'Ana García','1 oct');
-      else if(dst.op==='add') rAdd(dl,sec,dst.k,'Ana García','1 oct');
-      else rOff(dl,sec,dst.k,'Ana García','1 oct',g.motivo.toLowerCase()); };
+      if(dst.op==='addG') rAddG(dl,sec,dst.g,dst.k,nota);
+      else if(dst.op==='add') rAdd(dl,sec,dst.k,nota);
+      else rOff(dl,sec,dst.k,nota); };
     if(_qResOpt==='regla'){ if(!secs.length) return; secs.forEach(escribe); }
     else if(_qResOpt==='dicc') escribe('');
     _qResolved[g.id]=_qResOpt;
