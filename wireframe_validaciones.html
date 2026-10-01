@@ -1248,10 +1248,16 @@
   // El formulario lo decide el tipo de regla, no la regla: son cuatro formas para las
   // quince. En los grupos el destino ya lo da la cabecera desde la que se abre.
   function rForma(l){
-    if(l.tipo==='Corrección') return {n:2, sep:' → ', ph:['forma incorrecta','forma correcta']};
-    if(l.tipo==='Correspondencia') return {n:2, sep:' → ', ph:['valor','a qué corresponde']};
-    if(l.tipo==='Equivalencia' && !rEsGrupos(l)) return {n:2, sep:' ↔ ', ph:['una','la otra']};
-    return {n:1, sep:'', ph:['término']}; }
+    // La forma sale de las entradas que ya hay, no del tipo: «Símbolos que no admiten
+    // plural» es de tipo Corrección pero sus entradas son términos sueltos.
+    var e0=l.v[0]||'';
+    var sep=(e0.indexOf(' → ')>=0)?' → ':((e0.indexOf(' ↔ ')>=0)?' ↔ ':'');
+    var n=sep?2:1;
+    // El ejemplo sale de la primera entrada de la propia regla: así el formulario
+    // enseña la forma que espera sin tener que explicarla.
+    var ej=(l.v[0]||'').split(sep||' · ');
+    var ph=n===2 ? ['ej. '+(ej[0]||''), 'ej. '+(ej[1]||'')] : ['ej. '+(ej[0]||'término')];
+    return {n:n, sep:sep, ph:ph}; }
   function rAbrirNuevo(g){ _rNuevo={g:g||null}; _rAviso=''; renderDicc(); }
   function rCerrarNuevo(){ _rNuevo=null; _rAviso=''; renderDicc(); }
   // Dónde más aparece un término dentro de la misma regla de grupos. Con el matGrupo
