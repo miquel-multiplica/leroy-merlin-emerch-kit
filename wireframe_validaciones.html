@@ -101,8 +101,8 @@
   .desc-table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
   .desc-table thead tr { border-bottom: 1px solid var(--border-card); }
   .v-mtabla thead tr { background: #f5f6f7; }
-  .v-sub thead tr { background: transparent; }
-  .v-sub th { padding-left: 0; padding-right: 12px; }
+  .v-sub thead tr { background: var(--bg-parchment); }
+  .v-sub th:first-child { padding-left: 12px; }
   .v-sub tbody tr:hover { background: transparent; }
   .v-sub tbody td { padding-left: 0; }
   .v-sub tbody tr.v-refs, .v-sub tbody tr.v-refs:hover { background: transparent; border-bottom: none; }
@@ -892,7 +892,7 @@
          refs:[{r:'62011511',m:'MOD_SD32',d:'Plato de ducha de resina 120x80',s:'Baño'},{r:'62010418',m:'MOD_SN31',d:'Mueble de lavabo 2 cajones',s:'Baño'}]}
       ]},
     { id:'g4', disp:'«lona ≈ pvc»', motivo:'Valores equivalentes', check:'Discrepancia de material',
-      reason:'Designación "lona" · descripción "PVC"', destino:{l:'m2',op:'add',k:'lona → grupo del plástico'},
+      reason:'Designación "lona" · descripción "PVC"', destino:{l:'m2',op:'addG',g:'plastico',k:'lona'},
       auds:[
         {aud:1003, per:'Gama · Jardín', rev:'Laura Pons', fecha:'15 sep',
          refs:[{r:'75310220',m:'MOD_TL41',d:'Toldo de brazos invisibles 3x2 m',s:'Jardín'},{r:'75310238',m:'MOD_TL41',d:'Toldo cofre 4x3 m',s:'Jardín'},{r:'75311104',m:'MOD_PG42',d:'Pérgola bioclimática 3x4 m',s:'Jardín'}]},
@@ -1049,7 +1049,7 @@
         +'<td style="'+num+'">'+qModelos(g)+'</td>'
         +'<td style="font-size:12px;color:var(--text-muted);line-height:1.5;">'+secTxt+'</td>'
         +'<td style="text-align:right;"><button onclick="event.stopPropagation();openRes(\''+g.id+'\')" class="btn btn-primary" style="height:32px;font-size:12px;padding:0 14px;">Resolver</button></td></tr>'
-        +(abierto?'<tr><td colspan="9" style="padding:0 20px 14px 46px;background:var(--bg-parchment);">'+qAudsHtml(g)+'</td></tr>':''); }).join('');
+        +(abierto?'<tr><td colspan="9" style="padding:0 20px 14px 46px;">'+qAudsHtml(g)+'</td></tr>':''); }).join('');
     return '<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
   function qToggle(id){ _qOpen[id]=!_qOpen[id]; renderQPanel(); }
@@ -1070,7 +1070,7 @@
         +'<td style="'+td+'color:var(--text-muted);">'+(function(){ var ss=qSecDeAud(a), ks=Object.keys(ss);
             return (ks.length===1)?ks[0]:ks.length+' secciones'; })()+'</td>'
         +'<td style="'+td+'text-align:right;font-variant-numeric:tabular-nums;">'+a.refs.length+'</td></tr>'
-        +(ab?'<tr class="v-refs"><td colspan="6" style="padding:2px 12px 8px 46px;">'+a.refs.map(function(r,i2){
+        +(ab?'<tr class="v-refs"><td colspan="6" style="padding:6px 12px 10px 46px;background:var(--bg-parchment);">'+a.refs.map(function(r,i2){
             return '<div style="display:flex;align-items:baseline;gap:16px;padding:7px 0;'+(i2?'border-top:1px solid var(--border-card);':'')+'">'
               +'<a href="https://www.leroymerlin.es/productos/ref-'+r.r+'.html" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:12px;font-weight:700;color:var(--green);text-decoration:none;font-variant-numeric:tabular-nums;width:76px;flex-shrink:0;">'+r.r+'</a>'
               +'<span style="font-size:11px;color:var(--text-muted);width:86px;flex-shrink:0;">'+r.m+'</span>'
@@ -1086,7 +1086,18 @@
   var _rAmb='', _rFVal='', _rFTipo='', _rOpen=null, _rQ='';
 
   function rKey(sec){ return sec||'General'; }
-  function rCapa(l,sec){ var c=l.capas&&l.capas[rKey(sec)]; return c||{add:[],off:[]}; }
+  function rCapa(l,sec){ var c=(l.capas&&l.capas[rKey(sec)])||{};
+    return {add:c.add||[], off:c.off||[], addG:c.addG||[], offG:c.offG||[]}; }
+  function rCapaW(l,sec){ var k=rKey(sec);
+    if(!l.capas[k]) l.capas[k]={add:[],off:[],addG:[],offG:[]};
+    var c=l.capas[k]; c.add=c.add||[]; c.off=c.off||[]; c.addG=c.addG||[]; c.offG=c.offG||[]; return c; }
+  // Una lista de grupos no se edita por filas: la unidad es el término dentro de su
+  // grupo. Añadir «lona» a los plásticos no es una entrada nueva, es un miembro más.
+  function rEsGrupos(l){ return !!(l.v.length && l.v[0].indexOf(' · ')>=0); }
+  function rGK(entrada){ return entrada.split(' · ')[0]; }
+  function rOffEnG(l,g,k){ var o=[]; for(var sec in (l.capas||{})){ if(sec==='General') continue;
+      if(rCapa(l,sec).offG.some(function(x){return x.g===g&&x.k===k;})) o.push(sec); } return o; }
+  function rCambios(l,sec){ var c=rCapa(l,sec); return c.add.length+c.off.length+c.addG.length+c.offG.length; }
   function rOffDe(l,sec){ var o={}; rCapa(l,sec).off.forEach(function(x){ o[x.k]=x; }); return o; }
   // En cuántas SECCIONES está anulada una entrada general (la capa general no cuenta:
   // ahí ya está anulada para todos). Dos o más es la señal de que la que está mal es
@@ -1100,7 +1111,19 @@
   // Las entradas tal y como las ve un ámbito, con su procedencia. Es lo que de verdad
   // ejecuta el motor si auditas ahí.
   function rEfectivas(l,sec){
-    var gOff=rOffDe(l,''), off=sec?rOffDe(l,sec):{}, out=[];
+    var out=[];
+    if(rEsGrupos(l)){
+      var cap=sec?rCapa(l,sec):null;
+      l.v.forEach(function(entrada){
+        var g=rGK(entrada), ts=entrada.split(' · ').map(function(t){ return {t:t, origen:'heredada'}; });
+        if(sec){
+          var offs={}; cap.offG.forEach(function(x){ if(x.g===g) offs[x.k]=x; });
+          ts.forEach(function(o){ var d=offs[o.t]; if(d){ o.origen='off'; o.meta=d; } });
+          cap.addG.forEach(function(x){ if(x.g===g) ts.push({t:x.k, origen:'add', meta:x}); });
+        } else ts.forEach(function(o){ o.fuera=rOffEnG(l,g,o.t); });
+        out.push({k:entrada, g:g, terms:ts}); });
+      return out; }
+    var gOff=rOffDe(l,''), off=sec?rOffDe(l,sec):{};
     l.v.forEach(function(k){
       if(!sec){ var g=gOff[k]; out.push({k:k, origen:g?'off':'heredada', meta:g, fuera:rOffEn(l,k)}); return; }
       if(gOff[k]) return;                       // anulada arriba: no se hereda
@@ -1109,6 +1132,7 @@
     return out; }
   function rCuentaGen(l){ return l.e - rCapa(l,'').off.length; }
   function rCuenta(l,sec){
+    if(rEsGrupos(l)) return l.v.length;
     if(!sec) return rCuentaGen(l);
     var c=rCapa(l,sec); return rCuentaGen(l) - c.off.length + c.add.length; }
 
@@ -1158,10 +1182,10 @@
       var cambia='';
       if(sec){
         if(l.fijo) cambia='<span style="font-size:11.5px;color:var(--text-muted);">no admite ámbito</span>';
-        else if(!c.add.length&&!c.off.length) cambia='<span style="font-size:12px;color:var(--text-muted);">—</span>';
-        else cambia=(c.add.length?'<span style="color:var(--green);font-weight:700;">+'+c.add.length+'</span>':'')
-          +(c.add.length&&c.off.length?' ':'')
-          +(c.off.length?'<span style="color:var(--warning-text);font-weight:700;">−'+c.off.length+'</span>':'');
+        else if(!rCambios(l,sec)) cambia='<span style="font-size:12px;color:var(--text-muted);">—</span>';
+        else { var na=c.add.length+c.addG.length, no=c.off.length+c.offG.length;
+          cambia=(na?'<span style="color:var(--green);font-weight:700;">+'+na+'</span>':'')+(na&&no?' ':'')
+            +(no?'<span style="color:var(--warning-text);font-weight:700;">−'+no+'</span>':''); }
       } else {
         var t=0; l.v.forEach(function(k){ if(rOffEn(l,k).length) t++; });
         cambia=t?'<span style="color:var(--warning-text);font-weight:700;">'+t+'</span>':'<span style="font-size:12px;color:var(--text-muted);">—</span>';
@@ -1185,52 +1209,82 @@
 
   // Anular no borra: deja la entrada a la vista, tachada, con quién y por qué.
   function rAnular(k){ rOff(rFind(_rOpen),_rAmb,k,'Ana García','1 oct','anulada desde el panel'); renderDicc(); renderQPanel(); vToast('Anulada en '+rKey(_rAmb)); }
-  function rOff(l,sec,k,por,f,m){ if(!l) return; var key=rKey(sec);
-    if(!l.capas[key]) l.capas[key]={add:[],off:[]};
-    if(!rOffDe(l,sec)[k]) l.capas[key].off.push({k:k,por:por,f:f,m:m});
+  function rOff(l,sec,k,por,f,m){ if(!l) return; var c=rCapaW(l,sec);
+    if(!rOffDe(l,sec)[k]) c.off.push({k:k,por:por,f:f,m:m});
     l.m=f+' · '+por; }
-  function rAdd(l,sec,k,por,f){ if(!l) return; var key=rKey(sec);
-    if(key==='General'){ if(l.v.indexOf(k)<0){ l.v.push(k); l.e++; } if(l.nueva&&l.v.length) l.nueva=false; }
-    else { if(!l.capas[key]) l.capas[key]={add:[],off:[]};
-      if(l.capas[key].add.indexOf(k)<0) l.capas[key].add.push(k); }
+  function rAdd(l,sec,k,por,f){ if(!l) return;
+    if(rKey(sec)==='General'){ if(l.v.indexOf(k)<0){ l.v.push(k); l.e++; } if(l.nueva&&l.v.length) l.nueva=false; }
+    else { var c=rCapaW(l,sec); if(c.add.indexOf(k)<0) c.add.push(k); }
     l.m=f+' · '+por; }
-  function rReactivar(k){ var l=rFind(_rOpen); if(!l) return; var key=rKey(_rAmb); if(!l.capas[key]) return;
-    l.capas[key].off=l.capas[key].off.filter(function(x){ return x.k!==k; });
-    l.m='1 oct · Ana García'; renderDicc(); renderQPanel(); vToast('Reactivada en '+key); }
 
-  function renderDicc(){ var l=rFind(_rOpen); if(!l) return; var sec=_rAmb;
+  // Dentro de una lista de grupos se opera sobre un término de un grupo concreto. En
+  // general el término entra en la cadena del grupo; en una sección, en su capa.
+  function rAddG(l,sec,g,k,por,f){ if(!l) return;
+    if(rKey(sec)==='General'){ l.v=l.v.map(function(e){ return (rGK(e)===g && e.split(' · ').indexOf(k)<0)?e+' · '+k:e; }); }
+    else { var c=rCapaW(l,sec); if(!c.addG.some(function(x){return x.g===g&&x.k===k;})) c.addG.push({g:g,k:k,por:por,f:f}); }
+    l.m=f+' · '+por; }
+  function rOffG(l,sec,g,k,por,f,m){ if(!l) return; var c=rCapaW(l,sec);
+    if(!c.offG.some(function(x){return x.g===g&&x.k===k;})) c.offG.push({g:g,k:k,por:por,f:f,m:m});
+    l.m=f+' · '+por; }
+  function rAnularG(g,k){ rOffG(rFind(_rOpen),_rAmb,g,k,'Ana García','1 oct','anulada desde el panel'); renderDicc(); renderQPanel(); vToast('«'+k+'» anulada en '+rKey(_rAmb)); }
+  function rReactivarG(g,k){ var l=rFind(_rOpen); if(!l) return; var c=rCapaW(l,_rAmb);
+    c.offG=c.offG.filter(function(x){ return !(x.g===g&&x.k===k); });
+    l.m='1 oct · Ana García'; renderDicc(); renderQPanel(); vToast('«'+k+'» reactivada en '+rKey(_rAmb)); }
+  function rReactivar(k){ var l=rFind(_rOpen); if(!l) return; var c=rCapaW(l,_rAmb);
+    c.off=c.off.filter(function(x){ return x.k!==k; });
+    l.m='1 oct · Ana García'; renderDicc(); renderQPanel(); vToast('Reactivada en '+rKey(_rAmb)); }
+
+  // Marca de procedencia y acción, en carriles de ancho fijo para que no bailen.
+  function rMarca(o,sec){
+    if(o.origen==='off') return '<span style="font-size:11px;color:var(--warning-text);">anulada aquí</span>';
+    if(o.origen==='add') return '<span style="font-size:11px;color:var(--green);font-weight:600;">añadida aquí</span>';
+    // Lo heredado es el caso por defecto y no se etiqueta: marcar solo lo que difiere.
+    return (o.fuera&&o.fuera.length)?'<span style="font-size:11px;color:var(--warning-text);">anulada en '+o.fuera.length+(o.fuera.length===1?' sección':' secciones')+'</span>':''; }
+  function rBtn(on,fn,txt){ return '<button class="r-acc'+(on?' on':'')+'" onclick="'+fn+'" style="background:#fff;border:1px solid var(--border-input);border-radius:7px;height:26px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-'+(on?'body':'muted')+');white-space:nowrap;">'+txt+'</button>'; }
+  function rEsc(x){ return x.replace(/'/g,"\\'"); }
+  function rCarriles(txt,marca,acc,off){
+    return '<div style="display:flex;align-items:center;gap:12px;font-size:12.5px;line-height:1.5;">'
+      +'<span style="flex:1;min-width:0;'+(off?'text-decoration:line-through;color:var(--text-muted);':'color:var(--text-body);')+'">'+txt+'</span>'
+      +'<span style="width:150px;flex-shrink:0;text-align:right;">'+marca+'</span>'
+      +'<span style="width:92px;flex-shrink:0;display:inline-flex;justify-content:flex-end;">'+acc+'</span></div>'; }
+  function rFirma(m){ return m?'<div style="font-size:11px;color:var(--text-muted);margin-top:3px;">'+m.por+' · '+m.f+(m.m?' · «'+m.m+'»':'')+'</div>':''; }
+
+  function renderDicc(){ var l=rFind(_rOpen); if(!l) return; var sec=_rAmb, grupos=rEsGrupos(l);
     document.getElementById('v-dicc-title').textContent=l.k;
-    var c=rCapa(l,sec);
+    var n=rCuenta(l,sec), cam=rCambios(l,sec), c=rCapa(l,sec);
+    var detalle='';
+    if(sec&&cam){ var a=c.add.length+c.addG.length, o=c.off.length+c.offG.length;
+      detalle=' · '+(a?'+'+a+(grupos?' término'+(a>1?'s':''):' propia'+(a>1?'s':'')):'')+(a&&o?', ':'')+(o?o+' anulad'+(grupos?('o'+(o>1?'s':'')):('a'+(o>1?'s':''))):''); }
     document.getElementById('v-dicc-sub').innerHTML=l.tipo+' · '+l.val+' · <strong style="color:var(--text-body);">'+(sec||'General')+'</strong>'
-      +' · '+fmtNum(rCuenta(l,sec))+(rCuenta(l,sec)===1?' entrada':' entradas')+(sec&&(c.add.length||c.off.length)?' · '+(c.add.length?'+'+c.add.length+' propia'+(c.add.length>1?'s':''):'')+(c.add.length&&c.off.length?', ':'')+(c.off.length?c.off.length+' anulada'+(c.off.length>1?'s':''):''):'')
+      +' · '+fmtNum(n)+(grupos?(n===1?' grupo':' grupos'):(n===1?' entrada':' entradas'))+detalle
       +(l.v.length<l.e?' · <span style="color:var(--warning-text);">viendo una muestra de '+l.v.length+'</span>':'');
 
     var ef=rEfectivas(l,sec).filter(function(x){ return !_rQ || x.k.toLowerCase().indexOf(_rQ)>=0; });
     var body;
-    if(l.nueva&&!l.v.length) body='<div style="padding:28px;text-align:center;color:var(--text-muted);font-size:13px;line-height:1.6;">Esta lista todavía no existe en el motor.<br>La crea la primera entrada que se resuelva contra ella.</div>';
-    else if(!ef.length) body='<div style="padding:28px;text-align:center;color:var(--text-muted);font-size:13px;">Sin coincidencias.</div>';
+    if(!ef.length) body='<div style="padding:28px;text-align:center;color:var(--text-muted);font-size:13px;">Sin coincidencias.</div>';
+    else if(grupos) body=ef.map(function(x,i){
+      // Un término por línea: es la única forma de poder marcarlos uno a uno.
+      return '<div style="display:flex;gap:12px;padding:11px 0;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
+        +'<span style="color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;min-width:24px;text-align:right;font-size:12.5px;line-height:1.5;">'+(i+1)+'</span>'
+        +'<div style="flex:1;min-width:0;">'+x.terms.map(function(o){
+            var off=(o.origen==='off');
+            var acc=l.fijo?'':(off?rBtn(true,"rReactivarG('"+rEsc(x.g)+"','"+rEsc(o.t)+"')",'Reactivar')
+                                 :(o.origen==='add'?'':rBtn(false,"rAnularG('"+rEsc(x.g)+"','"+rEsc(o.t)+"')",'Anular aquí')));
+            return '<div class="r-ent" style="padding:2px 0;">'+rCarriles(o.t,rMarca(o,sec),acc,off)+(off?rFirma(o.meta):'')+'</div>'; }).join('')
+        +'</div></div>'; }).join('');
     else body=ef.map(function(x,i){
-      var off=(x.origen==='off'), add=(x.origen==='add');
-      var marca=off?'<span style="font-size:11px;color:var(--warning-text);flex-shrink:0;">anulada aquí</span>'
-        :(add?'<span style="font-size:11px;color:var(--green);font-weight:600;flex-shrink:0;">añadida aquí</span>'
-        :(sec?'<span style="font-size:11px;color:var(--text-muted);flex-shrink:0;">heredada</span>'
-        :((x.fuera&&x.fuera.length)?'<span style="font-size:11px;color:var(--warning-text);flex-shrink:0;">anulada en '+x.fuera.length+(x.fuera.length===1?' sección':' secciones')+'</span>':'')));
-      var acc=(!l.fijo)?(off?'<button class="r-acc on" onclick="rReactivar(\''+x.k.replace(/'/g,"\\'")+'\')" style="background:#fff;border:1px solid var(--border-input);border-radius:7px;height:26px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;flex-shrink:0;">Reactivar</button>'
-        :(add?'':'<button class="r-acc" onclick="rAnular(\''+x.k.replace(/'/g,"\\'")+'\')" style="background:#fff;border:1px solid var(--border-input);border-radius:7px;height:26px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-muted);white-space:nowrap;flex-shrink:0;">Anular aquí</button>')):'';
-      return '<div class="r-ent" style="padding:9px 0;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
-        +'<div style="display:flex;align-items:center;gap:12px;font-size:12.5px;line-height:1.5;">'
-        +'<span style="color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;min-width:24px;text-align:right;">'+(i+1)+'</span>'
-        +'<span style="flex:1;min-width:0;'+(off?'text-decoration:line-through;color:var(--text-muted);':'color:var(--text-body);')+'">'+x.k+'</span>'
-        +'<span style="width:150px;flex-shrink:0;text-align:right;">'+marca+'</span>'
-        +'<span style="width:92px;flex-shrink:0;display:inline-flex;justify-content:flex-end;">'+acc+'</span>'+'</div>'
-        +(off&&x.meta?'<div style="font-size:11px;color:var(--text-muted);margin:3px 0 0 36px;">'+x.meta.por+' · '+x.meta.f+' · «'+x.meta.m+'»</div>':'')+'</div>'; }).join('');
+      var off=(x.origen==='off');
+      var acc=l.fijo?'':(off?rBtn(true,"rReactivar('"+rEsc(x.k)+"')",'Reactivar')
+                           :(x.origen==='add'?'':rBtn(false,"rAnular('"+rEsc(x.k)+"')",'Anular aquí')));
+      return '<div class="r-ent" style="display:flex;gap:12px;padding:9px 0;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
+        +'<span style="color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;min-width:24px;text-align:right;font-size:12.5px;line-height:1.5;">'+(i+1)+'</span>'
+        +'<div style="flex:1;min-width:0;">'+rCarriles(x.k,rMarca(x,sec),acc,off)+(off?rFirma(x.meta):'')+'</div></div>'; }).join('');
     document.getElementById('v-dicc-body').innerHTML=body;
     var nota=document.getElementById('v-dicc-nota');
     var ns=[];
     if(l.fijo) ns.push('Esta regla no admite ámbito: es la misma en todo el catálogo.');
     if(l.v.length<l.e) ns.push('En el prototipo solo están cargadas '+l.v.length+' de las '+fmtNum(l.e)+' entradas generales. El resto vive en el motor.');
     nota.innerHTML=ns.join(' ');
-    // Sin nota no hace falta la franja del pie.
     var ft=document.getElementById('v-dicc-foot'); if(ft) ft.style.display=ns.length?'block':'none'; }
 
   // ── Resolución ─────────────────────────────────────────────────────────────
@@ -1287,7 +1341,8 @@
     var dst=g.destino, dl=dst?rFind(dst.l):null;
     // La entrada trae su justificación detrás; en la frase basta el término.
     var corto=dst?dst.k.split(' · ')[0].split(' (')[0]:'';
-    var acc=dst?(dst.op==='add'?'Se añade <strong>«'+corto+'»</strong> a':'Se anula <strong>«'+corto+'»</strong> en'):'';
+    var acc=dst?(dst.op==='off'?'Se anula <strong>«'+corto+'»</strong> en'
+      :(dst.op==='addG'?'Se añade <strong>«'+corto+'»</strong> al grupo de <strong>'+dst.g+'</strong> en':'Se añade <strong>«'+corto+'»</strong> a')):'';
     var reglaTxt=dl?(acc+' <strong>'+dl.k+'</strong> ('+dl.tipo+(dl.k===dl.val?'':' · '+dl.val)+')'+(dl.nueva?'. Esta regla <strong>todavía no existe en el motor</strong>: la crea esta entrada':'')):'';
 
     var detSec=qSecciones(g);
@@ -1322,7 +1377,7 @@
   function renderResCta(g){ var b=document.getElementById('v-res-go'); if(!b) return;
     var k=qResSel().length;
     var op=g.destino?g.destino.op:'add';
-    b.textContent=(_qResOpt==='ign')?'Ignorar':(op==='add'?'Añadir':'Anular')+((_qResOpt==='regla'&&k>1)?' en '+k+' secciones':'');
+    b.textContent=(_qResOpt==='ign')?'Ignorar':(op==='off'?'Anular':'Añadir')+((_qResOpt==='regla'&&k>1)?' en '+k+' secciones':'');
     // Sin ámbito elegido no hay nada que crear: que el botón no parezca pulsable.
     var muerto=(_qResOpt==='regla' && !k);
     b.style.opacity=muerto?'0.4':'';
@@ -1332,14 +1387,15 @@
     var n=qDescartes(g);
     var dst=g.destino, dl=dst?rFind(dst.l):null, secs=qResSel();
     var escribe=function(sec){ if(!dl||!dst) return;
-      if(dst.op==='add') rAdd(dl,sec,dst.k,'Ana García','1 oct');
+      if(dst.op==='addG') rAddG(dl,sec,dst.g,dst.k,'Ana García','1 oct');
+      else if(dst.op==='add') rAdd(dl,sec,dst.k,'Ana García','1 oct');
       else rOff(dl,sec,dst.k,'Ana García','1 oct',g.motivo.toLowerCase()); };
     if(_qResOpt==='regla'){ if(!secs.length) return; secs.forEach(escribe); }
     else if(_qResOpt==='dicc') escribe('');
     _qResolved[g.id]=_qResOpt;
     closeRes(); renderConfig();
     vToast(_qResOpt==='ign'?'Caso ignorado'
-      :(dl?(dst.op==='add'?'Añadido a ':'Anulado en ')+dl.k+' · '+(_qResOpt==='dicc'?'general':secs.join(', ')):'Hecho')); }
+      :(dl?(dst.op==='off'?'Anulado en ':'Añadido a ')+dl.k+' · '+(_qResOpt==='dicc'?'general':secs.join(', ')):'Hecho')); }
 
   function fmtNum(n){ return n.toLocaleString('es-ES'); }
 
