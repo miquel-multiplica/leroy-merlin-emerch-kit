@@ -9,6 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+  .r-ent .r-acc{ opacity:0; transition:opacity .12s ease; }
+  .r-ent:hover .r-acc, .r-ent .r-acc.on{ opacity:1; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: system-ui, -apple-system, sans-serif; background: #f2f2f2; color: #191919; min-height: 100vh; }
 
@@ -682,8 +684,8 @@
     </div>
     <div style="flex:1; min-width:0; display:flex; flex-direction:column;">
       <div style="flex:1; min-height:0; overflow-y:auto; padding:28px;">
-        <div style="font-size:15px; font-weight:700; color:var(--text-ink); margin-bottom:4px;">¿Hasta dónde es cierto?</div>
-        <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:18px; line-height:1.5;">De la respuesta depende qué se crea y a quién afecta.</div>
+        <div style="font-size:15px; font-weight:700; color:var(--text-ink); margin-bottom:4px;">¿Dónde vale esto?</div>
+        <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:18px; line-height:1.5;">Qué se escribe sale del motivo del descarte. Lo único que hace falta decidir es el ámbito.</div>
         <div id="v-res-opts"></div>
       </div>
     <div style="border-top:1px solid var(--border-card); padding:16px 28px; display:flex; align-items:center; gap:12px;">
@@ -854,7 +856,7 @@
   // ve de qué auditorías y revisores viene, y por eso se puede resolver solo una parte.
   var _qGrupos=[
     { id:'g1', disp:'«izq»', motivo:'Abreviatura aceptada', check:'Ortografía en designación',
-      reason:'"puerta corredera izq" — «izq» no reconocida (posible falta)', dicc:'Erratas conocidas',
+      reason:'"puerta corredera izq" — «izq» no reconocida (posible falta)', destino:{l:'o3',op:'add',k:'izq'},
       auds:[
         {aud:1001, per:'Gama · A', rev:'Ana García', fecha:'12 sep',
          refs:[{r:'18570700',m:'MOD_PE01',d:'Puerta de entrada acabado inox',s:'Puertas y ventanas'},{r:'18570741',m:'MOD_PE01',d:'Puerta de entrada 60 cm',s:'Puertas y ventanas'},{r:'18571236',m:'MOD_PC02',d:'Puerta corredera 80 cm',s:'Puertas y ventanas'},{r:'18571301',m:'MOD_PC02',d:'Puerta corredera acabado roble',s:'Puertas y ventanas'},{r:'18572402',m:'MOD_PA03',d:'Puerta acorazada 2 puertas',s:'Puertas y ventanas'},{r:'18573503',m:'MOD_VC04',d:'Ventana corredera 120 cm',s:'Puertas y ventanas'},{r:'18572406',m:'MOD_PA03',d:'Puerta acorazada 120 cm',s:'Puertas y ventanas'},{r:'18570804',m:'MOD_PE01',d:'Puerta de entrada 60 cm',s:'Puertas y ventanas'},{r:'18571305',m:'MOD_PC02',d:'Puerta corredera 2 puertas',s:'Puertas y ventanas'},{r:'18573510',m:'MOD_VC04',d:'Ventana corredera 80 cm',s:'Puertas y ventanas'},{r:'18570812',m:'MOD_PE01',d:'Puerta de entrada acabado roble',s:'Puertas y ventanas'},{r:'18572411',m:'MOD_PA03',d:'Puerta acorazada inox',s:'Puertas y ventanas'}]},
@@ -866,7 +868,7 @@
          refs:[{r:'44120100',m:'MOD_AE21',d:'Aplique exterior acabado inox',s:'Iluminación'},{r:'44120118',m:'MOD_AE21',d:'Aplique exterior negro',s:'Iluminación'},{r:'44120133',m:'MOD_AE21',d:'Aplique exterior 60 cm',s:'Iluminación'}]}
       ]},
     { id:'g2', disp:'«gr»', motivo:'Abreviatura aceptada', check:'Abreviaturas incorrectas',
-      reason:'[Abreviatura] "gr" → debería ser g', dicc:'Abreviaturas',
+      reason:'[Abreviatura] "gr" → debería ser g', destino:{l:'o2',op:'off',k:'gr → g · el símbolo del gramo no lleva «r»'},
       reglaPrevia:{ambito:'Sección · Herramientas', autor:'Laura Pons', fecha:'18 sep'},
       auds:[
         {aud:1010, per:'Gama · Fontanería', rev:'Ana García', fecha:'26 sep',
@@ -875,7 +877,7 @@
          refs:[{r:'44121290',m:'MOD_FS22',d:'Farol solar antracita',s:'Iluminación'}]}
       ]},
     { id:'g3', disp:'«gris ≈ antracita»', motivo:'Valores equivalentes', check:'Discrepancia de color',
-      reason:'Designación "gris" · descripción "antracita"', dicc:'Colores',
+      reason:'Designación "gris" · descripción "antracita"', destino:{l:'c2',op:'add',k:'antracita → grupo del gris'},
       auds:[
         {aud:1001, per:'Gama · A', rev:'Ana García', fecha:'12 sep',
          refs:[{r:'81920100',m:'MOD_TP11',d:'Taladro percutor serie Confort',s:'Herramientas'},{r:'81920144',m:'MOD_TP11',d:'Taladro percutor 750 W',s:'Herramientas'},{r:'81921230',m:'MOD_AT12',d:'Atornillador 18 V',s:'Herramientas'}]},
@@ -883,68 +885,82 @@
          refs:[{r:'81922311',m:'MOD_LJ13',d:'Lijadora orbital 300 W',s:'Herramientas'},{r:'81930118',m:'MOD_SC14',d:'Sierra circular 1200 W',s:'Herramientas'}]}
       ]},
     { id:'g4', disp:'«GROHE EUROSMART CE»', motivo:'Marca o nombre propio', check:'Posible designación administrativa',
-      reason:'Designación "GROHE EUROSMART CE" en mayúsculas — ¿nombre interno?', dicc:null,
+      reason:'Designación "GROHE EUROSMART CE" en mayúsculas — ¿nombre interno?', destino:{l:'a1',op:'add',k:'GROHE'}, dicc:null,
       auds:[
         {aud:1002, per:'Proveedor · Grohe', rev:'Miquel Soler', fecha:'14 sep',
          refs:[{r:'52001400',m:'MOD_GM33',d:'Grifería monomando 2 puertas',s:'Baño'},{r:'52001455',m:'MOD_GM33',d:'Grifo de lavabo monomando cromado',s:'Baño'}]}
       ]},
     { id:'g5', disp:'«de intemperie ≈ exterior»', motivo:'Término válido en nuestro vocabulario', check:'Falta semántica SEO en designación',
-      reason:'No aparece el término SEO "exterior" exigido por la guía', dicc:'Colores',
+      reason:'No aparece el término SEO "exterior" exigido por la guía', destino:{l:'x1',op:'add',k:'de intemperie ≈ exterior'},
       auds:[
         {aud:1012, per:'Gama · Iluminación', rev:'Ana García', fecha:'28 sep',
          refs:[{r:'44120983',m:'MOD_AE21',d:'Aplique de exterior LED negro E27',s:'Iluminación'},{r:'44120999',m:'MOD_PL23',d:'Farol solar de pared antracita',s:'Iluminación'},{r:'44121205',m:'MOD_FS22',d:'Baliza solar 40 cm',s:'Iluminación'}]}
       ]}
   ];
 
-  var _qReglas=[
-    { disp:'«uds»', motivo:'Abreviatura aceptada', check:'Abreviaturas incorrectas', ambito:'General', autor:'Ana García', fecha:'2 sep', silencia:1240, origen:52, on:true },
-    { disp:'«inox ≈ acero inoxidable»', motivo:'Valores equivalentes', check:'Discrepancia de material', ambito:'General', autor:'Ana García', fecha:'5 sep', silencia:890, origen:31, on:true },
-    { disp:'«gr»', motivo:'Abreviatura aceptada', check:'Abreviaturas incorrectas', ambito:'Sección · Herramientas', autor:'Laura Pons', fecha:'18 sep', silencia:340, origen:14, on:true },
-    { disp:'«Ø»', motivo:'No aplica a esta categoría', check:'Símbolos extraños', ambito:'Sección · Baño', autor:'Miquel Soler', fecha:'21 sep', silencia:96, origen:9, on:true },
-    { disp:'«mate ≈ satinado»', motivo:'Valores equivalentes', check:'Discrepancia de color', ambito:'Modelo · MOD_201540', autor:'Laura Pons', fecha:'25 sep', silencia:23, origen:6, on:false }
-  ];
-
-  // Estructura real de packages/validador-fichas/src/dictionaries/ del motor. No son
-  // seis listas planas: cada familia agrupa listas con trabajos distintos, y el tamaño
-  // de cada una dice cuánta cobertura tiene el check que la usa. Las muestras de
-  // contenido están copiadas de sus ficheros.
-  var _qDicc=[
-    { n:'Colores', check:'Discrepancia de color', m:'28 sep · Ana García', listas:[
-      {id:'c1',k:'Colores reconocidos',e:531,d:'Lo que el motor sabe leer como color',t:'chips',
-       v:['blanco','negro','rojo','azul','verde','amarillo','naranja','rosa','morado','violeta','gris','marrón','beige','dorado','plateado','plata','oro','antracita','grafito','turquesa','coral','burdeos','marfil','nieve','hueso','perla','alabastro','ébano','carbón','cromado','níquel','titanio','caqui','oliva','menta','esmeralda','cobalto','zafiro','granate','teja']},
-      {id:'c2',k:'Grupos de equivalencia',e:11,d:'Tonos que cuentan como el mismo color',t:'grupos',
-       v:['blanco · blanca · marfil · nieve · hueso · perla · alabastro','negro · negra · ébano · antracita · grafito · carbono · carbón','gris · grisáceo · plateado · plata · gris perla · gris claro · gris oscuro · cromado · cromo · inoxidable · inox · acero · zinc · níquel · titanio · metálico','azul · azul marino · celeste · cian · turquesa · índigo · cobalto · zafiro · navy · petróleo','verde · verde botella · oliva · verde militar · menta · esmeralda · lima · caqui','rojo · roja · burdeos · vino · granate · carmesí · coral · terracota · teja']},
-      {id:'c3',k:'Mapeo a familia ADEO',e:505,d:'Cada color a su familia del estándar',t:'pares',
-       v:['antracita → negro','marfil → blanco','cromado → gris','petróleo → azul','terracota → rojo','caqui → verde']},
-      {id:'c4',k:'Partes secundarias',e:55,d:'El texto se corta aquí: solo se compara el color del producto principal, no el de un accesorio',t:'chips',
-       v:['pata','patas','estructura','marco','borde','pantalla','cabecero','cajón','cajones','puerta','puertas','balda','baldas','tablero','tapa','asiento','respaldo','reposabrazos','cojín','cojines','funda','asa','tirador','tiradores','base','pie','pies','rueda','ruedas','cristal','vidrio','tela','tapizado','tapicería','perfil','perfiles','travesaño','maneta','panel','paneles','encimera']}]},
-    { n:'Materiales', check:'Discrepancia de material', m:'20 sep · Laura Pons', listas:[
-      {id:'m1',k:'Materiales reconocidos',e:41,d:'Lo que el motor sabe leer como material',t:'chips',
-       v:['metal','hierro','acero','aluminio','inoxidable','inox','forja','zinc','níquel','titanio','latón','bronce','cobre','cromo','fundición','zamak','madera','mdf','melamina','teca','bambú','roble','nogal','cerezo','haya','pino','aglomerado','contrachapado','plástico','policarbonato','abs','pvc','resina','tela','poliéster','algodón','lino','cuero','piel','cristal','cerámica']},
-      {id:'m2',k:'Grupos de equivalencia',e:9,d:'Acero e inox cuentan como el mismo',t:'grupos',
-       v:['metal · hierro · acero · aluminio · inoxidable · inox · forja · zinc · níquel · titanio · latón · bronce · cobre · cromo · fundición · zamak · acero inoxidable','madera · mdf · melamina · teka · teca · bambú · roble · nogal · cerezo · haya · pino · aglomerado · contrachapado · chapa · tablero','plástico · policarbonato · abs · pvc · polietileno · polipropileno · resina','tela · tejido · poliéster · algodón · lino · terciopelo · microfibra · canvas · lona','cuero · piel · polipiel · nubuck · ante · gamuza','cristal · vidrio · vidrio templado · cristal templado']},
-      {id:'m3',k:'Partes que señalan composición',e:117,d:'Si delante del término hay «mango de» o «hoja de», lo que sigue es un material',t:'chips',
-       v:['cabeza','mango','hoja','cuerpo','empuñadura','punta','vástago','cable','base','soporte','carcasa','funda','recubrimiento','revestimiento','núcleo','alma','filo','borde','virola','casquillo','remache']},
-      {id:'m4',k:'Términos ambiguos color/material',e:15,d:'«cobre» puede ser las dos cosas',t:'chips',
-       v:['acero','cromo','cromado','cromada','inoxidable','inox','latón','bronce','cobre','titanio','zinc','níquel','plata','oro']},
-      {id:'m5',k:'Marcadores de composición',e:24,d:'Delatan que se está hablando de de qué está hecho',t:'chips',
-       v:['material','materiales','fabricado','fabricada','compuesto','compuesta','elaborado','elaborada','hecho','hecha','construido','construida','cuerpo','carcasa','aleación','masa','composición','principal en la masa']},
-      {id:'m6',k:'Marcadores de uso o destino',e:35,d:'Distinguen «silla de madera» de «broca para madera»',t:'chips',
-       v:['corte','cortes','uso','usos','colocación','instalación','instalaciones','montaje','montajes','fijación','fijaciones','aplicación','aplicaciones','trabajo','trabajos','encolado','lijado','pulido','perforación']}]},
-    { n:'Ortografía', check:'Erratas conocidas · Abreviaturas', m:'26 sep · Ana García', listas:[
-      {id:'o1',k:'Erratas y tildes',e:112,d:'Lista cerrada. No hay corrector general todavía',t:'pares',
-       v:['hehexagonal → hexagonal','adheviso → adhesivo','adhesibo → adhesivo','adhesvio → adhesivo','inoxidabe → inoxidable','inoxdiable → inoxidable','regulabe → regulable','plegabe → plegable','lavabe → lavable','desmontabe → desmontable','antideslisante → antideslizante','estrucutra → estructura','materail → material','cristla → cristal','vidiro → vidrio']},
-      {id:'o2',k:'Abreviaturas incorrectas',e:3,d:'Tres entradas en total: la cobertura de este check es mínima',t:'pares',
-       v:['unds → uds. · abreviatura de «unidades» según la RAE: con punto, sin «n»','gr → g · el símbolo del gramo según la RAE es «g», sin la «r»','ptas → puertas · «ptas» es la abreviatura RAE de «pesetas», no de «puertas»']},
-      {id:'o3',k:'Siglas internas del ADM',e:98,d:'No se marcan como errata',t:'chips',
-       v:['ins','insp','pint','sat','ext','int','mat','adh','alu','mad','lamp','alf','avell','met','torn','esm','red','std','blq','bco']}]},
-    { n:'Unidades', check:'Espacio RAE · Falta unidad', m:'2 sep · Ana García', listas:[
-      {id:'u1',k:'Unidades con espacio RAE',e:29,d:'Entre el número y la unidad',t:'chips',
-       v:['mm2','cm2','m2','km','hm','dam','dm','mm','cm','ml','cl','dal','dl','hl','kl','kg','mah','nm','m','l']},
-      {id:'u2',k:'Conversiones a milímetros',e:17,d:'Permite comparar cm con mm',t:'pares',
-       v:['mm → 1','cm → 10','dm → 100','m → 1.000','dam → 10.000','hm → 100.000','km → 1.000.000']},
-      {id:'u3',k:'Símbolos que no admiten plural',e:11,d:'De aquí sale que «kgs» sea un error',t:'chips',
-       v:['kg','dam','dal','kl','km','hm','mah','dbi','ah','nm','lx']}]}
+  // Una sola entidad: una REGLA es una afirmación que el motor consulta. Tiene tipo
+  // (qué clase de afirmación), la validación a la que alimenta, y entradas. Lo que
+  // antes eran «diccionarios» y «reglas» era la misma cosa vista a dos alturas: lo
+  // único que las distinguía era que unas no tenían ámbito. Ahora todas lo tienen.
+  //
+  // capas[sección] = { add:[...], off:[{k, por, f, m}] }
+  //   add  — entradas que solo valen en esa sección
+  //   off  — entradas heredadas de general que ahí no aplican. Se desactivan, no se
+  //          borran: un hueco no tiene autor, y una entrada anulada en varias
+  //          secciones es la señal de que la general está mal.
+  var _rListas=[
+    { id:'c1', val:'Discrepancia de color', tipo:'Vocabulario', k:'Colores reconocidos',
+      d:'Lo que el motor sabe leer como color', e:531, m:'28 sep · Ana García', capas:{},
+      v:['blanco','negro','rojo','azul','verde','amarillo','naranja','rosa','morado','violeta','gris','marrón','beige','dorado','plateado','plata','oro','antracita','grafito','turquesa','coral','burdeos','marfil','nieve','hueso','perla','alabastro','ébano','carbón','cromado','níquel','titanio','caqui','oliva','menta','esmeralda','cobalto','zafiro','granate','teja']},
+    { id:'c2', val:'Discrepancia de color', tipo:'Equivalencia', k:'Grupos de equivalencia',
+      d:'Tonos que cuentan como el mismo color', e:11, m:'28 sep · Ana García', capas:{},
+      v:['blanco · blanca · marfil · nieve · hueso · perla · alabastro','negro · negra · ébano · antracita · grafito · carbono · carbón','gris · grisáceo · plateado · plata · gris perla · gris claro · gris oscuro · cromado · cromo · inoxidable · inox · acero · zinc · níquel · titanio · metálico','azul · azul marino · celeste · cian · turquesa · índigo · cobalto · zafiro · navy · petróleo','verde · verde botella · oliva · verde militar · menta · esmeralda · lima · caqui','rojo · roja · burdeos · vino · granate · carmesí · coral · terracota · teja']},
+    { id:'c3', val:'Discrepancia de color', tipo:'Correspondencia', k:'Mapeo a familia ADEO',
+      d:'Cada color a su familia del estándar. No admite ámbito: es un estándar corporativo', e:505, m:'28 sep · Ana García', fijo:true, capas:{},
+      v:['antracita → negro','marfil → blanco','cromado → gris','petróleo → azul','terracota → rojo','caqui → verde']},
+    { id:'c4', val:'Discrepancia de color', tipo:'Contexto', k:'Partes secundarias',
+      d:'El texto se corta aquí: solo se compara el color del producto principal', e:55, m:'28 sep · Ana García', fijo:true, capas:{},
+      v:['pata','patas','estructura','marco','borde','pantalla','cabecero','cajón','cajones','puerta','puertas','balda','baldas','tablero','tapa','asiento','respaldo','reposabrazos','cojín','cojines','funda','asa','tirador','tiradores','base','pie','pies','rueda','ruedas','cristal','vidrio','tela','tapizado','tapicería','perfil','perfiles','travesaño','maneta','panel','paneles','encimera']},
+    { id:'m1', val:'Discrepancia de material', tipo:'Vocabulario', k:'Materiales reconocidos',
+      d:'Lo que el motor sabe leer como material', e:41, m:'20 sep · Laura Pons',
+      capas:{ 'Baño':{add:[],off:[{k:'cromado',por:'Miquel Soler',f:'24 sep',m:'en griferías es un acabado, no de qué está hecho el grifo'}]},
+              'Jardín':{add:[],off:[{k:'cromado',por:'Ana García',f:'27 sep',m:'mismo caso que en Baño: es acabado'}]} },
+      v:['metal','hierro','acero','aluminio','inoxidable','inox','forja','zinc','níquel','titanio','latón','bronce','cobre','cromo','cromado','fundición','zamak','madera','mdf','melamina','teca','bambú','roble','nogal','cerezo','haya','pino','aglomerado','contrachapado','plástico','policarbonato','abs','pvc','resina','tela','poliéster','algodón','lino','cuero','piel','cristal']},
+    { id:'m2', val:'Discrepancia de material', tipo:'Equivalencia', k:'Grupos de equivalencia',
+      d:'Acero e inox cuentan como el mismo', e:9, m:'20 sep · Laura Pons', capas:{},
+      v:['metal · hierro · acero · aluminio · inoxidable · inox · forja · zinc · níquel · titanio · latón · bronce · cobre · cromo · fundición · zamak · acero inoxidable','madera · mdf · melamina · teka · teca · bambú · roble · nogal · cerezo · haya · pino · aglomerado · contrachapado · chapa · tablero','plástico · policarbonato · abs · pvc · polietileno · polipropileno · resina','tela · tejido · poliéster · algodón · lino · terciopelo · microfibra · canvas · lona','cuero · piel · polipiel · nubuck · ante · gamuza','cristal · vidrio · vidrio templado · cristal templado']},
+    { id:'m3', val:'Discrepancia de material', tipo:'Contexto', k:'Partes que señalan composición',
+      d:'Si delante hay «mango de» u «hoja de», lo que sigue es un material', e:117, m:'20 sep · Laura Pons', fijo:true, capas:{},
+      v:['cabeza','mango','hoja','cuerpo','empuñadura','punta','vástago','cable','base','soporte','carcasa','funda','recubrimiento','revestimiento','núcleo','alma','filo','borde','virola','casquillo','remache']},
+    { id:'o1', val:'Erratas conocidas', tipo:'Corrección', k:'Erratas y tildes',
+      d:'Lista cerrada. No hay corrector general todavía', e:112, m:'26 sep · Ana García',
+      capas:{ 'Puertas y ventanas':{add:['coredera → corredera','correderza → corredera'],off:[]} },
+      v:['hehexagonal → hexagonal','adheviso → adhesivo','adhesibo → adhesivo','adhesvio → adhesivo','inoxidabe → inoxidable','inoxdiable → inoxidable','regulabe → regulable','plegabe → plegable','lavabe → lavable','desmontabe → desmontable','antideslisante → antideslizante','estrucutra → estructura','materail → material','cristla → cristal','vidiro → vidrio']},
+    { id:'o2', val:'Abreviaturas incorrectas', tipo:'Corrección', k:'Abreviaturas incorrectas',
+      d:'Tres entradas en total: la cobertura de esta validación es mínima', e:3, m:'26 sep · Ana García',
+      capas:{ 'Herramientas':{add:[],off:[{k:'gr → g',por:'Laura Pons',f:'18 sep',m:'«gr» es abreviatura aceptada en herramienta de mano'}]} },
+      v:['unds → uds. · con punto y sin «n», según la RAE','gr → g · el símbolo del gramo no lleva «r»','ptas → puertas · «ptas» es la abreviatura de «pesetas»']},
+    { id:'o3', val:'Erratas conocidas', tipo:'Vocabulario', k:'Siglas internas del ADM',
+      d:'No se marcan como errata', e:98, m:'26 sep · Ana García', capas:{},
+      v:['ins','insp','pint','sat','ext','int','mat','adh','alu','mad','lamp','alf','avell','met','torn','esm','red','std','blq','bco']},
+    { id:'s1', val:'Símbolos extraños', tipo:'Vocabulario', k:'Caracteres admitidos',
+      d:'Todo lo que no esté aquí se marca como símbolo extraño', e:46, m:'2 sep · Ana García',
+      capas:{ 'Baño':{add:['Ø'],off:[]} },
+      v:['a-z','A-Z','0-9','á é í ó ú','ñ Ñ','ü Ü','espacio','.',',',';',':','!','¡','?','¿','(',')','[',']','"',"'",'-','–','—','/','%','°','º','ª','&','·','…','€','$','™','®','©','²','³','×']},
+    { id:'a1', val:'Posible designación administrativa', tipo:'Vocabulario', k:'Marcas reconocidas',
+      d:'Nombres propios que pueden ir en mayúsculas sin ser una designación administrativa', e:0, m:'—', nueva:true, capas:{},
+      v:[]},
+    { id:'x1', val:'Falta semántica SEO en designación', tipo:'Equivalencia', k:'Sinónimos SEO aceptados',
+      d:'Términos que cuentan como el que exige la guía', e:0, m:'—', nueva:true, capas:{}, v:[]},
+    { id:'u1', val:'Espacio antes de unidad (RAE)', tipo:'Vocabulario', k:'Unidades con espacio RAE',
+      d:'Entre el número y la unidad', e:29, m:'2 sep · Ana García', capas:{},
+      v:['mm2','cm2','m2','km','hm','dam','dm','mm','cm','ml','cl','dal','dl','hl','kl','kg','mah','nm','m','l']},
+    { id:'u2', val:'Falta unidad de medida', tipo:'Correspondencia', k:'Conversiones a milímetros',
+      d:'Permite comparar cm con mm', e:17, m:'2 sep · Ana García', fijo:true, capas:{},
+      v:['mm → 1','cm → 10','dm → 100','m → 1.000','dam → 10.000','hm → 100.000','km → 1.000.000']},
+    { id:'u3', val:'Espacio antes de unidad (RAE)', tipo:'Corrección', k:'Símbolos que no admiten plural',
+      d:'De aquí sale que «kgs» sea un error', e:11, m:'2 sep · Ana García', capas:{},
+      v:['kg','dam','dal','kl','km','hm','mah','dbi','ah','nm','lx']}
   ];
 
   var _qTab='pend', _qOpen={}, _qOpenAud={}, _qResId=null, _qResOpt='regla', _qResSecs={}, _qResolved={}, _resCons=null;
@@ -959,7 +975,6 @@
   function qPend(){ return _qGrupos.filter(function(g){ return !_qResolved[g.id]; }); }
   function qTodasSecciones(){ var m={}; for(var k in FAMILIA_OF) m[FAMILIA_OF[k]]=1;
     _qGrupos.forEach(function(g){ for(var x in qSecciones(g)) m[x]=1; });
-    _qReglas.forEach(function(r){ var x=qSecOf(r); if(x) m[x]=1; });
     return Object.keys(m).sort(); }
 
   function renderConfig(){ renderQMetrics(); renderQTabs(); renderQPanel(); }
@@ -967,25 +982,21 @@
 
   function renderQMetrics(){ var el=document.getElementById('v-motor-metrics'); if(!el) return;
     var desc=0, auds={}; _qGrupos.forEach(function(g){ desc+=qDescartes(g); g.auds.forEach(function(a){auds[a.aud]=1;}); });
-    var act=_qReglas.filter(function(r){return r.on;}), sil=0; act.forEach(function(r){ sil+=r.silencia; });
     var nAud=0; for(var k in auds) nAud++;
-    // Sin ratio: los descartes vienen de varias auditorías y las alertas son de una, así
-    // que el porcentaje no tendría denominador. En producción sí, y es la métrica que dice
-    // si el bucle funciona.
+    var ent=0, capas=0; _rListas.forEach(function(l){ ent+=l.e; for(var sec in (l.capas||{})){ var c=l.capas[sec]; capas+=c.add.length+c.off.length; } });
     el.innerHTML='<strong style="color:var(--text-body);">'+fmtNum(desc)+' descartes</strong> de '+nAud+' auditorías · '
-      +qPend().length+' casos por resolver · '+act.length+' reglas activas, que silencian <strong style="color:var(--text-body);">'+fmtNum(sil)+' alertas</strong>'; }
+      +qPend().length+' casos por resolver · <strong style="color:var(--text-body);">'+fmtNum(ent)+' entradas generales</strong> y '+capas+' cambios por sección'; }
 
   function renderQTabs(){ var el=document.getElementById('v-motor-tabs'); if(!el) return;
     var t=function(k,label,n){ var on=(_qTab===k);
       return '<button onclick="setQTab(\''+k+'\')" style="height:48px;padding:0 18px;background:none;border:none;border-bottom:2px solid '+(on?'var(--green)':'transparent')+';font-family:\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:'+(on?'700':'600')+';color:'+(on?'var(--text-ink)':'var(--text-muted)')+';cursor:pointer;display:inline-flex;align-items:center;gap:8px;">'+label
         +(n!==null?'<span style="background:var(--bg-parchment);color:'+(on?'var(--text-ink)':'var(--text-body)')+';border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700;">'+n+'</span>':'')+'</button>'; };
-    el.innerHTML=t('pend','Por resolver',qPend().length)+t('ign','Ignorados',qIgnorados().length)+t('dicc','Diccionarios',null)+t('reglas','Reglas',_qReglas.length); }
+    el.innerHTML=t('pend','Por resolver',qPend().length)+t('ign','Ignorados',qIgnorados().length)+t('reglas','Reglas',_rListas.length); }
 
   function renderQPanel(){ var el=document.getElementById('v-motor-panel'); if(!el) return;
     if(_qTab==='pend') el.innerHTML=qPendHtml();
-    else if(_qTab==='reglas') el.innerHTML=qReglasHtml();
     else if(_qTab==='ign') el.innerHTML=qIgnHtml();
-    else el.innerHTML=qDiccHtml(); }
+    else el.innerHTML=qReglasHtml(); }
 
   // Ignorar no es tirar: un caso apartado que vuelve a aparecer también dice algo, así
   // que se queda a la vista y se puede devolver a la cola.
@@ -1065,122 +1076,151 @@
     return '<div style="background:#fff;border:1px solid var(--border-card);border-radius:10px;overflow:hidden;margin-top:12px;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
   // ── Reglas ─────────────────────────────────────────────────────────────────
-  // Una regla NO vive sobre un diccionario: actúan en momentos distintos. El
-  // diccionario alimenta al check y cambia lo que detecta; la regla cancela después un
-  // hallazgo ya producido. Por eso el diccionario es global y la regla tiene ámbito.
-  var _fSec='', _fMod='';
+  // Dos niveles de ámbito: general y sección. Una sección hereda todo lo general y
+  // su capa dice solo lo que cambia — lo que añade y lo que anula. Así la lista
+  // general sigue siendo una afirmación legible sobre el catálogo, y abrir una
+  // sección nueva no obliga a revisar las 531 entradas de cada lista.
+  var _rAmb='', _rFVal='', _rOpen=null, _rQ='';
 
-  // La pregunta útil no es "qué reglas se definieron aquí" sino "qué está descartado si
-  // audito esto": una regla general también aplica, y se lista.
-  // En real esta relación sale del catálogo; aquí va sembrada para que el segundo
-  // desplegable no pueda ofrecer un modelo que no esté en la sección elegida.
-  var MOD_SEC={ 'MOD_201540':'Baño' };
-  function qPartes(a){ var i=a.indexOf(' · '); return (i<0)?[a,'']:[a.slice(0,i),a.slice(i+3)]; }
-  function qSecOf(r){ var pr=qPartes(r.ambito); return (pr[0]==='Sección')?pr[1]:((pr[0]==='Modelo')?(MOD_SEC[pr[1]]||''):''); }
-  function qSecciones2(){ var m={}; _qReglas.forEach(function(r){ var x=qSecOf(r); if(x) m[x]=1; }); return Object.keys(m).sort(); }
-  // Modelos cuyo código casa con lo escrito en el buscador.
-  function qModsMatch(){ if(!_fMod) return null; var q=_fMod.toLowerCase(), o={};
-    _qReglas.forEach(function(r){ var pr=qPartes(r.ambito); if(pr[0]==='Modelo' && pr[1].toLowerCase().indexOf(q)>=0) o[pr[1]]=1; });
-    return Object.keys(o); }
-  // Lo que aplica a un perímetro se acumula hacia abajo: lo general siempre, lo de la
-  // sección también dentro de sus modelos, y lo del modelo solo ahí.
-  function qAplica(r){
-    if(r.ambito==='General') return true;
-    if(_fSec && qSecOf(r)!==_fSec) return false;
-    var ms=qModsMatch();
-    if(ms){ if(!ms.length) return false;
-      var pr=qPartes(r.ambito);
-      if(pr[0]==='Modelo') return ms.indexOf(pr[1])>=0;
-      return ms.some(function(m){ return MOD_SEC[m]===pr[1]; }); }
-    return true; }
-  function setFSec(v){ _fSec=v; renderQPanel(); }
-  function setFMod(v){ _fMod=v; renderQPanel(); }
-  function qClearF(){ _fSec=''; _fMod=''; renderQPanel(); }
+  function rKey(sec){ return sec||'General'; }
+  function rCapa(l,sec){ var c=l.capas&&l.capas[rKey(sec)]; return c||{add:[],off:[]}; }
+  function rOffDe(l,sec){ var o={}; rCapa(l,sec).off.forEach(function(x){ o[x.k]=x; }); return o; }
+  // En cuántas SECCIONES está anulada una entrada general (la capa general no cuenta:
+  // ahí ya está anulada para todos). Dos o más es la señal de que la que está mal es
+  // la entrada general, no las secciones.
+  function rOffEn(l,k){ var o=[]; for(var sec in (l.capas||{})) if(sec!=='General'&&rOffDe(l,sec)[k]) o.push(sec); return o; }
+  function rSecciones(){ var m={}; _rListas.forEach(function(l){ for(var sec in (l.capas||{})) m[sec]=1; });
+    qTodasSecciones().forEach(function(x){ m[x]=1; }); return Object.keys(m).sort(); }
+  function rValidaciones(){ var m={}; _rListas.forEach(function(l){ m[l.val]=1; }); return Object.keys(m).sort(); }
+
+  // Las entradas tal y como las ve un ámbito, con su procedencia. Es lo que de verdad
+  // ejecuta el motor si auditas ahí.
+  function rEfectivas(l,sec){
+    var gOff=rOffDe(l,''), off=sec?rOffDe(l,sec):{}, out=[];
+    l.v.forEach(function(k){
+      if(!sec){ var g=gOff[k]; out.push({k:k, origen:g?'off':'heredada', meta:g, fuera:rOffEn(l,k)}); return; }
+      if(gOff[k]) return;                       // anulada arriba: no se hereda
+      var d=off[k]; out.push({k:k, origen:d?'off':'heredada', meta:d}); });
+    if(sec) rCapa(l,sec).add.forEach(function(k){ out.push({k:k, origen:'add'}); });
+    return out; }
+  function rCuentaGen(l){ return l.e - rCapa(l,'').off.length; }
+  function rCuenta(l,sec){
+    if(!sec) return rCuentaGen(l);
+    var c=rCapa(l,sec); return rCuentaGen(l) - c.off.length + c.add.length; }
+
+  function setRAmb(v){ _rAmb=v; renderQPanel(); }
+  function setRFVal(v){ _rFVal=v; renderQPanel(); }
+  function rClearF(){ _rAmb=''; _rFVal=''; renderQPanel(); }
 
   function qReglasHtml(){
+    var sec=_rAmb;
     var aviso='<div style="padding:16px 20px;font-size:12.5px;color:var(--text-muted);line-height:1.55;border-bottom:1px solid var(--border-card);">'
-      +'Una regla <strong style="color:var(--text-body);">descarta automáticamente</strong> las alertas que el revisor ya descartó a mano, para que no vuelvan a aparecer. '
-      +'A diferencia de una entrada de diccionario, no le enseña nada al motor: la validación las sigue detectando y la regla tapa el resultado. '
-      +'Si una validación acumula muchas reglas, lo que falta es ampliar su diccionario. '
-      +'Una regla desactivada deja de descartar: sus alertas vuelven a aparecer.</div>';
+      +'Una regla es <strong style="color:var(--text-body);">una afirmación que el motor consulta</strong> al validar: qué palabras cuenta como color, qué términos valen como el mismo, qué está mal escrito. '
+      +'Lo general vale en todo el catálogo; cada sección lo hereda y puede añadir lo suyo o anular lo que ahí no aplica.</div>';
 
-    var optSec='<option value="">Sección</option>'+qSecciones2().map(function(v){ return '<option'+(v===_fSec?' selected':'')+'>'+v+'</option>'; }).join('');
-    var selSec='<div style="position:relative;"><select onchange="setFSec(this.value)" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'+optSec
+    // Entradas generales anuladas en dos o más secciones: la cola de limpieza del
+    // vocabulario general.
+    var dudosas=[];
+    _rListas.forEach(function(l){ l.v.forEach(function(k){ var f=rOffEn(l,k); if(f.length>=2) dudosas.push({l:l,k:k,f:f}); }); });
+    var banda=(!sec&&dudosas.length)?'<div style="margin:14px 20px;background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:8px;padding:12px 15px;font-size:12.5px;color:var(--warning-text);line-height:1.55;">'
+      +'<strong>'+dudosas.length+(dudosas.length===1?' entrada general está anulada':' entradas generales están anuladas')+' en dos o más secciones.</strong> '
+      +'Cuando varias secciones anulan lo mismo, lo que está mal es la entrada general: '
+      + dudosas.map(function(x){ return '«'+x.k+'» en '+x.l.k+' ('+x.f.join(', ')+')'; }).join(' · ')+'.</div>':'';
+
+    var selAmb='<div style="position:relative;"><select onchange="setRAmb(this.value)" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'
+      +'<option value="">General</option>'+rSecciones().map(function(v){ return '<option'+(v===sec?' selected':'')+'>'+v+'</option>'; }).join('')
       +'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>';
-    var busca='<div style="position:relative; flex:0 1 190px; min-width:120px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'
-      +'<input value="'+(_fMod||'').replace(/"/g,'&quot;')+'" oninput="setFMod(this.value)" placeholder="Modelo…" style="width:100%;height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 12px 0 34px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;"/></div>';
-    var clear=(_fSec||_fMod)?'<button onclick="qClearF()" style="margin-left:auto;align-self:center;background:none;border:none;padding:0 2px;height:36px;font-family:\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;white-space:nowrap;">Borrar filtros</button>':'';
+    var selVal='<div style="position:relative;"><select onchange="setRFVal(this.value)" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'
+      +'<option value="">Validación</option>'+rValidaciones().map(function(v){ return '<option'+(v===_rFVal?' selected':'')+'>'+v+'</option>'; }).join('')
+      +'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>';
+    var clear=(sec||_rFVal)?'<button onclick="rClearF()" style="margin-left:auto;align-self:center;background:none;border:none;padding:0 2px;height:36px;font-family:\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;white-space:nowrap;">Borrar filtros</button>':'';
     var filtro='<div style="padding:14px 20px;border-bottom:1px solid var(--border-card);display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
-      +'<span style="font-size:12.5px;color:var(--text-muted);align-self:center;">Qué está descartado si audito</span>'+selSec+busca+clear+'</div>';
+      +'<span style="font-size:12.5px;color:var(--text-muted);align-self:center;">Lo que aplica en</span>'+selAmb+selVal+clear+'</div>';
 
     var th=function(t,w,al){ return '<th style="width:'+w+';text-align:'+(al||'left')+';">'+t+'</th>'; };
-    var head='<thead><tr>'+th('Regla','15%')+th('Motivo del descarte','12%')+th('Validación','12%')+th('Ámbito','13%')+th('Descarta hoy','10%','right')+th('Nace de','10%','right')+th('Creada por','9%')+th('Fecha','6%')+th('','13%')+'</tr></thead>';
-    var rs=_qReglas.map(function(r,idx){ return {r:r,idx:idx}; }).filter(function(o){ return qAplica(o.r); })
-      .sort(function(a,b){ return b.r.silencia-a.r.silencia; });
-    if(!rs.length) return aviso+filtro+'<div style="padding:34px;text-align:center;color:var(--text-muted);font-size:13px;">No hay reglas que apliquen a este ámbito.</div>';
-    var rows=rs.map(function(o){
-      var r=o.r, dim=r.on?'':'opacity:.5;';
-      var num='text-align:right;font-variant-numeric:tabular-nums;font-size:13px;color:var(--text-ink);';
-      return '<tr style="'+dim+'">'
-        +'<td style="font-size:13px;font-weight:700;color:var(--text-ink);">'+r.disp+'</td>'
-        +'<td style="font-size:12px;color:var(--text-muted);">'+r.motivo+'</td>'
-        +'<td style="font-size:12px;color:var(--text-body);">'+r.check+'</td>'
-        +'<td style="font-size:12px;color:var(--text-body);">'+r.ambito+'</td>'
-        +'<td style="'+num+'font-weight:700;'+(r.on?'':'color:var(--text-muted);font-weight:500;')+'">'+fmtNum(r.silencia)+'</td>'
-        +'<td style="'+num+'">'+r.origen+'</td>'
-        +'<td style="font-size:12px;color:var(--text-body);">'+r.autor+'</td>'
-        +'<td style="font-size:12px;color:var(--text-muted);white-space:nowrap;">'+r.fecha+'</td>'
-        +'<td style="text-align:right;"><button onclick="qToggleRegla('+o.idx+')" style="background:#fff;border:1px solid var(--border-input);border-radius:8px;height:30px;padding:0 12px;font-size:11.5px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;">'+(r.on?'Desactivar':'Activar')+'</button></td></tr>'; }).join('');
-    return aviso+filtro+'<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
+    var head='<thead><tr>'+th('Regla','22%')+th('Tipo','12%')+th('Validación','18%')+th('Entradas','10%','right')
+      +(sec?th('Cambia aquí','14%','right'):th('Anuladas en alguna sección','14%','right'))+th('Última edición','14%')+th('','10%')+'</tr></thead>';
+    var ls=_rListas.filter(function(l){ return !_rFVal || l.val===_rFVal; });
+    var rows=ls.map(function(l){
+      var c=rCapa(l,sec), num='text-align:right;font-variant-numeric:tabular-nums;font-size:13px;color:var(--text-ink);';
+      var cambia='';
+      if(sec){
+        if(l.fijo) cambia='<span style="font-size:11.5px;color:var(--text-muted);">no admite ámbito</span>';
+        else if(!c.add.length&&!c.off.length) cambia='<span style="font-size:12px;color:var(--text-muted);">—</span>';
+        else cambia=(c.add.length?'<span style="color:var(--green);font-weight:700;">+'+c.add.length+'</span>':'')
+          +(c.add.length&&c.off.length?' ':'')
+          +(c.off.length?'<span style="color:var(--warning-text);font-weight:700;">−'+c.off.length+'</span>':'');
+      } else {
+        var t=0; l.v.forEach(function(k){ if(rOffEn(l,k).length) t++; });
+        cambia=t?'<span style="color:var(--warning-text);font-weight:700;">'+t+'</span>':'<span style="font-size:12px;color:var(--text-muted);">—</span>';
+      }
+      var nuevo=l.nueva?' <span style="display:inline-block;background:var(--success-bg);border:1px solid var(--green);border-radius:5px;padding:1px 6px;font-size:10.5px;font-weight:600;color:var(--green);">lista nueva</span>':'';
+      return '<tr><td><span style="display:block;font-size:13px;font-weight:700;color:var(--text-ink);">'+l.k+nuevo+'</span>'
+        +'<span style="display:block;font-size:11.5px;color:var(--text-muted);margin-top:2px;">'+l.d+'</span></td>'
+        +'<td style="font-size:12px;color:var(--text-body);">'+l.tipo+'</td>'
+        +'<td style="font-size:12px;color:var(--text-body);">'+l.val+'</td>'
+        +'<td style="'+num+'font-weight:700;">'+fmtNum(rCuenta(l,sec))+'</td>'
+        +'<td style="'+num+'">'+cambia+'</td>'
+        +'<td style="font-size:12px;color:var(--text-muted);">'+l.m+'</td>'
+        +'<td style="text-align:right;"><button onclick="openDicc(\''+l.id+'\')" style="background:#fff;border:1px solid var(--border-input);border-radius:8px;height:30px;padding:0 12px;font-size:11.5px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;">Ver</button></td></tr>'; }).join('');
+    return aviso+banda+filtro+'<div style="overflow-x:auto;"><table class="desc-table v-mtabla" style="width:100%;">'+head+'<tbody>'+rows+'</tbody></table></div>'; }
 
-  function qToggleRegla(i){ var r=_qReglas[i]; if(r) r.on=!r.on; renderQMetrics(); renderQPanel(); }
+  // ── Ver una regla: sus entradas, de dónde viene cada una ───────────────────
+  function rFind(id){ return _rListas.filter(function(l){return l.id===id;})[0]; }
+  function openDicc(id){ _rOpen=id; _rQ=''; renderDicc(); document.getElementById('v-dicc-modal').classList.add('open'); }
+  function closeDicc(){ document.getElementById('v-dicc-modal').classList.remove('open'); _rOpen=null; }
+  function diccBuscar(v){ _rQ=(v||'').toLowerCase(); renderDicc(); }
 
-  // ── Diccionarios ───────────────────────────────────────────────────────────
-  var _qDiccOpen=null, _qDiccQ='';
-  function qDiccHtml(){
-    var aviso='<div style="padding:16px 20px;font-size:12.5px;color:var(--text-muted);line-height:1.55;border-bottom:1px solid var(--border-card);">'
-      +'El motor solo compara lo que está en estas listas: <strong style="color:var(--text-body);">si un color o un material no figura, no se compara y no salta ninguna alerta</strong>. '
-      +'Una ficha sin avisos no siempre está correcta — puede que no se haya podido comprobar. El tamaño de cada lista es, de hecho, la cobertura del check que la usa. De momento son de solo lectura.</div>';
-    return aviso+_qDicc.map(function(d,i){
-      return '<div style="padding:18px 20px;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
-        +'<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px;">'
-          +'<span style="font-size:14px;font-weight:700;color:var(--text-ink);">'+d.n+'</span>'
-          +'<span style="font-size:12px;color:var(--text-muted);">'+d.check+'</span>'
-          +'<span style="margin-left:auto;font-size:11px;color:var(--text-muted);">últ. cambio '+d.m+'</span></div>'
-        +'<table class="desc-table v-mtabla" style="width:100%;"><tbody>'
-        + d.listas.map(function(l){
-            return '<tr style="cursor:pointer;" onclick="openDicc(\''+l.id+'\')">'
-              +'<td style="width:34%;font-size:12.5px;font-weight:600;color:var(--text-ink);">'+l.k+'</td>'
-              +'<td style="width:9%;text-align:right;font-size:13px;font-weight:700;color:var(--text-ink);font-variant-numeric:tabular-nums;">'+l.e+'</td>'
-              +'<td style="font-size:12px;color:var(--text-muted);padding-left:20px;">'+l.d+'</td>'
-              +'<td style="width:9%;text-align:right;"><span style="font-size:12px;font-weight:600;color:var(--green);">Ver</span></td></tr>'; }).join('')
-        +'</tbody></table></div>'; }).join(''); }
+  // Anular no borra: deja la entrada a la vista, tachada, con quién y por qué.
+  function rAnular(k){ rOff(rFind(_rOpen),_rAmb,k,'Ana García','1 oct','anulada desde el panel'); renderDicc(); renderQPanel(); vToast('Anulada en '+rKey(_rAmb)); }
+  function rOff(l,sec,k,por,f,m){ if(!l) return; var key=rKey(sec);
+    if(!l.capas[key]) l.capas[key]={add:[],off:[]};
+    if(!rOffDe(l,sec)[k]) l.capas[key].off.push({k:k,por:por,f:f,m:m});
+    l.m=f+' · '+por; }
+  function rAdd(l,sec,k,por,f){ if(!l) return; var key=rKey(sec);
+    if(key==='General'){ if(l.v.indexOf(k)<0){ l.v.push(k); l.e++; } if(l.nueva&&l.v.length) l.nueva=false; }
+    else { if(!l.capas[key]) l.capas[key]={add:[],off:[]};
+      if(l.capas[key].add.indexOf(k)<0) l.capas[key].add.push(k); }
+    l.m=f+' · '+por; }
+  function rReactivar(k){ var l=rFind(_rOpen); if(!l) return; var key=rKey(_rAmb); if(!l.capas[key]) return;
+    l.capas[key].off=l.capas[key].off.filter(function(x){ return x.k!==k; });
+    l.m='1 oct · Ana García'; renderDicc(); renderQPanel(); vToast('Reactivada en '+key); }
 
-  function qDiccFind(id){ var out=null; _qDicc.forEach(function(d){ d.listas.forEach(function(l){ if(l.id===id) out={d:d,l:l}; }); }); return out; }
-  function openDicc(id){ _qDiccOpen=id; _qDiccQ=''; renderDicc(); document.getElementById('v-dicc-modal').classList.add('open'); }
-  function closeDicc(){ document.getElementById('v-dicc-modal').classList.remove('open'); _qDiccOpen=null; }
-  function diccBuscar(v){ _qDiccQ=(v||'').toLowerCase(); renderDicc(); }
-  function renderDicc(){ var o=qDiccFind(_qDiccOpen); if(!o) return;
-    document.getElementById('v-dicc-title').textContent=o.l.k;
-    document.getElementById('v-dicc-sub').innerHTML=o.d.n+' · '+o.l.d+' · <strong style="color:var(--text-body);">'+o.l.e+' entradas</strong>';
-    var vs=o.l.v.filter(function(x){ return !_qDiccQ || x.toLowerCase().indexOf(_qDiccQ)>=0; });
+  function renderDicc(){ var l=rFind(_rOpen); if(!l) return; var sec=_rAmb;
+    document.getElementById('v-dicc-title').textContent=l.k;
+    var c=rCapa(l,sec);
+    document.getElementById('v-dicc-sub').innerHTML=l.tipo+' · '+l.val+' · <strong style="color:var(--text-body);">'+(sec||'General')+'</strong>'
+      +' · '+fmtNum(rCuenta(l,sec))+' entradas'+(sec&&(c.add.length||c.off.length)?' · '+(c.add.length?'+'+c.add.length+' propia'+(c.add.length>1?'s':''):'')+(c.add.length&&c.off.length?', ':'')+(c.off.length?c.off.length+' anulada'+(c.off.length>1?'s':''):''):'');
+
+    var ef=rEfectivas(l,sec).filter(function(x){ return !_rQ || x.k.toLowerCase().indexOf(_rQ)>=0; });
     var body;
-    // Mismo formato para los tres tipos de lista: términos sueltos, grupos y pares.
-    // Mezclar pastillas y filas hacía parecer que eran cosas distintas, y no lo son.
-    if(!vs.length) body='<div style="padding:28px;text-align:center;color:var(--text-muted);font-size:13px;">Sin coincidencias.</div>';
-    else body=vs.map(function(x,i){ return '<div style="display:flex;gap:12px;padding:9px 0;font-size:12.5px;color:var(--text-body);line-height:1.5;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
+    if(l.nueva&&!l.v.length) body='<div style="padding:28px;text-align:center;color:var(--text-muted);font-size:13px;line-height:1.6;">Esta lista todavía no existe en el motor.<br>La crea la primera entrada que se resuelva contra ella.</div>';
+    else if(!ef.length) body='<div style="padding:28px;text-align:center;color:var(--text-muted);font-size:13px;">Sin coincidencias.</div>';
+    else body=ef.map(function(x,i){
+      var off=(x.origen==='off'), add=(x.origen==='add');
+      var marca=off?'<span style="font-size:11px;color:var(--warning-text);flex-shrink:0;">anulada aquí</span>'
+        :(add?'<span style="font-size:11px;color:var(--green);font-weight:600;flex-shrink:0;">añadida aquí</span>'
+        :(sec?'<span style="font-size:11px;color:var(--text-muted);flex-shrink:0;">heredada</span>'
+        :((x.fuera&&x.fuera.length)?'<span style="font-size:11px;color:var(--warning-text);flex-shrink:0;">anulada en '+x.fuera.length+(x.fuera.length===1?' sección':' secciones')+'</span>':'')));
+      var acc=(!l.fijo)?(off?'<button class="r-acc on" onclick="rReactivar(\''+x.k.replace(/'/g,"\\'")+'\')" style="background:#fff;border:1px solid var(--border-input);border-radius:7px;height:26px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-body);white-space:nowrap;flex-shrink:0;">Reactivar</button>'
+        :(add?'':'<button class="r-acc" onclick="rAnular(\''+x.k.replace(/'/g,"\\'")+'\')" style="background:#fff;border:1px solid var(--border-input);border-radius:7px;height:26px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:pointer;color:var(--text-muted);white-space:nowrap;flex-shrink:0;">Anular aquí</button>')):'';
+      return '<div class="r-ent" style="padding:9px 0;'+(i?'border-top:1px solid var(--border-card);':'')+'">'
+        +'<div style="display:flex;align-items:center;gap:12px;font-size:12.5px;line-height:1.5;">'
         +'<span style="color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;min-width:24px;text-align:right;">'+(i+1)+'</span>'
-        +'<span style="min-width:0;">'+x+'</span></div>'; }).join('');
+        +'<span style="flex:1;min-width:0;'+(off?'text-decoration:line-through;color:var(--text-muted);':'color:var(--text-body);')+'">'+x.k+'</span>'
+        +marca+acc+'</div>'
+        +(off&&x.meta?'<div style="font-size:11px;color:var(--text-muted);margin:3px 0 0 36px;">'+x.meta.por+' · '+x.meta.f+' · «'+x.meta.m+'»</div>':'')+'</div>'; }).join('');
     document.getElementById('v-dicc-body').innerHTML=body;
     var nota=document.getElementById('v-dicc-nota');
-    nota.innerHTML=(o.l.v.length<o.l.e)?'Muestra de '+o.l.v.length+' de las '+o.l.e+' entradas. El contenido completo vive en el motor.':''; }
+    nota.innerHTML=l.fijo?'Esta regla no admite ámbito: es la misma en todo el catálogo.'
+      :((l.v.length<l.e)?'Muestra de '+l.v.length+' de las '+fmtNum(l.e)+' entradas generales. El contenido completo vive en el motor.':''); }
 
   // ── Resolución ─────────────────────────────────────────────────────────────
   function qFind(id){ return _qGrupos.filter(function(g){return g.id===id;})[0]; }
   function openRes(id){ var g=qFind(id); if(!g) return;
     // El diccionario arregla el origen y deja el check funcionando, así que es la
     // opción por defecto siempre que el caso se pueda expresar como conocimiento.
-    _qResId=id; _qResOpt=g.dicc?'dicc':'regla';
+    _qResId=id; _qResOpt='dicc';
     // Se preseleccionan las secciones donde se ha detectado, pero el revisor puede
     // añadir otras: que no haya salido todavía en Baño no significa que no valga allí.
     _qResSecs={}; Object.keys(qSecciones(g)).forEach(function(x){ _qResSecs[x]=1; });
@@ -1223,44 +1263,43 @@
         +(on?'<div style="padding:0 16px 14px 46px;">'+extra+'</div>':'')+'</div>'; };
 
     var cons=function(txt){ return '<div style="font-size:12.5px;color:var(--text-body);line-height:1.55;">'+txt+'</div>'; };
-    var est=function(){ return fmtNum(Math.round(n*11)*qResSel().length); };
-    var consRegla=function(){ return qResSel().length
-      ? cons('Se crea una regla por sección: la validación se apaga en '+qResSel().join(', ')+' y sigue avisando en el resto. Dejará de avisar en <strong>~'+est()+' referencias</strong>.')
-      : '<div style="font-size:12.5px;color:var(--warning-text);">Elige al menos una sección.</div>'; };
+    // La única pregunta que queda es DÓNDE. Qué se escribe y en qué regla sale del
+    // motivo del descarte, no hay que preguntarlo: «valores equivalentes» va a una
+    // equivalencia, «abreviatura aceptada» a un vocabulario, y así.
+    var dst=g.destino, dl=dst?rFind(dst.l):null;
+    var corto=dst?dst.k.split(' · ')[0]:'';
+    var acc=dst?(dst.op==='add'?'Se añade <strong>«'+corto+'»</strong> a':'Se anula <strong>«'+corto+'»</strong> en'):'';
+    var reglaTxt=dl?(acc+' <strong>'+dl.k+'</strong> ('+dl.tipo+(dl.k===dl.val?'':' · '+dl.val)+')'+(dl.nueva?'. Esta regla <strong>todavía no existe en el motor</strong>: la crea esta entrada':'')):'';
 
-    // Casillas con scroll en vez de pastillas: caben todas las secciones y, debajo,
-    // los modelos donde se ha detectado — el ámbito de una regla puede ser un modelo.
     var detSec=qSecciones(g);
     var fila=function(on,onch,txt,nota){
       return '<label style="display:flex;align-items:center;gap:9px;padding:6px 12px;cursor:pointer;font-size:12.5px;color:var(--text-body);">'
         +'<input type="checkbox"'+(on?' checked':'')+' onchange="'+onch+'" style="width:15px;height:15px;accent-color:var(--green);cursor:pointer;flex-shrink:0;"/>'
         +'<span style="flex:1;min-width:0;">'+txt+'</span>'
         +(nota?'<span style="font-size:11px;color:var(--text-muted);flex-shrink:0;">'+nota+'</span>':'')+'</label>'; };
-    var cab=function(t){ return '<div style="padding:9px 12px 4px;font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;">'+t+'</div>'; };
     var lista='<div style="max-height:212px;overflow-y:auto;border:1px solid var(--border-input);border-radius:8px;background:#fff;margin-bottom:11px;">'
-      + cab('Secciones')
       + qTodasSecciones().map(function(x){ var esc=x.replace(/'/g,"\\'");
           return fila(!!_qResSecs[x],'toggleResSec(\''+esc+'\')',x,detSec[x]?detSec[x]+(detSec[x]===1?' descarte':' descartes'):''); }).join('')
       +'</div>'
       +'<div style="font-size:11.5px;color:var(--text-muted);margin-bottom:9px;">Vienen marcadas las secciones donde se ha detectado. Puedes añadir las que sepas que también valen.</div>';
 
-    var dicc=opt('dicc','En todo el catálogo', g.dicc
-      ? cons('Se añade al diccionario de <strong>'+g.dicc+'</strong>. El motor lo aprende y deja de equivocarse en todas partes, sin dejar de comprobar lo demás.')
-      : cons('Esta validación no se apoya en ninguna lista que ampliar, así que se crea una <strong>regla general</strong>: se apaga para este caso en todo el catálogo.'));
+    var consSec=function(){ return qResSel().length
+      ? cons(reglaTxt+', solo en <strong>'+qResSel().join(', ')+'</strong>. En el resto del catálogo la validación sigue avisando.')
+      : '<div style="font-size:12.5px;color:var(--warning-text);">Elige al menos una sección.</div>'; };
 
-    document.getElementById('v-res-opts').innerHTML= dicc
-      + opt('regla','Solo en algunas secciones', lista+'<div id="v-res-cons">'+consRegla()+'</div>')
+    document.getElementById('v-res-opts').innerHTML=
+        opt('dicc','En todo el catálogo', cons(reglaTxt+', con ámbito <strong>general</strong>. Vale en todas las secciones mientras ninguna lo anule.'))
+      + opt('regla','Solo en algunas secciones', lista+'<div id="v-res-cons">'+consSec()+'</div>')
       + opt('ign','Ignorar',
-        cons('No se crea nada. El caso queda en <strong>Ignorados</strong> por si reaparece.'));
+        cons('No se escribe nada. El caso queda en <strong>Ignorados</strong> por si reaparece.'));
 
-    // Se guarda para poder refrescar solo la consecuencia al marcar una casilla.
-    _resCons=consRegla;
+    _resCons=consSec;
     renderResCta(g); }
 
   function renderResCta(g){ var b=document.getElementById('v-res-go'); if(!b) return;
     var k=qResSel().length;
-    b.textContent=(_qResOpt==='regla')?(k>1?'Crear '+k+' reglas':'Crear regla')
-      :((_qResOpt==='dicc')?(g.dicc?'Añadir al diccionario':'Crear regla general'):'Ignorar');
+    var op=g.destino?g.destino.op:'add';
+    b.textContent=(_qResOpt==='ign')?'Ignorar':(op==='add'?'Añadir':'Anular')+((_qResOpt==='regla'&&k>1)?' en '+k+' secciones':'');
     // Sin ámbito elegido no hay nada que crear: que el botón no parezca pulsable.
     var muerto=(_qResOpt==='regla' && !k);
     b.style.opacity=muerto?'0.4':'';
@@ -1268,16 +1307,16 @@
 
   function aplicarRes(){ var g=qFind(_qResId); if(!g) return;
     var n=qDescartes(g);
-    var amb=qResSel().map(function(x){return 'Sección · '+x;});
-    if(_qResOpt==='regla'){ if(!amb.length) return;
-      amb.forEach(function(a){ _qReglas.push({disp:g.disp,motivo:g.motivo,check:g.check,ambito:a,autor:'Ana García',fecha:'30 sep',silencia:Math.round(n*11),origen:n,on:true}); }); }
-    else if(_qResOpt==='dicc'){
-      if(g.dicc) _qDicc.forEach(function(d){ if(d.n===g.dicc){ d.e--; d.m='30 sep · Ana García'; } });
-      else _qReglas.push({disp:g.disp,motivo:g.motivo,check:g.check,ambito:'General',autor:'Ana García',fecha:'30 sep',silencia:Math.round(n*34),origen:n,on:true}); }
+    var dst=g.destino, dl=dst?rFind(dst.l):null, secs=qResSel();
+    var escribe=function(sec){ if(!dl||!dst) return;
+      if(dst.op==='add') rAdd(dl,sec,dst.k,'Ana García','1 oct');
+      else rOff(dl,sec,dst.k,'Ana García','1 oct',g.motivo.toLowerCase()); };
+    if(_qResOpt==='regla'){ if(!secs.length) return; secs.forEach(escribe); }
+    else if(_qResOpt==='dicc') escribe('');
     _qResolved[g.id]=_qResOpt;
     closeRes(); renderConfig();
-    vToast(_qResOpt==='regla'?(amb.length===1?'Regla creada · '+amb[0]:amb.length+' reglas creadas')
-      :(_qResOpt==='dicc'?(g.dicc?'Añadido al diccionario de '+g.dicc:'Regla general creada'):'Caso ignorado')); }
+    vToast(_qResOpt==='ign'?'Caso ignorado'
+      :(dl?(dst.op==='add'?'Añadido a ':'Anulado en ')+dl.k+' · '+(_qResOpt==='dicc'?'general':secs.join(', ')):'Hecho')); }
 
   function fmtNum(n){ return n.toLocaleString('es-ES'); }
 
