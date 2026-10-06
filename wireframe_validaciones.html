@@ -2389,12 +2389,11 @@
   }
 
   // ── Acceso al motor de validaciones ────────────────────────────────────────
-  // El panel sigue montado entero; solo se oculta su puerta de entrada para poder
-  // enseñar el prototipo al cliente sin que entre ahí. Poner a true para recuperarlo.
+  // El panel sigue montado entero y el enlace sigue a la vista: lo único que se corta
+  // es que lleve a ninguna parte, para poder enseñar el prototipo al cliente sin que
+  // entre ahí. Poner a true para recuperarlo.
   var MOTOR_VISIBLE = false;
   function abrirMotor(){ if(!MOTOR_VISIBLE) return; go('v-config'); renderConfig(); }
-  (function(){ var b=document.getElementById('v-motor-link');
-    if(b && !MOTOR_VISIBLE) b.style.display='none'; })();
 
   renderTypeButtons();
   switchTab('todo');
