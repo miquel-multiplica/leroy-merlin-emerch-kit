@@ -531,7 +531,7 @@
     <div class="grid" style="max-width:none; padding:0 40px;">
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:24px;">
         <div style="font-size:32px; font-weight:700; color:var(--text-ink);">Validaciones</div>
-        <div style="display:flex; gap:20px; align-items:center;"><button onclick="go('v-config'); renderConfig();" style="height:44px; font-size:14px; padding:0 4px; white-space:nowrap; background:none; border:none; color:var(--green); cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-family:'Inter',system-ui,sans-serif;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Motor de validaciones</button><button class="btn btn-primary" onclick="startNueva()" style="height:44px; font-size:14px; padding:0 20px; white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva auditoría</button></div>
+        <div style="display:flex; gap:20px; align-items:center;"><button id="v-motor-link" onclick="abrirMotor()" style="height:44px; font-size:14px; padding:0 4px; white-space:nowrap; background:none; border:none; color:var(--green); cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-weight:600; font-family:'Inter',system-ui,sans-serif;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Motor de validaciones</button><button class="btn btn-primary" onclick="startNueva()" style="height:44px; font-size:14px; padding:0 20px; white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva auditoría</button></div>
       </div>
       <div style="display:flex; gap:0; border-bottom:1px solid var(--border-card); margin-bottom:20px;">
         <button class="v-tab" data-tab="todo" onclick="switchTab('todo')">Todo</button>
@@ -2387,6 +2387,14 @@
     _vTipo=null; _vValor=null; _vSelOpt=null; _vListName=''; _vCsvAttempt=0; _vDetectNum=0; _vDetected=false;
     go('v-hub'); switchTab('por-revisar');
   }
+
+  // ── Acceso al motor de validaciones ────────────────────────────────────────
+  // El panel sigue montado entero; solo se oculta su puerta de entrada para poder
+  // enseñar el prototipo al cliente sin que entre ahí. Poner a true para recuperarlo.
+  var MOTOR_VISIBLE = false;
+  function abrirMotor(){ if(!MOTOR_VISIBLE) return; go('v-config'); renderConfig(); }
+  (function(){ var b=document.getElementById('v-motor-link');
+    if(b && !MOTOR_VISIBLE) b.style.display='none'; })();
 
   renderTypeButtons();
   switchTab('todo');
