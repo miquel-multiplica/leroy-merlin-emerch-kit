@@ -50,6 +50,15 @@ La propuesta excluye la **accionabilidad** y la **bandeja de acciones y decision
 informa y responde. Pero una bandeja es justo lo que haría a alguien abrirlo cada mañana, y el
 criterio de éxito firmado es *«que se use y se discuta»*. Hay que resolver qué ocupa ese sitio.
 
+**Media respuesta la da el deck anterior**: el cliente pidió *«no otro cuadro de mando más»*, y la
+pieza que lo evita son *«alertas que llegan solas, con impacto y siguiente paso»*. O sea que el
+peso de la pantalla no está en los KPIs sino en las alertas — lo contrario de lo que sugiere el
+demo. Queda por resolver qué hace esa pantalla **cuando no hay ninguna alerta**.
+
+También hay una tensión menor que conviene mirar: la propuesta dice que el cockpit *«no propone
+flujos accionables»*, y a la vez que cada alerta lleva *«el siguiente paso sugerido»*. Se
+reconcilian —sugerir en texto no es montar un flujo— pero hay que decidir dónde está la raya.
+
 ### 4 · Los cinco supuestos están escritos como si ya se cumplieran
 
 Y ninguna de sus alternativas es cosmética: o recortan alcance o degradan el producto. Las dos que

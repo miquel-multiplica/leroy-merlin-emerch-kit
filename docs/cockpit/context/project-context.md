@@ -16,6 +16,54 @@ acciones. La propuesta excluye explícitamente la accionabilidad y la bandeja de
 cockpit **informa y responde**. Qué ve entonces el eMerchant al abrirlo es una de las preguntas
 abiertas (ver `../ESTADO_MODULO_COCKPIT.md`).
 
+## Por qué existe el proyecto
+
+> **Procedencia.** Esto no está en la propuesta firmada: sale del deck anterior
+> *«Cockpit y generación de agentes — propuesta por fases»* (v1.0, septiembre 2026, 87.710 €),
+> que **quedó obsoleto** cuando el alcance se recortó a lo que hoy está firmado. Su detalle de
+> fases y arquitectura ya no aplica. Se recoge aquí solo el encuadre del porqué, que la propuesta
+> firmada no llegó a escribir.
+
+**El objetivo no es un cockpit de e-commerce.** Es un modelo transversal a marketing, y empieza
+por eMerchandising **porque es donde hay prototipo y datos** — no porque sea el rol más
+importante. El cockpit es el vehículo; lo que se quiere demostrar es que el modelo se sostiene.
+
+Un cockpit, definido en una línea: **el puesto de trabajo digital de un rol — su misión, sus
+métricas, sus agentes.**
+
+Y el cuello de botella está nombrado: *«tres agentes montados de nueve previstos. El cuello de
+botella no es la IA, es la documentación.»* Por eso el ámbito son las familias que **ya** tienen
+guía eMerch, y por eso el principio de no generar documentación nueva.
+
+### Lo que pidió el cliente
+
+Siete necesidades, en sus palabras. Son el mejor enunciado del motivo que tenemos:
+
+| Necesidad | Cómo se resuelve |
+|---|---|
+| **No otro cuadro de mando más** | Alertas que llegan solas, con impacto y siguiente paso. |
+| No un proyecto por cockpit, sino un sistema que los genere | Configuración declarativa por usuario. *(El generador es fase 2.)* |
+| Que no dependa de meses de documentación | La ficha se propone desde las fuentes, la persona corrige. *(Fuera de lo firmado.)* |
+| Que IT no vea un superagente | Agentes acotados sobre vistas parametrizadas. |
+| Que se pueda medir el retorno | Trazabilidad de cada respuesta desde el día uno. |
+| Que el agente aprenda de los documentos que ya existen | Ingesta del corpus en el formato en que está hoy. |
+| Que sea el colaborador quien enseñe al agente, no el proveedor | En esta fase se define **con él**, durante la inmersión. |
+
+La primera es la más útil para diseñar: **el cliente dice explícitamente que no quiere otro
+cuadro de mando.** Es la mitad de la respuesta a qué ve el eMerchant al abrirlo.
+
+### El objetivo de esta fase, en cinco palabras
+
+**Dejar de buscar el dato.** Y la prueba de que ha funcionado, también del deck: *el eMerchant lo
+usa a diario y lo desafía — corrige, descarta con motivo y pide lo que falta, y todo queda
+registrado.* Es la misma frase que la propuesta firmada convirtió en *«que se use y se discuta»*.
+
+### Dos encuadres más que conviene no perder
+
+- **El cockpit orquesta, no reemplaza fuentes ni aplicativos.**
+- **Se apoya en dos iniciativas que ya existen:** las guías eMerch como base documental y la
+  analítica digital como fuente de métricas.
+
 ## Problema actual
 
 - Las métricas del puesto están repartidas en varias herramientas que hay que abrir una a una.
