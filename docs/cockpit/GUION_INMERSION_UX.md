@@ -75,8 +75,10 @@ qué quieren hacer con ellos** — así que las preguntas van por ahí, no por l
 - **¿Qué es un «action item»?** ¿Cualquier ticket suyo, o un subconjunto con alguna marca?
 - ¿Quién los crea y quién los cierra hoy? ¿Los abre él o se los abren?
 - ¿Vive en Jira o lo evita? Si lo evita, ¿por dónde se entera de lo que tiene que hacer?
-- **¿Qué gana viéndolos en el cockpit en vez de en Jira?** Si la respuesta es «nada, ya tengo
-  Jira», no merece la pena — y es mejor saberlo hoy.
+- Cuando abres un pendiente, **¿qué necesitas tener delante para decidir si lo haces ahora?**
+- ¿Cuáles de tus pendientes tienen que ver con un número que miras?
+- **¿Qué pendiente se te queda parado porque te falta un dato?** — ese es el caso que el cockpit
+  resuelve y Jira no puede: el item junto al KPI que lo motiva y la alerta que lo disparó.
 - ¿Hay campo de mundo o de familia, para poder filtrar su ámbito?
 - Lo que pida y no exista, ¿se anota también ahí? Por contrato hay que registrarlo.
 
