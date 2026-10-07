@@ -39,9 +39,12 @@ sesión de arranque, que es otra cosa: poner el alcance sobre la mesa y disparar
 
 Abrir el Word y marcar, pieza por pieza, qué se cierra en la inmersión. Lo que hay que tocar:
 
-- **«3 KPIs»** — ¿tres definiciones con sus cortes, o tres números? (Un corte es la misma fórmula
-  con otro filtro; si cambia la fórmula, el dueño o la fuente, es un KPI nuevo.)
-- **«3 tipos de alerta»** — ¿tres reglas distintas o tres niveles de una?
+- **Los techos están confirmados** (Gera): **3 KPIs máximo, 3 alertas máximo, 1 agente**. Son
+  techos, no objetivos — se puede arrancar con menos y es mejor señal.
+- **Un KPI son tres cosas: fórmula, dueño y fuente.** Cortarlo por familia o por mes no crea uno
+  nuevo; cambiar cualquiera de las tres, sí.
+- **Las fuentes están decididas: BigQuery y guías eMerch.** Lo que falta es **cuántas guías**, y
+  es un entregable de esta fase.
 - **El ámbito** — qué mundo, y cuántas familias tienen guía eMerch **hoy**, con número.
 - **Las dos piezas invisibles** — catálogo de métricas y trazabilidad. Nadie las pide y las dos
   tienen trabajo.
@@ -52,8 +55,10 @@ Abrir el Word y marcar, pieza por pieza, qué se cierra en la inmersión. Lo que
 
 ## 2 · Mapear el demo contra el alcance
 
-Pasar cada bloque del demo por la regla de la propuesta —**entra lo que tiene fuente**— y
-marcarlo: entra / no entra / no se sabe.
+Pasar cada bloque del demo por la regla de la propuesta —**entra lo que tiene fuente**—, que
+ahora se puede aplicar literal porque las fuentes están decididas:
+
+> **¿Sale de BigQuery, de una guía eMerch o de Jira? Si no sale de ahí, no entra.**
 
 **Ojo con «Catálogo y familias».** Parece la candidata natural porque se apoya en las guías, pero
 el deck anterior la excluye explícitamente: *«widget de seguimiento de familias: las etapas y el
@@ -62,21 +67,39 @@ esa pestaña son GV Quality y ATT, que vienen de analítica.
 
 → **Salida:** el demo anotado, y la lista de lo que parecía entrar y no entra.
 
-## 3 · Cómo entran las cosas: Jira y las fuentes del día a día
+## 3 · Los Action Items de Jira
 
-El bloque que más nos falta entender. Qué preguntar:
+Lo pidió Fernando y quedó para revisarse aquí. **La complejidad no está en la integración, está en
+qué quieren hacer con ellos** — así que las preguntas van por ahí, no por lo técnico:
 
-- ¿Qué le llega al eMerchant por Jira y qué no? ¿Quién abre los tickets?
-- ¿Los lee, o se entera por otro lado y el ticket es el registro a posteriori?
-- ¿Qué tableros y proyectos? ¿Hay campo de mundo o de familia para poder filtrar su ámbito?
-- Lo que se pide y hoy no existe, **¿dónde se anota?** Por contrato hay que registrarlo.
+- **¿Qué es un «action item»?** ¿Cualquier ticket suyo, o un subconjunto con alguna marca?
+- ¿Quién los crea y quién los cierra hoy? ¿Los abre él o se los abren?
+- ¿Vive en Jira o lo evita? Si lo evita, ¿por dónde se entera de lo que tiene que hacer?
+- **¿Qué gana viéndolos en el cockpit en vez de en Jira?** Si la respuesta es «nada, ya tengo
+  Jira», no merece la pena — y es mejor saberlo hoy.
+- ¿Hay campo de mundo o de familia, para poder filtrar su ámbito?
+- Lo que pida y no exista, ¿se anota también ahí? Por contrato hay que registrarlo.
 
-**Por qué Jira y no otra cosa:** el deck lo pone como *«rastro del colaborador»* junto a correo y
-Drive, pero en la mitigación legal dice que si no hay base legal *«arrancamos solo con Jira, Drive
-de equipo y calendario»*. Es la fuente menos problemática de las tres, y la única del grupo que se
-puede pedir hoy sin abrir un tema legal.
+### Esto reabre la bandeja, y de forma legítima
 
-→ **Salida:** si Jira es bandeja de entrada, backlog o las dos, y si sirve para filtrar por ámbito.
+La bandeja de acciones se excluyó por un motivo escrito: *«requiere que alguien mantenga estado y
+bloqueadores, y en este alcance no hay backoffice»*. **Si los items vienen de Jira, el backoffice
+es Jira** — nadie mantiene nada de nuestro lado. El motivo de la exclusión desaparece.
+
+Y de paso contesta la pregunta de qué ve el eMerchant al abrirlo: alertas + lo que tiene pendiente
++ sus KPIs ya es una razón para abrirlo cada mañana, sin construir backoffice.
+
+### Pero hay una raya que conviene decidir hoy
+
+- **Leer** los items de Jira y mostrarlos → informa. No rompe nada de lo firmado.
+- **Escribir** el check de completado de vuelta a Jira → la propuesta dice que el cockpit *«no
+  ejecuta nada en los sistemas de origen»*. Es una excepción, pequeña pero excepción.
+
+Y escribir no es gratis por lo técnico, sino por la identidad: para que el ticket lo cierre **la
+persona** y no un `cockpit-bot`, hace falta autenticación por usuario. Conviene decidirlo con eso
+sobre la mesa, no después.
+
+→ **Salida:** qué es un action item, si se lee o también se escribe, y si sirve para filtrar por ámbito.
 → **Acción:** pedir lectura de un tablero y una exportación de ~50 tickets para ver la forma real.
 
 ## 4 · Con quién hay que hablar
