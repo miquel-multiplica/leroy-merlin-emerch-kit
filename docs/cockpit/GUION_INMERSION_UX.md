@@ -1,129 +1,118 @@
-# Cockpit — guion de inmersión (lado UX)
+# Cockpit — guion de la inmersión
 
-> **Qué es esto.** El guion de las sesiones con el Responsable de eMerchandising. La propuesta ya
-> dice **qué hay que acordar** —familias, fuentes, KPIs, alertas, dueños—; esto es **lo que hay
-> que descubrir antes** para poder acordarlo bien.
+> **Qué es esto.** El material de las sesiones de inmersión. La propuesta ya dice **qué hay que
+> acordar** —familias, fuentes, KPIs, alertas, dueños—; esto es **lo que hay que descubrir antes**
+> para poder acordarlo bien.
 >
-> No es un cuestionario a recitar. Son las preguntas que abren; el trabajo está en lo que venga
-> después de cada una.
+> Va en dos partes, y no son el mismo día:
+> **(1)** la sesión con stakeholders, que es la de hoy, y
+> **(2)** las sesiones con los eMerchants, que son las siguientes.
 >
-> Escrito el 2026-10-07, para la primera sesión.
+> Escrito el 2026-10-07.
 
 ---
 
-## Cómo conducirlo
+# Parte 1 · Sesión con stakeholders
 
-**Preguntar por la semana pasada, no por el día típico.** El día típico es una construcción: sale
-ordenado, completo y falso. El lunes pasado sale desordenado y verdadero.
-
-**No enseñar el demo al principio.** Existe, lo conocen y ancla todo: a partir de ahí solo
-hablarán de lo que ya vieron. Si hay que enseñarlo, al final, y como pregunta: *«¿qué de esto no
-usarías?»*.
-
-**No preguntar qué quieren.** Preguntar qué hacen, qué miran, qué preguntan y qué les falló. Lo
-que quieren es un resumen de lo que creen que se puede pedir.
-
-**Perseguir el ejemplo concreto.** Cuando digan «siempre miro el CV», la pregunta siguiente es
-*«¿cuándo fue la última vez y qué hiciste después?»*. Si no hay última vez, no lo miran.
-
----
-
----
-
-# Agenda de la primera sesión (7 de octubre)
-
-Cinco bloques. El guion de abajo es para las sesiones **con el eMerchant**; esto es para la
-sesión de arranque, que es otra cosa: poner el alcance sobre la mesa y disparar accesos.
+**Hoy no se entrevista a ningún usuario.** El objetivo es doble: cerrar lo que se pueda del
+alcance, y sobre todo **dejar montadas las sesiones con los eMerchants**, que es lo que
+desbloquea todo lo demás.
 
 ## 1 · Repasar los inputs de la propuesta
 
-Abrir el Word y marcar, pieza por pieza, qué se cierra en la inmersión. Lo que hay que tocar:
+Abrir el documento de formalización y marcar, pieza por pieza, qué se cierra en la inmersión.
 
-- **Los techos están confirmados** (Gera): **3 KPIs máximo, 3 alertas máximo, 1 agente**. Son
-  techos, no objetivos — se puede arrancar con menos y es mejor señal.
+- **Los techos están confirmados:** 3 KPIs máximo, 3 alertas máximo, 1 agente. Son techos, no
+  objetivos — arrancar con menos es mejor señal.
 - **Un KPI son tres cosas: fórmula, dueño y fuente.** Cortarlo por familia o por mes no crea uno
   nuevo; cambiar cualquiera de las tres, sí.
-- **Las fuentes están decididas: BigQuery y guías eMerch.** Lo que falta es **cuántas guías**, y
-  es un entregable de esta fase.
-- **El ámbito** — qué mundo, y cuántas familias tienen guía eMerch **hoy**, con número.
-- **Las dos piezas invisibles** — catálogo de métricas y trazabilidad. Nadie las pide y las dos
+- **Las fuentes están decididas:** BigQuery y guías eMerch. Falta **cuántas guías**, y es un
+  entregable de esta fase.
+- **El ámbito:** qué mundo, y cuántas familias tienen guía eMerch hoy, con número.
+- **Las dos piezas invisibles:** catálogo de métricas y trazabilidad. Nadie las pide y las dos
   tienen trabajo.
-- **Los cinco supuestos** — cuáles están cerrados de verdad. Datos y Negocio recortan alcance;
+- **Los cinco supuestos:** cuáles están cerrados de verdad. Datos y Negocio recortan alcance;
   Seguridad puede parar el proyecto.
 
 → **Salida:** qué se cierra hoy y qué queda para las siguientes sesiones.
 
 ## 2 · Mapear el demo contra el alcance
 
-Pasar cada bloque del demo por la regla de la propuesta —**entra lo que tiene fuente**—, que
-ahora se puede aplicar literal porque las fuentes están decididas:
+Pasar cada bloque del demo por la regla de la propuesta —**entra lo que tiene fuente**—, que ahora
+se puede aplicar literal porque las fuentes están decididas:
 
 > **¿Sale de BigQuery, de una guía eMerch o de Jira? Si no sale de ahí, no entra.**
 
-**Ojo con «Catálogo y familias».** Parece la candidata natural porque se apoya en las guías, pero
-el deck anterior la excluye explícitamente: *«widget de seguimiento de familias: las etapas y el
-avance se mantienen a mano»*. El pipeline por etapas **no tiene fuente**. Lo que sí la tiene de
-esa pestaña son GV Quality y ATT, que vienen de analítica.
+**Aviso sobre «Catálogo y familias».** Parece la candidata natural porque se apoya en las guías,
+pero el pipeline por etapas —paso 3 de 6, bloqueador, próxima acción— **no tiene fuente**: se
+mantendría a mano. De esa pestaña solo tienen fuente GV Quality y ATT, que vienen de analítica.
 
 → **Salida:** el demo anotado, y la lista de lo que parecía entrar y no entra.
 
-## 3 · Los Action Items de Jira
+## 3 · Los Action Items de Jira — lo que un stakeholder sí puede contestar
 
-Lo pidió Fernando y quedó para revisarse aquí. **La complejidad no está en la integración, está en
-qué quieren hacer con ellos** — así que las preguntas van por ahí, no por lo técnico:
+Lo pidió Fernando y quedó para revisarse aquí. La complejidad no está en la integración, está en
+qué se quiere hacer con ellos. Hoy, la parte que no necesita al usuario:
 
-- **¿Qué es un «action item»?** ¿Cualquier ticket suyo, o un subconjunto con alguna marca?
-- ¿Quién los crea y quién los cierra hoy? ¿Los abre él o se los abren?
-- ¿Vive en Jira o lo evita? Si lo evita, ¿por dónde se entera de lo que tiene que hacer?
-- Cuando abres un pendiente, **¿qué necesitas tener delante para decidir si lo haces ahora?**
-- ¿Cuáles de tus pendientes tienen que ver con un número que miras?
-- **¿Qué pendiente se te queda parado porque te falta un dato?** — ese es el caso que el cockpit
-  resuelve y Jira no puede: el item junto al KPI que lo motiva y la alerta que lo disparó.
-- ¿Hay campo de mundo o de familia, para poder filtrar su ámbito?
-- Lo que pida y no exista, ¿se anota también ahí? Por contrato hay que registrarlo.
+- **¿Qué es un «action item»?** ¿Cualquier ticket, o un subconjunto con alguna marca?
+- ¿Qué proyectos y tableros? ¿Hay campo de mundo o de familia para poder filtrar el ámbito?
+- ¿Quién los crea? ¿Los abre el eMerchant o se los abren?
+- ¿Quién puede dar acceso de lectura, y cuándo?
 
 ### Esto reabre la bandeja, y de forma legítima
 
 La bandeja de acciones se excluyó por un motivo escrito: *«requiere que alguien mantenga estado y
 bloqueadores, y en este alcance no hay backoffice»*. **Si los items vienen de Jira, el backoffice
-es Jira** — nadie mantiene nada de nuestro lado. El motivo de la exclusión desaparece.
+es Jira** — nadie mantiene nada de nuestro lado, y el motivo de la exclusión desaparece.
 
-Y de paso contesta la pregunta de qué ve el eMerchant al abrirlo: alertas + lo que tiene pendiente
-+ sus KPIs ya es una razón para abrirlo cada mañana, sin construir backoffice.
+Y de paso contesta qué ve el eMerchant al abrirlo: alertas + lo que tiene pendiente + sus KPIs ya
+es una razón para abrirlo cada mañana, sin construir backoffice.
 
-### Pero hay una raya que conviene decidir hoy
+### Una raya que conviene decidir
 
-- **Leer** los items de Jira y mostrarlos → informa. No rompe nada de lo firmado.
+- **Leer** los items y mostrarlos → informa. No rompe nada de lo firmado.
 - **Escribir** el check de completado de vuelta a Jira → la propuesta dice que el cockpit *«no
   ejecuta nada en los sistemas de origen»*. Es una excepción, pequeña pero excepción.
 
-Y escribir no es gratis por lo técnico, sino por la identidad: para que el ticket lo cierre **la
-persona** y no un `cockpit-bot`, hace falta autenticación por usuario. Conviene decidirlo con eso
-sobre la mesa, no después.
+Escribir no es caro por lo técnico sino por la identidad: para que el ticket lo cierre **la
+persona** y no un bot, hace falta autenticación por usuario.
 
-→ **Salida:** qué es un action item, si se lee o también se escribe, y si sirve para filtrar por ámbito.
 → **Acción:** pedir lectura de un tablero y una exportación de ~50 tickets para ver la forma real.
 
-## 4 · Con quién hay que hablar
+## 4 · Montar las sesiones con los eMerchants
 
-Cerrar **nombres y fechas hoy**, no «ya lo vemos»:
+**El bloque más importante de hoy.** Sin fechas no hay inmersión, y es lo único que depende
+enteramente de ellos.
+
+- **¿A cuántos entrevistamos?** Con uno no hay contraste; a partir de tres se repite. Dos o tres.
+- **¿A quiénes?** Pedir explícitamente que no sean solo los entusiastas. Alguien que use poco las
+  herramientas de hoy cuenta más que quien ya las domina.
+- **Individuales, no en grupo.** En grupo el de más peso marca el tono y el resto asiente.
+- **El manager, mejor fuera de la sala.** Cambia lo que la persona cuenta sobre lo que no mira,
+  no entiende o no se cree.
+- **¿Podemos verle trabajar?** Media hora mirando su pantalla vale más que una hora de preguntas.
+  Si cabe, pedirlo.
+- **Formato:** 60 minutos, y si se puede grabar.
+- **Quién hace la presentación.** Que la pida el stakeholder, no nosotros en frío.
+
+Y las figuras que hay que poner nombre hoy:
 
 | Quién | Para qué |
 |---|---|
-| El eMerchant piloto | Necesidades del rol y día a día. Es el guion de abajo. |
-| Su manager | Valida los KPIs y las alertas. |
-| Dueño de cada KPI | Sin esta figura no hay definición acordada. |
-| Responsable de las reglas de alerta | Sin él: umbrales fijos, no alertas con criterio. |
-| Alguien de datos | BigQuery: qué tablas y quién da acceso. |
-| IT / seguridad | Criterios por escrito y proveedor de modelo aprobado. |
-| Quien mantiene las guías eMerch | En qué formato están de verdad. |
+| El eMerchant piloto (2-3) | Necesidades del rol y día a día |
+| Su manager | Valida los KPIs y las alertas |
+| Dueño de cada KPI | Sin esta figura no hay definición acordada |
+| Responsable de las reglas de alerta | Sin él: umbrales fijos, no alertas con criterio |
+| Alguien de datos | BigQuery: qué tablas y quién da acceso |
+| IT / seguridad | Criterios por escrito y proveedor de modelo aprobado |
+| Quien mantiene las guías eMerch | En qué formato están de verdad |
 
-→ **Salida:** calendario de las siguientes sesiones.
+→ **Salida:** calendario de las siguientes sesiones, con nombres y fechas.
 
 ## 5 · Qué datos existen y cómo se disponibilizan
 
 Por cada KPI candidato: **tabla, quién da el acceso, cada cuánto se actualiza**. Y lo mismo para
-la guía eMerch (formato real, no el que suponemos) y para Jira.
+la guía eMerch —formato real, no el que suponemos— y para Jira.
 
 → **Salida:** mapa de fuentes con responsable y fecha de acceso por cada una.
 
@@ -132,26 +121,53 @@ la guía eMerch (formato real, no el que suponemos) y para Jira.
 1. **Pedir los accesos** — BigQuery con datos reales, un tablero de Jira, las guías. Son las que
    tienen plazo de otro, no nuestro.
 2. **Pedir los criterios de IT por escrito** y el proveedor de modelo aprobado.
-3. **Poner nombre** al dueño de KPI y al responsable de alertas.
+3. **Poner nombre** al dueño de KPI y al responsable de las reglas de alerta.
+
+## Qué hay que salir sabiendo hoy
+
+- [ ] **Fechas y nombres** de las sesiones con los eMerchants.
+- [ ] **Cuántas guías eMerch** hay y de qué familias, con lista.
+- [ ] **Qué es un action item**, y si se lee o también se escribe.
+- [ ] **Quién da cada acceso**, y cuándo.
+- [ ] **Dueño de KPI y responsable de alertas**, con nombre.
+- [ ] El demo anotado: qué entra, qué no y qué no se sabe.
 
 ---
 
-# Guion de las sesiones con el eMerchant
+# Parte 2 · Sesiones con el eMerchant
 
-## 0 · Encuadre (2 minutos)
+**No es la sesión de hoy.** Esto se usa cuando las sesiones que se monten en el bloque 4 tengan
+fecha.
+
+## Cómo conducirlas
+
+**Preguntar por la semana pasada, no por el día típico.** El día típico es una construcción: sale
+ordenado, completo y falso. El lunes pasado sale desordenado y verdadero.
+
+**No enseñar el demo al principio.** Existe, lo conocen y ancla todo: a partir de ahí solo
+hablarán de lo que ya vieron. Si hay que enseñarlo, al final y como pregunta: *«¿qué de esto no
+usarías?»*.
+
+**No preguntar qué quieren.** Preguntar qué hacen, qué miran, qué preguntan y qué les falló. Lo
+que quieren es un resumen de lo que creen que se puede pedir.
+
+**Perseguir el ejemplo concreto.** Cuando digan «siempre miro el CV», la siguiente es *«¿cuándo
+fue la última vez y qué hiciste después?»*. Si no hay última vez, no lo miran.
+
+## Encuadre (2 minutos)
 
 No venimos a enseñar nada ni a validar una idea. Venimos a entender el puesto. Nada de lo que se
 diga aquí compromete a que esté en la herramienta.
 
-## 1 · El puesto y el día
+## El puesto y el día
 
 - Cuéntame el lunes pasado. ¿Qué hiciste, por orden?
 - ¿Qué fue lo primero que abriste al sentarte? ¿Y después?
 - De una semana tuya, ¿cuánto es mirar cómo van las cosas y cuánto es hacer cosas?
 - ¿Qué te interrumpe? ¿Quién te escribe y para qué?
-- ¿Qué parte de tu trabajo crees que nadie de fuera entiende?
+- ¿Cuánto tiempo pasas al día buscando un dato que sabes que existe?
 
-## 2 · Qué mira de verdad  → *los 3 KPIs*
+## Qué mira de verdad  → *los 3 KPIs*
 
 - ¿Qué herramientas abriste la semana pasada? ¿Cuántas veces cada una?
 - Si solo pudieras ver **un número** cada mañana, ¿cuál?
@@ -159,77 +175,63 @@ diga aquí compromete a que esté en la herramienta.
 - ¿Qué número has mirado este mes que te haya hecho **cambiar algo**? ¿Qué cambiaste?
 - ¿Cuál de los indicadores de tu ficha no miras nunca? ¿Por qué?
 - Cuando ves un número que no te gusta, ¿qué es lo siguiente que haces?
-- ¿Cada cuánto lo miras? ¿Diario, semanal, cuando te preguntan?
 
-## 3 · De dónde salen y quién los discute  → *fórmula, dueño, fuente*
+## De dónde salen y quién los discute  → *fórmula, dueño, fuente*
 
 - ¿Has visto alguna vez dos cifras distintas del mismo indicador? ¿Qué pasó?
 - Si tu manager te pregunta de dónde sale ese número, ¿a quién preguntas tú?
 - ¿Hay algún número que no te acabes de creer?
 - ¿Quién decide cómo se calcula? ¿Lo has acordado con alguien o viene dado?
-- ¿Alguna vez has tenido que rehacer un cálculo a mano porque la herramienta no lo daba así?
 
-## 4 · Qué se le escapa  → *los 3 tipos de alerta*
+## Qué se le escapa  → *las 3 alertas*
 
 - La última vez que algo se te pasó y lo descubriste tarde: ¿qué fue y cómo te enteraste?
 - ¿Quién te avisa hoy de los problemas? ¿Por qué canal?
 - **¿Qué aviso has recibido este mes que no te servía de nada?**
-- Si mañana a las ocho te llegara un aviso, ¿de qué querría que fuera para que valiera la pena?
+- Si mañana a las ocho te llegara un aviso, ¿de qué querrías que fuera para que valiera la pena?
 - Cuando te avisan de algo, ¿qué necesitas saber para decidir si es grave?
-- ¿Qué tendría que pasar para que dejaras de hacer caso a los avisos?
 
-## 5 · Qué pregunta y a quién  → *el agente*
+## Qué pregunta y a quién  → *el agente*
 
 - ¿Qué le has preguntado esta semana a alguien del equipo?
 - ¿Qué te preguntan a ti? ¿Siempre lo mismo?
 - ¿Qué buscas en la guía eMerch? ¿Cuánto tardas en encontrarlo?
-- ¿Hay algo que preguntas siempre y siempre te cuesta?
 - Si pudieras preguntarle a algo que supiera de tu mundo, ¿qué le preguntarías primero?
 - **¿Qué respuesta te haría desconfiar?** ¿Qué necesitarías ver para fiarte?
 - ¿Y si te dijera «no lo sé»? ¿Mejor o peor que inventarse algo?
 
-## 6 · El sitio en su rutina  → *qué ve al abrir el cockpit*
+## Sus pendientes  → *los action items*
 
-Esta parte alimenta la pregunta que tenemos abierta: si no hay bandeja de tareas, qué hace que
-alguien abra esto por su cuenta.
+- ¿Dónde está lo que tienes que hacer? ¿Lo llevas tú o te lo llevan?
+- Cuando abres un pendiente, **¿qué necesitas tener delante para decidir si lo haces ahora?**
+- ¿Cuáles de tus pendientes tienen que ver con un número que miras?
+- **¿Qué pendiente se te queda parado porque te falta un dato?**
+- Lo que pides y no existe, ¿dónde acaba?
+
+## El sitio en su rutina  → *qué ve al abrir el cockpit*
 
 - ¿Qué abres cada mañana sin que nadie te lo pida? ¿Por qué justo eso?
 - ¿Qué tendría que tener algo para que lo abrieras tú solo, no porque te lo manden?
-- **Si esto existiera y no tuviera una lista de tareas, ¿para qué lo abrirías?**
-- ¿En qué momento del día lo usarías? ¿Desde el escritorio, en una reunión, de camino?
+- ¿En qué momento del día lo usarías? ¿Desde el escritorio, en una reunión?
 - ¿Lo usarías delante de otra persona? ¿De quién?
 
-## 7 · Su ámbito  → *qué mundo y qué familias*
+## Su ámbito  → *qué mundo y qué familias*
 
 - ¿De qué familias respondes? ¿Cuáles te quitan más tiempo?
 - ¿Cuáles tienen guía eMerch hoy?
 - ¿Trabajas solo sobre tu mundo, o te comparan con otros?
-- ¿Hay alguna familia que mirarías cada día si pudieras?
 
-## 8 · Cierre
+## Cierre
 
 - **Si dentro de tres meses esto existiera y funcionara, ¿qué habrías dejado de hacer?**
 - ¿Qué te haría no volver a abrirlo?
 - ¿A quién más deberíamos preguntar?
 
----
-
-## Qué hay que salir sabiendo
-
-Al cerrar las sesiones tenemos que poder escribir, sin inventar:
+## Qué hay que salir sabiendo de estas sesiones
 
 - [ ] **Tres candidatos a KPI**, cada uno con quién responde de su definición y de qué fuente sale.
-- [ ] **Qué número mira cada día** y cuál mira solo porque se lo piden — no es lo mismo y no deben
-      pesar igual.
+- [ ] **Qué número mira cada día** y cuál mira solo porque se lo piden — no deben pesar igual.
 - [ ] **Tres situaciones reales** que merecerían aviso, contadas como ocurrieron.
-- [ ] **Las cinco preguntas que más repite**, que es lo primero que el agente tiene que saber responder.
+- [ ] **Las cinco preguntas que más repite**, que es lo primero que el agente tiene que responder.
 - [ ] **Qué le haría abrirlo por su cuenta**, sin lista de tareas.
-- [ ] **Qué familias de su ámbito tienen guía** hoy, con número.
-- [ ] **Lo que pidió y hoy no existe** — por contrato esto se registra: es la base de la fase siguiente.
-
-## Lo que no haría en estas sesiones
-
-- Enseñar el demo al principio.
-- Preguntar «¿qué KPIs quieres?» — la respuesta será la lista de su ficha, que ya tenemos.
-- Prometer. Todo lo que se diga aquí entra solo si tiene fuente.
-- Cerrar el ámbito en la primera sesión. Hay más de una; la primera es para entender.
+- [ ] **Lo que pidió y hoy no existe** — por contrato se registra: es la base de la fase siguiente.
