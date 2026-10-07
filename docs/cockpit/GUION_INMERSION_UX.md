@@ -28,6 +28,91 @@ que quieren es un resumen de lo que creen que se puede pedir.
 
 ---
 
+---
+
+# Agenda de la primera sesión (7 de octubre)
+
+Cinco bloques. El guion de abajo es para las sesiones **con el eMerchant**; esto es para la
+sesión de arranque, que es otra cosa: poner el alcance sobre la mesa y disparar accesos.
+
+## 1 · Repasar los inputs de la propuesta
+
+Abrir el Word y marcar, pieza por pieza, qué se cierra en la inmersión. Lo que hay que tocar:
+
+- **«3 KPIs»** — ¿tres definiciones con sus cortes, o tres números? (Un corte es la misma fórmula
+  con otro filtro; si cambia la fórmula, el dueño o la fuente, es un KPI nuevo.)
+- **«3 tipos de alerta»** — ¿tres reglas distintas o tres niveles de una?
+- **El ámbito** — qué mundo, y cuántas familias tienen guía eMerch **hoy**, con número.
+- **Las dos piezas invisibles** — catálogo de métricas y trazabilidad. Nadie las pide y las dos
+  tienen trabajo.
+- **Los cinco supuestos** — cuáles están cerrados de verdad. Datos y Negocio recortan alcance;
+  Seguridad puede parar el proyecto.
+
+→ **Salida:** qué se cierra hoy y qué queda para las siguientes sesiones.
+
+## 2 · Mapear el demo contra el alcance
+
+Pasar cada bloque del demo por la regla de la propuesta —**entra lo que tiene fuente**— y
+marcarlo: entra / no entra / no se sabe.
+
+**Ojo con «Catálogo y familias».** Parece la candidata natural porque se apoya en las guías, pero
+el deck anterior la excluye explícitamente: *«widget de seguimiento de familias: las etapas y el
+avance se mantienen a mano»*. El pipeline por etapas **no tiene fuente**. Lo que sí la tiene de
+esa pestaña son GV Quality y ATT, que vienen de analítica.
+
+→ **Salida:** el demo anotado, y la lista de lo que parecía entrar y no entra.
+
+## 3 · Cómo entran las cosas: Jira y las fuentes del día a día
+
+El bloque que más nos falta entender. Qué preguntar:
+
+- ¿Qué le llega al eMerchant por Jira y qué no? ¿Quién abre los tickets?
+- ¿Los lee, o se entera por otro lado y el ticket es el registro a posteriori?
+- ¿Qué tableros y proyectos? ¿Hay campo de mundo o de familia para poder filtrar su ámbito?
+- Lo que se pide y hoy no existe, **¿dónde se anota?** Por contrato hay que registrarlo.
+
+**Por qué Jira y no otra cosa:** el deck lo pone como *«rastro del colaborador»* junto a correo y
+Drive, pero en la mitigación legal dice que si no hay base legal *«arrancamos solo con Jira, Drive
+de equipo y calendario»*. Es la fuente menos problemática de las tres, y la única del grupo que se
+puede pedir hoy sin abrir un tema legal.
+
+→ **Salida:** si Jira es bandeja de entrada, backlog o las dos, y si sirve para filtrar por ámbito.
+→ **Acción:** pedir lectura de un tablero y una exportación de ~50 tickets para ver la forma real.
+
+## 4 · Con quién hay que hablar
+
+Cerrar **nombres y fechas hoy**, no «ya lo vemos»:
+
+| Quién | Para qué |
+|---|---|
+| El eMerchant piloto | Necesidades del rol y día a día. Es el guion de abajo. |
+| Su manager | Valida los KPIs y las alertas. |
+| Dueño de cada KPI | Sin esta figura no hay definición acordada. |
+| Responsable de las reglas de alerta | Sin él: umbrales fijos, no alertas con criterio. |
+| Alguien de datos | BigQuery: qué tablas y quién da acceso. |
+| IT / seguridad | Criterios por escrito y proveedor de modelo aprobado. |
+| Quien mantiene las guías eMerch | En qué formato están de verdad. |
+
+→ **Salida:** calendario de las siguientes sesiones.
+
+## 5 · Qué datos existen y cómo se disponibilizan
+
+Por cada KPI candidato: **tabla, quién da el acceso, cada cuánto se actualiza**. Y lo mismo para
+la guía eMerch (formato real, no el que suponemos) y para Jira.
+
+→ **Salida:** mapa de fuentes con responsable y fecha de acceso por cada una.
+
+## Las tres cosas que conviene disparar hoy
+
+1. **Pedir los accesos** — BigQuery con datos reales, un tablero de Jira, las guías. Son las que
+   tienen plazo de otro, no nuestro.
+2. **Pedir los criterios de IT por escrito** y el proveedor de modelo aprobado.
+3. **Poner nombre** al dueño de KPI y al responsable de alertas.
+
+---
+
+# Guion de las sesiones con el eMerchant
+
 ## 0 · Encuadre (2 minutos)
 
 No venimos a enseñar nada ni a validar una idea. Venimos a entender el puesto. Nada de lo que se
