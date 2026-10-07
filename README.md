@@ -1,6 +1,6 @@
 # Leroy Merlin — eMerch Toolkit
 
-Repositorio de trabajo del **eMerch Toolkit**: prototipos (wireframes) y documentación de producto de sus módulos. Hoy cubre **Descripciones** (generación masiva de descripciones) y **Validaciones** (auditor de calidad de producto), sobre la base del sistema de **Guías de Estilo**.
+Repositorio de trabajo del **eMerch Toolkit**: prototipos (wireframes) y documentación de producto de sus módulos. Hoy cubre **Descripciones** (generación masiva de descripciones), **Validaciones** (auditor de calidad de producto) y **Cockpit** (el tablero del Responsable de eMerchandising, con agente), sobre la base del sistema de **Guías de Estilo**.
 
 ## Wireframes (prototipos)
 
@@ -26,6 +26,11 @@ Se abren directamente en el navegador. Se sirven además vía GitHub Pages:
 - [docs/descripciones/PROPUESTA_RECORTES_DESCRIPCIONES.md](docs/descripciones/PROPUESTA_RECORTES_DESCRIPCIONES.md) — análisis de recortes (sin decisiones tomadas).
 - [docs/descripciones/ESTADO_MODULO_DESCRIPCIONES.md](docs/descripciones/ESTADO_MODULO_DESCRIPCIONES.md) — estado del trabajo / contexto entre sesiones.
 - [openspec/specs/descripciones/spec.md](openspec/specs/descripciones/spec.md) — especificación en formato OpenSpec.
+
+### Cockpit
+- [docs/cockpit/PROPUESTA_COCKPIT.md](docs/cockpit/PROPUESTA_COCKPIT.md) — el alcance firmado; manda sobre cualquier otro material.
+- [docs/cockpit/context/](docs/cockpit/context/) — contexto funcional (producto, roles, reglas, datos, flujos, specs).
+- [docs/cockpit/ESTADO_MODULO_COCKPIT.md](docs/cockpit/ESTADO_MODULO_COCKPIT.md) — estado y preguntas abiertas (contexto entre sesiones).
 
 ### Validaciones
 - [docs/validaciones/ANALISIS_VALIDACIONES.md](docs/validaciones/ANALISIS_VALIDACIONES.md) — análisis consolidado del módulo (auditor de calidad).
