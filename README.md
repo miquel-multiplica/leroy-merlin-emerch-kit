@@ -30,6 +30,7 @@ Se abren directamente en el navegador. Se sirven además vía GitHub Pages:
 ### Cockpit
 - [docs/cockpit/PROPUESTA_COCKPIT.md](docs/cockpit/PROPUESTA_COCKPIT.md) — el alcance firmado; manda sobre cualquier otro material.
 - [docs/cockpit/context/](docs/cockpit/context/) — contexto funcional (producto, roles, reglas, datos, flujos, specs).
+- [docs/cockpit/GUION_INMERSION_UX.md](docs/cockpit/GUION_INMERSION_UX.md) — guion de las sesiones de inmersión (lado UX).
 - [docs/cockpit/ESTADO_MODULO_COCKPIT.md](docs/cockpit/ESTADO_MODULO_COCKPIT.md) — estado y preguntas abiertas (contexto entre sesiones).
 
 ### Validaciones
