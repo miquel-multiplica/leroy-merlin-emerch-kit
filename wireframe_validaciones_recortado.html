@@ -889,10 +889,10 @@
     { id:4, perimetro:'Proveedor · Roca', tipo:'Vendor', refs:8940, hs:77, tend:0, alertas:5900, fecha:'Hace 5 días', creador:'Ana García', estado:'revisado' },
     { id:5, perimetro:'Seller · LuzHogar', tipo:'Vendor', refs:2150, hs:58, tend:1, alertas:1419, fecha:'Hace 1 día', creador:'Miquel Soler', estado:'por-revisar' },
     { id:6, perimetro:'Gama · M', tipo:'Gama', refs:28470, hs:85, tend:1, alertas:18790, fecha:'Hace 10 días', creador:'Laura Pons', estado:'revisado' },
-    { id:7, perimetro:'Gama · Suelos y pavimentos', tipo:'Gama', refs:1540, hs:49, tend:-1, alertas:1016, fecha:'Hace 4 min', creador:'Ana García', estado:'en-curso', prog:18 },
-    { id:8, perimetro:'Gama · Iluminación LED', tipo:'Gama', refs:1830, hs:63, tend:-1, alertas:0, fecha:'Hace 20 min', creador:'Miquel Soler', estado:'error' },
+    { id:7, perimetro:'Gama · B', tipo:'Gama', refs:1540, hs:49, tend:-1, alertas:1016, fecha:'Hace 4 min', creador:'Ana García', estado:'en-curso', prog:18 },
+    { id:8, perimetro:'Gama · C', tipo:'Gama', refs:1830, hs:63, tend:-1, alertas:0, fecha:'Hace 20 min', creador:'Miquel Soler', estado:'error' },
     { id:9, perimetro:'Listado · Campaña primavera jardín', tipo:'Listado', refs:318, hs:73, tend:1, alertas:196, fecha:'Hace 6 h', creador:'Laura Pons', estado:'por-revisar' },
-    { id:10, perimetro:'Gama · Baño', tipo:'Gama', refs:2240, hs:70, tend:1, alertas:1480, fecha:'Hace 2 días', creador:'Ana García', estado:'revisado' }
+    { id:10, perimetro:'Gama · D', tipo:'Gama', refs:2240, hs:70, tend:1, alertas:1480, fecha:'Hace 2 días', creador:'Ana García', estado:'revisado' }
   ];
   var _audCounter=100;
   var _vTab='todo';
@@ -914,7 +914,7 @@
   function vAudRelanzar(id){ closeAudMenus(); var a=_audits.filter(function(x){return x.id===id;})[0]; if(a){ a.estado='en-curso'; a.prog=0; a.fecha='Ahora'; } renderAudits(); openInforme(id); }
 
   /* ═════════ INFORME ═════════ */
-  var _infId=null, _infFindings=[], _fpPending=null, _infFOwner='', _infFSeller='', _infFSev='', _infFTipo='', _infFPp='', _infFSearch='', _infDistOpen=false, _infImpOpen=false, _infTab=null, _infPage=1, _infSort='sev', _infFpView=false, _infFSeccion='';
+  var _infId=null, _infFindings=[], _fpPending=null, _infFOwner='', _infFSeller='', _infFSev='', _infFTipo='', _infFPp='', _infFGama='', _infFSearch='', _infDistOpen=false, _infImpOpen=false, _infTab=null, _infPage=1, _infSort='sev', _infFpView=false, _infFSeccion='';
   var _INF_SAMPLE=[
     { id:1, ref:'18570749', desig:'Puerta de entrada acorazada blanca 120 cm', modelo:'MOD_202512', guia:'Puertas de entrada', seccion:'Carpintería', emoji:'📐', tipo:'Discrepancia de dimensiones', ubic:'designación ↔ ficha técnica', diag:'Designación "120 cm" · atributo Altura "100 cm"', accion:'Unificar la medida (revisar cuál es correcta)', owner:'TIP', pp:'1P', seller:'Simon', sev:'critica' },
     { id:2, ref:'18800786', desig:'Juego de destornilladores 6 piezas gris', modelo:'MOD_200485', guia:'Herramienta de mano', seccion:'Herramientas', emoji:'🎨', tipo:'Discrepancia de color', ubic:'designación ↔ descripción', diag:'Designación "crudo" · descripción "blanco"', accion:'Unificar el color en ambos', owner:'TIP', pp:'1P', seller:'Roca', sev:'critica' },
@@ -992,7 +992,7 @@
   function ppTag(pp){ return '<span class="v-tag" style="background:'+(pp==='1P'?'var(--success-bg)':'var(--bg-parchment)')+';color:'+(pp==='1P'?'var(--green)':'var(--text-muted)')+';">'+pp+'</span>'; }
   function statCard(label, valueHtml, sub){ return '<div style="flex:1; min-width:150px; border:1px solid var(--border-card); border-radius:10px; padding:14px 16px; background:#fff;"><div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">'+label+'</div><div style="font-size:22px; font-weight:700; color:var(--text-ink); line-height:1.1;">'+valueHtml+'</div>'+(sub?'<div style="font-size:11px; color:var(--text-muted); margin-top:5px;">'+sub+'</div>':'')+'</div>'; }
   function openInforme(id){ var a=_audits.filter(function(x){return x.id===id;})[0]; if(!a) return;
-    _infId=id; _infFOwner=''; _infFSeller=''; _infFSev=''; _infFTipo=''; _infFPp=''; _infFSeccion=''; _infFSearch=''; _infSort='sev'; _infFpView=false; _infPage=1; _infFindings=[]; var _idc=0; var _pushF=function(o,pin){ var c=_fpClone(o); c.id=++_idc; c.pin=pin||0; if(!c.desig) c.desig=_desigFor(c.guia,c.ref); _infFindings.push(c); }; FP_HEROES.forEach(function(h,hx){ _pushF(h,hx+1); }); for(var _tp in FP_CFG){ if(!FP_CFG[_tp].bulk) continue; var _cfg=FP_CFG[_tp], _tpl=FP_TPL[_tp]; var _have=0; for(var _q=0;_q<_infFindings.length;_q++){ if(_infFindings[_q].tipo===_tp)_have++; } for(var _j=_have;_j<_cfg.count;_j++){ var _md=_cfg.modelos[_j % _cfg.modelos.length]; var _o=_fpClone(_tpl); _o.familia=_cfg.familia; _o.guia=_md.name; _o.modelo=_md.code; _o.seller=(_cfg.sellers?_cfg.sellers[Math.floor(_j/_cfg.modelos.length)%_cfg.sellers.length]:_o.seller); _o.ref=String(_md.refBase+100+_j); _pushF(_o,0); } } var _fill=_INF_SAMPLE.filter(function(t){return !FP_CFG.hasOwnProperty(t.tipo);}); var _target=Math.max(_infFindings.length+24, a.alertas||0); var _fi=0; while(_infFindings.length<_target){ var _t2=_fill[_fi%_fill.length]; var _o2=_fpClone(_t2); _o2.familia=(FAMILIA_OF[_o2.guia]||_o2.seccion||'—'); _o2.ref=String(30000000+_infFindings.length); _o2.modelo='MOD_F'+(1000+_infFindings.length); _pushF(_o2,0); _fi++; } _applyPerimetro();
+    _infId=id; _infFOwner=''; _infFSeller=''; _infFSev=''; _infFTipo=''; _infFPp=''; _infFSeccion=''; _infFSearch=''; _infSort='sev'; _infFpView=false; _infPage=1; _infFindings=[]; var _idc=0; var _pushF=function(o,pin){ var c=_fpClone(o); c.id=++_idc; c.pin=pin||0; if(!c.desig) c.desig=_desigFor(c.guia,c.ref); if(!c.gama) c.gama=gamaDeRef(c.ref); _infFindings.push(c); }; FP_HEROES.forEach(function(h,hx){ _pushF(h,hx+1); }); for(var _tp in FP_CFG){ if(!FP_CFG[_tp].bulk) continue; var _cfg=FP_CFG[_tp], _tpl=FP_TPL[_tp]; var _have=0; for(var _q=0;_q<_infFindings.length;_q++){ if(_infFindings[_q].tipo===_tp)_have++; } for(var _j=_have;_j<_cfg.count;_j++){ var _md=_cfg.modelos[_j % _cfg.modelos.length]; var _o=_fpClone(_tpl); _o.familia=_cfg.familia; _o.guia=_md.name; _o.modelo=_md.code; _o.seller=(_cfg.sellers?_cfg.sellers[Math.floor(_j/_cfg.modelos.length)%_cfg.sellers.length]:_o.seller); _o.ref=String(_md.refBase+100+_j); _pushF(_o,0); } } var _fill=_INF_SAMPLE.filter(function(t){return !FP_CFG.hasOwnProperty(t.tipo);}); var _target=Math.max(_infFindings.length+24, a.alertas||0); var _fi=0; while(_infFindings.length<_target){ var _t2=_fill[_fi%_fill.length]; var _o2=_fpClone(_t2); _o2.familia=(FAMILIA_OF[_o2.guia]||_o2.seccion||'—'); _o2.ref=String(30000000+_infFindings.length); _o2.modelo='MOD_F'+(1000+_infFindings.length); _pushF(_o2,0); _fi++; } _applyPerimetro();
     var _pp=a.perimetro.split('·'); var nombre=_pp.slice(1).join('·').trim()||a.perimetro; var _pcode=(a.tipo==='Modelo'&&_pp.length>1)?_pp[0].trim():'';
     document.getElementById('v-inf-title').innerHTML='<span style="font-variant-numeric:tabular-nums;">'+audCode(a)+'</span>';
     var _crumb=document.getElementById('v-inf-crumb'); if(_crumb) _crumb.textContent=a.perimetro;
@@ -1041,10 +1041,17 @@
   function distCol(inner){ return '<div style="flex:1; min-width:260px;">'+inner+'</div>'; }
   function fselG(varName,val,groups,ph){ var o='<option value="">'+ph+'</option>'+groups.map(function(g){return '<optgroup label="'+g[0]+'">'+g[1].map(function(t){return '<option value="'+t.replace(/"/g,'&quot;')+'"'+(val===t?' selected':'')+'>'+t+'</option>';}).join('')+'</optgroup>';}).join(''); return '<div style="position:relative;"><select onchange="'+varName+'=this.value; _infPage=1; renderMTabla();" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'+o+'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'; }
   function fsel(varName,val,pairs,ph){ var o='<option value="">'+ph+'</option>'+pairs.map(function(p){return '<option value="'+p[0]+'"'+(val===p[0]?' selected':'')+'>'+p[1]+'</option>';}).join(''); return '<div style="position:relative;"><select onchange="'+varName+'=this.value; _infPage=1; renderMTabla();" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'+o+'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'; }
-  function clearInfFilters(){ _infFSeller=''; _infFOwner=''; _infFSev=''; _infFTipo=''; _infFSeccion=''; _infFPp=''; _infFSearch=''; _infPage=1; renderMatriz(); }
+  function clearInfFilters(){ _infFSeller=''; _infFOwner=''; _infFSev=''; _infFTipo=''; _infFSeccion=''; _infFPp=''; _infFGama=''; _infFSearch=''; _infPage=1; renderMatriz(); }
   function setMatrizTab(v){ var fp=(v==='fp'); if(_infFpView===fp) return; _infFpView=fp; _infPage=1; renderMatriz(); }
   function renderMatriz(){ var host=document.getElementById('v-inf-matriz'); if(!host) return;
-    var tipos=[], sellers=[], secciones=[]; _infFindings.forEach(function(f){ if(tipos.indexOf(f.tipo)===-1) tipos.push(f.tipo); if(f.seller && sellers.indexOf(f.seller)===-1) sellers.push(f.seller); if(f.seccion && secciones.indexOf(f.seccion)===-1) secciones.push(f.seccion); });
+    var tipos=[], sellers=[], secciones=[], gamas=[]; _infFindings.forEach(function(f){ if(tipos.indexOf(f.tipo)===-1) tipos.push(f.tipo); if(f.seller && sellers.indexOf(f.seller)===-1) sellers.push(f.seller); if(f.seccion && secciones.indexOf(f.seccion)===-1) secciones.push(f.seccion); if(f.gama && gamas.indexOf(f.gama)===-1) gamas.push(f.gama); });
+    // Un filtro con una sola opcion no filtra nada: solo ocupa sitio. Se pinta solo
+    // si hay mas de un valor entre los hallazgos —lo que deja fuera la gama cuando
+    // la auditoria ya es de una gama, y el seller cuando es de un proveedor.
+    var fselSi=function(varName,val,pairs,ph){ return pairs.length>1 ? fsel(varName,val,pairs,ph) : ''; };
+    var GORD='M A B C D E S Z T L R P K V'.split(' ');
+    var gamaPairs=gamas.slice().sort(function(a,b){ return GORD.indexOf(a)-GORD.indexOf(b); })
+      .map(function(g){ var d=gamaDesc(g); return [g, d? g+' · '+d : g]; });
     // Pestanas del listado: las cifras son totales de cada pestana, no del filtrado
     // (el filtrado ya lo cuenta el pie: "1-20 de 340 alertas").
     var nFp=_infFindings.filter(function(x){return x.fp;}).length, nCorr=_infFindings.length-nFp;
@@ -1054,12 +1061,13 @@
     var tabsBar='<div style="display:flex;align-items:stretch;gap:4px;padding:0 8px;border-bottom:1px solid var(--border-card);">'+mtab('corr','Correcciones',nCorr)+mtab('fp','Falsos positivos',nFp)+'</div>';
     var clearLink='<button id="v-clearf" onclick="clearInfFilters()" class="v-clearf" style="display:none;align-items:center;margin-left:auto;align-self:center;background:none;border:none;padding:0 2px;height:36px;font-family:\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;white-space:nowrap;">Borrar filtros</button>';
     var filters='<div style="display:flex; gap:10px; flex-wrap:wrap; padding:14px 16px; border-bottom:1px solid var(--border-card);">'
-      +fsel('_infFSeller',_infFSeller,sellers.sort().map(function(s){return [s,s];}),'Seller')
+      +fselSi('_infFSeller',_infFSeller,sellers.sort().map(function(s){return [s,s];}),'Seller')
       +fsel('_infFOwner',_infFOwner,[['TIP','TIP'],['Seller','Seller']],'Owner')
       +fsel('_infFSev',_infFSev,[['bloqueante','Bloqueante'],['critica','Crítica'],['mejora','Leve']],'Severidad')
       +fselG('_infFTipo',_infFTipo,TIPOS_GRUPOS,'Tipo de error')
-      +fsel('_infFSeccion',_infFSeccion,secciones.sort().map(function(s){return [s,s];}),'Sección')
-      +fsel('_infFPp',_infFPp,[['1P','1P'],['3P','3P']],'1P/3P')
+      +fselSi('_infFSeccion',_infFSeccion,secciones.sort().map(function(s){return [s,s];}),'Sección')
+      +fselSi('_infFGama',_infFGama,gamaPairs,'Gama')
+      +fselSi('_infFPp',_infFPp,[['1P','1P'],['3P','3P']],'1P/3P')
       +'<div style="position:relative; flex:0 1 190px; min-width:120px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input value="'+(_infFSearch||'').replace(/"/g,'&quot;')+'" oninput="_infFSearch=this.value; _infPage=1; renderMTabla();" placeholder="Referencia o modelo…" style="width:100%;height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 12px 0 34px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;"/></div>'
       +clearLink+'</div>';
     host.innerHTML='<div style="border:1px solid var(--border-card); border-radius:12px; background:#fff; overflow:hidden;">'+tabsBar+filters+'<div id="v-inf-mtabla"></div></div><div id="v-inf-pager"></div>';
@@ -1070,7 +1078,7 @@
     var FP_DIS='background:#f0f1f2;border:1px solid var(--border-card);border-radius:6px;height:28px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:not-allowed;color:var(--text-disabled);white-space:nowrap;';
     var DIS_T='La auditoría ya está revisada · reábrela para cambiar los falsos positivos';
     var q=(_infFSearch||'').toLowerCase();
-    var list=_infFindings.filter(function(f){ return (_infFpView ? f.fp : !f.fp) && (!_infFSeller||f.seller===_infFSeller) && (!_infFOwner||f.owner===_infFOwner) && (!_infFSev||f.sev===_infFSev) && (!_infFTipo||f.tipo===_infFTipo) && (!_infFSeccion||f.seccion===_infFSeccion) && (!_infFPp||f.pp===_infFPp) && (!q||(f.ref+' '+f.modelo).toLowerCase().indexOf(q)!==-1); });
+    var list=_infFindings.filter(function(f){ return (_infFpView ? f.fp : !f.fp) && (!_infFSeller||f.seller===_infFSeller) && (!_infFOwner||f.owner===_infFOwner) && (!_infFSev||f.sev===_infFSev) && (!_infFTipo||f.tipo===_infFTipo) && (!_infFGama||f.gama===_infFGama) && (!_infFSeccion||f.seccion===_infFSeccion) && (!_infFPp||f.pp===_infFPp) && (!q||(f.ref+' '+f.modelo).toLowerCase().indexOf(q)!==-1); });
     var SRANK={bloqueante:0,critica:1,mejora:2};
     if(_infSort==='sev') list.sort(function(x,y){ return (SRANK[x.sev]-SRANK[y.sev])||(x.ref<y.ref?-1:1); });
     else if(_infSort==='ref') list.sort(function(x,y){ return x.ref<y.ref?-1:(x.ref>y.ref?1:0); });
@@ -1078,7 +1086,7 @@
     else if(_infSort==='owner') list.sort(function(x,y){ return x.owner<y.owner?-1:(x.owner>y.owner?1:0); });
     else if(_infSort==='segmento') list.sort(function(x,y){ return x.pp<y.pp?-1:(x.pp>y.pp?1:0); });
     var _pn=list.filter(function(x){return x.pin;}).sort(function(a,b){return a.pin-b.pin;}),_rs=list.filter(function(x){return !x.pin;}); list=_pn.concat(_rs);
-    var _cf=document.getElementById('v-clearf'); if(_cf) _cf.style.display=(_infFSeller||_infFOwner||_infFSev||_infFTipo||_infFSeccion||_infFPp||(_infFSearch||'').trim())?'inline-flex':'none';
+    var _cf=document.getElementById('v-clearf'); if(_cf) _cf.style.display=(_infFSeller||_infFOwner||_infFSev||_infFTipo||_infFSeccion||_infFGama||_infFPp||(_infFSearch||'').trim())?'inline-flex':'none';
     var _nfp=_infFindings.filter(function(x){return x.fp;}).length; var _tc=document.getElementById('v-tabn-corr'), _tf=document.getElementById('v-tabn-fp'); if(_tc)_tc.textContent=fmtNum(_infFindings.length-_nfp); if(_tf)_tf.textContent=fmtNum(_nfp); var per=20, total=list.length, totalPages=Math.max(1,Math.ceil(total/per));
     if(_infPage>totalPages)_infPage=totalPages; if(_infPage<1)_infPage=1;
     var start=(_infPage-1)*per, end=Math.min(total,start+per), pageRows=list.slice(start,end);
@@ -1243,7 +1251,20 @@
   }
   var _sellerPick=null;
   function audSellerName(a){ if(!a || a.tipo!=='Vendor') return null; var t=(a.perimetro||''); var i=t.indexOf('·'); return (i>=0?t.slice(i+1):t).trim()||null; }
-  function _applyPerimetro(){ var a=_audits.filter(function(x){return x.id===_infId;})[0]; var sn=audSellerName(a); if(!sn) return;
+  // ── Gama ──────────────────────────────────────────────────────────────────
+  // La gama es la clasificacion de implantacion de la referencia: M corazon de
+  // gama, A-D segun el tamano de la tienda, y el resto casos aparte. Se deriva de
+  // la referencia para que la misma salga siempre con la misma gama.
+  var _GAMA_MIX=['M','M','M','M','M','M','M','A','A','A','A','A','B','B','B','C','C','D','E','S'];
+  function gamaDeRef(ref){ var n=0, t=String(ref||''); for(var i=0;i<t.length;i++) n=(n*31+t.charCodeAt(i))>>>0;
+    return _GAMA_MIX[n % _GAMA_MIX.length]; }
+  function gamaDesc(g){ return ({M:'Corazon de gama',A:'Segun tamano de tienda',B:'Segun tamano de tienda',
+    C:'Segun tamano de tienda',D:'Segun tamano de tienda',E:'Muestras',S:'AVS'})[g]||''; }
+
+  function _applyPerimetro(){ var a=_audits.filter(function(x){return x.id===_infId;})[0];
+    if(a && a.tipo==='Gama'){ var g=(a.perimetro.split('·')[1]||'').trim();
+      if(g) _infFindings.forEach(function(f){ f.gama=g; }); }
+    var sn=audSellerName(a); if(!sn) return;
     _infFindings.forEach(function(f){ f.seller=sn; }); }
   var PDF_SEV={bloqueante:{c:'#c0392b',t:'Bloqueante'},critica:{c:'#8e2820',t:'Crítica'},mejora:{c:'#b7791f',t:'Leve'}};
   var PDF_LOGO='<svg viewBox="0 0 570 466" xmlns="http://www.w3.org/2000/svg" fill="none" class="pdf-logo" role="img" aria-label="Leroy Merlin"> <path fill-rule="evenodd" clip-rule="evenodd" d="M61.0161 405.43H509.183L285.098 181.348L61.0161 405.43Z" fill="#78BE20"/> <path fill-rule="evenodd" clip-rule="evenodd" d="M50.6761 395.777L85.4934 361.301L73.772 349.579L52.0542 371.3L12.7558 331.999L0 344.754L50.6761 395.777ZM65.5006 300.284L74.119 308.903L92.0464 290.975L102.734 301.315L84.4624 319.243L95.8368 330.277L117.902 308.212L128.242 318.555L93.0775 353.713L42.0577 302.697L77.222 267.536L87.5654 277.876L65.5006 300.284ZM178.918 267.876L144.444 257.88C148.582 250.296 146.513 239.952 139.62 233.059C132.035 225.475 119.28 225.822 110.658 234.437L84.8028 260.292L135.823 311.315L148.578 298.212L107.215 256.845L115.83 248.571C119.28 244.78 125.486 244.78 128.932 248.571C132.379 252.021 132.379 257.88 128.589 261.673L121.005 269.254L165.131 281.666L178.918 267.876ZM207.532 187.551C200.295 179.97 190.983 175.833 182.021 175.489C172.712 175.489 163.75 178.936 155.819 186.867C139.616 203.069 141.341 224.097 156.166 238.921C163.75 246.505 172.712 250.639 182.021 250.639C190.983 250.986 200.292 247.54 208.22 239.609C224.079 223.406 222.701 202.376 207.532 187.551ZM198.223 229.265C193.399 234.093 187.883 235.124 182.021 233.056C178.231 231.678 174.093 228.921 170.299 224.781C160.303 215.128 157.887 205.132 165.818 197.204C170.643 192.376 176.162 191.345 182.021 193.413C185.811 194.792 189.605 197.548 193.742 201.688C203.395 211.341 206.151 221.337 198.223 229.265ZM223.044 160.318L213.735 131.36L228.563 116.192L241.315 165.49L261.312 185.482L248.212 198.585L228.563 178.592L181.334 163.768L195.467 149.631L222.701 159.974L223.044 160.318ZM459.198 335.792L509.874 284.769L496.421 271.326L445.404 322.346L459.198 335.792ZM263.724 140.665L303.369 121.71L274.411 151.012L286.132 163.077L337.156 112.057L320.95 95.8484L282.342 114.467L301.648 76.5462L285.098 60L234.078 111.02L245.8 122.741L275.102 93.4393L256.14 133.085L263.724 140.665ZM352.324 147.906L343.705 156.524L363.008 176.177L352.667 186.517L333.021 167.215L321.984 178.245L345.777 202.032L335.427 212.372L298.888 175.486L349.911 124.81L386.45 161.352L376.11 171.696L352.324 147.906ZM401.618 278.566L436.095 313.037L447.817 301.315L426.096 279.945L465.397 240.296L452.645 227.543L401.618 278.566ZM538.829 313.728L522.63 367.85L557.787 332.689L569.853 344.754L518.836 395.777L502.977 379.572L516.764 324.071L481.947 358.888L470.222 347.167L521.248 296.147L538.829 313.728ZM391.969 268.91L401.622 234.093C409.209 238.227 419.549 236.509 426.79 229.265C434.027 221.681 434.027 208.925 425.415 200.307L397.835 172.73L346.811 223.75L359.908 236.849L400.931 195.479L410.931 205.475C414.724 209.266 414.724 215.128 411.278 218.578C407.828 222.368 401.618 222.022 398.175 218.578L388.866 209.266L377.835 254.773L391.969 268.91Z" fill="black"/> </svg>';
