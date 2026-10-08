@@ -1998,8 +1998,8 @@
   var _GAMA_MIX=['M','M','M','M','M','M','M','A','A','A','A','A','B','B','B','C','C','D','E','S'];
   function gamaDeRef(ref){ var n=0, t=String(ref||''); for(var i=0;i<t.length;i++) n=(n*31+t.charCodeAt(i))>>>0;
     return _GAMA_MIX[n % _GAMA_MIX.length]; }
-  function gamaDesc(g){ return ({M:'Corazon de gama',A:'Segun tamano de tienda',B:'Segun tamano de tienda',
-    C:'Segun tamano de tienda',D:'Segun tamano de tienda',E:'Muestras',S:'AVS'})[g]||''; }
+  function gamaDesc(g){ return ({M:'Corazón de gama',A:'Según tamaño de tienda',B:'Según tamaño de tienda',
+    C:'Según tamaño de tienda',D:'Según tamaño de tienda',E:'Muestras',S:'AVS'})[g]||''; }
 
   function _applyPerimetro(){ var a=_audits.filter(function(x){return x.id===_infId;})[0];
     // Si la auditoria se lanzo sobre una gama, todas sus referencias son de esa gama.
