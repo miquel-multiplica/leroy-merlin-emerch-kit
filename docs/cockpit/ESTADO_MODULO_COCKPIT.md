@@ -159,6 +159,38 @@ estado y no hay backoffice. Si los items vienen de Jira, **el backoffice es Jira
 Lo que sigue sin saber nadie —ni Pedro, ni Susana, ni Javier— es **de qué tablero y con qué
 filtro**. Es la pregunta para Fernando.
 
+## Ya hay gente montándose sus propios agentes y cockpits
+
+**Lo dijo Fernando en el kickoff del 14 de octubre.** Hay que pedir que nos los enseñen, y es
+probablemente la investigación más barata y más fiable del proyecto.
+
+**Por qué vale tanto:**
+
+- **Es demanda validada, no declarada.** Alguien dedicó su tiempo a construirlo sin que nadie se
+  lo pidiera. Eso dice más que cualquier entrevista.
+- **No tiene sesgo de entrevista.** No es lo que creen que podrían pedir: es lo que ya hacen.
+- **Puede contener la respuesta a *«qué ve el eMerchant al abrir»***, que es la pregunta de
+  producto que llevamos abierta. Lo que pusieron primero en su propio cockpit es la respuesta.
+- **Y la propuesta ya lo pide como criterio de éxito:** *«queda registrado qué pidieron los
+  colaboradores y no existía»*. Esos montajes caseros **son ese registro, ya escrito, antes de
+  empezar el proyecto.**
+
+**Qué pedir, y pedirlo en vivo, no contado:**
+
+- ¿Quién ha montado qué? Con nombres.
+- ¿Con qué herramienta, y qué datos le da de comer?
+- ¿Qué le pregunta de verdad — los prompts que repite cada semana?
+- **¿Qué intentó y abandonó?** Es la mejor de las preguntas: lo que no consiguió marca dónde está
+  la dificultad real.
+
+**Y tiene una lectura de gobierno que conviene no esquivar:** si ya hay agentes caseros leyendo
+datos de la casa, el *«que IT no vea un superagente»* tiene precedentes. Mejor conocerlos que
+descubrirlos.
+
+**Conviene distinguirlo** de los *«tres agentes montados de nueve previstos»* que menciona el
+contexto del deck: aquello es el esfuerzo oficial; esto es gente resolviéndose la vida por su
+cuenta. No es lo mismo y las dos cosas interesan.
+
 ## Una observación para la inmersión
 
 El ámbito son «las familias que ya tienen guía eMerch». Conviene saber **cuántas son de verdad**
