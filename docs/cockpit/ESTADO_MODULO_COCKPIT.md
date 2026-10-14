@@ -75,6 +75,39 @@ Las otras tres —documentación, legal y seguridad— están en
 sobre qué puede consultar un agente, y proveedor de modelo aprobado) es la que menos controlamos
 y la que puede parar el proyecto entero.
 
+### 5 · Dónde vive el cockpit, y qué pasa cuando deje de ser de calidad
+
+**Preguntado en el kickoff del 14 de octubre y no resuelto.**
+
+Hoy tenemos tres herramientas —Guías, Descripciones y Validaciones— y las tres son de **calidad
+de catálogo**. El cockpit de fase 1 también, así que encaja de forma natural a su lado o dentro.
+
+**Pero el cockpit no se queda ahí.** En cuanto entren otros perfiles —opecoms y animación, CV y
+negocio— esos usuarios **no usan ninguna de las tres**. Y entonces la arquitectura que hoy parece
+obvia deja de serlo.
+
+Hay una contradicción que conviene nombrar:
+
+- En la sesión se pidió *«integrar data **dentro de la app de guías** a modo de cockpit»*.
+- Y el deck dice *«el cockpit **orquesta**, no reemplaza fuentes y/o aplicativos»*.
+
+**Orquestar no es estar dentro.** Son dos arquitecturas distintas y solo se nota al dibujar la
+navegación.
+
+**Qué hay que preguntar:**
+
+- ¿El cockpit vive **dentro** de la app de guías, o la app de guías es **una de las cosas a las
+  que el cockpit lleva**?
+- Cuando entre el eMerch de opecoms, ¿abre la misma aplicación? ¿Entra por su **rol** o por su
+  **herramienta**?
+- ¿Las tres herramientas actuales conservan entrada propia, o se accede solo desde el cockpit?
+- ¿Hay una capa común de identidad y rol, o cada herramienta mantiene la suya?
+
+**Mientras no se responda**, lo barato es **no cerrar ninguna de las dos puertas**: mantener el
+cockpit al mismo nivel que las tres herramientas, no enterrado en la navegación de una de ellas.
+Construir dentro hoy y tener que sacarlo en 2027 obliga a rehacer navegación y, probablemente,
+identidad y permisos. Dejar la costura puesta no cuesta casi nada.
+
 ## El deck de kickoff promete más que el contrato
 
 Revisado el **14 de octubre**, el día de su sesión. Corrige bien varias cosas del deck
