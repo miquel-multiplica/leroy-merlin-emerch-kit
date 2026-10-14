@@ -35,6 +35,22 @@ formatos acordados en la inmersión** — no ingesta de cualquier formato.
 
 ⬜ TODO — qué formato tiene hoy la guía eMerch.
 
+### Tarea (Jira)
+
+**No es conocimiento, es operación.** No alimenta al agente: alimenta la bandeja. Por eso no
+cuenta como tercera fuente de conocimiento, no pasa por la vista parametrizada y no entra en la
+trazabilidad de respuestas.
+
+| Campo | Notas |
+|---|---|
+| Tablero y filtro | ⬜ TODO — es lo único que nadie sabe todavía. |
+| Estado | Lo mantiene Jira, no nosotros. Ese es justamente el motivo por el que la bandeja puede entrar. |
+| Ámbito | ⬜ TODO — ¿hay campo de mundo o de familia para filtrar? |
+| Lectura / escritura | Por defecto **solo lectura**. Escribir el check de completado choca con *«no ejecuta nada en los sistemas de origen»* y obliga a autenticar por usuario. |
+
+**Frescura:** las tareas cambian cada hora, frente al día de BigQuery y el mes de las guías. Es
+el dato con el ritmo más exigente de los tres.
+
 ### Vista
 
 La capa preparada sobre la que trabaja la IA, porque no consulta las fuentes libremente.

@@ -75,6 +75,57 @@ Las otras tres —documentación, legal y seguridad— están en
 sobre qué puede consultar un agente, y proveedor de modelo aprobado) es la que menos controlamos
 y la que puede parar el proyecto entero.
 
+## El deck de kickoff promete más que el contrato
+
+Revisado el **14 de octubre**, el día de su sesión. Corrige bien varias cosas del deck
+anterior —el reto ya es *«disponibilizar un MVP de eMerchant Cockpit»* y no la generación de
+agentes; un solo agente; fuentes decididas; y una slide de infraestructura (GCP en entorno
+Multiplica, aislado de producción, migración solo cuando esté validado) que responde al supuesto
+de Seguridad sin que lo pregunten—.
+
+**Pero arrastra cuatro líneas del deck de 87.710 € que el recorte dejó fuera:**
+
+| El deck de kickoff dice | La propuesta firmada dice |
+|---|---|
+| «La home y las áreas de responsabilidad… **tope 12 widgets**» | **3 KPIs máximo** |
+| «**Acciones propuestas por área**, con su siguiente paso» | Accionabilidad fuera de alcance |
+| «**Bandeja de acciones y decisiones: consulta con JIRA**» | Bandeja explícitamente excluida |
+| «**Prueba de inferencia acotada**: la ficha se propone desde las fuentes» | No aparece |
+
+La primera es la que más pesa: **12 widgets frente a 3 KPIs es cuatro veces el alcance**, y es el
+número que se queda anclado en quien lo ve proyectado.
+
+**Descuadre menor:** el calendario dice «12 semanas» y la tabla llega a S16 y Mes 4. El proyecto
+va del 1 de octubre al 31 de diciembre — **13 semanas**.
+
+## Jira no es conocimiento, son tareas
+
+El deck parecía contradecirse: nombra Jira en *«qué haremos»*, no lo dibuja en la arquitectura, y
+mantiene que las fuentes de conocimiento son dos y ninguna es Jira. **No hay contradicción si se
+separan las dos naturalezas:**
+
+| | Alimenta a | Cómo |
+|---|---|---|
+| **Conocimiento** — BigQuery + guías eMerch | el **agente** | vistas parametrizadas, con trazabilidad de cada respuesta |
+| **Operación** — Jira | la **bandeja** | lectura directa de un tablero, sin pasar por el agente |
+
+Y de ahí salen cuatro consecuencias:
+
+- **El agente no lee Jira.** Responde sobre datos y guías; los pendientes los enseña la bandeja.
+  Mantiene limpio el alcance del agente y la slide de «dos fuentes» se queda correcta.
+- **No necesita vista parametrizada.** Un tablero se lee y se pinta: es lo más barato de la lista,
+  aunque suene a lo contrario.
+- **No entra en la trazabilidad**, que aplica a las respuestas del agente.
+- **Pero tiene otro ritmo.** BigQuery va a diario, las guías se recargan **una vez al mes** y las
+  tareas cambian cada hora. Una bandeja desfasada es peor que un KPI desfasado: un número viejo se
+  nota, una tarea ya hecha que sigue ahí te hace perder el tiempo y dejas de fiarte de la pantalla.
+
+**Y la bandeja vuelve a entrar de forma legítima:** se excluyó porque alguien tendría que mantener
+estado y no hay backoffice. Si los items vienen de Jira, **el backoffice es Jira**.
+
+Lo que sigue sin saber nadie —ni Pedro, ni Susana, ni Javier— es **de qué tablero y con qué
+filtro**. Es la pregunta para Fernando.
+
 ## Una observación para la inmersión
 
 El ámbito son «las familias que ya tienen guía eMerch». Conviene saber **cuántas son de verdad**
