@@ -91,8 +91,10 @@ Detalle en [`user-roles.md`](./user-roles.md).
 
 Lo comprometido, literal de la propuesta:
 
-- **Un rol y un ámbito.** El ámbito concreto —qué mundo y qué familias— **se define en la
-  inmersión**, acotado a las familias que ya tienen guía eMerch.
+- **Un rol y un ámbito.** Qué familias entran **se define en la inmersión**, acotado a las que
+  ya tienen guía eMerch. **Ajustado en el kickoff del 14:** un mundo es una agrupación de
+  categorías de producto, no una población de usuarios, y lo que se construya será
+  **transversal** — el ámbito lo marca la cobertura de guías, no el mundo.
 - **3 KPIs**, con fórmula, dueño y fuente. Cuáles, ⬜ TODO (inmersión).
 - **3 tipos de alertas**, con impacto y siguiente paso. Cuáles, ⬜ TODO (inmersión).
 - **Un agente conversacional**, uno solo, que cita sus fuentes.

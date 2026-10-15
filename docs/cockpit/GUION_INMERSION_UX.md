@@ -28,7 +28,8 @@ Abrir el documento de formalización y marcar, pieza por pieza, qué se cierra e
   nuevo; cambiar cualquiera de las tres, sí.
 - **Las fuentes están decididas:** BigQuery y guías eMerch. Falta **cuántas guías**, y es un
   entregable de esta fase.
-- **El ámbito:** qué mundo, y cuántas familias tienen guía eMerch hoy, con número.
+- **El ámbito:** cuántas familias tienen guía eMerch hoy, con número. El trabajo es
+  **transversal**, no acotado a un mundo — un mundo es una agrupación de categorías de producto.
 - **Las dos piezas invisibles:** catálogo de métricas y trazabilidad. Nadie las pide y las dos
   tienen trabajo.
 - **Los cinco supuestos:** cuáles están cerrados de verdad. Datos y Negocio recortan alcance;
@@ -215,11 +216,12 @@ diga aquí compromete a que esté en la herramienta.
 - ¿En qué momento del día lo usarías? ¿Desde el escritorio, en una reunión?
 - ¿Lo usarías delante de otra persona? ¿De quién?
 
-## Su ámbito  → *qué mundo y qué familias*
+## Su ámbito  → *qué familias*
 
 - ¿De qué familias respondes? ¿Cuáles te quitan más tiempo?
 - ¿Cuáles tienen guía eMerch hoy?
-- ¿Trabajas solo sobre tu mundo, o te comparan con otros?
+- ¿Trabajas solo sobre lo tuyo, o te comparan con otros?
+- ¿Miras alguna vez familias que no son tuyas? ¿Para qué?
 
 ## Cierre
 

@@ -7,10 +7,28 @@
 
 ---
 
+## Cómo leer este documento
+
+Hay tres niveles y conviene no mezclarlos:
+
+| | Qué es | Dónde vive |
+|---|---|---|
+| **Lo firmado** | El contrato. Manda sobre todo lo demás | [`PROPUESTA_COCKPIT.md`](./PROPUESTA_COCKPIT.md) |
+| **La visión de negocio** | Lo que Leroy dice que quiere. **No compromete alcance** | el acta del kickoff, en [`context/`](./context/) |
+| **Lo decidido** | Lo poco que está cerrado de verdad | abajo, en «Lo decidido» |
+
+**Casi todo lo que salió del kickoff del 14 es visión de negocio, no definición.** Lo que define
+el producto es la **inmersión**, y todavía no ha empezado.
+
 ## Dónde estamos
 
 Hay propuesta firmada y nada construido. La inmersión es la que cierra el alcance real: qué
-mundo, qué familias, qué tres KPIs, qué tres alertas y de qué fuentes salen.
+qué familias, qué tres KPIs, qué tres alertas y de qué fuentes salen.
+
+**Sobre el ámbito ya hay un ajuste** (kickoff del 14): un mundo es una **agrupación de categorías
+de producto**, no una población de usuarios distinta. Lo que se construya será **transversal**, no
+acotado a un mundo. La propuesta hablaba de *«un rol y un ámbito»* pensando en un mundo; el ámbito
+real lo marcan **las familias que tienen guía**, no la pertenencia a un mundo.
 
 **El alcance firmado** está volcado en [`PROPUESTA_COCKPIT.md`](./PROPUESTA_COCKPIT.md) y manda
 sobre cualquier otro material.
@@ -159,42 +177,23 @@ estado y no hay backoffice. Si los items vienen de Jira, **el backoffice es Jira
 Lo que sigue sin saber nadie —ni Pedro, ni Susana, ni Javier— es **de qué tablero y con qué
 filtro**. Es la pregunta para Fernando.
 
-## Ya hay gente montándose sus propios agentes y cockpits
+## Preguntas para la inmersión que salieron del kickoff
 
-**Lo dijo Fernando en el kickoff del 14 de octubre.** Hay que pedir que nos los enseñen, y es
-probablemente la investigación más barata y más fiable del proyecto.
+Ninguna es un hallazgo todavía. Son hilos de los que tirar cuando empiecen las entrevistas.
 
-**Por qué vale tanto:**
-
-- **Es demanda validada, no declarada.** Alguien dedicó su tiempo a construirlo sin que nadie se
-  lo pidiera. Eso dice más que cualquier entrevista.
-- **No tiene sesgo de entrevista.** No es lo que creen que podrían pedir: es lo que ya hacen.
-- **Puede contener la respuesta a *«qué ve el eMerchant al abrir»***, que es la pregunta de
-  producto que llevamos abierta. Lo que pusieron primero en su propio cockpit es la respuesta.
-- **Y la propuesta ya lo pide como criterio de éxito:** *«queda registrado qué pidieron los
-  colaboradores y no existía»*. Esos montajes caseros **son ese registro, ya escrito, antes de
-  empezar el proyecto.**
-
-**Qué pedir, y pedirlo en vivo, no contado:**
-
-- ¿Quién ha montado qué? Con nombres.
-- ¿Con qué herramienta, y qué datos le da de comer?
-- ¿Qué le pregunta de verdad — los prompts que repite cada semana?
-- **¿Qué intentó y abandonó?** Es la mejor de las preguntas: lo que no consiguió marca dónde está
-  la dificultad real.
-
-**Y tiene una lectura de gobierno que conviene no esquivar:** si ya hay agentes caseros leyendo
-datos de la casa, el *«que IT no vea un superagente»* tiene precedentes. Mejor conocerlos que
-descubrirlos.
-
-**Conviene distinguirlo** de los *«tres agentes montados de nueve previstos»* que menciona el
-contexto del deck: aquello es el esfuerzo oficial; esto es gente resolviéndose la vida por su
-cuenta. No es lo mismo y las dos cosas interesan.
+- **¿Alguien se ha montado su propio agente o su propio cuadro de mando?** Fernando lo mencionó de
+  pasada. Si aparece alguno durante la inmersión, enseña más que una entrevista: es lo que alguien
+  hizo sin que se lo pidieran. Y la pregunta que más rendiría sería **qué intentó y abandonó**.
+- **Los tableros que usa Pedro** —mencionó Search & Publication, Calidad de catálogo y eMerch—.
+  Puede que nos enseñen alguno. Con el alcance en calidad de catálogo, el que interesa es ese.
+- **¿Cómo es el día a día del eMerch?** Es el objetivo central de la inmersión y no lo sabemos.
+- **¿De qué datos se dispone de verdad?** Ignacio avisó de que *«lo que más les costó fue
+  disponibilizar las BBDD»*. Es el aviso de plazo más serio que se dio.
 
 ## Una observación para la inmersión
 
 El ámbito son «las familias que ya tienen guía eMerch». Conviene saber **cuántas son de verdad**
-antes de prometer KPIs de mundo: si son una minoría del catálogo, un indicador agregado del mundo
+antes de prometer indicadores agregados: si son una minoría del catálogo, un indicador agregado
 no se puede calcular sobre ellas sin explicar muy bien qué está midiendo.
 
 ## Dónde está cada cosa
