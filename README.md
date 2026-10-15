@@ -1,57 +1,80 @@
 # Leroy Merlin — eMerch Toolkit
 
-Repositorio de trabajo del **eMerch Toolkit**: prototipos (wireframes) y documentación de producto de sus módulos. Hoy cubre **Descripciones** (generación masiva de descripciones), **Validaciones** (auditor de calidad de producto) y **Cockpit** (el tablero del Responsable de eMerchandising, con agente), sobre la base del sistema de **Guías de Estilo**.
+Repositorio de trabajo del **eMerch Toolkit**: prototipos y documentación de producto de sus
+módulos. Hoy cubre **Guías de Estilo**, **Descripciones**, **Validaciones** y **Cockpit**.
 
-## Wireframes (prototipos)
+## Cómo está organizado
 
-Se abren directamente en el navegador. Se sirven además vía GitHub Pages:
+Dos niveles: lo que sirve a todos los productos vive arriba, en `context/`; lo específico de
+cada uno vive en su carpeta. Y dentro de cada producto se separa **lo que hemos aprendido**
+(`context/`) de **lo que hemos decidido** (`definition/`).
+
+```
+context/                        ← transversal: sirve a los cuatro productos
+├── business/                   ← contexto de negocio y glosario
+├── user/user-research/         ← investigación con usuarios
+└── pseudo-design-system/       ← convenciones visuales de los prototipos
+
+<producto>/
+├── context/                    ← lo que sabemos
+│   ├── scope/                  ← propuesta, alcance comprometido
+│   ├── business/               ← entrevistas con stakeholders, material de cliente
+│   ├── user/                   ← investigación propia del producto
+│   └── product-as-is/          ← el producto tal como está hoy
+└── definition/                 ← lo que decidimos
+    ├── decisiones-y-pendientes.md   ← contexto entre sesiones
+    ├── artefactos/             ← flujos, arquitectura de información, personas
+    └── pendings/               ← abierto, sin cerrar
+```
+
+**Los prototipos se quedan en la raíz** para que las URLs de GitHub Pages no cambien.
+
+## Prototipos
 
 | Prototipo | Archivo | URL pública |
 |---|---|---|
-| Descripciones (completo) | [wireframe_descripciones.html](wireframe_descripciones.html) | https://miquel-multiplica.github.io/leroy-merlin-emerch-kit/wireframe_descripciones.html |
-| Descripciones (versión recortada) | [wireframe_descripciones_recortado.html](wireframe_descripciones_recortado.html) | https://miquel-multiplica.github.io/leroy-merlin-emerch-kit/wireframe_descripciones_recortado.html |
-| Validaciones (auditor de calidad) | [wireframe_validaciones.html](wireframe_validaciones.html) | https://miquel-multiplica.github.io/leroy-merlin-emerch-kit/wireframe_validaciones.html |
+| Descripciones | [wireframe_descripciones.html](wireframe_descripciones.html) | https://miquel-multiplica.github.io/leroy-merlin-emerch-kit/wireframe_descripciones.html |
+| Descripciones · MVP | [wireframe_descripciones_recortado.html](wireframe_descripciones_recortado.html) | https://miquel-multiplica.github.io/leroy-merlin-emerch-kit/wireframe_descripciones_recortado.html |
+| Validaciones | [wireframe_validaciones.html](wireframe_validaciones.html) | https://miquel-multiplica.github.io/leroy-merlin-emerch-kit/wireframe_validaciones.html |
+| Validaciones · MVP | [wireframe_validaciones_recortado.html](wireframe_validaciones_recortado.html) | https://miquel-multiplica.github.io/leroy-merlin-emerch-kit/wireframe_validaciones_recortado.html |
 
-## Documentación
+## Transversal
 
-### General
-- [docs/PRODUCT.md](docs/PRODUCT.md) — contexto de producto del sistema completo (Guías de Estilo).
-- [docs/diseno/DESIGN_LEROY_GUIAS_ESTILOS.md](docs/diseno/DESIGN_LEROY_GUIAS_ESTILOS.md) — convenciones de design system.
+- [context/pseudo-design-system/](context/pseudo-design-system/) — convenciones visuales de los
+  prototipos. Se llama *pseudo* porque el diseño final de UI todavía no existe.
+- [context/business/](context/business/) — ⬜ pendiente: falta un **glosario** (gama, sección,
+  familia, mundo, modelo, ATT, GV, TIP, 1P/3P). Leroy lo pidió en el kickoff.
+- [context/user/user-research/](context/user/user-research/) — ⬜ pendiente: las entrevistas con
+  eMerchs de la semana del 20 de octubre.
 
-### Guías de estilo
-- [docs/guias/PUBLICACION_GUIAS.md](docs/guias/PUBLICACION_GUIAS.md) — publicar o no publicar guías: respuestas de desarrollo y preguntas abiertas con el cliente.
+## Guías de Estilo
 
-### Descripciones
-- [docs/descripciones/FUNCIONAL_DESCRIPCIONES.md](docs/descripciones/FUNCIONAL_DESCRIPCIONES.md) — documentación funcional del módulo.
-- [docs/descripciones/PROPUESTA_RECORTES_DESCRIPCIONES.md](docs/descripciones/PROPUESTA_RECORTES_DESCRIPCIONES.md) — análisis de recortes (sin decisiones tomadas).
-- [docs/descripciones/ESTADO_MODULO_DESCRIPCIONES.md](docs/descripciones/ESTADO_MODULO_DESCRIPCIONES.md) — estado del trabajo / contexto entre sesiones.
-- [openspec/specs/descripciones/spec.md](openspec/specs/descripciones/spec.md) — especificación en formato OpenSpec.
+- [guias/definition/producto.md](guias/definition/producto.md) — documentación funcional.
+- [guias/definition/pendings/publicacion-guias.md](guias/definition/pendings/publicacion-guias.md) — publicar o no publicar guías.
 
-### Cockpit
-- [docs/cockpit/PROPUESTA_COCKPIT.md](docs/cockpit/PROPUESTA_COCKPIT.md) — el alcance firmado; manda sobre cualquier otro material.
-- [docs/cockpit/context/](docs/cockpit/context/) — contexto funcional (producto, roles, reglas, datos, flujos, specs).
-- [docs/cockpit/GUION_INMERSION_UX.md](docs/cockpit/GUION_INMERSION_UX.md) — guion de las sesiones de inmersión (lado UX).
-- [docs/cockpit/INMERSION_SESION_1.md](docs/cockpit/INMERSION_SESION_1.md) — qué salió de la sesión del 7 de octubre.
-- [docs/cockpit/ESTADO_MODULO_COCKPIT.md](docs/cockpit/ESTADO_MODULO_COCKPIT.md) — estado y preguntas abiertas (contexto entre sesiones).
+## Descripciones
 
-### Validaciones
-- [docs/validaciones/ANALISIS_VALIDACIONES.md](docs/validaciones/ANALISIS_VALIDACIONES.md) — análisis consolidado del módulo (auditor de calidad).
-- [docs/validaciones/ESTADO_MODULO_VALIDACIONES.md](docs/validaciones/ESTADO_MODULO_VALIDACIONES.md) — estado del prototipo y pendientes (contexto entre sesiones).
+- [descripciones/context/scope/alcance-mvp.md](descripciones/context/scope/alcance-mvp.md) — qué queda fuera de una primera versión.
+- [descripciones/definition/funcional.md](descripciones/definition/funcional.md) — documentación funcional.
+- [descripciones/definition/open-spec.md](descripciones/definition/open-spec.md) — especificación en formato OpenSpec.
+- [descripciones/definition/decisiones-y-pendientes.md](descripciones/definition/decisiones-y-pendientes.md) — contexto entre sesiones.
 
-## Estructura del repo
+## Validaciones
 
-```
-/
-├─ README.md
-├─ robots.txt                             # evita indexación en buscadores
-├─ wireframe_descripciones.html           # prototipos (se quedan en raíz → URLs estables)
-├─ wireframe_descripciones_recortado.html
-├─ wireframe_validaciones.html
-├─ docs/
-│  ├─ PRODUCT.md
-│  ├─ guias/
-│  ├─ descripciones/
-│  ├─ validaciones/
-│  └─ diseno/
-└─ openspec/specs/descripciones/spec.md
-```
+- [validaciones/context/scope/alcance-mvp.md](validaciones/context/scope/alcance-mvp.md) — los recortes del MVP y su razonamiento.
+- [validaciones/definition/analisis.md](validaciones/definition/analisis.md) — análisis consolidado del módulo.
+- [validaciones/definition/decisiones-y-pendientes.md](validaciones/definition/decisiones-y-pendientes.md) — contexto entre sesiones.
+- [validaciones/definition/pendings/preguntas-cliente.md](validaciones/definition/pendings/preguntas-cliente.md) — preguntas abiertas con el cliente.
+
+## Cockpit
+
+- [cockpit/context/scope/propo.md](cockpit/context/scope/propo.md) — **la propuesta firmada**. Manda sobre cualquier otro material.
+- [cockpit/context/scope/project-context.md](cockpit/context/scope/project-context.md) — qué es, por qué existe y de dónde parte.
+- [cockpit/context/business/stakeholders-interviews/](cockpit/context/business/stakeholders-interviews/) — sesiones del 7 y del 14 de octubre.
+- [cockpit/context/user/user-research/guion-entrevistas.md](cockpit/context/user/user-research/guion-entrevistas.md) — guion de inmersión.
+- [cockpit/definition/decisiones-y-pendientes.md](cockpit/definition/decisiones-y-pendientes.md) — contexto entre sesiones.
+
+## Infra
+
+GitHub Pages vía GitHub Actions. El material en bruto del cliente vive en
+`validaciones/context/business/docs-de-cliente/` y **no se versiona** — lo cubre el `.gitignore`.
