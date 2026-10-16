@@ -546,6 +546,12 @@ si las candidatas se derivan o se siguen declarando.
 - ~~**Histórico y evolutivo**~~ — **aparcado**: las ejecuciones van por separado.
 - **Roles y permisos 1P/3P** — el cliente los pidió y el validador de gama es el usuario
   principal. Nada prototipado.
+  **Sube de categoría el 16 de octubre:** al plantear el lanzamiento en lote se decidió que
+  **el 1P/3P se resolverá por permisos**, no eligiéndolo en el wizard. Por eso la maqueta del
+  lote (`wireframe_validaciones_lote.html`) **quita el selector de catálogo** que aparecía al
+  elegir un proveedor dual. Deja de ser un pendiente de diseño y pasa a ser **un bloqueo**: sin
+  saber qué ve cada rol no se sabe qué catálogo audita, y eso cambia el wizard, el perímetro que
+  se guarda y qué referencias entran. ⬜ **Por definir con el cliente.**
 - **«La guía está mal»** — la vía para escalar una alerta cuyo problema es el documento y no la
   ficha. No es un falso positivo y no vive en el panel del motor. Enlaza con la C2.
 - ~~**Volver de la resolución a la regla**~~ — **hecho** el 1 de octubre: la modal termina en

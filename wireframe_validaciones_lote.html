@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Validaciones · Lanzar auditorías en lote (maqueta)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+  .modal-x:hover{ background:var(--bg-parchment); color:var(--text-ink); }
+  .r-ent .r-acc{ opacity:0; transition:opacity .12s ease; }
+  .r-ent:hover .r-acc, .r-ent .r-acc.on{ opacity:1; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f2f2f2; color: #191919; min-height: 100vh; }
+
+  :root {
+    /* Brand */
+    --green:          #188803;
+    --green-hover:    #035010;
+    --green-light:    #f6fbf3;
+    --green-mid:      #46a610;
+    /* Surfaces */
+    --bg-page:        #f2f2f2;
+    --bg-surface:     #ffffff;
+    --bg-parchment:   #eeeff1;
+    /* Text */
+    --text-ink:       #191919;
+    --text-body:      #333333;
+    --text-muted:     #666666;
+    --text-disabled:  #999999;
+    --text-secondary-dark: #4d4d4d; /* neutrals/700 */
+    --primary-02-200: #eeeff1;
+    --primary-02-50: #f8f8f9;
+    /* Borders */
+    --border:         #e5e5e5;
+    --border-input:   #cccccc;
+    --border-focus:   #999999;
+    /* Semantic */
+    --success:        #188803;
+    --success-bg:     #ebf5de;
+    --success-border: #46a610;
+    --warning-text:   #c65200;
+    --warning-bg:     #fdf1e8;
+    --warning-border: #ea7315;
+    --danger-text:    #c61112;
+    --info-bg:        #daeff7;
+    --info-border:    #a7d9ed;
+    /* Aliases para compatibilidad con código existente */
+    --text-primary:   #191919;
+    --text-secondary: #333333;
+    --text-tertiary:  #666666;
+    --action-primary: #188803;
+    --bg-hover:       #f2f2f2;
+    --border-card:    #e5e5e5;
+  }
+
+  .screen { display: none; min-height: 100vh; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  /* NAVBAR */
+  .navbar {
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-card);
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+    flex-shrink: 0;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .navbar-left { display: flex; align-items: center; gap: 14px; }
+  .navbar-logo {
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .navbar-title { font-size: 16px; font-weight: 600; color: var(--text-body); }
+  .navbar-apps-btn { background: none; border: none; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--text-body); margin-left: 4px; flex-shrink: 0; }
+  .navbar-apps-btn:hover { background: var(--bg-hover); }
+  .navbar-right { display: flex; align-items: center; gap: 24px; }
+  .navbar-link {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 400; color: var(--text-body);
+    cursor: pointer; text-decoration: none;
+    padding: 0 8px; height: 64px;
+    border-bottom: 3px solid transparent;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+  .navbar-link:hover { border-bottom-color: var(--green); }
+  .navbar-link-active { border-bottom-color: var(--green); }
+  .navbar-link svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+  /* BREADCRUMB NAVBAR (flujos) */
+  .navbar-breadcrumb { display: flex; align-items: center; gap: 8px; }
+  .navbar-breadcrumb-home { font-size: 14px; font-weight: 400; color: var(--text-muted); cursor: pointer; }
+  .navbar-breadcrumb-home:hover { color: var(--green); }
+  .navbar-breadcrumb-sep { font-size: 14px; color: var(--text-muted); }
+  .navbar-breadcrumb-current { font-size: 14px; font-weight: 600; color: var(--text-body); }
+
+  /* DESCRIPTIONS TABLE */
+  .desc-table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+  .desc-table thead tr { border-bottom: 1px solid var(--border-card); }
+  .v-mtabla thead tr { background: #f5f6f7; }
+  .v-sub thead tr { background: var(--bg-parchment); }
+  .v-sub th:first-child, .v-sub tbody td:first-child { padding-left: 46px; }
+  .v-sub tbody tr:hover { background: transparent; }
+  .v-sub tbody td { padding-left: 0; }
+  .v-sub tbody tr.v-refs, .v-sub tbody tr.v-refs:hover { background: transparent; border-bottom: none; }
+  .v-clearf:hover { color: var(--green-hover); text-decoration: underline; }
+  .desc-table th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: .02em; }
+  .desc-table tbody tr { border-bottom: 1px solid var(--border-card); transition: background 0.1s; }
+  .desc-table tbody tr:last-child { border-bottom: none; }
+  .desc-table tbody tr:hover { background: var(--green-light); }
+  #s10 .desc-table tbody tr .row-cta { visibility: hidden; }
+  #s10 .desc-table tbody tr:hover .row-cta { visibility: visible; }
+  #s9 .desc-table tbody tr .row-cta-overlay { visibility: hidden; }
+  #s9 .desc-table tbody tr:hover .row-cta-overlay { visibility: visible; }
+  #s9 .desc-table tbody tr:hover .row-cta-overlay .row-cta { visibility: visible; }
+  #s9 .desc-table tbody tr.row-paused .row-cta-overlay { visibility: visible; }
+  #s9 .desc-table tbody tr.row-paused .row-cta-overlay .row-cta { visibility: visible; }
+  #s9 .desc-table tbody tr .model-guia-chevron { visibility: hidden; }
+  #s9 .desc-table tbody tr:hover .model-guia-chevron { visibility: visible; }
+  #s9 .desc-table tbody tr .model-guia-menu.open .model-guia-chevron { visibility: visible; }
+  #s9 .desc-table tbody tr.row-paused { background: var(--bg-parchment); }
+  .desc-table td { padding: 14px 12px; vertical-align: middle; }
+
+  .sort-arrow { color: var(--text-disabled); opacity: 0; transition: opacity 0.12s ease; }
+  .sortable-th:hover .sort-arrow { opacity: 1; }
+  .sort-arrow.sort-arrow-active { opacity: 1; color: var(--text-body); }
+
+  .lm-tooltip { position: relative; display: inline-flex; }
+  .lm-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333333;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.4;
+    padding: 7px 10px;
+    border-radius: 6px;
+    white-space: normal;
+    width: max-content;
+    max-width: 220px;
+    text-align: left;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+    z-index: 10000;
+  }
+  .lm-tooltip::before {
+    content: '';
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    border: 5px solid transparent;
+    border-top-color: #333333;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+    z-index: 10000;
+  }
+  .lm-tooltip:hover::after, .lm-tooltip:hover::before { opacity: 1; visibility: visible; }
+  .lm-tooltip-below::after { bottom:auto; top:130%; left:auto; right:0; transform:none; }
+  .lm-tooltip-below::before { bottom:auto; top:130%; left:auto; right:8px; transform:translateY(-100%); border-top-color:transparent; border-bottom-color:#333333; }
+  .lm-tt-abajo::after{ bottom:auto; top:168%; left:0; right:auto; transform:none; }
+  .lm-tt-abajo::before{ bottom:auto; top:168%; left:10px; right:auto; transform:translateY(-100%); border-top-color:transparent; border-bottom-color:#333333; }
+  .desc-section-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin: 28px 0 10px; }
+  .desc-section-label:first-child { margin-top: 0; }
+
+  /* GRID — 1224px max, 108px margins */
+  .page-body { flex: 1; padding: 48px 0 100px; overflow-y: auto; }
+  .grid { max-width: 1440px; margin: 0 auto; padding: 0 108px; }
+
+  /* PAGE HEADER */
+  .page-title { font-size: 32px; font-weight: 700; color: var(--text-ink); text-align: center; margin-bottom: 8px; }
+  .page-subtitle { font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 36px; }
+
+  /* CONTEXT BAR */
+  .context-bar { text-align: center; margin-bottom: 24px; }
+  .context-bar .guide-name { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+  .context-bar .guide-meta { font-size: 14px; color: var(--text-tertiary); margin-left: 8px; }
+
+  /* SEARCH */
+  .search-wrap { position: relative; margin-bottom: 20px; }
+  .search-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; stroke: var(--text-tertiary); fill: none; stroke-width: 2; }
+  .search-input {
+    width: 100%; height: 56px;
+    border: 1px solid var(--border-input); border-radius: 8px;
+    padding: 0 12px 0 40px;
+    font-size: 14px; font-family: 'Inter', system-ui, sans-serif; color: var(--text-primary);
+    background: var(--bg-surface); outline: none;
+  }
+  .search-input:focus { border-color: var(--green); outline: none; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 11px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.07em;
+    margin-bottom: 12px; margin-top: 8px;
+  }
+
+  /* LIST ROW — selección directa navega */
+  .list-row {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-card);
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s;
+    user-select: none;
+  }
+  .list-row:hover { border-color: var(--green); background: var(--green-light); }
+  .list-row.selected { border: 2px solid var(--green-mid); background: var(--green-light); }
+  .list-row.disabled { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
+
+  /* RADIO */
+  .wf-radio {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--border); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.12s;
+  }
+  .wf-radio.checked { border-color: var(--action-primary); background: var(--action-primary); }
+  .wf-radio.checked::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+
+  /* GUIDE ROW */
+  .guide-info { flex: 1; }
+  .guide-name-row { font-size: 15px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+  .guide-meta-row { font-size: 13px; color: var(--text-tertiary); margin-top: 3px; }
+  .guide-date { font-size: 12px; color: var(--text-tertiary); flex-shrink: 0; }
+
+  /* MODEL ROW */
+  .model-code { font-size: 13px; color: var(--text-tertiary); min-width: 120px; }
+  .model-name { font-size: 14px; color: var(--text-primary); flex: 1; }
+
+  /* BADGE */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; font-weight: 600; padding: 3px 10px;
+    border-radius: 999px; letter-spacing: 0.01em;
+  }
+  .badge-published {
+    background: var(--success-bg);
+    color: var(--green);
+    border: 1px solid var(--green);
+  }
+  .badge-warn {
+    background: var(--warning-bg);
+    color: var(--warning-text);
+    border: 1px solid var(--warning-border);
+  }
+
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--bg-surface); border-top: 1px solid var(--border-card);
+    height: 72px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; z-index: 0;
+  }
+  .bottom-bar.with-sidebar { left: 260px; }
+  .bottom-bar { display: none; }
+  .bottom-bar.with-sidebar { display: none; }
+  #s1.active ~ .bottom-bar,
+  #s2.active ~ .bottom-bar,
+  #s9.active ~ .bottom-bar,
+  #s10.active ~ .bottom-bar { display: none; }
+  .bottom-bar.right { justify-content: flex-end; }
+
+  /* BUTTONS */
+  .btn { height: 40px; border-radius: 8px; font-size: 14px; font-weight: 700; font-family: 'Inter', system-ui, sans-serif; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; padding: 0 24px; transition: background 0.12s; }
+  .btn-primary { background: var(--green); color: #fff; }
+  .btn-primary:hover { background: var(--green-hover); }
+  .btn-primary:disabled { background: var(--bg-parchment); color: var(--text-disabled); cursor: not-allowed; }
+  .btn-back { background: none; border: none; cursor: pointer; font-size: 16px; font-weight: 700; color: var(--green); font-family: 'Inter', system-ui, sans-serif; display: flex; align-items: center; gap: 6px; padding: 0; }
+  .btn-back:hover { color: var(--green-hover); }
+
+  /* INFO NOTE */
+  .info-note { display: flex; align-items: flex-start; gap: 8px; background: var(--info-bg); border: 1px solid var(--info-border); border-radius: 8px; padding: 12px 14px; margin-top: 16px; font-size: 14px; color: var(--text-body); }
+  .info-note svg { width: 16px; height: 16px; stroke: var(--info-border); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; margin-top: 1px; }
+
+  /* WIZARD */
+  .wizard-layout { display: flex; flex: 1; overflow: hidden; }
+  .wizard-sidebar { width: 260px; flex-shrink: 0; background: #343b4c; padding: 28px 16px 100px 20px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+  .sidebar-guide-name { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .sidebar-guide-meta { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 28px; line-height: 1.5; }
+  .sidebar-step { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.5); }
+  .sidebar-step.active { background: rgba(255,255,255,0.1); color: #fff; font-weight: 600; }
+  .sidebar-step.done { color: rgba(255,255,255,0.5); }
+  .sidebar-step-dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 10px; font-weight: 600;
+    color: rgba(255,255,255,0.5);
+  }
+  .sidebar-step.active .sidebar-step-dot { border-color: rgba(255,255,255,0.6); color: #fff; }
+  .sidebar-step.done .sidebar-step-dot { background: #46a610; border-color: #46a610; }
+
+  .wizard-content { flex: 1; overflow-y: auto; padding: 48px 64px 100px; }
+  .wizard-title { font-size: 24px; font-weight: 700; color: var(--text-ink); margin-bottom: 8px; }
+  .wizard-subtitle { font-size: 14px; color: var(--text-tertiary); margin-bottom: 32px; }
+  /* Pestañas grandes Selección de SKU's */
+  .sku-tabs { display: flex; gap: 12px; margin-bottom: 28px; }
+  .sku-tab { flex: 1; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-surface); padding: 18px 20px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; transition: border-color .12s, background .12s; }
+  .sku-tab:hover { border-color: var(--green); }
+  .sku-tab.active { border-color: var(--green-mid); background: var(--green-light); }
+  .sku-tab-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border-input); flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; }
+  .sku-tab.active .sku-tab-radio { border-color: var(--green); }
+  .sku-tab.active .sku-tab-radio::after { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--green); }
+  .sku-tab-title { font-size: 15px; font-weight: 700; color: var(--text-ink); margin-bottom: 2px; }
+  .sku-tab-sub { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  /* Bloque "stat" de SKU's detectados — distinto de las pestañas: sin borde, número protagonista */
+  .sku-count-card { background: var(--bg-surface); border-radius: 10px; padding: 26px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .sku-count-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .sku-count-num { font-size: 44px; font-weight: 700; color: var(--green); line-height: 1; letter-spacing: -0.02em; }
+  .sku-count-unit { font-size: 17px; font-weight: 700; color: var(--text-ink); }
+  .sku-count-detected { font-size: 13px; font-weight: 400; color: var(--text-disabled); }
+  .sku-count-label { font-size: 13px; color: var(--text-muted); margin-top: 12px; line-height: 1.5; }
+  .sku-loading { display: flex; align-items: center; gap: 12px; background: var(--bg-surface); border-radius: 10px; padding: 22px 24px; font-size: 14px; color: var(--text-muted); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .sku-spinner { width: 22px; height: 22px; border-radius: 50%; border: 2.5px solid var(--green-light); border-top-color: var(--green); animation: spin 0.9s linear infinite; flex-shrink: 0; }
+
+  /* UPLOAD */
+  .upload-zone { border: 2px dashed var(--border); border-radius: 12px; padding: 56px 32px; text-align: center; background: var(--bg-surface); cursor: pointer; transition: border-color 0.12s, background 0.12s; }
+  .upload-zone:hover { border-color: var(--green); background: var(--green-light); }
+  .upload-zone svg { width: 40px; height: 40px; stroke: var(--text-tertiary); fill: none; stroke-width: 1.5; margin-bottom: 14px; }
+  .upload-zone-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+  .upload-zone-sub { font-size: 13px; color: var(--text-tertiary); }
+  .upload-zone-sub strong { color: var(--text-primary); }
+
+  /* SPEC TABLE */
+  .spec-section { margin-top: 36px; }
+  .spec-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+  .spec-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .spec-table th { text-align: left; padding: 9px 14px; background: var(--bg-parchment); color: var(--text-secondary); font-weight: 700; border-bottom: 1px solid var(--border); }
+  .spec-table td { padding: 9px 14px; border-bottom: 1px solid #EBF0F4; color: var(--text-primary); }
+  .spec-table tr:last-child td { border-bottom: none; }
+  .req-badge { background: #272A30; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px; }
+  .opt-badge { background: var(--bg-hover); color: var(--text-tertiary); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px; }
+
+  /* Guide row layout: name fijo | meta fijo | badge fijo | espacio | cta */
+  .list-row { display: flex; align-items: center; }
+  .guide-info { display: flex; align-items: center; gap: 0; }
+  .guide-name-text { font-size: 15px; font-weight: 700; color: var(--text-ink); white-space: nowrap; width: 240px; flex-shrink: 0; }
+  .guide-meta-inline { font-size: 13px; font-weight: 400; color: var(--text-tertiary); white-space: nowrap; width: 380px; flex-shrink: 0; }
+  .guide-info .badge { flex-shrink: 0; margin-left: 0; }
+  .row-spacer { flex: 1; }
+
+  .row-cta {
+    visibility: hidden;
+    background: var(--green); color: #fff;
+    border: none; border-radius: 8px;
+    height: 36px; padding: 0 18px;
+    font-size: 13px; font-weight: 700; font-family: 'Inter', system-ui, sans-serif;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    display: flex; align-items: center;
+  }
+  .list-row:hover .row-cta { visibility: visible; }
+  .list-row:hover { border-color: var(--border-focus); background: #FAFBFC; }
+
+  /* row-cta como contenedor en tablas (s10, s9) */
+  #s10 .row-cta, #s9 .row-cta {
+    background: none; color: inherit; border: none;
+    height: auto; padding: 0;
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0; white-space: nowrap;
+  }
+
+  /* Modal overlay — faux viewport para no usar position:fixed */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  /* Modal guía como side-panel derecho con slide-in */
+  #v-motor-hist-modal { display:flex !important; justify-content:flex-end; pointer-events:none; background:transparent; transition:background .25s ease; }
+  #v-motor-hist-modal.open { pointer-events:auto; background:rgba(0,0,0,0.45); }
+  #v-motor-hist-modal .modal-box { transform:translateX(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); }
+  #v-motor-hist-modal.open .modal-box { transform:translateX(0); }
+  #v-motor-pend-modal { display:flex !important; justify-content:flex-end; pointer-events:none; background:transparent; transition:background .25s ease; }
+  #v-motor-pend-modal.open { pointer-events:auto; background:rgba(0,0,0,0.45); }
+  #v-motor-pend-modal .modal-box { transform:translateX(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); }
+  #v-motor-pend-modal.open .modal-box { transform:translateX(0); }
+  .modal-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    width: 480px;
+    max-width: 90vw;
+  }
+
+  /* --- Documento imprimible (informe del seller) — A4 apaisado, patrón de la guía eMerch --- */
+  #print-root{ display:none; }
+  .pdf-doc{ font-family:'Inter',system-ui,sans-serif; color:#1c1c1a; }
+  .pdf-cover{ position:relative; width:1047px; min-height:718px; box-sizing:border-box; padding:44px 60px 40px 64px; background:#fff; display:flex; flex-direction:column; }
+  .pdf-cover::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:12px; background:#78be20; }
+  .pdf-flow{ width:1047px; table-layout:fixed; border-collapse:collapse; background:#fff; }
+  .pdf-flow td{ vertical-align:top; }
+  .pdf-flow td.pdf-barcell{ padding:0 0 30px; }
+  .pdf-bar{ display:flex; align-items:center; height:50px; background:#494f60; color:#fff; }
+  .pdf-bar-g{ width:12px; align-self:stretch; background:#78be20; flex-shrink:0; }
+  .pdf-bar-t{ font-size:18px; font-weight:700; padding-left:22px; }
+  .pdf-bar-r{ margin-left:auto; padding-right:26px; font-size:10.5px; color:#d7d9df; }
+  .pdf-bodycell{ padding:0 46px 8px 50px; }
+  .pdf-cols{ }
+  .pdf-modcols{ column-count:2; column-gap:44px; column-fill:auto; }
+  .pdf-footcell{ padding:0; }
+  .pdf-footspacer{ height:0; }
+  .pdf-logo{ height:38px; width:auto; display:block; }
+  .pdf-pagelogo{ position:absolute; right:38px; bottom:26px; }
+  .pdf-doc{ position:relative; }
+  .pdf-logo-sm{ height:30px; width:auto; display:block; align-self:flex-start; flex-shrink:0; }
+  .pdf-sec{ break-inside:avoid; page-break-inside:avoid; margin-bottom:40px; }
+  .pdf-card{ break-inside:avoid; page-break-inside:avoid; }
+  .pdf-doc, .pdf-doc *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  @media print{
+    @page{ size:A4 landscape; margin:0; }
+    html, body{ background:#fff !important; }
+    body > *{ display:none !important; }
+    body > #print-root{ display:block !important; }
+    .pdf-cover{ width:auto; min-height:0; height:210mm; padding:26mm 20mm 16mm 22mm; page-break-after:always; break-after:page; }
+    .pdf-flow{ width:100%; }
+    .pdf-flow-break{ page-break-before:always; break-before:page; }
+    .pdf-pagelogo{ position:fixed; right:16mm; bottom:9mm; }
+    /* Reserva la franja inferior donde se pinta el logo fijo: el tfoot se repite
+       en cada hoja, asi que ningun bloque puede quedar debajo del logo. */
+    .pdf-footspacer{ height:24mm; }
+    .pdf-sec:last-child{ margin-bottom:0; }
+  }
+  .v-bottombar{ position:fixed; left:0; right:0; bottom:0; z-index:40; display:none;
+    background:#fff; border-top:1px solid var(--border-card); box-shadow:0 -6px 18px rgba(0,0,0,.07); }
+  .v-bottombar-in{ max-width:1440px; margin:0 auto; padding:12px clamp(24px, 5.6vw, 80px);
+    display:flex; align-items:center; justify-content:center; gap:14px; }
+  .btn-tertiary{ background:#fff; border:none; border-radius:8px; height:32px; padding:0 14px;
+    font-size:13px; font-weight:600; font-family:'Inter',system-ui,sans-serif; color:var(--green); cursor:pointer;
+    display:inline-flex; align-items:center; transition:background .12s, color .12s; }
+  .btn-tertiary:hover{ background:var(--bg-parchment); color:var(--green-hover); }
+  .btn-secondary{ background:#fff; border:1px solid var(--green); border-radius:8px; height:44px; padding:0 20px;
+    font-size:14px; font-weight:600; font-family:'Inter',system-ui,sans-serif; color:var(--green); cursor:pointer;
+    display:inline-flex; align-items:center; transition:background .12s, color .12s, border-color .12s; }
+  .btn-secondary:hover{ background:var(--bg-parchment); color:var(--green-hover); border-color:var(--green-hover); }
+  .btn-link{ background:none; border:none; padding:0; font-size:13px; font-weight:600; color:var(--green);
+    cursor:pointer; font-family:'Inter',system-ui,sans-serif; transition:color .12s; }
+  .btn-link:hover{ color:var(--green-hover); }
+  .lm-check{ -webkit-appearance:none; appearance:none; width:20px; height:20px; min-width:20px; border:1.5px solid #bcbcbc; border-radius:6px; background:#fff; cursor:pointer; position:relative; margin:0; flex-shrink:0; transition:background .12s,border-color .12s; }
+  .lm-check:hover{ border-color:#8a8a8a; }
+  .lm-check:checked{ background:var(--green); border-color:var(--green); }
+  .lm-check:checked::after{ content:''; position:absolute; left:6px; top:2px; width:5px; height:10px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg); }
+  .lm-check:disabled{ cursor:default; }
+  .fp-modrows{ box-sizing:border-box; max-height:0; opacity:0; overflow:hidden; transition:max-height .24s cubic-bezier(.4,0,.2,1), opacity .18s ease; }
+  .modal-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: #FEF3C7;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .modal-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+  .modal-body { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px; }
+  .modal-actions { display: flex; flex-direction: column; gap: 8px; }
+  .modal-btn-primary { background: var(--green); color: #fff; border: none; border-radius: 8px; height: 44px; font-size: 14px; font-weight: 700; font-family: 'Leroy Merlin Sans','Inter',system-ui,sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .modal-btn-secondary { background: #fff; color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; height: 44px; font-size: 14px; font-weight: 700; font-family: 'Leroy Merlin Sans','Inter',system-ui,sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .no-edit-mode .edit-pencil-btn { display: none; }
+  .modal-btn-ghost { background: none; border: none; font-size: 13px; color: var(--text-tertiary); font-family: 'Leroy Merlin Sans','Inter',system-ui,sans-serif; cursor: pointer; padding: 8px 0; text-align: center; }
+
+  .tooltip-wrap { position:relative; display:inline-flex; align-items:center; }
+  .tooltip-wrap .tooltip-box {
+    display:none; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    background:#1e2433; color:#fff; font-size:12px; font-weight:400; line-height:1.5;
+    padding:8px 12px; border-radius:6px; white-space:nowrap; z-index:9999; pointer-events:none;
+    font-family:'Inter',system-ui,sans-serif;
+  }
+  .tooltip-wrap:hover .tooltip-box { display:block; }
+
+  .row-menu { position:relative; display:inline-block; }
+  .row-menu-btn { background:none; border:none; cursor:pointer; padding:4px 6px; border-radius:6px; color:var(--text-muted); font-size:18px; line-height:1; }
+  .row-menu-btn:hover { background:var(--bg-parchment); }
+  /* ── Filtros de multiseleccion ────────────────────────────────────────────
+     Un popover con checkboxes. Las marcas no filtran hasta pulsar Aplicar:
+     cerrar sin aplicar las descarta, que es lo unico que le da sentido al boton.
+     El fondo suave marca la fila seleccionada y el hover usa un gris mas claro,
+     porque si los dos fueran --bg-parchment no se distinguiria lo marcado de
+     donde tienes el raton. */
+  .fms { position:relative; flex-shrink:0; }
+  .fms-btn { display:flex; align-items:center; gap:7px; height:36px; border:1px solid var(--border-input); border-radius:8px; padding:0 11px; font-size:12px; font-family:'Inter',system-ui,sans-serif; color:var(--text-body); background:#fff; cursor:pointer; white-space:nowrap; }
+  .fms-btn:hover { border-color:var(--text-muted); }
+  .fms-btn.has { color:var(--text-ink); font-weight:600; border-color:var(--green); }
+  .fms.open .fms-btn { border-color:var(--green); }
+  .fms-pop { display:none; position:absolute; left:0; top:calc(100% + 5px); background:#fff; border:1px solid var(--border-card); border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.13); min-width:238px; z-index:9999; }
+  .fms.open .fms-pop { display:block; }
+  .fms-list { max-height:264px; overflow:auto; padding:4px 0; }
+  .fms-row { display:flex; align-items:center; gap:10px; padding:8px 13px; font-size:12.5px; color:var(--text-body); cursor:pointer; }
+  .fms-row:hover { background:#f6f7f8; }
+  .fms-row.sel { background:var(--bg-parchment); color:var(--text-ink); }
+  .fms-grp { padding:9px 13px 3px; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--text-muted); }
+  .fms-none { padding:14px 13px; font-size:12.5px; color:var(--text-muted); }
+  .fms-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 11px; border-top:1px solid var(--border-card); }
+  .fms-b { height:30px; padding:0 13px; border-radius:7px; font-family:'Inter',system-ui,sans-serif; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
+  .fms-b[disabled] { opacity:.4; cursor:not-allowed; }
+  .fms-b-sec { background:#fff; border:1px solid var(--border-input); color:var(--text-body); }
+  .fms-b-sec:hover { background:var(--bg-parchment); }
+  .fms-b-pri { background:var(--green); border:1px solid var(--green); color:#fff; }
+  /* El buscador de referencias crece al enfocarlo o cuando lleva algo, que es
+     cuando hace falta sitio para ver varias separadas por comas. */
+  .v-reffind { position:relative; flex:0 1 240px; min-width:170px; transition:flex-basis .16s ease; }
+  .v-reffind.wide { flex-basis:360px; }
+  .row-menu-dropdown { display:none; position:absolute; right:0; top:calc(100% + 4px); background:#fff; border:1px solid var(--border-card); border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.12); min-width:160px; z-index:9999; padding:4px 0; }
+  .row-menu.open .row-menu-dropdown { display:block; }
+  .row-menu-item { display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:13px; font-weight:500; color:var(--text-body); cursor:pointer; white-space:nowrap; }
+  .row-menu-item:hover { background:var(--bg-parchment); }
+  .row-menu-item.danger { color:#c61112; }
+  .row-menu-item.danger:hover { background:#fdeaea; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  #activate-form, #activate-loading, #activate-success, #activate-header {
+    transition: opacity 0.4s ease;
+  }
+
+  @container (max-width: 1300px) {
+    .stat-card-text { display: block; }
+    .stat-card-text > span:first-child { display: block; margin-bottom: 2px; }
+  }
+
+</style>
+<style>
+  .v-tab { background:none; border:none; border-bottom:2px solid transparent; margin-bottom:-1px; padding:10px 18px; font-size:14px; font-weight:400; font-family:'Inter',system-ui,sans-serif; color:var(--text-body); cursor:pointer; }
+  .v-tab.active { color:var(--green); font-weight:600; border-bottom-color:var(--green); }
+  #w-hub .desc-table tbody tr:hover { background:var(--green-light); }
+  #w-hub .desc-table tbody tr .row-cta-overlay { visibility:hidden; }
+  #w-hub .desc-table tbody tr:hover .row-cta-overlay { visibility:visible; }
+  #v-inf-mtabla .desc-table th, #v-inf-mtabla .desc-table td { padding-left:8px; padding-right:8px; }
+  #v-inf-mtabla .desc-table th:first-child, #v-inf-mtabla .desc-table td:first-child { padding-left:14px; }
+  #v-inf-mtabla .desc-table th:last-child, #v-inf-mtabla .desc-table td:last-child { padding-right:14px; }
+  .v-type-btn { display:flex; align-items:center; gap:14px; width:100%; text-align:left; background:#fff; border:1px solid var(--border-card); border-radius:10px; padding:16px 18px; cursor:pointer; transition:border-color .12s, background .12s; font-family:'Inter',system-ui,sans-serif; }
+  .v-type-btn:hover { border-color:var(--green); background:var(--green-light); }
+  .v-type-ico { width:38px; height:38px; border-radius:8px; background:var(--success-bg); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .v-type-ico svg { width:20px; height:20px; stroke:var(--green); fill:none; stroke-width:2; }
+  .v-opt { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border:1px solid var(--border-card); border-radius:8px; cursor:pointer; background:#fff; margin-bottom:8px; transition:border-color .1s, background .1s; }
+  .v-opt:hover { border-color:var(--green); }
+  .v-opt.sel { border-color:var(--green-mid); background:var(--green-light); }
+  .v-tag { font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; }
+</style>
+<style>
+  /* ── Solo de esta maqueta ─────────────────────────────────────────────────
+     Las cajitas de la derecha: una por item seleccionado, en lugar de la caja
+     grande unica con el recuento de referencias. */
+  .lote-card { background:#fff; border:1px solid var(--border-card); border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:14px; }
+  .lote-card + .lote-card { margin-top:10px; }
+  .lote-num { font-size:19px; font-weight:700; color:var(--text-ink); font-variant-numeric:tabular-nums; line-height:1; }
+  .lote-x { background:none; border:none; cursor:pointer; color:var(--text-muted); padding:4px; display:flex; flex-shrink:0; }
+  .lote-x:hover { color:#c61112; }
+  .lote-empty { background:var(--bg-parchment); border:1px dashed var(--border-card); border-radius:10px; padding:28px 24px; text-align:center; font-size:13px; color:var(--text-muted); }
+  .lote-total { display:flex; align-items:baseline; gap:8px; margin-bottom:14px; font-size:13px; color:var(--text-body); }
+  .lote-aviso { background:var(--info-bg); border:1px solid var(--info-border); border-radius:8px; padding:12px 14px; font-size:12.5px; color:var(--text-body); line-height:1.6; margin-bottom:20px; }
+  .lote-tope { background:#fff5e6; border:1px solid #e8b25a; border-radius:8px; padding:10px 13px; font-size:12.5px; color:var(--text-body); margin-top:12px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ SCREEN · LISTADO (mínimo) ══════════════════ -->
+<div class="screen active" id="w-hub">
+<nav class="navbar">
+    <div class="navbar-left">
+      <div class="navbar-logo" onclick="location.href='wireframe_descripciones.html'" style="cursor:pointer;"><svg width="59" height="48" viewBox="0 0 59 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip_lm_home)"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.2915 41.8054H52.5042L29.3977 18.6992L6.2915 41.8054Z" fill="#78BE20"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.22546 40.8102L8.81565 37.2551L7.607 36.0465L5.36756 38.2862L1.31531 34.2336L0 35.549L5.22546 40.8102ZM6.75409 30.9634L7.64277 31.8521L9.49136 30.0035L10.5934 31.0698L8.70933 32.9183L9.88221 34.0561L12.1574 31.7809L13.2236 32.8475L9.59768 36.4728L4.33678 31.2122L7.96274 27.5866L9.0293 28.6528L6.75409 30.9634ZM18.4491 27.6217L14.8944 26.5909C15.321 25.8088 15.1077 24.7423 14.3969 24.0315C13.6148 23.2494 12.2995 23.2852 11.4105 24.1736L8.74444 26.8396L14.0053 32.1009L15.3206 30.7498L11.0554 26.4842L11.9438 25.631C12.2995 25.2401 12.9395 25.2401 13.2949 25.631C13.6503 25.9867 13.6503 26.5909 13.2594 26.9821L12.4774 27.7638L17.0275 29.0436L18.4491 27.6217ZM21.3997 19.339C20.6534 18.5573 19.6932 18.1306 18.7691 18.0952C17.8092 18.0952 16.885 18.4506 16.0672 19.2684C14.3965 20.9391 14.5744 23.1073 16.103 24.636C16.885 25.418 17.8092 25.8443 18.7691 25.8443C19.6932 25.8801 20.6531 25.5247 21.4706 24.7068C23.1059 23.0361 22.9638 20.8676 21.3997 19.339ZM20.4398 23.6403C19.9423 24.1381 19.3736 24.2444 18.7691 24.0311C18.3782 23.889 17.9516 23.6048 17.5604 23.1779C16.5296 22.1825 16.2806 21.1518 17.0984 20.3343C17.5959 19.8365 18.1649 19.7301 18.7691 19.9434C19.1599 20.0855 19.5511 20.3697 19.9777 20.7967C20.9731 21.792 21.2573 22.8228 20.4398 23.6403ZM22.9992 16.5308L22.0393 13.5448L23.5683 11.9807L24.8832 17.0641L26.9451 19.1256L25.5944 20.4767L23.5683 18.4152L18.6982 16.8865L20.1556 15.4288L22.9638 16.4954L22.9992 16.5308ZM47.3501 34.6248L52.5756 29.3636L51.1884 27.9774L45.9278 33.2383L47.3501 34.6248ZM27.1939 14.5043L31.2819 12.5498L28.2959 15.5712L29.5045 16.8153L34.7658 11.5544L33.0947 9.88303L29.1137 11.8028L31.1044 7.89268L29.3979 6.18652L24.137 11.4474L25.3456 12.6561L28.3671 9.63461L26.4118 13.7226L27.1939 14.5043ZM36.3298 15.2509L35.4411 16.1396L37.4315 18.1661L36.3653 19.2323L34.3395 17.2419L33.2014 18.3794L35.6548 20.8321L34.5876 21.8984L30.8198 18.0949L36.0811 12.8694L39.8488 16.6375L38.7826 17.704L36.3298 15.2509ZM41.4129 28.724L44.9679 32.2784L46.1766 31.0698L43.9368 28.8661L47.9894 24.7777L46.6744 23.4628L41.4129 28.724ZM55.5613 32.3496L53.8909 37.9305L57.5162 34.3049L58.7603 35.549L53.4997 40.8102L51.8645 39.1391L53.2861 33.4162L49.6959 37.0064L48.4869 35.7977L53.7485 30.5368L55.5613 32.3496ZM40.4179 27.7283L41.4132 24.1381C42.1956 24.5644 43.2618 24.3872 44.0084 23.6403C44.7546 22.8583 44.7546 21.543 43.8666 20.6543L41.0227 17.8107L35.7614 23.0716L37.1119 24.4223L41.342 20.1564L42.3731 21.1872C42.7643 21.5781 42.7643 22.1825 42.4089 22.5383C42.0531 22.9291 41.4129 22.8934 41.0578 22.5383L40.0979 21.5781L38.9604 26.2706L40.4179 27.7283Z" fill="black"/></g><defs><clipPath id="clip_lm_home"><rect width="58.7755" height="48" fill="white"/></clipPath></defs></svg></div>
+      <span class="navbar-title">eMerch Toolkit</span>
+    </div>
+    <div class="navbar-right">
+      <span class="navbar-link" onclick="location.href='wireframe_descripciones.html'" style="cursor:pointer;"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Descripciones</span>
+      <span class="navbar-link navbar-link-active" style="cursor:default;"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Validaciones</span>
+      <div class="row-menu" id="user-menu-v" style="margin-left:8px;">
+        <button class="navbar-link" onclick="event.stopPropagation(); document.getElementById('user-menu-v').classList.toggle('open')" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:'Inter',system-ui,sans-serif;font-size:14px;font-weight:400;color:var(--text-body);padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Ana García<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="row-menu-dropdown" style="right:0; min-width:180px;"><div class="row-menu-item" style="color:var(--text-muted);">Cerrar sesión</div></div>
+      </div>
+    </div>
+  </nav>
+  <div class="grid" style="padding-top:40px; padding-bottom:80px;">
+    <div class="lote-aviso">
+      <strong>Maqueta de una funcionalidad en estudio:</strong> lanzar varias auditorías de una vez.
+      No es el prototipo de validaciones — aquí solo está el embudo de «Nueva auditoría», el acuse
+      de recibo y el listado mínimo que prueba que salen <em>N</em> auditorías y no una con varios
+      perímetros. Categoría web y Listado CSV se lanzan de una en una y no están en esta maqueta.
+    </div>
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin-bottom:24px;">
+      <div>
+        <h1 style="font-size:28px; font-weight:700; color:var(--text-ink);">Auditorías de calidad</h1>
+        <div style="font-size:14px; color:var(--text-muted); margin-top:6px;">Lanza hasta <strong>3 perímetros</strong> del mismo tipo en una sola vez.</div>
+      </div>
+      <button class="btn btn-primary" onclick="startWizard()" style="flex-shrink:0;">Nueva auditoría<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    </div>
+    <div style="display:flex; gap:0; border-bottom:1px solid var(--border-card); margin-bottom:20px;">
+      <button class="v-tab" data-tab="todo" onclick="switchTab('todo')">Todo</button>
+      <button class="v-tab" data-tab="en-curso" onclick="switchTab('en-curso')">En curso<span id="w-tab-n" style="background:var(--bg-parchment); color:var(--text-body); border-radius:999px; padding:1px 8px; margin-left:7px; font-size:11px; font-weight:700; font-variant-numeric:tabular-nums;">0</span></button>
+    </div>
+    <div style="background:#fff; border:1px solid var(--border-card); border-radius:8px; overflow:hidden;">
+      <table class="desc-table" style="table-layout:fixed; width:100%;">
+        <thead><tr><th style="width:92px;">ID</th><th style="width:34%;">Perímetro</th><th style="width:15%;">Referencias</th><th style="width:16%;">Lanzada</th><th>Estado</th></tr></thead>
+        <tbody id="w-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SCREEN · WIZARD ══════════════════ -->
+<div class="screen" id="w-wizard">
+<nav class="navbar">
+    <div class="navbar-left">
+      <div class="navbar-logo" onclick="go('w-hub')" style="cursor:pointer;"><svg width="59" height="48" viewBox="0 0 59 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip_lm_home)"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.2915 41.8054H52.5042L29.3977 18.6992L6.2915 41.8054Z" fill="#78BE20"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.22546 40.8102L8.81565 37.2551L7.607 36.0465L5.36756 38.2862L1.31531 34.2336L0 35.549L5.22546 40.8102ZM6.75409 30.9634L7.64277 31.8521L9.49136 30.0035L10.5934 31.0698L8.70933 32.9183L9.88221 34.0561L12.1574 31.7809L13.2236 32.8475L9.59768 36.4728L4.33678 31.2122L7.96274 27.5866L9.0293 28.6528L6.75409 30.9634ZM18.4491 27.6217L14.8944 26.5909C15.321 25.8088 15.1077 24.7423 14.3969 24.0315C13.6148 23.2494 12.2995 23.2852 11.4105 24.1736L8.74444 26.8396L14.0053 32.1009L15.3206 30.7498L11.0554 26.4842L11.9438 25.631C12.2995 25.2401 12.9395 25.2401 13.2949 25.631C13.6503 25.9867 13.6503 26.5909 13.2594 26.9821L12.4774 27.7638L17.0275 29.0436L18.4491 27.6217ZM21.3997 19.339C20.6534 18.5573 19.6932 18.1306 18.7691 18.0952C17.8092 18.0952 16.885 18.4506 16.0672 19.2684C14.3965 20.9391 14.5744 23.1073 16.103 24.636C16.885 25.418 17.8092 25.8443 18.7691 25.8443C19.6932 25.8801 20.6531 25.5247 21.4706 24.7068C23.1059 23.0361 22.9638 20.8676 21.3997 19.339ZM20.4398 23.6403C19.9423 24.1381 19.3736 24.2444 18.7691 24.0311C18.3782 23.889 17.9516 23.6048 17.5604 23.1779C16.5296 22.1825 16.2806 21.1518 17.0984 20.3343C17.5959 19.8365 18.1649 19.7301 18.7691 19.9434C19.1599 20.0855 19.5511 20.3697 19.9777 20.7967C20.9731 21.792 21.2573 22.8228 20.4398 23.6403ZM22.9992 16.5308L22.0393 13.5448L23.5683 11.9807L24.8832 17.0641L26.9451 19.1256L25.5944 20.4767L23.5683 18.4152L18.6982 16.8865L20.1556 15.4288L22.9638 16.4954L22.9992 16.5308ZM47.3501 34.6248L52.5756 29.3636L51.1884 27.9774L45.9278 33.2383L47.3501 34.6248ZM27.1939 14.5043L31.2819 12.5498L28.2959 15.5712L29.5045 16.8153L34.7658 11.5544L33.0947 9.88303L29.1137 11.8028L31.1044 7.89268L29.3979 6.18652L24.137 11.4474L25.3456 12.6561L28.3671 9.63461L26.4118 13.7226L27.1939 14.5043ZM36.3298 15.2509L35.4411 16.1396L37.4315 18.1661L36.3653 19.2323L34.3395 17.2419L33.2014 18.3794L35.6548 20.8321L34.5876 21.8984L30.8198 18.0949L36.0811 12.8694L39.8488 16.6375L38.7826 17.704L36.3298 15.2509ZM41.4129 28.724L44.9679 32.2784L46.1766 31.0698L43.9368 28.8661L47.9894 24.7777L46.6744 23.4628L41.4129 28.724ZM55.5613 32.3496L53.8909 37.9305L57.5162 34.3049L58.7603 35.549L53.4997 40.8102L51.8645 39.1391L53.2861 33.4162L49.6959 37.0064L48.4869 35.7977L53.7485 30.5368L55.5613 32.3496ZM40.4179 27.7283L41.4132 24.1381C42.1956 24.5644 43.2618 24.3872 44.0084 23.6403C44.7546 22.8583 44.7546 21.543 43.8666 20.6543L41.0227 17.8107L35.7614 23.0716L37.1119 24.4223L41.342 20.1564L42.3731 21.1872C42.7643 21.5781 42.7643 22.1825 42.4089 22.5383C42.0531 22.9291 41.4129 22.8934 41.0578 22.5383L40.0979 21.5781L38.9604 26.2706L40.4179 27.7283Z" fill="black"/></g><defs><clipPath id="clip_lm_home"><rect width="58.7755" height="48" fill="white"/></clipPath></defs></svg></div>
+      <div class="navbar-breadcrumb">
+        <span class="navbar-breadcrumb-home" onclick="location.href='wireframe_descripciones.html'">eMerch Toolkit</span><span class="navbar-breadcrumb-sep">›</span><span class="navbar-breadcrumb-home" onclick="go('w-hub')">Validaciones</span><span class="navbar-breadcrumb-sep">›</span><span class="navbar-breadcrumb-current">Nueva auditoría en lote</span>
+      </div>
+    </div>
+    <div class="navbar-right">
+      <div class="row-menu" id="user-menu-vw">
+        <button class="navbar-link" onclick="event.stopPropagation(); document.getElementById('user-menu-vw').classList.toggle('open')" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:'Inter',system-ui,sans-serif;font-size:14px;font-weight:400;color:var(--text-body);padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Ana García<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="row-menu-dropdown" style="right:0; min-width:180px;"><div class="row-menu-item" style="color:var(--text-muted);">Cerrar sesión</div></div>
+      </div>
+    </div>
+  </nav>
+  <div class="wizard-layout">
+    <aside class="wizard-sidebar" style="width:344px;">
+      <div class="sidebar-guide-name">Nueva auditoría</div>
+      <div class="sidebar-guide-meta" style="margin-bottom:28px;">Auditoría de calidad de fichas</div>
+      <div class="sidebar-step active"><div class="sidebar-step-dot">1</div>Perímetro</div>
+      <div class="sidebar-step"><div class="sidebar-step-dot">2</div>Ejecución</div>
+      <div style="margin-top:auto; margin-bottom:-100px; height:72px; display:flex; align-items:center;"><button onclick="go('w-hub')" style="background:none; border:none; cursor:pointer; color:rgba(255,255,255,0.7); font-size:14px; font-weight:600; font-family:'Inter',system-ui,sans-serif; padding:0;">Cancelar y salir</button></div>
+    </aside>
+    <div style="flex:1; overflow:hidden; display:grid; grid-template-columns:1fr 1fr; min-height:0;">
+      <div style="padding:40px 32px 100px; border-right:1px solid var(--border); background:#FAFBFC; overflow-y:auto;">
+        <div class="wizard-title" style="font-size:20px; margin-bottom:20px;">Selecciona el perímetro</div>
+        <div style="display:flex; align-items:center; gap:12px; border:1px solid var(--border-card); border-radius:8px; padding:11px 14px; background:#fff;">
+          <div id="w-type-ico" class="v-type-ico" style="width:34px; height:34px;"></div>
+          <span id="w-type-label" style="flex:1; font-size:14px; font-weight:700; color:var(--text-ink);">—</span>
+          <button onclick="openTypeModal()" title="Cambiar tipo" style="background:none; border:none; cursor:pointer; color:var(--green); padding:4px; display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        </div>
+        <div id="w-picker" style="margin-top:24px;"></div>
+      </div>
+      <div style="padding:40px 32px 100px; background:var(--bg-page); overflow-y:auto;">
+        <div style="font-size:20px; font-weight:700; color:var(--text-ink); margin-bottom:20px;">Tu selección</div>
+        <div id="w-right"></div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar with-sidebar" style="display:flex; left:344px;">
+    <button class="btn-back" onclick="go('w-hub')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Atrás</button>
+    <button id="w-launch" class="btn btn-primary" disabled style="opacity:0.4; cursor:not-allowed;" onclick="launchLote()">Empezar auditoría de calidad<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<!-- ══════════════════ MODAL · TIPO ══════════════════ -->
+<div class="modal-overlay" id="w-type-modal">
+  <div class="modal-box" style="position:relative; width:520px; max-width:92vw; padding:40px 36px 32px;">
+    <button onclick="closeTypeModal()" style="position:absolute; top:16px; right:16px; background:none; border:none; cursor:pointer; color:var(--text-muted); padding:4px; display:flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div style="text-align:center; margin-bottom:24px;">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#188803" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; margin-bottom:12px;"><path d="M12 3l1.5 3 3.5.5-2.5 2.5.5 3.5L12 11l-3 1.5.5-3.5L7 6.5l3.5-.5z"/><path d="M19 9l1 2 2 .5-1.5 1.5.5 2-2-1-2 1 .5-2L16 11.5l2-.5z"/></svg>
+      <div style="font-size:22px; font-weight:700; color:var(--text-ink);">¿Qué quieres auditar?</div>
+      <div style="font-size:13px; color:var(--text-muted); margin-top:10px;">Un lote no mezcla tipos: eliges uno y añades hasta 3 valores.</div>
+    </div>
+    <div id="w-type-buttons" style="display:flex; flex-direction:column; gap:10px;"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ MODAL · ACUSE DE RECIBO ══════════════════ -->
+<div class="modal-overlay" id="w-ack-modal">
+  <div class="modal-box" style="position:relative; width:520px; max-width:92vw; padding:36px 36px 28px;">
+    <div style="text-align:center; margin-bottom:22px;">
+      <div style="width:46px;height:46px;border-radius:50%;background:var(--success-bg);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div id="w-ack-title" style="font-size:21px; font-weight:700; color:var(--text-ink);">—</div>
+      <div style="font-size:13px; color:var(--text-muted); margin-top:8px;">Se están ejecutando. Puedes cerrar esto y seguir trabajando.</div>
+    </div>
+    <div id="w-ack-list" style="margin-bottom:18px;"></div>
+    <button class="btn btn-primary" onclick="goEnCurso()" style="width:100%; justify-content:center;">Ver en curso<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+  </div>
+</div>
+
+<script>
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  MAQUETA · LANZAR AUDITORÍAS EN LOTE
+  //  Tres órdenes a la vez, no una auditoría con tres perímetros: cada item
+  //  seleccionado acaba siendo una fila propia en el listado.
+  //  Decisiones tomadas con Miquel el 16 de octubre de 2026:
+  //   · Admiten lote Gama, Proveedor/Seller, Modelo y Sección. Categoría web y
+  //     Listado CSV se lanzan de una en una y no están en esta maqueta.
+  //   · No se mezclan tipos en un mismo lote.
+  //   · Tope de 3 items, por ahora.
+  //   · Fuera el selector 1P/3P del proveedor dual: el 1P/3P se resolverá por
+  //     permisos. Pendiente de definir con el cliente.
+  //   · El modal deja de ser un monitor de progreso y pasa a ser un acuse de
+  //     recibo que lleva a la pestaña «En curso», que es donde el progreso vive
+  //     de verdad porque se puede abandonar y volver.
+  // ═══════════════════════════════════════════════════════════════════════════
+  var MAX_LOTE=3;
+  var TIPOS_LOTE=['Gama','Vendor','Modelo','Seccion'];
+
+  var _vTipos=[
+    { k:'Gama', label:'Gama', sub:'Todas las referencias de una gama', ico:'<svg viewBox="0 0 24 24"><path d="M3 7h18"/><path d="M3 12h18"/><path d="M3 17h18"/></svg>' },
+    { k:'Vendor', label:'Proveedor / Seller', sub:'Catálogo de un proveedor (1P) o seller (3P)', ico:'<svg viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg>' },
+    { k:'Modelo', label:'Modelo', sub:'Un modelo concreto (tipología)', ico:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>' },
+    { k:'Categoría', label:'Categoría web', sub:'Pegar la URL de su PLP', ico:'<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>' },
+    { k:'Seccion', label:'Sección', sub:'Referencias de una sección de tienda física', ico:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>' },
+    { k:'Listado', label:'Listado CSV', sub:'Subir un fichero con las referencias', ico:'<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' }
+  ];
+
+  var _vLists={
+    'Modelo':[{name:'Puerta entrada nogal',code:'MOD_202512'},{name:'Aplique de pared industrial',code:'MOD_000000'},{name:'Foco empotrable LED 8W',code:'MOD_445120'},{name:'Suelo laminado roble natural',code:'MOD_889900'},{name:'Ventana PVC oscilobatiente',code:'MOD_202513'},{name:'Armario modular 3 puertas',code:'MOD_334455'},{name:'Grifo monomando cocina',code:'MOD_112233'},{name:'Radiador aluminio 8 elementos',code:'MOD_667788'},{name:'Cortadora de césped eléctrica',code:'MOD_998877'},{name:'Persiana enrollable exterior',code:'MOD_223344'},{name:'Encimera de cuarzo blanco',code:'MOD_778899'},{name:'Mampara de ducha corredera',code:'MOD_556677'},{name:'Toldo motorizado 3,5m',code:'MOD_445566'},{name:'Caldera de condensación 24kW',code:'MOD_334488'}],
+    'Gama':[{name:'M',desc:'Corazón de gama · se implanta en todas las tiendas'},{name:'A',desc:'Se implanta según el tamaño de la tienda'},{name:'B',desc:'Se implanta según el tamaño de la tienda'},{name:'C',desc:'Se implanta según el tamaño de la tienda'},{name:'D',desc:'Se implanta según el tamaño de la tienda'},{name:'E',desc:'Muestras'},{name:'S',desc:'AVS · penalizan en la cuenta de explotación'},{name:'Z',desc:'Referencia en AVS con devolución al proveedor'},{name:'T',desc:'Productos test'},{name:'L',desc:'Productos locales'},{name:'R',desc:'Repuestos'},{name:'P',desc:'Productos de promoción'},{name:'K',desc:'Bajo pedido'},{name:'V',desc:'Venta flash'}],
+    'Vendor':[{name:'Simon',tag:'1P'},{name:'Roca',dual:true},{name:'Grohe',dual:true},{name:'Saint-Gobain',tag:'1P'},{name:'Philips',tag:'1P'},{name:'Bosch',dual:true},{name:'Legrand',tag:'1P'},{name:'Somfy',tag:'1P'},{name:'LuzHogar',tag:'3P'},{name:'IlumStore',tag:'3P'},{name:'ElectroLuz',tag:'3P'},{name:'DecoLight',tag:'3P'},{name:'JardínPro',tag:'3P'},{name:'BañoExpress',tag:'3P'}],
+    'Seccion':[{name:'Baño'},{name:'Cocina'},{name:'Jardín'},{name:'Carpintería y madera'},{name:'Ferretería'},{name:'Herramientas'},{name:'Electricidad'},{name:'Fontanería y calefacción'},{name:'Climatización'},{name:'Iluminación'},{name:'Pintura y droguería'},{name:'Revestimientos y suelos'},{name:'Decoración'},{name:'Construcción y aislamiento'}]
+  };
+
+  var _vSkuBase={ 'Modelo':46,'Gama':2480,'Vendor':1150,'Categoría':890,'Seccion':2240,'Listado':640 };
+  var _queBox='<div style="margin-top:24px; background:var(--info-bg); border:1px solid var(--info-border); border-radius:8px; padding:16px 18px;"><div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--info-border)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span style="font-size:14px; font-weight:700; color:var(--text-ink);">¿Qué se validará?</span></div><div style="font-size:13px; color:var(--text-body); line-height:1.9;">· Coherencia: medidas, unidades, color y material<br>· Ortografía y calidad de la designación<br>· Atributos obligatorios sin completar<br>· Estructura de la designación<br>· Descripción (presencia y longitud)</div></div>';
+
+  var _tipo=null, _sel=[], _rows=[], _tab='en-curso', _seq=0, _tope=false;
+
+  function fmtNum(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
+  function estadoBadge(e){ var m={'en-curso':['En curso','var(--warning-bg)','var(--warning-border)','var(--warning-text)'],'por-revisar':['Pendiente de revisión','var(--bg-parchment)','var(--border-card)','var(--text-body)'],'revisado':['Revisada','var(--success-bg)','var(--success-border)','var(--green)'],'finalizada':['Finalizada','#fff','var(--border-card)','var(--text-muted)'],'error':['Error','#fdeaea','#f8bcbb','#c61112'],'borrador':['Borrador','var(--bg-parchment)','var(--border-card)','var(--text-muted)']}[e]||['Finalizada','#fff','var(--border-card)','var(--text-muted)']; return '<span style="display:inline-flex;align-items:center;background:'+m[1]+';border:1px solid '+m[2]+';border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;color:'+m[3]+';white-space:nowrap;">'+m[0]+'</span>'; }
+
+  function typeLabel(k){ for(var i=0;i<_vTipos.length;i++) if(_vTipos[i].k===k) return _vTipos[i].label; return k; }
+  function typeIco(k){ for(var i=0;i<_vTipos.length;i++) if(_vTipos[i].k===k) return _vTipos[i].ico; return ''; }
+  function go(id){ document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); }); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+
+  // ── Tipo ──────────────────────────────────────────────────────────────────
+  function openTypeModal(){ document.getElementById('w-type-modal').classList.add('open'); }
+  function closeTypeModal(){ document.getElementById('w-type-modal').classList.remove('open'); }
+  function renderTypeButtons(){
+    document.getElementById('w-type-buttons').innerHTML=_vTipos.map(function(t){
+      var ok=TIPOS_LOTE.indexOf(t.k)!==-1;
+      var sub=ok?t.sub:t.sub+' · de una en una, fuera de esta maqueta';
+      return '<button class="v-type-btn"'+(ok?'':' disabled style="opacity:.45;cursor:not-allowed;"')+' onclick="'+(ok?'chooseTipo(\''+t.k+'\')':'')+'"><div class="v-type-ico">'+t.ico+'</div><div style="flex:1;text-align:left;"><div style="font-size:14px;font-weight:700;color:var(--text-ink);">'+t.label+'</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px;">'+sub+'</div></div>'+(ok?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>':'')+'</button>';
+    }).join('');
+  }
+  function chooseTipo(k){
+    // Cambiar de tipo vacía la selección, porque un lote no mezcla tipos.
+    var habia=_sel.length && k!==_tipo;
+    _tipo=k; if(habia) _sel=[];
+    _tope=false;
+    closeTypeModal();
+    document.getElementById('w-type-ico').innerHTML=typeIco(k);
+    document.getElementById('w-type-label').textContent=typeLabel(k);
+    renderPicker(); renderRight(habia?'Se ha vaciado la selección: un lote no mezcla tipos.':'');
+  }
+
+  // ── Columna izquierda: la lista no se vacía, se va añadiendo ──────────────
+  function renderPicker(){
+    document.getElementById('w-picker').innerHTML=
+      '<div style="background:#fff;border:1px solid var(--border-card);border-radius:12px;padding:20px;">'
+      +'<div style="position:relative;margin-bottom:14px;">'
+      +'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'
+      +'<input id="w-opt-search" oninput="renderOpts(this.value)" type="text" placeholder="Busca '+typeLabel(_tipo).toLowerCase()+'\u2026" style="width:100%;height:44px;border:1px solid var(--border-input);border-radius:8px;padding:0 14px 0 40px;font-size:13px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;"/></div>'
+      +'<div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Haz clic para añadir. Hasta '+MAX_LOTE+'.</div>'
+      +'<div id="w-opt-list"></div></div>';
+    renderOpts('');
+  }
+  function renderOpts(q){
+    var list=document.getElementById('w-opt-list'); if(!list) return;
+    var ql=(q||'').toLowerCase();
+    // Lo ya añadido sale de la lista: esta a la vista en la columna de la derecha,
+    // y asi lo que queda a la izquierda es exactamente lo que todavia se puede elegir.
+    var items=(_vLists[_tipo]||[]).filter(function(o){
+      if(_sel.filter(function(x){return x.name===o.name;}).length) return false;
+      return !ql || o.name.toLowerCase().indexOf(ql)!==-1 || (o.code&&o.code.toLowerCase().indexOf(ql)!==-1);
+    });
+    if(!items.length){ list.innerHTML='<div style="color:var(--text-muted);font-size:13px;padding:16px 0;">'+(ql?'Sin resultados.':'No queda nada por añadir.')+'</div>'; return; }
+    list.innerHTML=items.map(function(o){
+      var code=o.code?'<span style="font-size:13px;color:var(--text-muted);font-weight:400;flex-shrink:0;">'+o.code+'</span>':'';
+      var desc=o.desc?'<span style="font-size:13px;color:var(--text-tertiary);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+o.desc+'</span>':'';
+      return '<div class="v-opt" onclick="addItem(\''+o.name.replace(/'/g,"\\'")+'\')">'
+        +'<div style="min-width:0;display:flex;align-items:baseline;gap:8px;">'+code
+        +'<span style="font-size:13px;color:var(--text-ink);font-weight:600;flex-shrink:0;">'+o.name+'</span>'+desc+'</div></div>';
+    }).join('');
+  }
+
+  // ── Añadir y quitar ───────────────────────────────────────────────────────
+  function addItem(name){
+    if(_sel.filter(function(x){return x.name===name;}).length) return;
+    if(_sel.length>=MAX_LOTE){ _tope=true; renderRight(); return; }
+    var o=(_vLists[_tipo]||[]).filter(function(x){return x.name===name;})[0]||{name:name};
+    var it={ name:o.name, code:o.code||'', desc:o.desc||'', tipo:_tipo, refs:null };
+    _sel.push(it); _tope=false;
+    renderOpts(document.getElementById('w-opt-search').value); renderRight();
+    // Cada cajita consulta por su cuenta, así que se ven resolverse una a una.
+    setTimeout(function(){
+      var base=_vSkuBase[it.tipo]||500;
+      var h=0; for(var i=0;i<it.name.length;i++) h=(h*31+it.name.charCodeAt(i))>>>0;
+      it.refs=Math.max(40, Math.round(base*(0.55+(h%90)/100)));
+      renderRight();
+    }, 700+Math.random()*500);
+  }
+  function removeItem(i){
+    _sel.splice(i,1); _tope=false;
+    var s=document.getElementById('w-opt-search');
+    renderOpts(s?s.value:''); renderRight();
+  }
+
+  // ── Columna derecha: una cajita por item ──────────────────────────────────
+  function renderRight(nota){
+    var host=document.getElementById('w-right');
+    if(!_tipo){ host.innerHTML='<div class="lote-empty">Elige primero qué quieres auditar.</div>'; updateLaunch(); return; }
+    if(!_sel.length){
+      host.innerHTML=(nota?'<div class="lote-tope" style="margin-top:0;margin-bottom:14px;">'+nota+'</div>':'')
+        +'<div class="lote-empty">Aún no has añadido nada<br><span style="font-size:12px;">Haz clic en los valores de la izquierda para añadirlos. Cada uno será una auditoría.</span></div>';
+      updateLaunch(); return;
+    }
+    var listos=_sel.filter(function(x){return x.refs!==null;});
+    var total=listos.reduce(function(a,x){return a+x.refs;},0);
+    var head='<div class="lote-total"><strong style="font-size:15px;color:var(--text-ink);">'+_sel.length+(_sel.length===1?' auditoría':' auditorías')+'</strong>'
+      +'<span>·</span><span>'+(listos.length===_sel.length?fmtNum(total)+' referencias en total':'contando referencias\u2026')+'</span></div>';
+    var cards=_sel.map(function(it,i){
+      var right = it.refs===null
+        ? '<div class="sku-loading" style="justify-content:flex-start;background:none;border:none;box-shadow:none;padding:0;"><div class="sku-spinner"></div></div>'
+        : '<div style="text-align:right;"><div class="lote-num">'+fmtNum(it.refs)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">referencias</div></div>';
+      return '<div class="lote-card">'
+        +'<div style="flex:1;min-width:0;">'
+        +'<div style="font-size:14px;font-weight:700;color:var(--text-ink);">'+(it.code?it.code+' · ':'')+it.name+'</div>'
+        +'<div style="font-size:12px;color:var(--text-muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(it.desc||typeLabel(it.tipo))+'</div></div>'
+        +right
+        +'<button class="lote-x" title="Quitar" onclick="removeItem('+i+')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>';
+    }).join('');
+    var tope=_tope?'<div class="lote-tope">De momento el tope es de '+MAX_LOTE+' por lote. Quita uno si quieres cambiarlo.</div>':'';
+    host.innerHTML=(nota?'<div class="lote-tope" style="margin-top:0;margin-bottom:14px;">'+nota+'</div>':'')+head+cards+tope+_queBox;
+    updateLaunch();
+  }
+  function updateLaunch(){
+    var b=document.getElementById('w-launch');
+    var ok=_sel.length>0 && _sel.filter(function(x){return x.refs===null;}).length===0;
+    b.disabled=!ok; b.style.opacity=ok?'1':'0.4'; b.style.cursor=ok?'pointer':'not-allowed';
+    var n=_sel.length;
+    b.childNodes[0].nodeValue = n>1 ? ('Empezar '+n+' auditorías de calidad') : 'Empezar auditoría de calidad';
+  }
+
+  // ── Lanzar: una fila por item ─────────────────────────────────────────────
+  function launchLote(){
+    var hoy=new Date(), f=('0'+hoy.getDate()).slice(-2)+'/'+('0'+(hoy.getMonth()+1)).slice(-2)+'/'+hoy.getFullYear();
+    var nuevas=_sel.map(function(it){
+      return { id:'AUD-'+(1240+(++_seq)), perimetro:typeLabel(it.tipo)+' · '+(it.code?it.code+' · ':'')+it.name, refs:it.refs, fecha:f };
+    });
+    _rows=nuevas.concat(_rows);
+    document.getElementById('w-ack-title').textContent = nuevas.length>1 ? (nuevas.length+' auditorías lanzadas') : 'Auditoría lanzada';
+    document.getElementById('w-ack-list').innerHTML = nuevas.map(function(r){
+      return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--border-card);">'
+        +'<span style="font-size:12px;font-weight:700;color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;">'+r.id+'</span>'
+        +'<span style="flex:1;min-width:0;font-size:13px;color:var(--text-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+r.perimetro+'</span>'
+        +'<span style="font-size:13px;font-weight:700;color:var(--text-body);font-variant-numeric:tabular-nums;flex-shrink:0;">'+fmtNum(r.refs)+'</span></div>';
+    }).join('') + (nuevas.length>1 ? '<div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:1px solid var(--border-card);font-size:13px;"><span style="color:var(--text-muted);">Total</span><strong style="font-variant-numeric:tabular-nums;">'+fmtNum(nuevas.reduce(function(a,r){return a+r.refs;},0))+' referencias</strong></div>' : '');
+    document.getElementById('w-ack-modal').classList.add('open');
+    _sel=[]; _tope=false;
+  }
+  function goEnCurso(){
+    document.getElementById('w-ack-modal').classList.remove('open');
+    go('w-hub'); switchTab('en-curso');
+    renderPicker(); renderRight();
+  }
+
+  // ── Listado mínimo ────────────────────────────────────────────────────────
+  function switchTab(t){
+    _tab=t;
+    document.querySelectorAll('.v-tab').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-tab')===t); });
+    renderRows();
+  }
+  function renderRows(){
+    document.getElementById('w-tab-n').textContent=_rows.length;
+    var tb=document.getElementById('w-tbody');
+    if(!_rows.length){
+      tb.innerHTML='<tr><td colspan="5" style="padding:40px 16px; text-align:center; color:var(--text-muted); font-size:13px;">Todavía no has lanzado ninguna. Pulsa «Nueva auditoría».</td></tr>';
+      return;
+    }
+    tb.innerHTML=_rows.map(function(r){
+      return '<tr><td style="font-size:12px;font-weight:700;color:var(--text-muted);font-variant-numeric:tabular-nums;">'+r.id+'</td>'
+        +'<td style="font-size:13px;color:var(--text-ink);font-weight:600;">'+r.perimetro+'</td>'
+        +'<td style="font-size:13px;font-variant-numeric:tabular-nums;">'+fmtNum(r.refs)+'</td>'
+        +'<td style="font-size:13px;color:var(--text-muted);">'+r.fecha+'</td>'
+        +'<td>'+estadoBadge('en-curso')+'</td></tr>';
+    }).join('');
+  }
+
+  function startWizard(){
+    go('w-wizard');
+    if(!_tipo){ openTypeModal(); } else { renderPicker(); renderRight(); }
+  }
+
+  // ── Arranque ──────────────────────────────────────────────────────────────
+  renderTypeButtons();
+  renderRows(); switchTab('en-curso');
+  renderRight();
+  document.addEventListener('click', function(e){
+    var m=document.getElementById('w-type-modal');
+    if(m.classList.contains('open') && e.target===m) closeTypeModal();
+  });
+</script>
+</body>
+</html>
