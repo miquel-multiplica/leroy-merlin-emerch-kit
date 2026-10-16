@@ -564,7 +564,8 @@
   .lote-x:hover { color:#c61112; }
   .lote-empty { background:var(--bg-parchment); border:1px dashed var(--border-card); border-radius:10px; padding:28px 24px; text-align:center; font-size:13px; color:var(--text-muted); }
   .lote-total { display:flex; align-items:baseline; gap:8px; margin-bottom:14px; font-size:13px; color:var(--text-body); }
-  .lote-aviso { background:var(--info-bg); border:1px solid var(--info-border); border-radius:8px; padding:12px 14px; font-size:12.5px; color:var(--text-body); line-height:1.6; margin-bottom:20px; }
+  .lote-aviso { background:#fdeaea; border:1px solid #f8bcbb; border-radius:8px; padding:12px 14px; font-size:12.5px; color:var(--text-body); line-height:1.6; margin-bottom:24px; }
+  .lote-aviso strong { color:#c61112; }
   .lote-tope { background:#fff5e6; border:1px solid #e8b25a; border-radius:8px; padding:10px 13px; font-size:12.5px; color:var(--text-body); margin-top:12px; }
 </style>
 </head>
@@ -586,19 +587,17 @@
       </div>
     </div>
   </nav>
-  <div class="grid" style="padding-top:40px; padding-bottom:80px;">
+  <div class="page-body">
+    <div class="grid" style="max-width:none; padding:0 40px;">
     <div class="lote-aviso">
       <strong>Maqueta de una funcionalidad en estudio:</strong> lanzar varias auditorías de una vez.
       No es el prototipo de validaciones — aquí solo está el embudo de «Nueva auditoría», el acuse
       de recibo y el listado mínimo que prueba que salen <em>N</em> auditorías y no una con varios
       perímetros. Categoría web y Listado CSV se lanzan de una en una y no están en esta maqueta.
     </div>
-    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin-bottom:24px;">
-      <div>
-        <h1 style="font-size:28px; font-weight:700; color:var(--text-ink);">Auditorías de calidad</h1>
-        <div style="font-size:14px; color:var(--text-muted); margin-top:6px;">Lanza hasta <strong>3 perímetros</strong> del mismo tipo en una sola vez.</div>
-      </div>
-      <button class="btn btn-primary" onclick="startWizard()" style="flex-shrink:0;">Nueva auditoría<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:24px;">
+      <div style="font-size:32px; font-weight:700; color:var(--text-ink);">Validaciones</div>
+      <button class="btn btn-primary" onclick="startWizard()" style="height:44px; font-size:14px; padding:0 20px; white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva auditoría</button>
     </div>
     <div style="display:flex; gap:0; border-bottom:1px solid var(--border-card); margin-bottom:20px;">
       <button class="v-tab" data-tab="todo" onclick="switchTab('todo')">Todo</button>
@@ -609,6 +608,7 @@
         <thead><tr><th style="width:92px;">ID</th><th style="width:34%;">Perímetro</th><th style="width:15%;">Referencias</th><th style="width:16%;">Lanzada</th><th>Estado</th></tr></thead>
         <tbody id="w-tbody"></tbody>
       </table>
+    </div>
     </div>
   </div>
 </div>
@@ -676,12 +676,13 @@
 <div class="modal-overlay" id="w-ack-modal">
   <div class="modal-box" style="position:relative; width:520px; max-width:92vw; padding:36px 36px 28px;">
     <div style="text-align:center; margin-bottom:22px;">
-      <div style="width:46px;height:46px;border-radius:50%;background:var(--success-bg);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div id="w-ack-title" style="font-size:21px; font-weight:700; color:var(--text-ink);">—</div>
+      <div style="margin-bottom:20px;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#188803" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;"><path d="M12 3l1.5 3 3.5.5-2.5 2.5.5 3.5L12 11l-3 1.5.5-3.5L7 6.5l3.5-.5z"/><path d="M19 9l1 2 2 .5-1.5 1.5.5 2-2-1-2 1 .5-2L16 11.5l2-.5z"/><path d="M5 14l.8 1.5 1.7.3-1.2 1.2.3 1.7L5 18l-1.6.7.3-1.7L2.5 15.8l1.7-.3z"/></svg></div>
+      <div id="w-ack-title" style="font-size:24px; font-weight:700; color:var(--text-ink); margin-bottom:12px;">Auditando…</div>
+      <div id="w-ack-sub" style="font-size:14px; color:var(--text-muted);">—</div>
     </div>
     <div id="w-ack-list" style="margin-bottom:4px;"></div>
     <div id="w-ack-note" class="info-note" style="margin-top:20px; margin-bottom:22px; text-align:left;"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span id="w-ack-note-txt"></span></div>
-    <button class="btn btn-primary" onclick="goEnCurso()" style="width:100%; justify-content:center;">Ver en curso<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+    <button class="btn btn-primary" onclick="goEnCurso()" style="width:100%; height:40px; font-size:13px; justify-content:center;">Cerrar y continuar en segundo plano</button>
   </div>
 </div>
 
@@ -723,7 +724,7 @@
   var _vSkuBase={ 'Modelo':46,'Gama':2480,'Vendor':1150,'Categoría':890,'Seccion':2240,'Listado':640 };
   var _queBox='<div style="margin-top:24px; background:var(--info-bg); border:1px solid var(--info-border); border-radius:8px; padding:16px 18px;"><div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--info-border)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span style="font-size:14px; font-weight:700; color:var(--text-ink);">¿Qué se validará?</span></div><div style="font-size:13px; color:var(--text-body); line-height:1.9;">· Coherencia: medidas, unidades, color y material<br>· Ortografía y calidad de la designación<br>· Atributos obligatorios sin completar<br>· Estructura de la designación<br>· Descripción (presencia y longitud)</div></div>';
 
-  var _tipo=null, _sel=[], _rows=[], _tab='en-curso', _seq=0, _tope=false;
+  var _tipo=null, _sel=[], _rows=[], _tab='en-curso', _seq=0, _tope=false, _tipoLanzado=null;
 
   function fmtNum(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
   function estadoBadge(e){ var m={'en-curso':['En curso','var(--warning-bg)','var(--warning-border)','var(--warning-text)'],'por-revisar':['Pendiente de revisión','var(--bg-parchment)','var(--border-card)','var(--text-body)'],'revisado':['Revisada','var(--success-bg)','var(--success-border)','var(--green)'],'finalizada':['Finalizada','#fff','var(--border-card)','var(--text-muted)'],'error':['Error','#fdeaea','#f8bcbb','#c61112'],'borrador':['Borrador','var(--bg-parchment)','var(--border-card)','var(--text-muted)']}[e]||['Finalizada','#fff','var(--border-card)','var(--text-muted)']; return '<span style="display:inline-flex;align-items:center;background:'+m[1]+';border:1px solid '+m[2]+';border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;color:'+m[3]+';white-space:nowrap;">'+m[0]+'</span>'; }
@@ -843,12 +844,17 @@
 
   // ── Lanzar: una fila por item ─────────────────────────────────────────────
   function launchLote(){
+    _tipoLanzado=_tipo;
     var hoy=new Date(), f=('0'+hoy.getDate()).slice(-2)+'/'+('0'+(hoy.getMonth()+1)).slice(-2)+'/'+hoy.getFullYear();
     var nuevas=_sel.map(function(it){
       return { id:++_seq, perimetro:typeLabel(it.tipo)+' · '+(it.code?it.code+' · ':'')+it.name, refs:it.refs, fecha:f };
     });
     _rows=nuevas.concat(_rows);
-    document.getElementById('w-ack-title').textContent = nuevas.length>1 ? (nuevas.length+' auditorías lanzadas') : 'Auditoría lanzada';
+    // El titulo es el mismo de la modal de progreso; lo que se ha lanzado lo
+    // dice el subtitulo, igual que alli con el perimetro.
+    document.getElementById('w-ack-sub').textContent = nuevas.length>1
+      ? (typeLabel(_tipoLanzado)+' · '+nuevas.length+' órdenes')
+      : nuevas[0].perimetro;
     document.getElementById('w-ack-list').innerHTML = nuevas.map(function(r){
       return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--border-card);">'
         +'<span style="font-size:12px;font-weight:700;color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;">'+audCode(r)+'</span>'
