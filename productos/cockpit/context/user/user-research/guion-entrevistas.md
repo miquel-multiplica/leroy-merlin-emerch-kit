@@ -6,6 +6,10 @@
 >
 > **Alcance de lo que investigamos:** calidad de catálogo. Transversal, no por mundo.
 >
+> **Llegan avisados.** Pedro les ha pedido foco en calidad de catálogo, así que vendrán filtrados:
+> contarán la parte de su día que creen que viene al caso. El encuadre les da permiso explícito
+> para salirse, porque el bloque 1 necesita el día entero.
+>
 > Escrito el 2026-10-16. Sustituye al guion anterior, cuya primera mitad era la agenda del
 > kickoff y ya está gastada.
 >
@@ -54,7 +58,15 @@ vez y qué hiciste después?»*.
 ## 0 · Encuadre (3 min)
 
 No venimos a enseñar nada ni a validar una idea: venimos a entender el puesto. Nada de lo que se
-diga compromete a que esté en la herramienta. ¿Podemos grabar?
+diga compromete a que esté en la herramienta.
+
+**Y un matiz, porque os han pedido foco en calidad de catálogo y es correcto:** eso es lo que
+vamos a construir. Pero en la primera parte queremos tu día entero, tal cual, aunque la mitad no
+tenga que ver con catálogo. Si solo nos cuentas esa parte, saldrá una herramienta que da por hecho
+que vives ahí dentro — y lo que te interrumpe y lo que no te da tiempo a hacer es justo donde esto
+tendría que encajar.
+
+¿Podemos grabar?
 
 ## 1 · El día de ayer (7 min)
 
