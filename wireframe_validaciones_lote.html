@@ -727,6 +727,7 @@
 
   function fmtNum(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
   function estadoBadge(e){ var m={'en-curso':['En curso','var(--warning-bg)','var(--warning-border)','var(--warning-text)'],'por-revisar':['Pendiente de revisión','var(--bg-parchment)','var(--border-card)','var(--text-body)'],'revisado':['Revisada','var(--success-bg)','var(--success-border)','var(--green)'],'finalizada':['Finalizada','#fff','var(--border-card)','var(--text-muted)'],'error':['Error','#fdeaea','#f8bcbb','#c61112'],'borrador':['Borrador','var(--bg-parchment)','var(--border-card)','var(--text-muted)']}[e]||['Finalizada','#fff','var(--border-card)','var(--text-muted)']; return '<span style="display:inline-flex;align-items:center;background:'+m[1]+';border:1px solid '+m[2]+';border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;color:'+m[3]+';white-space:nowrap;">'+m[0]+'</span>'; }
+  function audCode(a){ return '#'+(1000+((a&&a.id)||0)); }
 
   function typeLabel(k){ for(var i=0;i<_vTipos.length;i++) if(_vTipos[i].k===k) return _vTipos[i].label; return k; }
   function typeIco(k){ for(var i=0;i<_vTipos.length;i++) if(_vTipos[i].k===k) return _vTipos[i].ico; return ''; }
@@ -844,13 +845,13 @@
   function launchLote(){
     var hoy=new Date(), f=('0'+hoy.getDate()).slice(-2)+'/'+('0'+(hoy.getMonth()+1)).slice(-2)+'/'+hoy.getFullYear();
     var nuevas=_sel.map(function(it){
-      return { id:'AUD-'+(1240+(++_seq)), perimetro:typeLabel(it.tipo)+' · '+(it.code?it.code+' · ':'')+it.name, refs:it.refs, fecha:f };
+      return { id:++_seq, perimetro:typeLabel(it.tipo)+' · '+(it.code?it.code+' · ':'')+it.name, refs:it.refs, fecha:f };
     });
     _rows=nuevas.concat(_rows);
     document.getElementById('w-ack-title').textContent = nuevas.length>1 ? (nuevas.length+' auditorías lanzadas') : 'Auditoría lanzada';
     document.getElementById('w-ack-list').innerHTML = nuevas.map(function(r){
       return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--border-card);">'
-        +'<span style="font-size:12px;font-weight:700;color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;">'+r.id+'</span>'
+        +'<span style="font-size:12px;font-weight:700;color:var(--text-muted);font-variant-numeric:tabular-nums;flex-shrink:0;">'+audCode(r)+'</span>'
         +'<span style="flex:1;min-width:0;font-size:13px;color:var(--text-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+r.perimetro+'</span>'
         +'<span style="font-size:13px;font-weight:700;color:var(--text-body);font-variant-numeric:tabular-nums;flex-shrink:0;">'+fmtNum(r.refs)+'</span></div>';
     }).join('') + (nuevas.length>1 ? '<div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:1px solid var(--border-card);font-size:13px;"><span style="color:var(--text-muted);">Total</span><strong style="font-variant-numeric:tabular-nums;">'+fmtNum(nuevas.reduce(function(a,r){return a+r.refs;},0))+' referencias</strong></div>' : '');
@@ -877,7 +878,7 @@
       return;
     }
     tb.innerHTML=_rows.map(function(r){
-      return '<tr><td style="font-size:12px;font-weight:700;color:var(--text-muted);font-variant-numeric:tabular-nums;">'+r.id+'</td>'
+      return '<tr><td style="font-size:13px;font-weight:600;color:var(--text-secondary-dark);font-variant-numeric:tabular-nums;">'+audCode(r)+'</td>'
         +'<td style="font-size:13px;color:var(--text-ink);font-weight:600;">'+r.perimetro+'</td>'
         +'<td style="font-size:13px;font-variant-numeric:tabular-nums;">'+fmtNum(r.refs)+'</td>'
         +'<td style="font-size:13px;color:var(--text-muted);">'+r.fecha+'</td>'
