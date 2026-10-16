@@ -510,6 +510,7 @@
   .fms-none { padding:14px 13px; font-size:12.5px; color:var(--text-muted); }
   .fms-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 11px; border-top:1px solid var(--border-card); }
   .fms-b { height:30px; padding:0 13px; border-radius:7px; font-family:'Inter',system-ui,sans-serif; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
+  .fms-b[disabled] { opacity:.4; cursor:not-allowed; }
   .fms-b-sec { background:#fff; border:1px solid var(--border-input); color:var(--text-body); }
   .fms-b-sec:hover { background:var(--bg-parchment); }
   .fms-b-pri { background:var(--green); border:1px solid var(--green); color:#fff; }
@@ -1834,11 +1835,24 @@
     _fmsOpenId=null; _fmsDraft=[]; _fmsQuery='';
   }
   function fmsBody(id){
+    // El popover se monta una sola vez al abrir. Despues solo se redibujan el
+    // listado y el pie: si se rehiciera todo, el buscador perderia el cursor en
+    // cada tecla y la fila que recibio el clic desapareceria del DOM, con lo que
+    // el cierre por fuera la daria por «fuera» y cerraria el popover.
     var c=_FMS[id], host=document.getElementById('fms-pop-'+id); if(!host) return;
+    var search=c.search ? '<div style="padding:9px 10px 5px;border-bottom:1px solid var(--border-card);"><div style="position:relative;">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'
+      +'<input id="fms-q-'+id+'" oninput="fmsSearch(\''+id+'\',this.value)" onclick="event.stopPropagation()" placeholder="Buscar\u2026" style="width:100%;height:32px;border:1px solid var(--border-input);border-radius:7px;padding:0 10px 0 31px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;box-sizing:border-box;"/>'
+      +'</div></div>' : '';
+    host.innerHTML=search+'<div class="fms-list" id="fms-list-'+id+'"></div><div class="fms-foot" id="fms-foot-'+id+'"></div>';
+    fmsList(id); fmsFoot(id);
+  }
+  function fmsList(id){
+    var c=_FMS[id], host=document.getElementById('fms-list-'+id); if(!host) return;
     var q=(_fmsQuery||'').toLowerCase();
     var row=function(i){
       var p=c.flat[i], on=_fmsDraft.indexOf(p[0])!==-1;
-      return '<div class="fms-row'+(on?' sel':'')+'" onclick="fmsCheck(\''+id+'\','+i+')">'
+      return '<div class="fms-row'+(on?' sel':'')+'" onclick="event.stopPropagation(); fmsCheck(\''+id+'\','+i+')">'
         +'<input type="checkbox"'+(on?' checked':'')+' tabindex="-1" style="pointer-events:none;width:15px;height:15px;margin:0;accent-color:var(--green);flex-shrink:0;"/>'
         +'<span>'+p[1]+'</span></div>';
     };
@@ -1850,34 +1864,34 @@
         if(ids.length) body+='<div class="fms-grp">'+g[0]+'</div>'+ids.map(row).join('');
       });
     } else {
-      var ids=c.seq.filter(function(i){ return !q || c.flat[i][1].toLowerCase().indexOf(q)!==-1; });
-      body=ids.map(row).join('');
+      body=c.seq.filter(function(i){ return !q || c.flat[i][1].toLowerCase().indexOf(q)!==-1; }).map(row).join('');
     }
-    if(!body) body='<div class="fms-none">Nada que coincida</div>';
-    var search=c.search ? '<div style="padding:9px 10px 5px;border-bottom:1px solid var(--border-card);"><div style="position:relative;">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'
-      +'<input id="fms-q-'+id+'" value="'+(_fmsQuery||'').replace(/"/g,'&quot;')+'" oninput="_fmsQuery=this.value; fmsBody(\''+id+'\'); document.getElementById(\'fms-q-'+id+'\').focus();" placeholder="Buscar…" style="width:100%;height:32px;border:1px solid var(--border-input);border-radius:7px;padding:0 10px 0 31px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;box-sizing:border-box;"/>'
-      +'</div></div>' : '';
-    host.innerHTML=search+'<div class="fms-list">'+body+'</div>'
-      +'<div class="fms-foot"><button class="fms-b fms-b-sec" onclick="event.stopPropagation(); fmsReset(\''+id+'\')">Borrar</button>'
-      +'<button class="fms-b fms-b-pri" onclick="event.stopPropagation(); fmsApply(\''+id+'\')">Aplicar</button></div>';
+    host.innerHTML=body||'<div class="fms-none">Nada que coincida</div>';
   }
+  function fmsFoot(id){
+    var host=document.getElementById('fms-foot-'+id); if(!host) return;
+    // Sin nada marcado no hay nada que aplicar. Borrar, en cambio, sigue activo
+    // mientras el filtro tenga algo puesto: si se apagaran los dos a la vez, al
+    // desmarcar la ultima casilla no quedaria forma de dejar el filtro vacio.
+    var cur=window[_FMS[id].v]||[], vacio=_fmsDraft.length===0;
+    var dAp=vacio?' disabled':'', dBo=(vacio && !cur.length)?' disabled':'';
+    host.innerHTML='<button class="fms-b fms-b-sec"'+dBo+' onclick="event.stopPropagation(); fmsReset(\''+id+'\')">Borrar</button>'
+      +'<button class="fms-b fms-b-pri"'+dAp+' onclick="event.stopPropagation(); fmsApply(\''+id+'\')">Aplicar</button>';
+  }
+  function fmsSearch(id,v){ _fmsQuery=v; fmsList(id); }
   function fmsCheck(id,i){
     var v=_FMS[id].flat[i][0], k=_fmsDraft.indexOf(v);
     if(k===-1) _fmsDraft.push(v); else _fmsDraft.splice(k,1);
-    fmsBody(id);
-    if(_FMS[id].search){ var s=document.getElementById('fms-q-'+id); if(s) s.focus(); }
+    fmsList(id); fmsFoot(id);
   }
   function fmsApply(id){
     var c=_FMS[id]; window[c.v]=_fmsDraft.slice();
     fmsClose(); fmsSync(id); eval(c.apply);
   }
   function fmsReset(id){
-    // Borra de verdad y refresca la tabla, pero no cierra: asi se ve el efecto
-    // sin perder el popover.
-    var c=_FMS[id]; window[c.v]=[]; _fmsDraft=[];
-    fmsSync(id); fmsBody(id); eval(c.apply);
-    if(c.search){ var s=document.getElementById('fms-q-'+id); if(s) s.focus(); }
+    // Borra lo que haya marcado en ese filtro, lo aplica y cierra.
+    var c=_FMS[id]; window[c.v]=[];
+    fmsClose(); fmsSync(id); eval(c.apply);
   }
   // Varias referencias separadas por comas: en bloque y exactas. Con una sola se
   // mantiene el «contiene» de siempre, que es lo que sirve para teclear media
