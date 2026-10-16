@@ -55,30 +55,31 @@ quita la ambigüedad sin renunciar al nombre.
 
 ## Guías de Estilo
 
-- [guias/definition/producto.md](productos/guias/definition/producto.md) — documentación funcional.
-- [guias/definition/pendings/publicacion-guias.md](productos/guias/definition/pendings/publicacion-guias.md) — publicar o no publicar guías.
+- [productos/guias/definition/producto.md](productos/guias/definition/producto.md) — documentación funcional.
+- [productos/guias/definition/pendings/publicacion-guias.md](productos/guias/definition/pendings/publicacion-guias.md) — publicar o no publicar guías.
 
 ## Descripciones
 
-- [descripciones/context/scope/alcance-mvp.md](productos/descripciones/context/scope/alcance-mvp.md) — qué queda fuera de una primera versión.
-- [descripciones/definition/funcional.md](productos/descripciones/definition/funcional.md) — documentación funcional.
-- [descripciones/definition/open-spec.md](productos/descripciones/definition/open-spec.md) — especificación en formato OpenSpec.
-- [descripciones/definition/decisiones-y-pendientes.md](productos/descripciones/definition/decisiones-y-pendientes.md) — contexto entre sesiones.
+- [productos/descripciones/context/scope/alcance-mvp.md](productos/descripciones/context/scope/alcance-mvp.md) — qué queda fuera de una primera versión.
+- [productos/descripciones/definition/funcional.md](productos/descripciones/definition/funcional.md) — documentación funcional.
+- [productos/descripciones/definition/open-spec.md](productos/descripciones/definition/open-spec.md) — especificación en formato OpenSpec.
+- [productos/descripciones/definition/decisiones-y-pendientes.md](productos/descripciones/definition/decisiones-y-pendientes.md) — contexto entre sesiones.
 
 ## Validaciones
 
-- [validaciones/context/scope/alcance-mvp.md](productos/validaciones/context/scope/alcance-mvp.md) — los recortes del MVP y su razonamiento.
-- [validaciones/definition/analisis.md](productos/validaciones/definition/analisis.md) — análisis consolidado del módulo.
-- [validaciones/definition/decisiones-y-pendientes.md](productos/validaciones/definition/decisiones-y-pendientes.md) — contexto entre sesiones.
-- [validaciones/definition/pendings/preguntas-cliente.md](productos/validaciones/definition/pendings/preguntas-cliente.md) — preguntas abiertas con el cliente.
+- [productos/validaciones/context/scope/alcance-mvp.md](productos/validaciones/context/scope/alcance-mvp.md) — los recortes del MVP y su razonamiento.
+- [productos/validaciones/definition/analisis.md](productos/validaciones/definition/analisis.md) — análisis consolidado del módulo.
+- [productos/validaciones/definition/decisiones-y-pendientes.md](productos/validaciones/definition/decisiones-y-pendientes.md) — contexto entre sesiones.
+- [productos/validaciones/definition/pendings/preguntas-cliente.md](productos/validaciones/definition/pendings/preguntas-cliente.md) — preguntas abiertas con el cliente.
 
 ## Cockpit
 
-- [cockpit/context/scope/propo.md](productos/cockpit/context/scope/propo.md) — **la propuesta firmada**. Manda sobre cualquier otro material.
-- [cockpit/context/scope/project-context.md](productos/cockpit/context/scope/project-context.md) — qué es, por qué existe y de dónde parte.
-- [cockpit/context/business/stakeholders-interviews/](productos/cockpit/context/business/stakeholders-interviews/) — sesiones del 7 y del 14 de octubre.
-- [cockpit/context/user/user-research/guion-entrevistas.md](productos/cockpit/context/user/user-research/guion-entrevistas.md) — guion de inmersión.
-- [cockpit/definition/decisiones-y-pendientes.md](productos/cockpit/definition/decisiones-y-pendientes.md) — contexto entre sesiones.
+- [productos/cockpit/context/scope/propo.md](productos/cockpit/context/scope/propo.md) — **la propuesta firmada**. Manda sobre cualquier otro material.
+- [productos/cockpit/context/scope/project-context.md](productos/cockpit/context/scope/project-context.md) — qué es, por qué existe y de dónde parte.
+- [productos/cockpit/context/business/stakeholders-interviews/](productos/cockpit/context/business/stakeholders-interviews/) — sesiones del 7 y del 14 de octubre.
+- [productos/cockpit/context/user/user-research/guion-entrevistas.md](productos/cockpit/context/user/user-research/guion-entrevistas.md) — guion de inmersión.
+- [productos/cockpit/definition/incertidumbre.md](productos/cockpit/definition/incertidumbre.md) — qué no sabemos todavía y qué lo resolvería.
+- [productos/cockpit/definition/decisiones-y-pendientes.md](productos/cockpit/definition/decisiones-y-pendientes.md) — contexto entre sesiones.
 
 ## Infra
 
