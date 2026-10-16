@@ -14,27 +14,16 @@
 > Escrito el 2026-10-16. Sustituye al guion anterior, cuya primera mitad era la agenda del
 > kickoff y ya está gastada.
 >
-> **El documento que se reparte es el Google Doc «Guión Entrevistas eMerch - Cockpit».** Este
-> fichero es la fuente: si el guion cambia, se cambia aquí y se lleva allí. El taller del viernes
-> va aparte, en [`guion-workshop.md`](./guion-workshop.md).
+> **Este fichero y el Google Doc «Guión Entrevistas eMerch - Cockpit» van alineados.** El cuerpo
+> del guion dice lo mismo en los dos: si cambia en uno, se lleva al otro. Lo único que vive solo
+> aquí es esta cabecera, que es nota de repositorio. El taller del viernes va aparte, en
+> [`guion-workshop.md`](./guion-workshop.md).
 
 ---
 
 ## Contexto
 
-**Qué es el Cockpit.** No otro cuadro de mando: un sitio donde el eMerch ve **qué conviene hacer
-hoy** sobre su catálogo, con un agente al que puede preguntar y que responde con el conocimiento
-de Leroy —las guías eMerch— y no con conocimiento genérico de internet.
-
-**El alcance de esta fase es calidad de catálogo**, transversal a todos los mundos. Nada de fases
-futuras.
-
-**Qué venimos a averiguar.** Qué mira hoy un eMerch y dónde, qué se le escapa, y qué haría que
-abriera esto por su cuenta sin que nadie se lo mande. Eso decide los KPIs, los avisos y lo que el
-agente tiene que saber contestar.
-
-**Por qué entrevistamos a eMerchs y no a sus responsables.** Porque el producto es para ellos. Lo
-que piden los responsables ya lo tenemos de las sesiones del 7 y el 14 de octubre.
+⬜ Por escribir.
 
 ## Las sesiones de la semana
 
