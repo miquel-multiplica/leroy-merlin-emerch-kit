@@ -40,20 +40,18 @@ que piden los responsables ya lo tenemos de las sesiones del 7 y el 14 de octubr
 
 | | Quién | Cuándo | Para qué |
 |---|---|---|---|
-| **A** | **2 eMerchs de 1P**, por separado | lunes 19 y martes 20, 1 h cada una, online | Es la investigación de verdad |
-| **B** | **2 eMerchs de 3P**, juntos | por agendar, online | Lo mismo, pero en grupo |
+| **A** | **4 eMerchs** — 2 de 1P y 2 de 3P | lunes 19 y martes 20 las dos primeras, 1 h cada una, online | Es la investigación de verdad |
 | **C** | **Pedro y Susana** | **viernes 23, 11:00**, presencial, 3-4 h | Devolver conclusiones y priorizar con ellos |
 
-**Pedro asiste a todas.** En las dos de 1P como oyente; la de 3P es conjunta, así que allí está
-dentro del grupo. Dos eMerchs de cada perfil, 1P y 3P, para poder comparar. El taller del viernes
-se estructura después, con lo que salga.
+**Pedro asiste a las cuatro entrevistas como oyente.** El taller del viernes se estructura después,
+con lo que salga. Dos de cada perfil, 1P y 3P, para poder comparar.
 
 **Pedro no es eMerch hoy, lo fue.** Por eso el viernes es de contraste y priorización, no de
-descubrimiento: lo que hay que descubrir está en las sesiones con los eMerchs.
+descubrimiento: lo que hay que descubrir está en las cuatro entrevistas.
 
 **El criterio de Jordi, literal:** *«no quiero hacer una herramienta para uno o dos, quiero hacer
 una herramienta para todos; al menos buscar los puntos en común que aporten valor a todos»*. Las
-sesiones con los eMerchs existen para encontrar **lo común**, no para sumar deseos.
+cuatro entrevistas existen para encontrar **lo común**, no para sumar deseos.
 
 ---
 
@@ -178,34 +176,11 @@ sino **«ordénalos: cuál mirarías primero y cuál no abrirías»**:
 
 ---
 
-## Si la sesión es conjunta · los dos de 3P a la vez
-
-*Dos personas y su responsable en una hora no es una entrevista: es un grupo. Las mismas preguntas
-dan otra cosa, así que hay que cambiar tres.*
-
-**No se pregunta, se compara.** En grupo nadie confiesa que ha dejado de pedir algo al proveedor,
-pero sí señala en qué se diferencia del compañero. Así que *«¿has dejado de pedir algo porque
-sabes que no te lo van a dar?»* se convierte en **«¿hay algo que uno de los dos pida y el otro
-no? ¿por qué?»**. La diferencia la dicen; la renuncia propia, no.
-
-**Los seis candidatos, primero a solas.** Que cada uno escriba su orden —en el chat, en un papel—
-**antes** de hablarlo. Si se discute directamente, el primero que habla marca el orden y el
-segundo se suma. Hecho así, la sesión conjunta rinde más que dos sueltas: se ve dónde discrepan.
-
-**Una sola pantalla.** No caben dos recorridos. Que comparta uno y que el otro vaya diciendo **en
-qué lo hace distinto** — *«yo eso no lo abro»*, *«yo además miro…»*. Eso es más rápido que verlo
-dos veces y señala lo común, que es lo que busca Jordi.
-
-**Y qué se cae:** el bloque 1 se queda en la pregunta del porcentaje de la semana, y el bloque 5
-no entra. El 3 y el 4 se mantienen enteros, que son el alcance y los avisos.
-
----
-
-## Al comparar las sesiones · 1P frente a 3P
+## Al comparar las 4 entrevistas · 1P frente a 3P
 
 *No se pregunta en la entrevista: se observa después.* Cada eMerch habla solo de lo suyo, así que
-la diferencia entre los dos modelos no sale de ninguna sesión suelta — sale de poner las tres una
-al lado de otra. Tres cosas donde mirarla:
+la diferencia entre los dos modelos no sale de ninguna sesión suelta — sale de poner las cuatro
+una al lado de otra. Tres cosas donde mirarla:
 
 - **Quién corrige.** En 1P el TIP puede modificar; en 3P no actúa y es Marketplace quien habla con
   el seller. Eso cambia qué es un *«siguiente paso»* útil.

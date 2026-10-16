@@ -14,13 +14,9 @@
 | **2** | martes 20, 11:00 | 1 eMerch **1P** | online, 1 h |
 | **3** | por agendar | **2 eMerchs 3P a la vez** | online, conjunta |
 
-**Pedro Benavente asiste a todas.** En las dos de 1P como oyente; en la de 3P está dentro de una
-sesión de grupo, que no es lo mismo.
+**Pedro Benavente asiste a todas.**
 
-**Las de 3P pasan a ser una sola sesión conjunta**, así que de cuatro entrevistas se pasa a tres
-sesiones. Cambia lo que se puede sacar de ellas: dos personas en una hora son media hora cada una,
-y con un compañero y el responsable delante no se contesta igual. El guion lleva un apartado con
-las adaptaciones.
+**La de 3P es conjunta:** los dos eMerchs a la vez, más Pedro.
 
 **Las de 3P importan para el contraste**, no por el número: en 1P el TIP puede corregir la ficha y
 en 3P no actúa —es Marketplace quien habla con el seller—, así que la misma alerta acaba en una
@@ -29,8 +25,7 @@ primeras describe 1P.
 
 **Cada una es de 1 hora y el guion ocupa 60 minutos exactos.** Si se alarga el bloque 2 —la
 pantalla compartida, que es el que más rinde— cae primero el bloque 5, después los sondeos del
-bloque 3. No cae el bloque 4, que es de donde salen los avisos, ni la pregunta de cierre. En la
-conjunta de 3P eso no basta y el guion se recorta de verdad; cómo, está en el propio guion.
+bloque 3. No cae el bloque 4, que es de donde salen los avisos, ni la pregunta de cierre.
 
 ## Taller con Pedro y Susana
 
