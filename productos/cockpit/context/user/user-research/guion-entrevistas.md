@@ -11,6 +11,23 @@
 
 ---
 
+## Lo que ya sabemos — no preguntarlo desde cero
+
+*Viene de las sesiones con Pedro, Susana y Javier, no de los eMerchs. Conviene **confirmarlo de
+pasada**, no pedir que lo expliquen: quema tiempo y da la señal de que no les hemos escuchado.*
+
+- **La guía eMerch es por familia** y dice qué debe tener una ficha: atributos obligatorios,
+  términos SEO, mínimos de imágenes por categoría.
+- **Los tres tableros del oficio** son Search & Publication, Calidad de catálogo y eMerch.
+- **Nadie puede revisar todos esos reports cada semana.** Lo dijo Pedro con esas palabras.
+- **GV Quality y ATT Imp.5** existen como métricas de calidad y hay objetivo para 2026.
+- **El reparto de quién corrige:** congruencia al TIP, completitud al seller. En 3P el TIP no
+  actúa y es Marketplace quien habla con el seller.
+- **Las guías se recargan una vez al mes**, hacia el día 5.
+- ⬜ **Completar** con lo que demos por sabido de sesiones en las que no estuvimos todos.
+
+---
+
 ## Las tres sesiones de la semana
 
 | | Quién | Cuándo | Para qué |
@@ -51,11 +68,15 @@ vez y qué hiciste después?»*.
 No venimos a enseñar nada ni a validar una idea: venimos a entender el puesto. Nada de lo que se
 diga compromete a que esté en la herramienta. ¿Podemos grabar?
 
-## 1 · El día de ayer (12 min)
+## 1 · El día de ayer (10 min)
+
+*Sacar la forma real de la jornada antes de que la racionalice. Buscamos el orden en que hizo las
+cosas y qué le sacó de su plan.*
 
 - Cuéntame ayer. ¿Qué hiciste, por orden?
 - ¿Qué fue lo primero que abriste al sentarte? ¿Y después?
-- ¿Qué te interrumpió? ¿Quién te escribió y para qué?
+- ¿Qué te interrumpió? ¿Quién te escribió y para qué? *(sondear: ¿era algo que podrías haber
+  visto venir?)*
 - De una semana tuya, ¿cuánto es mirar cómo van las cosas y cuánto es hacer cosas?
 - **¿Cuánto tiempo pasas al día buscando un dato que sabes que existe?**
 
@@ -74,12 +95,17 @@ Aquí es donde se pide ver. Que abra lo que abre cada mañana y lo recorra en vo
 
 ## 3 · Calidad de catálogo, que es el alcance (15 min)
 
+*El bloque central. Queremos el criterio con el que juzga una ficha —que es lo que el producto
+tendrá que replicar— y dónde ha dejado de intentarlo.*
+
 - **¿Cómo sabes hoy que una familia tuya tiene la ficha mal?** ¿Te enteras tú o te lo dicen?
 - Cuando lo detectas, ¿qué haces? ¿Cuánto tarda en arreglarse?
 - **¿Qué atributos te importan de verdad en tu familia, y cuáles rellenas por cumplir?**
 - **¿Has dejado de pedir algo porque sabes que no te lo van a dar?**
-- ¿Qué proveedor te hace caso y cuál no? ¿Qué cambia entre uno y otro?
+- ¿Qué proveedor te hace caso y cuál no? ¿Qué cambia entre uno y otro? *(sondear: ¿es tamaño,
+  relación personal, que le compense?)*
 - Si tuvieras que elegir **una familia para arreglar este mes**, ¿cómo la eliges hoy?
+  *(sondear: ¿por volumen, por queja, por intuición, porque alguien te lo pidió?)*
 - Sobre la guía: ¿has escrito alguna? ¿La vuelves a mirar después?
 - **¿Alguna vez la guía pedía algo que no tenía sentido para tu familia?**
 
@@ -88,10 +114,14 @@ cumple. Y la última lleva desde septiembre sin respuesta del cliente.*
 
 ## 4 · Qué se le escapa (10 min)
 
+*De aquí salen los avisos. Lo que se le escapa dice más que lo que vigila, porque lo que vigila ya
+lo tiene cubierto de alguna forma.*
+
 Primero abierto, y solo después se leen los candidatos. Si se leen antes, se asiente a todo.
 
 - **La última vez que algo se te pasó y lo descubriste tarde: ¿qué fue y cómo te enteraste?**
-- ¿Quién te avisa hoy de los problemas? ¿Por qué canal?
+- ¿Quién te avisa hoy de los problemas? ¿Por qué canal? *(sondear: ¿correo, Teams, una reunión,
+  o te lo encuentras tú?)*
 - **¿Qué aviso has recibido este mes que no te servía de nada?**
 - Si mañana a las ocho te llegara un aviso, ¿de qué tendría que ser para que valiera la pena?
 
@@ -107,18 +137,22 @@ sino **«ordénalos: cuál mirarías primero y cuál no abrirías»**:
 
 → *Ordenar obliga a elegir. Y el que nadie abriría es tan informativo como el primero.*
 
-## 5 · Qué pregunta y a quién (5 min)
+## 5 · Qué pregunta y a quién (4 min)
+
+*Lo que hoy le pregunta a una persona es lo primero que el agente tendría que saber responder.*
 
 - ¿Qué le preguntaste esta semana a alguien del equipo? ¿A quién?
 - ¿Qué te preguntan a ti? ¿Siempre lo mismo?
-- ¿Qué buscas y no encuentras?
+- ¿Qué buscas y no encuentras? *(sondear: ¿has dejado de buscarlo?)*
 - **¿Qué respuesta te haría desconfiar?** ¿Y si te dijera «no lo sé»?
 
-## 6 · Cierre
+## 6 · Cierre (3 min)
 
 - **Si dentro de tres meses esto funcionara, ¿qué habrías dejado de hacer?**
 - ¿Qué te haría no volver a abrirlo?
 - ¿A quién más deberíamos preguntar?
+- ¿Qué pantalla o documento nos puedes pasar para entender mejor tu día a día?
+- **¿Hay algo importante que te esperabas que te preguntara y no te he preguntado?**
 
 ---
 
