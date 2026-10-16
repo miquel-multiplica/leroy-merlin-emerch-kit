@@ -1161,13 +1161,16 @@
   }
   function fmsFoot(id){
     var host=document.getElementById('fms-foot-'+id); if(!host) return;
-    // Sin nada marcado no hay nada que aplicar. Borrar, en cambio, sigue activo
-    // mientras el filtro tenga algo puesto: si se apagaran los dos a la vez, al
-    // desmarcar la ultima casilla no quedaria forma de dejar el filtro vacio.
-    var cur=window[_FMS[id].v]||[], vacio=_fmsDraft.length===0;
-    var dAp=vacio?' disabled':'', dBo=(vacio && !cur.length)?' disabled':'';
+    // El primario se activa cuando el borrador difiere de lo aplicado, no cuando
+    // hay algo marcado: desmarcar casillas tambien es un cambio, y es lo que pasa
+    // al vaciar el filtro a mano. En ese caso ademas se dice «Aplicar cambios»,
+    // porque es cuando hace falta que quede claro que al pulsarlo se queda vacio.
+    var cur=window[_FMS[id].v]||[], d=_fmsDraft;
+    var igual=(cur.length===d.length) && cur.every(function(v){ return d.indexOf(v)!==-1; });
+    var vaciando=(d.length===0 && cur.length>0);
+    var dAp=igual?' disabled':'', dBo=d.length?'':' disabled';
     host.innerHTML='<button class="fms-b fms-b-sec"'+dBo+' onclick="event.stopPropagation(); fmsReset(\''+id+'\')">Borrar</button>'
-      +'<button class="fms-b fms-b-pri"'+dAp+' onclick="event.stopPropagation(); fmsApply(\''+id+'\')">Aplicar</button>';
+      +'<button class="fms-b fms-b-pri"'+dAp+' onclick="event.stopPropagation(); fmsApply(\''+id+'\')">'+(vaciando?'Aplicar cambios':'Aplicar')+'</button>';
   }
   function fmsSearch(id,v){ _fmsQuery=v; fmsList(id); }
   function fmsCheck(id,i){
