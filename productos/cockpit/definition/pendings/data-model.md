@@ -72,3 +72,20 @@ Las dos que pueden recortar alcance, literales de la propuesta:
   *entran solo las áreas que tengan fuente; se ajusta el alcance, no el plazo*.
 - **Guía eMerch** — existente para las familias elegidas, en formato digital legible. Si no:
   *el alcance se acota a las familias que sí la tengan*.
+
+## Preguntas abiertas sobre el dato
+
+Para quien lleve los datos —hoy Javier Hernán—, cuando haya ocasión. **No hay sesión agendada para
+esto**; estaba como propuesta en el guion y se retiró. Salen de que el 7 de octubre describió una
+cascada de cinco fuentes que no está escrita en ningún sitio (ver
+[`incertidumbre.md`](../incertidumbre.md) y el transcript del 7 de octubre).
+
+- De cada cosa que han pedido: **¿existe el dato, en qué tabla y cada cuánto se refresca?**
+- ¿Cuál de las fuentes manda cuando dos dicen cosas distintas?
+- Sobre la cascada que describió el 7 de octubre —JSON, Drive 2026, Drive 2025—: **¿sigue siendo
+- ¿Hay dato de **clics por categoría de imagen**? Es lo que pide el caso de Pedro.
+- ¿Se puede cruzar calidad con comportamiento —conversión, add-to-cart— sin construir nada nuevo?
+- ¿Quién concede el acceso y cuánto tarda?
+
+→ *Ignacio avisó de que «lo que más les costó fue disponibilizar las BBDD». Preguntarlo con lo que
+hayan pedido las cuatro entrevistas en la mano hace que la petición salga completa a la primera.*
