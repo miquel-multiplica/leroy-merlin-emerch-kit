@@ -56,24 +56,26 @@ vez y qué hiciste después?»*.
 No venimos a enseñar nada ni a validar una idea: venimos a entender el puesto. Nada de lo que se
 diga compromete a que esté en la herramienta. ¿Podemos grabar?
 
-## 1 · El día de ayer (10 min)
+## 1 · El día de ayer (7 min)
 
 *Sacar la forma real de la jornada antes de que la racionalice. Buscamos el orden en que hizo las
 cosas y qué le sacó de su plan.*
 
 - Cuéntame ayer. ¿Qué hiciste, por orden?
-- ¿Qué fue lo primero que abriste al sentarte? ¿Y después?
 - ¿Qué te interrumpió? ¿Quién te escribió y para qué? *(sondear: ¿era algo que podrías haber
   visto venir?)*
-- De una semana tuya, ¿cuánto es mirar cómo van las cosas y cuánto es hacer cosas?
-- **¿Cuánto tiempo pasas al día buscando un dato que sabes que existe?**
+- **Ayer, ¿cuánto tiempo se te fue buscando un dato que sabías que existía?**
 
-## 2 · Qué mira y dónde — *con la pantalla compartida* (15 min)
+→ *Qué abrió y en qué orden no se pregunta aquí: se ve en el bloque 2. Preguntarlo de memoria
+gasta la respuesta, y luego repite la frase en vez de abrir nada.*
+
+## 2 · Qué mira y dónde — *con la pantalla compartida* (18 min)
 
 Aquí es donde se pide ver. Que abra lo que abre cada mañana y lo recorra en voz alta.
 
-- Enséñame lo que abriste ayer. ¿Qué miras primero en esta pantalla?
-- ¿Qué herramientas tocaste la semana pasada? ¿Cuántas veces cada una?
+- Enséñame lo que abriste ayer. ¿Qué miras primero en esta pantalla? ¿Y después?
+- ¿Qué más tocaste la semana pasada? *(sondear: pestañas abiertas, favoritos, historial — no se
+  pregunta cuántas veces, se mira)*
 - **¿Qué número miras porque te lo piden, y no porque te sirva?**
 - ¿Qué número has mirado este mes que te haya hecho **cambiar algo**? ¿Qué cambiaste?
 - ¿Hay algún número que no te acabes de creer? ¿Por qué?
