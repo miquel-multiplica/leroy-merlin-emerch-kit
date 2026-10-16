@@ -6,9 +6,10 @@
 >
 > **Alcance de lo que investigamos:** calidad de catálogo. Transversal, no por mundo.
 >
-> **Llegan avisados.** Pedro les ha pedido foco en calidad de catálogo, así que vendrán filtrados:
-> contarán la parte de su día que creen que viene al caso. El encuadre les da permiso explícito
-> para salirse, porque el bloque 1 necesita el día entero.
+> **Llegan avisados.** Pedro les ha pedido foco en calidad de catálogo. Eso nos ahorra explicar el
+> proyecto, pero vendrán filtrados. No se abre el melón del resto de su trabajo: solo se sitúa
+> calidad de catálogo dentro de su día —qué parte ocupa y cuándo la hacen— para saber dónde tiene
+> que aterrizar un aviso. El detalle de lo demás no entra.
 >
 > Escrito el 2026-10-16. Sustituye al guion anterior, cuya primera mitad era la agenda del
 > kickoff y ya está gastada.
@@ -61,19 +62,20 @@ No venimos a enseñar nada ni a validar una idea: venimos a entender el puesto. 
 diga compromete a que esté en la herramienta.
 
 **Y un matiz, porque os han pedido foco en calidad de catálogo y es correcto:** eso es lo que
-vamos a construir. Pero en la primera parte queremos tu día entero, tal cual, aunque la mitad no
-tenga que ver con catálogo. Si solo nos cuentas esa parte, saldrá una herramienta que da por hecho
-que vives ahí dentro — y lo que te interrumpe y lo que no te da tiempo a hacer es justo donde esto
-tendría que encajar.
+vamos a construir, y de eso vamos a hablar casi todo el rato. Lo único que necesitamos además es
+**situarlo en tu día**: cuánto de tu tiempo se va ahí y cuándo lo haces. Del resto de tu trabajo
+no hace falta que nos cuentes el detalle — con saber que existe y cuánto ocupa nos vale.
 
 ¿Podemos grabar?
 
 ## 1 · El día de ayer (7 min)
 
-*Sacar la forma real de la jornada antes de que la racionalice. Buscamos el orden en que hizo las
-cosas y qué le sacó de su plan.*
+*Situar calidad de catálogo dentro de la jornada: qué parte ocupa, cuándo se hace y qué la
+interrumpe. No es un recorrido por todo su trabajo.*
 
-- Cuéntame ayer. ¿Qué hiciste, por orden?
+- Cuéntame ayer, por encima. ¿Qué hiciste, por orden? *(lo que no sea catálogo, con nombrarlo
+  basta: no hace falta entrar)*
+- **¿Qué parte de tu semana se va en calidad de catálogo?** ¿Es un rato fijo o cuando salta algo?
 - ¿Qué te interrumpió? ¿Quién te escribió y para qué? *(sondear: ¿era algo que podrías haber
   visto venir?)*
 - **Ayer, ¿cuánto tiempo se te fue buscando un dato que sabías que existía?**
