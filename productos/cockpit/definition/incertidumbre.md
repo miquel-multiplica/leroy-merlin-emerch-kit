@@ -35,7 +35,7 @@ preguntan qué aporta valor, y el número sale después.
 
 **Lo que ya sabemos y no basta para cerrarlo:**
 
-- El contrato compromete **3 KPIs, 3 alertas y 1 agente**.
+- La propuesta estima **3 KPIs y 3 alertas** como referencia, y **1 agente** —ese sí, cerrado—.
 - El cliente pidió **«no otro cuadro de mando más»**.
 - El acta del kickoff apunta a tres preguntas al abrir: *qué ha cambiado · qué priorizar · qué
   acción puedo hacer*.
