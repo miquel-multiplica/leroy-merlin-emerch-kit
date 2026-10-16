@@ -11,30 +11,17 @@
 
 ---
 
-## Lo que ya sabemos — no preguntarlo desde cero
-
-*Viene de las sesiones con Pedro, Susana y Javier, no de los eMerchs. Conviene **confirmarlo de
-pasada**, no pedir que lo expliquen: quema tiempo y da la señal de que no les hemos escuchado.*
-
-- **La guía eMerch es por familia** y dice qué debe tener una ficha: atributos obligatorios,
-  términos SEO, mínimos de imágenes por categoría.
-- **Los tres tableros del oficio** son Search & Publication, Calidad de catálogo y eMerch.
-- **Nadie puede revisar todos esos reports cada semana.** Lo dijo Pedro con esas palabras.
-- **GV Quality y ATT Imp.5** existen como métricas de calidad y hay objetivo para 2026.
-- **El reparto de quién corrige:** congruencia al TIP, completitud al seller. En 3P el TIP no
-  actúa y es Marketplace quien habla con el seller.
-- **Las guías se recargan una vez al mes**, hacia el día 5.
-- ⬜ **Completar** con lo que demos por sabido de sesiones en las que no estuvimos todos.
-
----
-
 ## Las tres sesiones de la semana
 
 | | Quién | Cuándo | Para qué |
 |---|---|---|---|
-| **A** | **4 eMerchs** — 2 de 1P y 2 de 3P | lunes todo el día y martes por la mañana, online | Es la investigación de verdad |
+| **A** | **4 eMerchs** — 2 de 1P y 2 de 3P | lunes 19 y martes 20, online, 1 h cada una | Es la investigación de verdad |
 | **B** | **Javier Hernán** | después de las cuatro | Dónde vive el dato que piden las cuatro |
-| **C** | **Pedro y Susana** | **viernes 23**, presencial | Devolver conclusiones y priorizar con ellos |
+| **C** | **Pedro y Susana** | **viernes 23, 11:00**, presencial, 3-4 h | Devolver conclusiones y priorizar con ellos |
+
+**Solo hay dos agendadas, y las dos son de 1P.** Las dos de 3P están pendientes, que es justo donde
+el producto puede dejar de ser el mismo. Estado, riesgos y qué se cae si falta tiempo, en
+[`sesiones.md`](./sesiones.md).
 
 **Pedro no es eMerch hoy, lo fue.** Por eso la sesión C es de contraste y priorización, no de
 descubrimiento: lo que hay que descubrir está en las cuatro de la sesión A.
