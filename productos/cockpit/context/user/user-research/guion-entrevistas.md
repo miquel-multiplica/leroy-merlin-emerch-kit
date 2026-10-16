@@ -20,6 +20,22 @@
 
 ---
 
+## Contexto
+
+**Qué es el Cockpit.** No otro cuadro de mando: un sitio donde el eMerch ve **qué conviene hacer
+hoy** sobre su catálogo, con un agente al que puede preguntar y que responde con el conocimiento
+de Leroy —las guías eMerch— y no con conocimiento genérico de internet.
+
+**El alcance de esta fase es calidad de catálogo**, transversal a todos los mundos. Nada de fases
+futuras.
+
+**Qué venimos a averiguar.** Qué mira hoy un eMerch y dónde, qué se le escapa, y qué haría que
+abriera esto por su cuenta sin que nadie se lo mande. Eso decide los KPIs, los avisos y lo que el
+agente tiene que saber contestar.
+
+**Por qué entrevistamos a eMerchs y no a sus responsables.** Porque el producto es para ellos. Lo
+que piden los responsables ya lo tenemos de las sesiones del 7 y el 14 de octubre.
+
 ## Las sesiones de la semana
 
 | | Quién | Cuándo | Para qué |
@@ -88,7 +104,7 @@ gasta la respuesta, y luego repite la frase en vez de abrir nada.*
 
 ## 2 · Qué mira y dónde — *con la pantalla compartida* (18 min)
 
-Aquí es donde se pide ver. Que abra lo que abre cada mañana y lo recorra en voz alta.
+*Aquí es donde se pide ver. Que abra lo que abre cada mañana y lo recorra en voz alta.*
 
 - Enséñame lo que abriste ayer. ¿Qué miras primero en esta pantalla? ¿Y después?
 - ¿Qué más tocaste la semana pasada? *(sondear: pestañas abiertas, favoritos, historial — no se
@@ -157,7 +173,6 @@ sino **«ordénalos: cuál mirarías primero y cuál no abrirías»**:
 
 - **Si dentro de tres meses esto funcionara, ¿qué habrías dejado de hacer?**
 - ¿Qué te haría no volver a abrirlo?
-- ¿A quién más deberíamos preguntar?
 - ¿Qué pantalla o documento nos puedes pasar para entender mejor tu día a día?
 - **¿Hay algo importante que te esperabas que te preguntara y no te he preguntado?**
 
