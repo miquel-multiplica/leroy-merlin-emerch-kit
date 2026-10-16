@@ -8,6 +8,9 @@
 >
 > Escrito el 2026-10-16. Sustituye al guion anterior, cuya primera mitad era la agenda del
 > kickoff y ya está gastada.
+>
+> **El documento final es el Google Doc «Guión Inmersión Cockpit - eMerch»**, que es el que se
+> reparte. Este fichero es la fuente: si el guion cambia, se cambia aquí y se lleva allí.
 
 ---
 
@@ -46,7 +49,7 @@ vez y qué hiciste después?»*.
 
 ---
 
-# Sesión A · Entrevista con el eMerch · 60 min
+# Entrevista con el eMerch · 60 min
 
 ## 0 · Encuadre (3 min)
 
