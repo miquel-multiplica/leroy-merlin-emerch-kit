@@ -678,9 +678,9 @@
     <div style="text-align:center; margin-bottom:22px;">
       <div style="width:46px;height:46px;border-radius:50%;background:var(--success-bg);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div id="w-ack-title" style="font-size:21px; font-weight:700; color:var(--text-ink);">—</div>
-      <div style="font-size:13px; color:var(--text-muted); margin-top:8px;">Se están ejecutando. Puedes cerrar esto y seguir trabajando.</div>
     </div>
-    <div id="w-ack-list" style="margin-bottom:18px;"></div>
+    <div id="w-ack-list" style="margin-bottom:4px;"></div>
+    <div id="w-ack-note" class="info-note" style="margin-top:20px; margin-bottom:22px; text-align:left;"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span id="w-ack-note-txt"></span></div>
     <button class="btn btn-primary" onclick="goEnCurso()" style="width:100%; justify-content:center;">Ver en curso<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
   </div>
 </div>
@@ -855,6 +855,10 @@
         +'<span style="flex:1;min-width:0;font-size:13px;color:var(--text-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+r.perimetro+'</span>'
         +'<span style="font-size:13px;font-weight:700;color:var(--text-body);font-variant-numeric:tabular-nums;flex-shrink:0;">'+fmtNum(r.refs)+'</span></div>';
     }).join('') + (nuevas.length>1 ? '<div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:1px solid var(--border-card);font-size:13px;"><span style="color:var(--text-muted);">Total</span><strong style="font-variant-numeric:tabular-nums;">'+fmtNum(nuevas.reduce(function(a,r){return a+r.refs;},0))+' referencias</strong></div>' : '');
+    // Mismo aviso que la modal de progreso del prototipo, en plural si procede.
+    document.getElementById('w-ack-note-txt').innerHTML = nuevas.length>1
+      ? 'Puedes cerrar esta ventana. Las auditorías continuarán en segundo plano y sus informes quedarán en <strong>Por revisar</strong> cuando terminen.'
+      : 'Puedes cerrar esta ventana. La auditoría continuará en segundo plano y el informe quedará en <strong>Por revisar</strong> cuando termine.';
     document.getElementById('w-ack-modal').classList.add('open');
     _sel=[]; _tope=false;
   }
