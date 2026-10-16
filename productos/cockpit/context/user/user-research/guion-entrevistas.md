@@ -144,7 +144,7 @@ sino **«ordénalos: cuál mirarías primero y cuál no abrirías»**:
 
 ---
 
-## Al comparar las cuatro · 1P frente a 3P
+## Al comparar las 4 entrevistas · 1P frente a 3P
 
 *No se pregunta en la entrevista: se observa después.* Cada eMerch habla solo de lo suyo, así que
 la diferencia entre los dos modelos no sale de ninguna sesión suelta — sale de poner las cuatro
