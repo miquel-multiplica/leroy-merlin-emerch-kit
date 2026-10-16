@@ -21,8 +21,8 @@
 | **A** | **4 eMerchs** — 2 de 1P y 2 de 3P | lunes 19 y martes 20 las dos primeras, 1 h cada una, online | Es la investigación de verdad |
 | **C** | **Pedro y Susana** | **viernes 23, 11:00**, presencial, 3-4 h | Devolver conclusiones y priorizar con ellos |
 
-**Pedro asiste a las cuatro entrevistas como oyente.** Fechas y estado en
-[`sesiones.md`](./sesiones.md); el taller del viernes se estructura después, con lo que salga.
+**Pedro asiste a las cuatro entrevistas como oyente.** El taller del viernes se estructura después,
+con lo que salga. Dos de cada perfil, 1P y 3P, para poder comparar.
 
 **Pedro no es eMerch hoy, lo fue.** Por eso el viernes es de contraste y priorización, no de
 descubrimiento: lo que hay que descubrir está en las cuatro entrevistas.
@@ -144,9 +144,11 @@ sino **«ordénalos: cuál mirarías primero y cuál no abrirías»**:
 
 ---
 
-## Lo que cambia entre 1P y 3P
+## Al comparar las cuatro · 1P frente a 3P
 
-Dos de cada, para ver si el producto es el mismo. Lo que hay que mirar en el contraste:
+*No se pregunta en la entrevista: se observa después.* Cada eMerch habla solo de lo suyo, así que
+la diferencia entre los dos modelos no sale de ninguna sesión suelta — sale de poner las cuatro
+una al lado de otra. Tres cosas donde mirarla:
 
 - **Quién corrige.** En 1P el TIP puede modificar; en 3P no actúa y es Marketplace quien habla con
   el seller. Eso cambia qué es un *«siguiente paso»* útil.
