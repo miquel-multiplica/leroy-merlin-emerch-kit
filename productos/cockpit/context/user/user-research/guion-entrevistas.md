@@ -11,20 +11,18 @@
 
 ---
 
-## Las tres sesiones de la semana
+## Las sesiones de la semana
 
 | | Quién | Cuándo | Para qué |
 |---|---|---|---|
-| **A** | **4 eMerchs** — 2 de 1P y 2 de 3P | lunes 19 y martes 20, online, 1 h cada una | Es la investigación de verdad |
-| **B** | **Javier Hernán** | después de las cuatro | Dónde vive el dato que piden las cuatro |
+| **A** | **4 eMerchs** — 2 de 1P y 2 de 3P | lunes 19 y martes 20 las dos primeras, 1 h cada una, online | Es la investigación de verdad |
 | **C** | **Pedro y Susana** | **viernes 23, 11:00**, presencial, 3-4 h | Devolver conclusiones y priorizar con ellos |
 
-**Solo hay dos agendadas, y las dos son de 1P.** Las dos de 3P están pendientes, que es justo donde
-el producto puede dejar de ser el mismo. Estado, riesgos y qué se cae si falta tiempo, en
-[`sesiones.md`](./sesiones.md).
+**Pedro asiste a las cuatro entrevistas como oyente.** Fechas y estado en
+[`sesiones.md`](./sesiones.md); el taller del viernes se estructura después, con lo que salga.
 
-**Pedro no es eMerch hoy, lo fue.** Por eso la sesión C es de contraste y priorización, no de
-descubrimiento: lo que hay que descubrir está en las cuatro de la sesión A.
+**Pedro no es eMerch hoy, lo fue.** Por eso el viernes es de contraste y priorización, no de
+descubrimiento: lo que hay que descubrir está en las cuatro entrevistas.
 
 **El criterio de Jordi, literal:** *«no quiero hacer una herramienta para uno o dos, quiero hacer
 una herramienta para todos; al menos buscar los puntos en común que aporten valor a todos»*. Las
@@ -154,9 +152,11 @@ Dos de cada, para ver si el producto es el mismo. Lo que hay que mirar en el con
 
 ---
 
-# Sesión B · Javier Hernán · datos
+# Propuesta · una sesión con Javier Hernán sobre los datos
 
-Después de las cuatro, para llevarle lo que han pedido en vez de preguntar en abstracto.
+**No está agendada ni la ha pedido nadie: es una propuesta nuestra.** Sale de que el 7 de octubre
+describió una cascada de cinco fuentes que no está escrita en ningún sitio. Iría después de las
+cuatro entrevistas, para llevarle lo que han pedido en vez de preguntar en abstracto.
 
 - De cada cosa que han pedido: **¿existe el dato, en qué tabla y cada cuánto se refresca?**
 - ¿Cuál de las fuentes manda cuando dos dicen cosas distintas?
@@ -173,7 +173,9 @@ que la petición salga completa a la primera.*
 
 # Sesión C · Taller con Pedro y Susana · viernes 23, presencial
 
-No es descubrimiento: es **devolverles lo que dijeron sus eMerchs y priorizar con ellos**.
+**Se estructura después de las cuatro entrevistas**, con lo que salga de ellas. Lo que sigue es
+solo el encuadre: no es descubrimiento, es **devolverles lo que dijeron sus eMerchs y priorizar
+con ellos**.
 
 - Abrir con los titulares de las cuatro entrevistas, sin interpretarlos todavía.
 - **Lo común frente a lo particular:** qué pidieron los cuatro y qué pidió solo uno.
