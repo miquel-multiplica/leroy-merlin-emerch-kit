@@ -489,6 +489,34 @@
   .row-menu { position:relative; display:inline-block; }
   .row-menu-btn { background:none; border:none; cursor:pointer; padding:4px 6px; border-radius:6px; color:var(--text-muted); font-size:18px; line-height:1; }
   .row-menu-btn:hover { background:var(--bg-parchment); }
+  /* ── Filtros de multiseleccion ────────────────────────────────────────────
+     Un popover con checkboxes. Las marcas no filtran hasta pulsar Aplicar:
+     cerrar sin aplicar las descarta, que es lo unico que le da sentido al boton.
+     El fondo suave marca la fila seleccionada y el hover usa un gris mas claro,
+     porque si los dos fueran --bg-parchment no se distinguiria lo marcado de
+     donde tienes el raton. */
+  .fms { position:relative; flex-shrink:0; }
+  .fms-btn { display:flex; align-items:center; gap:7px; height:36px; border:1px solid var(--border-input); border-radius:8px; padding:0 11px; font-size:12px; font-family:'Inter',system-ui,sans-serif; color:var(--text-body); background:#fff; cursor:pointer; white-space:nowrap; }
+  .fms-btn:hover { border-color:var(--text-muted); }
+  .fms-btn.has { color:var(--text-ink); font-weight:600; border-color:var(--green); }
+  .fms.open .fms-btn { border-color:var(--green); }
+  .fms-pop { display:none; position:absolute; left:0; top:calc(100% + 5px); background:#fff; border:1px solid var(--border-card); border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.13); min-width:238px; z-index:9999; }
+  .fms.open .fms-pop { display:block; }
+  .fms-list { max-height:264px; overflow:auto; padding:4px 0; }
+  .fms-row { display:flex; align-items:center; gap:10px; padding:8px 13px; font-size:12.5px; color:var(--text-body); cursor:pointer; }
+  .fms-row:hover { background:#f6f7f8; }
+  .fms-row.sel { background:var(--bg-parchment); color:var(--text-ink); }
+  .fms-grp { padding:9px 13px 3px; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--text-muted); }
+  .fms-none { padding:14px 13px; font-size:12.5px; color:var(--text-muted); }
+  .fms-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 11px; border-top:1px solid var(--border-card); }
+  .fms-b { height:30px; padding:0 13px; border-radius:7px; font-family:'Inter',system-ui,sans-serif; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
+  .fms-b-sec { background:#fff; border:1px solid var(--border-input); color:var(--text-body); }
+  .fms-b-sec:hover { background:var(--bg-parchment); }
+  .fms-b-pri { background:var(--green); border:1px solid var(--green); color:#fff; }
+  /* El buscador de referencias crece al enfocarlo o cuando lleva algo, que es
+     cuando hace falta sitio para ver varias separadas por comas. */
+  .v-reffind { position:relative; flex:0 1 240px; min-width:170px; transition:flex-basis .16s ease; }
+  .v-reffind.wide { flex-basis:360px; }
   .row-menu-dropdown { display:none; position:absolute; right:0; top:calc(100% + 4px); background:#fff; border:1px solid var(--border-card); border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.12); min-width:160px; z-index:9999; padding:4px 0; }
   .row-menu.open .row-menu-dropdown { display:block; }
   .row-menu-item { display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:13px; font-weight:500; color:var(--text-body); cursor:pointer; white-space:nowrap; }
@@ -541,12 +569,7 @@
         <button class="v-tab" data-tab="borradores" onclick="switchTab('borradores')">Borradores<span id="v-tab-borradores-count" style="background:var(--bg-parchment); color:var(--text-body); border-radius:999px; font-size:11px; font-weight:600; padding:1px 7px; margin-left:4px;"></span></button>
       </div>
       <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
-        <div style="position:relative; flex-shrink:0;">
-          <select id="v-filter-tipo" onchange="renderAudits()" style="height:40px; border:1px solid var(--border-input); border-radius:8px; padding:0 36px 0 12px; font-size:13px; font-family:'Inter',system-ui,sans-serif; color:var(--text-body); background:#fff; cursor:pointer; field-sizing:content; appearance:none; -webkit-appearance:none;">
-            <option value="">Tipo de perímetro</option><option value="Gama">Gama</option><option value="Vendor">Proveedor / Seller</option><option value="Modelo">Modelo</option><option value="Categoría">Categoría web</option><option value="Seccion">Sección</option><option value="Listado">Listado CSV</option>
-          </select>
-          <svg style="position:absolute; right:12px; top:50%; transform:translateY(-50%); pointer-events:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
+        <div id="v-hub-tipo-f" style="flex-shrink:0;"></div>
         <div style="position:relative; flex:1; min-width:240px;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input id="v-search" oninput="renderAudits()" type="text" placeholder="Buscar por gama, proveedor, modelo, categoría o creador" style="width:100%; height:40px; border:1px solid var(--border-input); border-radius:8px; padding:0 14px 0 40px; font-size:13px; font-family:'Inter',system-ui,sans-serif; color:var(--text-body); outline:none;"/>
@@ -853,7 +876,9 @@
 
 <script>
   function go(id){ document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); }); var t=document.getElementById(id); if(t){ t.classList.add('active'); window.scrollTo(0,0); } }
-  document.addEventListener('click', function(e){ document.querySelectorAll('.row-menu.open').forEach(function(m){ if(!m.contains(e.target)) m.classList.remove('open'); }); });
+  document.addEventListener('click', function(e){ document.querySelectorAll('.row-menu.open').forEach(function(m){ if(!m.contains(e.target)) m.classList.remove('open'); });
+    // Cerrar por fuera descarta las marcas sin aplicar.
+    if(_fmsOpenId){ var p=document.getElementById('fms-'+_fmsOpenId); if(p && !p.contains(e.target)) fmsClose(); } });
   // ═══════════════════════════════════════════════════════════════════════════
   //  PANEL DE ADMINISTRACIÓN DEL MOTOR
   //  Sustituye al editor de prompts por nodo (guardado en la etiqueta git
@@ -1574,7 +1599,7 @@
   function vAudRelanzar(id){ closeAudMenus(); var a=_audits.filter(function(x){return x.id===id;})[0]; if(a){ a.estado='en-curso'; a.prog=0; a.fecha='Ahora'; } renderAudits(); openInforme(id); }
 
   /* ═════════ INFORME ═════════ */
-  var _infId=null, _infFindings=[], _fpPending=null, _fpSelRefs=[], _infFOwner='', _infFSeller='', _infFSev='', _infFTipo='', _infFPp='', _infFGama='', _infFSearch='', _infDistOpen=false, _infImpOpen=false, _infTab=null, _infPage=1, _infSort='sev', _infFpView=false, _infFSeccion='';
+  var _infId=null, _infFindings=[], _fpPending=null, _fpSelRefs=[], _infFOwner=[], _infFSeller=[], _infFSev=[], _infFTipo=[], _infFPp=[], _infFGama=[], _infFSearch='', _infDistOpen=false, _infImpOpen=false, _infTab=null, _infPage=1, _infSort='sev', _infFpView=false, _infFSeccion=[], _hubFTipo=[];
   var _INF_SAMPLE=[
     { id:1, ref:'18570749', desig:'Puerta de entrada acorazada blanca 120 cm', modelo:'MOD_202512', guia:'Puertas de entrada', seccion:'Carpintería', emoji:'📐', tipo:'Discrepancia de dimensiones', ubic:'designación ↔ ficha técnica', diag:'Designación "120 cm" · atributo Altura "100 cm"', accion:'Unificar la medida (revisar cuál es correcta)', owner:'TIP', pp:'1P', seller:'Simon', sev:'critica' },
     { id:2, ref:'18800786', desig:'Juego de destornilladores 6 piezas gris', modelo:'MOD_200485', guia:'Herramienta de mano', seccion:'Herramientas', emoji:'🎨', tipo:'Discrepancia de color', ubic:'designación ↔ descripción', diag:'Designación "crudo" · descripción "blanco"', accion:'Unificar el color en ambos', owner:'TIP', pp:'1P', seller:'Roca', sev:'critica' },
@@ -1652,7 +1677,7 @@
   function ppTag(pp){ return '<span class="v-tag" style="background:'+(pp==='1P'?'var(--success-bg)':'var(--bg-parchment)')+';color:'+(pp==='1P'?'var(--green)':'var(--text-muted)')+';">'+pp+'</span>'; }
   function statCard(label, valueHtml, sub){ return '<div style="flex:1; min-width:150px; border:1px solid var(--border-card); border-radius:10px; padding:14px 16px; background:#fff;"><div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">'+label+'</div><div style="font-size:22px; font-weight:700; color:var(--text-ink); line-height:1.1;">'+valueHtml+'</div>'+(sub?'<div style="font-size:11px; color:var(--text-muted); margin-top:5px;">'+sub+'</div>':'')+'</div>'; }
   function openInforme(id){ var a=_audits.filter(function(x){return x.id===id;})[0]; if(!a) return;
-    if(a.estado==='borrador'){ openFunnelFor(a); return; } _infId=id; _infFOwner=''; _infFSeller=''; _infFSev=''; _infFTipo=''; _infFPp=''; _infFGama=''; _infFSeccion=''; _infFSearch=''; _infSort='sev'; _infFpView=false; _infPage=1; _infFindings=[]; var _idc=0; var _pushF=function(o,pin){ var c=_fpClone(o); c.id=++_idc; c.pin=pin||0; if(!c.desig) c.desig=_desigFor(c.guia,c.ref); if(!c.gama) c.gama=gamaDeRef(c.ref); _infFindings.push(c); }; FP_HEROES.forEach(function(h,hx){ _pushF(h,hx+1); }); for(var _tp in FP_CFG){ if(!FP_CFG[_tp].bulk) continue; var _cfg=FP_CFG[_tp], _tpl=FP_TPL[_tp]; var _have=0; for(var _q=0;_q<_infFindings.length;_q++){ if(_infFindings[_q].tipo===_tp)_have++; } for(var _j=_have;_j<_cfg.count;_j++){ var _md=_cfg.modelos[_j % _cfg.modelos.length]; var _o=_fpClone(_tpl); _o.familia=_cfg.familia; _o.guia=_md.name; _o.modelo=_md.code; _o.seller=(_cfg.sellers?_cfg.sellers[Math.floor(_j/_cfg.modelos.length)%_cfg.sellers.length]:_o.seller); _o.ref=String(_md.refBase+100+_j); _pushF(_o,0); } } var _fill=_INF_SAMPLE.filter(function(t){return !FP_CFG.hasOwnProperty(t.tipo);}); var _target=Math.max(_infFindings.length+24, a.alertas||0); var _fi=0; while(_infFindings.length<_target){ var _t2=_fill[_fi%_fill.length]; var _o2=_fpClone(_t2); _o2.familia=(FAMILIA_OF[_o2.guia]||_o2.seccion||'—'); _o2.ref=String(30000000+_infFindings.length); _o2.modelo='MOD_F'+(1000+_infFindings.length); _pushF(_o2,0); _fi++; } _applyPerimetro();
+    if(a.estado==='borrador'){ openFunnelFor(a); return; } _infId=id; _infFOwner=[]; _infFSeller=[]; _infFSev=[]; _infFTipo=[]; _infFPp=[]; _infFGama=[]; _infFSeccion=[]; _infFSearch=''; _infSort='sev'; _infFpView=false; _infPage=1; _infFindings=[]; var _idc=0; var _pushF=function(o,pin){ var c=_fpClone(o); c.id=++_idc; c.pin=pin||0; if(!c.desig) c.desig=_desigFor(c.guia,c.ref); if(!c.gama) c.gama=gamaDeRef(c.ref); _infFindings.push(c); }; FP_HEROES.forEach(function(h,hx){ _pushF(h,hx+1); }); for(var _tp in FP_CFG){ if(!FP_CFG[_tp].bulk) continue; var _cfg=FP_CFG[_tp], _tpl=FP_TPL[_tp]; var _have=0; for(var _q=0;_q<_infFindings.length;_q++){ if(_infFindings[_q].tipo===_tp)_have++; } for(var _j=_have;_j<_cfg.count;_j++){ var _md=_cfg.modelos[_j % _cfg.modelos.length]; var _o=_fpClone(_tpl); _o.familia=_cfg.familia; _o.guia=_md.name; _o.modelo=_md.code; _o.seller=(_cfg.sellers?_cfg.sellers[Math.floor(_j/_cfg.modelos.length)%_cfg.sellers.length]:_o.seller); _o.ref=String(_md.refBase+100+_j); _pushF(_o,0); } } var _fill=_INF_SAMPLE.filter(function(t){return !FP_CFG.hasOwnProperty(t.tipo);}); var _target=Math.max(_infFindings.length+24, a.alertas||0); var _fi=0; while(_infFindings.length<_target){ var _t2=_fill[_fi%_fill.length]; var _o2=_fpClone(_t2); _o2.familia=(FAMILIA_OF[_o2.guia]||_o2.seccion||'—'); _o2.ref=String(30000000+_infFindings.length); _o2.modelo='MOD_F'+(1000+_infFindings.length); _pushF(_o2,0); _fi++; } _applyPerimetro();
     var _pp=a.perimetro.split('·'); var nombre=_pp.slice(1).join('·').trim()||a.perimetro; var _pcode=(a.tipo==='Modelo'&&_pp.length>1)?_pp[0].trim():'';
     document.getElementById('v-inf-title').innerHTML='<span style="font-variant-numeric:tabular-nums;">'+audCode(a)+'</span>';
     var _crumb=document.getElementById('v-inf-crumb'); if(_crumb) _crumb.textContent=a.perimetro;
@@ -1748,9 +1773,137 @@
     var lg=function(col,txt){return '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:'+col+';display:inline-block;"></span>'+txt+'</span>';};
     var legend='<div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text-muted);">'+lg(SEVC.b,'Bloqueante')+lg(SEVC.c,'Crítica')+lg(SEVC.l,'Leve')+'</div>';
     return legend+'<div style="display:flex; gap:36px; flex-wrap:wrap;">'+distCol(distSect('Designación',desig))+distCol(distSect('Descripción',desc))+distCol(distSect('Ficha técnica',ficha)+distSect('Multimedia',multi,true))+'</div>'; }
-  function fselG(varName,val,groups,ph){ var o='<option value="">'+ph+'</option>'+groups.map(function(g){return '<optgroup label="'+g[0]+'">'+g[1].map(function(t){return '<option value="'+t.replace(/"/g,'&quot;')+'"'+(val===t?' selected':'')+'>'+t+'</option>';}).join('')+'</optgroup>';}).join(''); return '<div style="position:relative;"><select onchange="'+varName+'=this.value; _infPage=1; renderMTabla();" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'+o+'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'; }
-  function fsel(varName,val,pairs,ph){ var o='<option value="">'+ph+'</option>'+pairs.map(function(p){return '<option value="'+p[0]+'"'+(val===p[0]?' selected':'')+'>'+p[1]+'</option>';}).join(''); return '<div style="position:relative;"><select onchange="'+varName+'=this.value; _infPage=1; renderMTabla();" style="height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 12px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);background:#fff;cursor:pointer;field-sizing:content;appearance:none;-webkit-appearance:none;">'+o+'</select><svg style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>'; }
-  function clearInfFilters(){ _infFSeller=''; _infFOwner=''; _infFSev=''; _infFTipo=''; _infFSeccion=''; _infFPp=''; _infFGama=''; _infFSearch=''; _infPage=1; renderMatriz(); }
+  // ── Filtros de multiseleccion ─────────────────────────────────────────────
+  // Sustituyen a los <select> de seleccion unica. Las marcas viven en un borrador
+  // hasta que se pulsa Aplicar; cerrar el popover por fuera las tira.
+  //   Borrar  -> vacia ESE filtro y refresca la tabla sin cerrar el popover.
+  //              El «Borrar filtros» de la barra sigue siendo el general.
+  //   Aplicar -> vuelca el borrador al filtro y cierra.
+  // Los valores se pasan por indice y no por texto, para no tener que escapar
+  // nombres de seller con comillas dentro de un onclick.
+  var _FMS={}, _fmsOpenId=null, _fmsDraft=[], _fmsQuery='';
+  function fms(id, varName, pairs, ph, o){
+    o=o||{};
+    var flat = o.groups ? [] : pairs.slice();
+    if(o.groups) o.groups.forEach(function(g){ g[1].forEach(function(p){ flat.push(p); }); });
+    _FMS[id]={v:varName, ph:ph, flat:flat, groups:o.groups||null, search:!!o.search,
+              apply:o.apply||'renderMTabla()', seq:flat.map(function(_,i){return i;})};
+    return '<div class="fms" id="fms-'+id+'"><button class="fms-btn" id="fms-btn-'+id+'"'
+      +' onclick="fmsToggle(event,\''+id+'\')">'+fmsLabel(id)
+      +'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
+      +'</button><div class="fms-pop" id="fms-pop-'+id+'"></div></div>';
+  }
+  function fmsLabel(id){
+    var c=_FMS[id], cur=window[c.v]||[];
+    if(!cur.length) return '<span>'+c.ph+'</span>';
+    if(cur.length===1){
+      var m=c.flat.filter(function(p){ return p[0]===cur[0]; })[0];
+      return '<span>'+(m?m[1]:cur[0])+'</span>';
+    }
+    return '<span>'+c.ph+' · '+cur.length+'</span>';
+  }
+  function fmsSync(id){
+    var b=document.getElementById('fms-btn-'+id); if(!b) return;
+    var c=_FMS[id], cur=window[c.v]||[];
+    b.innerHTML=fmsLabel(id)+'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+    b.classList.toggle('has', cur.length>0);
+  }
+  function fmsToggle(e,id){
+    e.stopPropagation();
+    if(_fmsOpenId===id){ fmsClose(); return; }
+    fmsClose();
+    var c=_FMS[id], cur=(window[c.v]||[]).slice();
+    _fmsOpenId=id; _fmsDraft=cur.slice(); _fmsQuery='';
+    // Los seleccionados suben arriba, pero solo al abrir: si se reordenase en
+    // vivo, las filas bailarian bajo el cursor al desmarcar una.
+    if(c.search){
+      var seq=c.flat.map(function(_,i){return i;});
+      seq.sort(function(a,b){
+        var sa=cur.indexOf(c.flat[a][0])!==-1?0:1, sb=cur.indexOf(c.flat[b][0])!==-1?0:1;
+        return sa-sb || (c.flat[a][1].toLowerCase()<c.flat[b][1].toLowerCase()?-1:1);
+      });
+      c.seq=seq;
+    }
+    document.getElementById('fms-'+id).classList.add('open');
+    fmsBody(id);
+    if(c.search){ var s=document.getElementById('fms-q-'+id); if(s) s.focus(); }
+  }
+  function fmsClose(){
+    if(!_fmsOpenId) return;
+    var el=document.getElementById('fms-'+_fmsOpenId); if(el) el.classList.remove('open');
+    _fmsOpenId=null; _fmsDraft=[]; _fmsQuery='';
+  }
+  function fmsBody(id){
+    var c=_FMS[id], host=document.getElementById('fms-pop-'+id); if(!host) return;
+    var q=(_fmsQuery||'').toLowerCase();
+    var row=function(i){
+      var p=c.flat[i], on=_fmsDraft.indexOf(p[0])!==-1;
+      return '<div class="fms-row'+(on?' sel':'')+'" onclick="fmsCheck(\''+id+'\','+i+')">'
+        +'<input type="checkbox"'+(on?' checked':'')+' tabindex="-1" style="pointer-events:none;width:15px;height:15px;margin:0;accent-color:var(--green);flex-shrink:0;"/>'
+        +'<span>'+p[1]+'</span></div>';
+    };
+    var body='';
+    if(c.groups){
+      c.groups.forEach(function(g){
+        var ids=[]; c.flat.forEach(function(p,i){ if(g[1].filter(function(x){return x[0]===p[0];}).length) ids.push(i); });
+        ids=ids.filter(function(i){ return !q || c.flat[i][1].toLowerCase().indexOf(q)!==-1; });
+        if(ids.length) body+='<div class="fms-grp">'+g[0]+'</div>'+ids.map(row).join('');
+      });
+    } else {
+      var ids=c.seq.filter(function(i){ return !q || c.flat[i][1].toLowerCase().indexOf(q)!==-1; });
+      body=ids.map(row).join('');
+    }
+    if(!body) body='<div class="fms-none">Nada que coincida</div>';
+    var search=c.search ? '<div style="padding:9px 10px 5px;border-bottom:1px solid var(--border-card);"><div style="position:relative;">'
+      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'
+      +'<input id="fms-q-'+id+'" value="'+(_fmsQuery||'').replace(/"/g,'&quot;')+'" oninput="_fmsQuery=this.value; fmsBody(\''+id+'\'); document.getElementById(\'fms-q-'+id+'\').focus();" placeholder="Buscar…" style="width:100%;height:32px;border:1px solid var(--border-input);border-radius:7px;padding:0 10px 0 31px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;box-sizing:border-box;"/>'
+      +'</div></div>' : '';
+    host.innerHTML=search+'<div class="fms-list">'+body+'</div>'
+      +'<div class="fms-foot"><button class="fms-b fms-b-sec" onclick="event.stopPropagation(); fmsReset(\''+id+'\')">Borrar</button>'
+      +'<button class="fms-b fms-b-pri" onclick="event.stopPropagation(); fmsApply(\''+id+'\')">Aplicar</button></div>';
+  }
+  function fmsCheck(id,i){
+    var v=_FMS[id].flat[i][0], k=_fmsDraft.indexOf(v);
+    if(k===-1) _fmsDraft.push(v); else _fmsDraft.splice(k,1);
+    fmsBody(id);
+    if(_FMS[id].search){ var s=document.getElementById('fms-q-'+id); if(s) s.focus(); }
+  }
+  function fmsApply(id){
+    var c=_FMS[id]; window[c.v]=_fmsDraft.slice();
+    fmsClose(); fmsSync(id); eval(c.apply);
+  }
+  function fmsReset(id){
+    // Borra de verdad y refresca la tabla, pero no cierra: asi se ve el efecto
+    // sin perder el popover.
+    var c=_FMS[id]; window[c.v]=[]; _fmsDraft=[];
+    fmsSync(id); fmsBody(id); eval(c.apply);
+    if(c.search){ var s=document.getElementById('fms-q-'+id); if(s) s.focus(); }
+  }
+  // Varias referencias separadas por comas: en bloque y exactas. Con una sola se
+  // mantiene el «contiene» de siempre, que es lo que sirve para teclear media
+  // referencia o parte de un modelo.
+  function refMatch(f,q){
+    if(!q) return true;
+    if(q.indexOf(',')!==-1){
+      var ws=q.split(',').map(function(x){return x.trim().toLowerCase();}).filter(Boolean);
+      return ws.indexOf(String(f.ref).toLowerCase())!==-1;
+    }
+    return (f.ref+' '+f.modelo).toLowerCase().indexOf(q)!==-1;
+  }
+  function onRefFind(el){
+    _infFSearch=el.value; _infPage=1;
+    var w=el.parentNode; if(w) w.classList.toggle('wide', !!el.value);
+    var x=document.getElementById('v-reffind-x'); if(x) x.style.display=el.value?'flex':'none';
+    renderMTabla();
+  }
+  function clearRefFind(){
+    _infFSearch=''; _infPage=1;
+    var el=document.getElementById('v-reffind-i');
+    if(el){ el.value=''; el.parentNode.classList.remove('wide'); el.focus(); }
+    var x=document.getElementById('v-reffind-x'); if(x) x.style.display='none';
+    renderMTabla();
+  }
+  function clearInfFilters(){ fmsClose(); _infFSeller=[]; _infFOwner=[]; _infFSev=[]; _infFTipo=[]; _infFSeccion=[]; _infFPp=[]; _infFGama=[]; _infFSearch=''; _infPage=1; renderMatriz(); }
   function setMatrizTab(v){ var fp=(v==='fp'); if(_infFpView===fp) return; _infFpView=fp; _infPage=1; renderMatriz(); }
   function renderMatriz(){ var host=document.getElementById('v-inf-matriz'); if(!host) return;
     var tipos=[], sellers=[], secciones=[], gamas=[]; _infFindings.forEach(function(f){ if(tipos.indexOf(f.tipo)===-1) tipos.push(f.tipo); if(f.seller && sellers.indexOf(f.seller)===-1) sellers.push(f.seller); if(f.seccion && secciones.indexOf(f.seccion)===-1) secciones.push(f.seccion); if(f.gama && gamas.indexOf(f.gama)===-1) gamas.push(f.gama); });
@@ -1758,7 +1911,8 @@
     // hay algo que elegir. Se pinta solo si hay mas de un valor entre los hallazgos
     // —lo que deja fuera la gama cuando la auditoria ya es de una gama, el seller
     // cuando es de un proveedor, y asi con el resto.
-    var fselSi=function(varName,val,pairs,ph){ return pairs.length>1 ? fsel(varName,val,pairs,ph) : ''; };
+    // La regla sigue igual con la multiseleccion.
+    var fmsSi=function(id,varName,pairs,ph,o){ return pairs.length>1 ? fms(id,varName,pairs,ph,o) : ''; };
     var GORD='M A B C D E S Z T L R P K V'.split(' ');
     var gamaPairs=gamas.slice().sort(function(a,b){ return GORD.indexOf(a)-GORD.indexOf(b); })
       .map(function(g){ var d=gamaDesc(g); return [g, d? g+' · '+d : g]; });
@@ -1771,14 +1925,14 @@
     var tabsBar='<div style="display:flex;align-items:stretch;gap:4px;padding:0 8px;border-bottom:1px solid var(--border-card);">'+mtab('corr','Correcciones',nCorr)+mtab('fp','Falsos positivos',nFp)+'</div>';
     var clearLink='<button id="v-clearf" onclick="clearInfFilters()" class="v-clearf" style="display:none;align-items:center;margin-left:auto;align-self:center;background:none;border:none;padding:0 2px;height:36px;font-family:\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;white-space:nowrap;">Borrar filtros</button>';
     var filters='<div style="display:flex; gap:10px; flex-wrap:wrap; padding:14px 16px; border-bottom:1px solid var(--border-card);">'
-      +fselSi('_infFSeller',_infFSeller,sellers.sort().map(function(s){return [s,s];}),'Seller')
-      +fsel('_infFOwner',_infFOwner,[['TIP','TIP'],['Seller','Seller']],'Owner')
-      +fsel('_infFSev',_infFSev,[['bloqueante','Bloqueante'],['critica','Crítica'],['mejora','Leve']],'Severidad')
-      +fselG('_infFTipo',_infFTipo,TIPOS_GRUPOS,'Tipo de error')
-      +fselSi('_infFSeccion',_infFSeccion,secciones.sort().map(function(s){return [s,s];}),'Sección')
-      +fselSi('_infFGama',_infFGama,gamaPairs,'Gama')
-      +fselSi('_infFPp',_infFPp,[['1P','1P'],['3P','3P']],'1P/3P')
-      +'<div style="position:relative; flex:0 1 190px; min-width:120px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input value="'+(_infFSearch||'').replace(/"/g,'&quot;')+'" oninput="_infFSearch=this.value; _infPage=1; renderMTabla();" placeholder="Referencia o modelo…" style="width:100%;height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 12px 0 34px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;"/></div>'
+      +fmsSi('finf-seller','_infFSeller',sellers.sort().map(function(s){return [s,s];}),'Seller',{search:true})
+      +fms('finf-owner','_infFOwner',[['TIP','TIP'],['Seller','Seller']],'Owner')
+      +fms('finf-sev','_infFSev',[['bloqueante','Bloqueante'],['critica','Crítica'],['mejora','Leve']],'Severidad')
+      +fms('finf-tipo','_infFTipo',null,'Tipo de error',{groups:TIPOS_GRUPOS.map(function(g){return [g[0],g[1].map(function(t){return [t,t];})];})})
+      +fmsSi('finf-seccion','_infFSeccion',secciones.sort().map(function(s){return [s,s];}),'Sección')
+      +fmsSi('finf-gama','_infFGama',gamaPairs,'Gama')
+      +fmsSi('finf-pp','_infFPp',[['1P','1P'],['3P','3P']],'1P/3P')
+      +'<div class="v-reffind'+((_infFSearch||'')?' wide':'')+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="v-reffind-i" value="'+(_infFSearch||'').replace(/"/g,'&quot;')+'" oninput="onRefFind(this)" placeholder="Referencia o modelo…" style="width:100%;height:36px;border:1px solid var(--border-input);border-radius:8px;padding:0 32px 0 34px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;box-sizing:border-box;"/><button id="v-reffind-x" onclick="clearRefFind()" title="Borrar" style="display:'+((_infFSearch||'')?'flex':'none')+';position:absolute;right:8px;top:50%;transform:translateY(-50%);align-items:center;justify-content:center;width:18px;height:18px;border:none;border-radius:50%;background:var(--bg-parchment);color:var(--text-body);font-size:13px;line-height:1;cursor:pointer;padding:0;">&times;</button></div>'
       +clearLink+'</div>';
     host.innerHTML='<div style="border:1px solid var(--border-card); border-radius:12px; background:#fff; overflow:hidden;">'+tabsBar+filters+'<div id="v-inf-mtabla"></div></div><div id="v-inf-pager"></div>';
     renderMTabla();
@@ -1788,7 +1942,8 @@
     var FP_DIS='background:#f0f1f2;border:1px solid var(--border-card);border-radius:6px;height:28px;padding:0 10px;font-size:11px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;cursor:not-allowed;color:var(--text-disabled);white-space:nowrap;';
     var DIS_T='La auditoría ya está revisada · reábrela para cambiar los falsos positivos';
     var q=(_infFSearch||'').toLowerCase();
-    var list=_infFindings.filter(function(f){ return (_infFpView ? f.fp : !f.fp) && (!_infFSeller||f.seller===_infFSeller) && (!_infFOwner||f.owner===_infFOwner) && (!_infFSev||f.sev===_infFSev) && (!_infFTipo||f.tipo===_infFTipo) && (!_infFGama||f.gama===_infFGama) && (!_infFSeccion||f.seccion===_infFSeccion) && (!_infFPp||f.pp===_infFPp) && (!q||(f.ref+' '+f.modelo).toLowerCase().indexOf(q)!==-1); });
+    var _in=function(a,v){ return !a.length || a.indexOf(v)!==-1; };
+    var list=_infFindings.filter(function(f){ return (_infFpView ? f.fp : !f.fp) && _in(_infFSeller,f.seller) && _in(_infFOwner,f.owner) && _in(_infFSev,f.sev) && _in(_infFTipo,f.tipo) && _in(_infFGama,f.gama) && _in(_infFSeccion,f.seccion) && _in(_infFPp,f.pp) && refMatch(f,q); });
     var SRANK={bloqueante:0,critica:1,mejora:2};
     if(_infSort==='sev') list.sort(function(x,y){ return (SRANK[x.sev]-SRANK[y.sev])||(x.ref<y.ref?-1:1); });
     else if(_infSort==='ref') list.sort(function(x,y){ return x.ref<y.ref?-1:(x.ref>y.ref?1:0); });
@@ -1796,7 +1951,7 @@
     else if(_infSort==='owner') list.sort(function(x,y){ return x.owner<y.owner?-1:(x.owner>y.owner?1:0); });
     else if(_infSort==='segmento') list.sort(function(x,y){ return x.pp<y.pp?-1:(x.pp>y.pp?1:0); });
     var _pn=list.filter(function(x){return x.pin;}).sort(function(a,b){return a.pin-b.pin;}),_rs=list.filter(function(x){return !x.pin;}); list=_pn.concat(_rs);
-    var _cf=document.getElementById('v-clearf'); if(_cf) _cf.style.display=(_infFSeller||_infFOwner||_infFSev||_infFTipo||_infFSeccion||_infFGama||_infFPp||(_infFSearch||'').trim())?'inline-flex':'none';
+    var _cf=document.getElementById('v-clearf'); if(_cf) _cf.style.display=(_infFSeller.length||_infFOwner.length||_infFSev.length||_infFTipo.length||_infFSeccion.length||_infFGama.length||_infFPp.length||(_infFSearch||'').trim())?'inline-flex':'none';
     var _nfp=_infFindings.filter(function(x){return x.fp;}).length; var _tc=document.getElementById('v-tabn-corr'), _tf=document.getElementById('v-tabn-fp'); if(_tc)_tc.textContent=fmtNum(_infFindings.length-_nfp); if(_tf)_tf.textContent=fmtNum(_nfp); var per=20, total=list.length, totalPages=Math.max(1,Math.ceil(total/per));
     if(_infPage>totalPages)_infPage=totalPages; if(_infPage<1)_infPage=1;
     var start=(_infPage-1)*per, end=Math.min(total,start+per), pageRows=list.slice(start,end);
@@ -2240,8 +2395,10 @@
   function audMenu(r){ var items; var IC_XC='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'; if(r.estado==='en-curso'){ items='<div class="row-menu-item" onclick="vAudInforme('+r.id+')">'+IC_EYE+'Ver detalle</div><div class="row-menu-item danger" onclick="vAudCancel('+r.id+')">'+IC_XC+'Cancelar</div>'; } else if(r.estado==='borrador'){ items='<div class="row-menu-item" onclick="vAudContinuar('+r.id+')">'+IC_REF+'Continuar</div><div class="row-menu-item danger" onclick="vAudDelete('+r.id+')">'+IC_TR+'Eliminar</div>'; } else if(r.estado==='error'){ items='<div class="row-menu-item" onclick="vAudInforme('+r.id+')">'+IC_EYE+'Ver detalle</div><div class="row-menu-item" onclick="vAudRelanzar('+r.id+')">'+IC_REF+'Reintentar</div><div class="row-menu-item danger" onclick="vAudDelete('+r.id+')">'+IC_TR+'Eliminar</div>'; } else { items='<div class="row-menu-item" onclick="vAudInforme('+r.id+')">'+IC_EYE+'Ver informe</div><div class="row-menu-item" onclick="vAudReauditar('+r.id+')">'+IC_REF+'Re-auditar</div><div class="row-menu-item danger" onclick="vAudDelete('+r.id+')">'+IC_TR+'Eliminar</div>'; } return '<div class="row-menu" id="audmenu-'+r.id+'"><button class="row-menu-btn" onclick="event.stopPropagation();document.getElementById(\'audmenu-'+r.id+'\').classList.toggle(\'open\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button><div class="row-menu-dropdown">'+items+'</div></div>'; }
   function renderAudits(){
     var tbody=document.getElementById('v-hub-tbody'); if(!tbody) return;
-    var q=(document.getElementById('v-search').value||'').toLowerCase(); var tf=document.getElementById('v-filter-tipo').value;
-    var rows=_audits.filter(function(r){ if(!matchesTab(r))return false; if(tf&&r.tipo!==tf)return false; if(q&&(r.perimetro+' '+r.creador).toLowerCase().indexOf(q)===-1)return false; return true; });
+    var q=(document.getElementById('v-search').value||'').toLowerCase();
+    var _ht=document.getElementById('v-hub-tipo-f');
+    if(_ht && !_ht.innerHTML) _ht.innerHTML=fms('hubtipo','_hubFTipo',[['Gama','Gama'],['Vendor','Proveedor / Seller'],['Modelo','Modelo'],['Categoría','Categoría web'],['Seccion','Sección'],['Listado','Listado CSV']],'Tipo de perímetro',{apply:'renderAudits()'});
+    var rows=_audits.filter(function(r){ if(!matchesTab(r))return false; if(_hubFTipo.length&&_hubFTipo.indexOf(r.tipo)===-1)return false; if(q&&(r.perimetro+' '+r.creador).toLowerCase().indexOf(q)===-1)return false; return true; });
     var cnt=_audits.filter(function(r){return r.estado==='por-revisar';}).length; var badge=document.getElementById('v-tab-revisar-count'); if(badge){ badge.textContent=cnt; badge.style.display=cnt?'inline-block':'none'; } [['v-tab-encurso-count','en-curso'],['v-tab-revisadas-count','revisado'],['v-tab-borradores-count','borrador']].forEach(function(p){ var _e=document.getElementById(p[0]); if(_e){ var _n=_audits.filter(function(r){return r.estado===p[1]||(p[1]==='en-curso'&&r.estado==='error');}).length; _e.textContent=_n; _e.style.display=_n?'inline-block':'none'; } });
     var isDraft=(_vTab==='borradores');
     var thead=document.getElementById('v-hub-thead');
