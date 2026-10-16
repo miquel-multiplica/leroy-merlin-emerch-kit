@@ -1,9 +1,10 @@
 name: Deploy GitHub Pages
 
-# Publica el sitio (raíz del repo: wireframes + docs) vía GitHub Actions,
-# en lugar del build legacy. Clave: los pushes se ENCOLAN, no se cancelan
-# entre sí (cancel-in-progress: false) → evita deploys atascados por pushes
-# seguidos. workflow_dispatch permite relanzar sin inventar un commit.
+# DOS JOBS A PROPÓSITO. Con un solo job, «Re-run jobs» rehace también la subida
+# del artefacto y deja DOS llamados «github-pages» en la misma ejecución; a
+# partir de ahí deploy-pages no sabe cuál publicar y la ejecución queda
+# envenenada (pasó el 2026-10-16). Separando build de deploy, «Re-run failed
+# jobs» relanza solo el deploy y reutiliza el artefacto que ya existe.
 
 on:
   push:
@@ -20,21 +21,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
+    # Fijado a 24.04: ubuntu-latest migra a Ubuntu 26 el 19 de octubre de 2026.
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Inventario del artefacto (para depurar)
-        run: |
-          echo "Ficheros en la raíz que se publican:"
-          ls -la
-          echo "Tamaño de los wireframes:"
-          du -h wireframe_*.html 2>/dev/null || true
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
@@ -44,6 +36,17 @@ jobs:
         with:
           path: '.'
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # Por defecto son 10 min y la cola de Pages los supera a menudo
+          # (2026-10-16: «Timeout reached, aborting!» a los 10m 14s).
+          timeout: 1800000
