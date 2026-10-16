@@ -9,8 +9,18 @@
 >
 > Abierto el 2026-10-16, antes de la semana de inmersión.
 
-**Estados:** 🔴 bloquea diseñar · 🟡 condiciona pero se puede avanzar · ⚪️ se decide más tarde a
-propósito
+**Los números de la propuesta y del kickoff son referencias estimadas, no compromisos.** Tres
+KPIs pueden acabar siendo dos o cuatro; los «12 widgets» son vaguedad deliberada para poder
+recortar módulos sin renegociar. Así que **ninguna entrada de aquí pregunta «cuál de los tres»**:
+preguntan qué aporta valor, y el número sale después.
+
+**Estados — dicen quién lo desbloquea, no cómo de grave es:**
+
+| | |
+|---|---|
+| 📊 **dato** | Lo contesta la inmersión de la semana del 20 |
+| 🤝 **decisión** | No hay dato que lo resuelva: alguien tiene que decidir |
+| ⚪️ **al diseñar** | Se decide más tarde a propósito. Que siga abierto está bien |
 
 ---
 
@@ -21,7 +31,7 @@ propósito
 | **Qué no sabemos** | Si la home lleva métricas, alertas, pendientes, el agente, o en qué proporción |
 | **Por qué importa** | Es la primera pantalla; de ahí cuelga todo lo demás |
 | **Qué lo resolvería** | Las cuatro entrevistas: qué abren cada mañana y por qué eso |
-| **Estado** | 🔴 |
+| **Estado** | 📊 |
 
 **Lo que ya sabemos y no basta para cerrarlo:**
 
@@ -38,27 +48,29 @@ propósito
 - ¿Franja de métricas sí o no, y de qué tamaño?
 - **Qué ocupa el centro un martes que no hay ninguna alerta.**
 
-## 2 · Cuáles son los tres KPIs
+## 2 · Qué indicadores aportan valor, y quién responde de cada uno
 
 | | |
 |---|---|
-| **Qué no sabemos** | Cuáles, y quién responde de cada definición |
-| **Por qué importa** | Sin dueño no hay definición acordada, y es la mitad del contrato |
-| **Qué lo resolvería** | Las entrevistas dan los candidatos; el taller del 23 los cierra con dueño |
-| **Estado** | 🔴 |
+| **Qué no sabemos** | Cuáles sirven de verdad, y quién responde de su definición |
+| **Por qué importa** | Un indicador sin dueño no tiene definición acordada, y sin eso no hay determinismo |
+| **Qué lo resolvería** | Las entrevistas dan los candidatos; el taller del 23 les pone dueño |
+| **Estado** | 📊 |
 
-La ficha del puesto lista **cuatro** —CV del mundo, CR y ATC familia-mercado, % de GV vendibles— y
-el contrato compromete tres. Pero con el alcance en calidad de catálogo es probable que los
-candidatos reales sean otros: **GV Quality, ATT Imp.5, cobertura de guías**.
+La ficha del puesto lista **cuatro** —CV del mundo, CR y ATC familia-mercado, % de GV vendibles—.
+Con el alcance en calidad de catálogo es probable que los candidatos reales sean otros:
+**GV Quality, ATT Imp.5, cobertura de guías**.
 
-## 3 · Cuáles son las tres alertas, y si son tipos o niveles
+**Cuántos acaben siendo es una consecuencia, no un dato de entrada.**
+
+## 3 · Qué merece un aviso, y si son reglas o niveles
 
 | | |
 |---|---|
-| **Qué no sabemos** | Qué dispara cada una, y si «3 tipos» son tres reglas o tres niveles de una |
-| **Por qué importa** | Tres reglas distintas es el triple de definición y de mantenimiento |
+| **Qué no sabemos** | Qué dispara cada aviso, y si «tipos» son reglas distintas o niveles de una |
+| **Por qué importa** | Cada regla distinta es definición y mantenimiento aparte |
 | **Qué lo resolvería** | El orden que salga de las entrevistas sobre los seis candidatos |
-| **Estado** | 🔴 |
+| **Estado** | 📊 |
 
 Seis candidatos sobre la mesa, cuatro de ellos dichos por el cliente:
 
@@ -79,7 +91,7 @@ alertas con criterio»*.
 | **Qué no sabemos** | Cuál es la fuente buena de cada cosa cuando dos dicen distinto |
 | **Por qué importa** | La regla de oro dice *«ante la misma pregunta, el mismo resultado»*, y hoy no es cierto |
 | **Qué lo resolvería** | La sesión con Javier Hernán |
-| **Estado** | 🔴 |
+| **Estado** | 📊 |
 
 El 7 de octubre, tres personas tardaron media hora en saber si un atributo estaba relleno. La
 cascada que se usa —JSON, Drive 2026, Drive 2025, más STEP y Opus— **vive en la cabeza de Javier**
@@ -94,7 +106,7 @@ y no está escrita. Y la recarga de guías es **mensual**, no diaria.
 | **Qué no sabemos** | Qué tablero, qué filtro, y si se lee o también se escribe |
 | **Por qué importa** | De ello depende que la bandeja entre o no, y con qué coste |
 | **Qué lo resolvería** | Fernando, que es el único que lo pidió |
-| **Estado** | 🟡 |
+| **Estado** | 🤝 |
 
 Lo pidió Fer y **nadie de los que lo usarían reconoce la petición**. Pedro: *«no usamos Jira»*. Y
 Susana hizo la pregunta que lo decide: *«¿vuelca en nuestras herramientas, o solo me avisa y me
@@ -110,7 +122,7 @@ y además obliga a autenticar por usuario para que el ticket no lo cierre un bot
 | **Qué no sabemos** | Si es el paraguas o una sección más, cuando entren otros roles |
 | **Por qué importa** | Rehacer navegación e identidad después es caro |
 | **Qué lo resolvería** | Decisión de producto con Leroy; internamente ya hay postura |
-| **Estado** | 🟡 |
+| **Estado** | 🤝 |
 
 **Internamente ya se acordó** en la sesión con Jordi del 15 de octubre: *el cockpit es la madre, y
 Guías, Descripciones y Validaciones son aplicaciones que viven dentro*. Falta contrastarlo con
@@ -126,7 +138,7 @@ herramientas, no enterrado en la navegación de una.
 | **Qué no sabemos** | El número, y si son familias que al eMerch le importan |
 | **Por qué importa** | Es el ámbito entero: *«las familias que ya tienen guía eMerch»* |
 | **Qué lo resolvería** | Una lista. Se pidió en el kickoff |
-| **Estado** | 🔴 |
+| **Estado** | 📊 |
 
 Si son una minoría del catálogo, un indicador agregado no se puede calcular sobre ellas sin
 explicar muy bien qué mide. Y si las que tienen guía no son las que pesan, el agente sabrá mucho
@@ -139,7 +151,7 @@ de lo que nadie le pregunta.
 | **Qué no sabemos** | Si hay forma defendible de decir «si arreglas esto, ganas aquello» |
 | **Por qué importa** | Es la POC 2 y el incentivo entero del proveedor |
 | **Qué lo resolvería** | Javier, y una decisión de método |
-| **Estado** | 🟡 |
+| **Estado** | 🤝 |
 
 Pedro ya avisó del riesgo: *«los KPIs pueden ser buenos y no haberse trabajado nada de calidad»*.
 Y tiene razón — **de una foto transversal no sale causalidad**.
@@ -157,7 +169,7 @@ Connectif resuelve esto de una forma copiable: da el dato y, pegado, **qué no s
 | **Qué no sabemos** | Qué cuenta como *«siguiente paso sugerido»* y qué ya es un flujo accionable |
 | **Por qué importa** | El contrato excluye lo segundo y compromete lo primero, sin definir la frontera |
 | **Qué lo resolvería** | Decisión de producto, con las entrevistas delante |
-| **Estado** | 🟡 |
+| **Estado** | 🤝 |
 
 La propuesta dice a la vez que el cockpit *«no propone flujos accionables»* y que cada alerta
 lleva *«el siguiente paso sugerido»*. **Sugerir un siguiente paso es proponer una acción.** No hay
@@ -170,7 +182,7 @@ contradicción si se define la raya; no definirla es lo que deja entrar todo.
 | **Qué no sabemos** | Si el TIP necesita lo mismo filtrado o algo distinto |
 | **Por qué importa** | Si es un filtro, es casi gratis; si es otra pantalla, es otro proyecto |
 | **Qué lo resolvería** | Preguntar si el TIP trabaja transversal o por ámbito |
-| **Estado** | 🟡 |
+| **Estado** | 📊 |
 
 En Validaciones el reparto ya está hecho: **congruencia al TIP, completitud al seller**. Y en el
 prototipo los hallazgos se reparten casi al 50%. Con el alcance en calidad de catálogo, **puede que
@@ -187,5 +199,6 @@ Para no reabrir lo cerrado:
 - Es **un** agente.
 - Va **integrado con Guías**.
 - **El agente no calcula**: los números salen de consultas validadas; él interpreta y explica.
-- Los **«12 widgets»** del deck son vaguedad deliberada para poder recortar módulos sin
-  renegociar. No es una promesa de doce cosas.
+- **Los números son referencias estimadas.** «3 KPIs», «3 alertas», «12 widgets»: ninguno es un
+  compromiso. Los widgets, además, son vaguedad deliberada para poder recortar módulos sin
+  renegociar.
