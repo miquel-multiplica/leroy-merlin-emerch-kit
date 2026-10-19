@@ -802,7 +802,8 @@
   function go(id){ document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); }); var t=document.getElementById(id); if(t){ t.classList.add('active'); window.scrollTo(0,0); } }
   document.addEventListener('click', function(e){ document.querySelectorAll('.row-menu.open').forEach(function(m){ if(!m.contains(e.target)) m.classList.remove('open'); });
     // Cerrar por fuera descarta las marcas sin aplicar.
-    if(_fmsOpenId){ var p=document.getElementById('fms-'+_fmsOpenId); if(p && !p.contains(e.target)) fmsClose(); } });
+    if(_fmsOpenId){ var p=document.getElementById('fms-'+_fmsOpenId); if(p && !p.contains(e.target)) fmsClose(); }
+    if(_spsOpen){ var sp=document.getElementById('sps'); if(sp && !sp.contains(e.target)) spsClose(); } });
   var _cfgFamilias=[
     {name:'Puertas y ventanas', modelos:[{name:'Puerta de entrada',code:'MOD_PE01'},{name:'Puerta corredera',code:'MOD_PC02'},{name:'Puerta acorazada',code:'MOD_PA03'},{name:'Ventana corredera',code:'MOD_VC04'}]},
     {name:'Herramientas', modelos:[{name:'Taladro percutor',code:'MOD_TP11'},{name:'Atornillador',code:'MOD_AT12'},{name:'Lijadora',code:'MOD_LJ13'},{name:'Sierra circular',code:'MOD_SC14'}]},
@@ -1498,10 +1499,41 @@
     return Object.keys(m).sort(function(a,b){ return m[b]-m[a]; }); }
   function currentSeller(){ var ns=sellerNames(); if(_sellerPick && ns.indexOf(_sellerPick)>=0) return _sellerPick; return ns[0]||'—'; }
   function setSellerPick(v){ _sellerPick=v;  }
-  function renderSellerPicker(){ var w=document.getElementById('v-seller-pickwrap'); if(!w) return; var ns=sellerNames(); var cur=currentSeller();
-    if(ns.length<=1){ w.innerHTML='<span style="font-size:13px;font-weight:600;color:var(--text-ink);">'+(ns[0]||'—')+'</span>'; return; }
-    var opts=ns.map(function(n){ var c=sellerFindings(n).length; return '<option value="'+n+'"'+(n===cur?' selected':'')+'>'+n+' ('+c+')</option>'; }).join('');
-    w.innerHTML='<select id="v-seller-pick" onchange="setSellerPick(this.value)" title="Proveedor del informe" style="height:34px;font-size:12px;padding:0 30px 0 10px;border:1px solid var(--border-input);border-radius:8px;background-color:#fff;color:var(--text-ink);font-family:\'Inter\',system-ui,sans-serif;-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%2714%27%20height=%2714%27%20viewBox=%270%200%2024%2024%27%20fill=%27none%27%20stroke=%27%238a8a8a%27%20stroke-width=%272%27%20stroke-linecap=%27round%27%20stroke-linejoin=%27round%27%3E%3Cpolyline%20points=%276%209%2012%2015%2018%209%27/%3E%3C/svg%3E);background-repeat:no-repeat;background-position:right 10px center;max-width:190px;">'+opts+'</select>'; }
+  // ── Selector de seller del modal de exportar ──────────────────────────────
+  // Como los filtros del informe, pero de selección única: sin casillas ni
+  // Aplicar, elegir es aplicar. Con buscador y scroll interno, porque en una
+  // auditoría multi seller puede haber muchos. Los nombres se pasan por índice
+  // para no escapar comillas en el onclick, y al teclear solo se redibuja la
+  // lista, para que el buscador no pierda el cursor.
+  var _spsOpen=false, _spsQ='', _spsNames=[];
+  function renderSellerPicker(){
+    var w=document.getElementById('v-seller-pickwrap'); if(!w) return;
+    var ns=sellerNames(); var cur=currentSeller();
+    if(ns.length<=1){ w.innerHTML='<span style="font-size:13px;font-weight:600;color:var(--text-ink);">'+(ns[0]||'\u2014')+'</span>'; return; }
+    w.innerHTML='<div class="fms" id="sps"><button class="fms-btn has" title="Proveedor del informe" onclick="spsToggle(event)">'+spsLabel(cur)+'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>'
+      +'<div class="fms-pop" id="sps-pop" style="left:auto;right:0;min-width:300px;"></div></div>';
+  }
+  function spsLabel(n){ return '<span>'+n+' <span style="color:var(--text-muted);font-weight:400;">('+fmtNum(sellerFindings(n).length)+')</span></span>'; }
+  function spsToggle(e){ e.stopPropagation(); if(_spsOpen){ spsClose(); return; }
+    _spsOpen=true; _spsQ=''; document.getElementById('sps').classList.add('open'); spsBody();
+    var q=document.getElementById('sps-q'); if(q) q.focus(); }
+  function spsClose(){ _spsOpen=false; var el=document.getElementById('sps'); if(el) el.classList.remove('open'); }
+  function spsBody(){ var host=document.getElementById('sps-pop'); if(!host) return;
+    host.innerHTML='<div style="padding:9px 10px 5px;border-bottom:1px solid var(--border-card);"><div style="position:relative;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'
+      +'<input id="sps-q" oninput="spsSearch(this.value)" onclick="event.stopPropagation()" placeholder="Buscar seller\u2026" style="width:100%;height:32px;border:1px solid var(--border-input);border-radius:7px;padding:0 10px 0 31px;font-size:12px;font-family:\'Inter\',system-ui,sans-serif;color:var(--text-body);outline:none;box-sizing:border-box;"/>'
+      +'</div></div><div class="fms-list" id="sps-list"></div>';
+    spsList(); }
+  function spsSearch(v){ _spsQ=v; spsList(); }
+  function spsList(){ var host=document.getElementById('sps-list'); if(!host) return;
+    var cur=currentSeller(), q=(_spsQ||'').toLowerCase();
+    _spsNames=sellerNames().slice().sort(function(a,b){ return a.localeCompare(b,'es'); });
+    var rows=_spsNames.map(function(n,i){
+      if(q && n.toLowerCase().indexOf(q)===-1) return '';
+      return '<div class="fms-row'+(n===cur?' sel':'')+'" style="justify-content:space-between;" onclick="event.stopPropagation(); spsPick('+i+')">'
+        +'<span>'+n+'</span><span style="color:var(--text-muted);font-variant-numeric:tabular-nums;">'+fmtNum(sellerFindings(n).length)+'</span></div>';
+    }).join('');
+    host.innerHTML=rows||'<div class="fms-none">Ningún seller coincide</div>'; }
+  function spsPick(i){ setSellerPick(_spsNames[i]); spsClose(); renderSellerPicker(); }
   function sellerDocHtml(){
     var name=currentSeller(); var fs=sellerFindings(name);
     var GREEN='#4e8c2a',INK='#1c1c1a',MUT='#6f6f69',BOR='#e6e6e1',LIME='#78be20';
@@ -1629,7 +1661,7 @@
     window.addEventListener('afterprint',restore); window.print(); setTimeout(restore,3000);
   }
   function openExport(){ renderSellerPicker(); document.getElementById('v-export-modal').classList.add('open'); }
-  function closeExport(){ document.getElementById('v-export-modal').classList.remove('open'); }
+  function closeExport(){ spsClose(); document.getElementById('v-export-modal').classList.remove('open'); }
   function vAudDelete(id){ closeAudMenus(); _audits=_audits.filter(function(a){return a.id!==id;}); renderAudits(); }
   function audActions(r){ return '<div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;"><div class="row-cta-overlay" style="display:flex;align-items:center;gap:4px;">'+audCTA(r)+'</div>'+audMenu(r)+'</div>'; }
   function audCTA(r){ if(r.estado==='por-revisar') return '<button onclick="event.stopPropagation();vAudInforme('+r.id+')" style="'+CTA_FILL+'">Revisar</button>'; if(r.estado==='revisado'||r.estado==='finalizada') return '<button onclick="event.stopPropagation();vAudInforme('+r.id+')" style="'+CTA_LINE+'">Ver informe</button>'; if(r.estado==='en-curso') return '<button onclick="event.stopPropagation();vAudCancel('+r.id+')" style="background:#fff;border:1px solid #c61112;border-radius:6px;height:30px;padding:0 14px;font-size:12px;font-weight:600;font-family:\'Inter\',system-ui,sans-serif;color:#c61112;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Cancelar</button>'; if(r.estado==='error') return '<button onclick="event.stopPropagation();vAudInforme('+r.id+')" style="'+CTA_LINE+'">Ver detalle</button>'; return ''; }
