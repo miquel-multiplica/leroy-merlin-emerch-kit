@@ -683,7 +683,7 @@
     <div style="display:flex; gap:12px; justify-content:flex-end;">
       <button onclick="closeFpRest()" style="background:none; border:none; color:var(--green); font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',system-ui,sans-serif; padding:0 14px; height:44px;">Cancelar</button>
       <button onclick="doFpRest(false)" class="btn-secondary" style="height:44px;">Solo esta</button>
-      <button id="v-fprest-all" onclick="doFpRest(true)" class="btn btn-primary" style="height:44px;">Todas</button>
+      <button id="v-fprest-all" onclick="doFpRest(true)" class="btn btn-primary" style="height:44px;">Restaurar todas</button>
     </div>
   </div>
 </div>
@@ -1350,7 +1350,7 @@
     _fpRestId=fid;
     var su=document.getElementById('v-fprest-sub');
     if(su) su.innerHTML='Esta alerta se descartó junto a otras '+fmtNum(sib.length-1)+', todas con el disparador <strong style="color:var(--text-body);">'+f.bulkTrigger+'</strong>.';
-    var ab=document.getElementById('v-fprest-all'); if(ab) ab.textContent='Las '+fmtNum(sib.length);
+    var ab=document.getElementById('v-fprest-all'); if(ab) ab.textContent='Restaurar las '+fmtNum(sib.length);
     document.getElementById('v-fprest-modal').classList.add('open'); }
   function closeFpRest(){ document.getElementById('v-fprest-modal').classList.remove('open'); _fpRestId=null; }
   function doFpRest(all){ var f=fpFind(_fpRestId); if(!f){ closeFpRest(); return; }
