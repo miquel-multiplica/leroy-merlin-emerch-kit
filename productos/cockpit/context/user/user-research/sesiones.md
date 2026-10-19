@@ -8,11 +8,11 @@
 
 ## Entrevistas con eMerchs
 
-| | Cuándo | Quién | Formato |
-|---|---|---|---|
-| **1** | lunes 19, 10:15 | 1 eMerch **1P** | online, 1 h |
-| **2** | martes 20, 11:00 | 1 eMerch **1P** | online, 1 h |
-| **3** | por agendar | **2 eMerchs 3P a la vez** | online, conjunta |
+| | Cuándo | Quién | Formato | Estado |
+|---|---|---|---|---|
+| **1** | lunes 19, 10:15 | 1 eMerch **1P** · iluminación | online, 1 h | ✅ hecha → [acta](./2026-10-19-emerch-1p.md) |
+| **2** | martes 20, 11:00 | 1 eMerch **1P** · mundo técnico | online, 1 h | agendada |
+| **3** | martes 20 | **2 eMerchs 3P a la vez** | online, conjunta | agendada |
 
 **Pedro Benavente asiste a todas.**
 
@@ -26,6 +26,10 @@ primeras describe 1P.
 **Cada una es de 1 hora y el guion ocupa 60 minutos exactos.** Si se alarga el bloque 2 —la
 pantalla compartida, que es el que más rinde— cae primero el bloque 5, después los sondeos del
 bloque 3. No cae el bloque 4, que es de donde salen los avisos, ni la pregunta de cierre.
+
+**Y en la primera pasó exactamente eso, pero peor.** Se fue a 1 h 14 y aun así **no se llegó a
+leer los seis candidatos a alerta**, que era el entregable que obligaba a priorizar. Si mañana hay
+que sacrificar algo, que no sea ese bloque: se puede abrir por ahí si hace falta.
 
 ## Taller con Pedro y Susana
 
