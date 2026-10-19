@@ -2486,7 +2486,8 @@
     var items=(_vLists[_vTipo]||[]).filter(function(o){ return !ql || o.name.toLowerCase().indexOf(ql)!==-1 || (o.code&&o.code.toLowerCase().indexOf(ql)!==-1); });
     if(items.length===0){ list.innerHTML='<div style="color:var(--text-muted);font-size:13px;padding:16px 0;">Sin resultados.</div>'; return; }
     list.innerHTML=items.map(function(o){
-      var tag=o.dual?'<span class="v-tag" style="background:var(--success-bg);color:var(--green);">1P</span> <span class="v-tag" style="background:var(--bg-parchment);color:var(--text-muted);">3P</span>':(o.tag?'<span class="v-tag" style="background:'+(o.tag==='1P'?'var(--success-bg)':'var(--bg-parchment)')+';color:'+(o.tag==='1P'?'var(--green)':'var(--text-muted)')+';">'+o.tag+'</span>':'');
+      var _tg=function(t){ return '<span class="v-tag" style="background:var(--bg-parchment);color:var(--text-muted);">'+t+'</span>'; };
+      var tag=o.dual?(_tg('1P')+' '+_tg('3P')):(o.tag?_tg(o.tag):'');
       var code=o.code?'<span style="font-size:13px;color:var(--text-muted);font-weight:400;flex-shrink:0;">'+o.code+'</span>':'';
       var desc=o.desc?'<span style="font-size:13px;color:var(--text-tertiary);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+o.desc+'</span>':'';
       return '<div class="v-opt" onclick="pickOpt(\''+o.name.replace(/'/g,"\\'")+'\')"><div style="min-width:0;display:flex;align-items:baseline;gap:8px;">'+code+'<span style="font-size:13px;color:var(--text-ink);font-weight:600;flex-shrink:0;">'+o.name+'</span>'+desc+'</div>'+(tag?'<div>'+tag+'</div>':'')+'</div>';
