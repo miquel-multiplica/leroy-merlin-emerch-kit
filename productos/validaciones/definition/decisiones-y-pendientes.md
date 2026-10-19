@@ -546,12 +546,23 @@ si las candidatas se derivan o se siguen declarando.
 - ~~**Histórico y evolutivo**~~ — **aparcado**: las ejecuciones van por separado.
 - **Roles y permisos 1P/3P** — el cliente los pidió y el validador de gama es el usuario
   principal. Nada prototipado.
-  **Sube de categoría el 16 de octubre:** al plantear el lanzamiento en lote se decidió que
-  **el 1P/3P se resolverá por permisos**, no eligiéndolo en el wizard. Por eso la maqueta del
-  lote (`wireframe_validaciones_lote.html`) **quita el selector de catálogo** que aparecía al
-  elegir un proveedor dual. Deja de ser un pendiente de diseño y pasa a ser **un bloqueo**: sin
-  saber qué ve cada rol no se sabe qué catálogo audita, y eso cambia el wizard, el perímetro que
-  se guarda y qué referencias entran. ⬜ **Por definir con el cliente.**
+  **Resuelto en parte el 19 de octubre**, confirmado con Pedro. Son dos cosas distintas y
+  conviene no mezclarlas:
+
+  - **Los permisos deciden qué universo ve cada usuario.** *«Si hacemos la diferenciación por
+    usuario para que los chicos de 3P solo puedan ver 3P, no sería necesario.»* Por eso **no se
+    añade** el paso «1P o 3P» al principio de «¿Qué quieres auditar?», que era la petición
+    original del cliente. ⬜ Queda por definir la regla de permisos en sí.
+  - **El selector del proveedor dual se queda.** Pedro lo confirma. Roca, Grohe y Bosch venden
+    en los dos catálogos, así que alguien con permiso para ver ambos **sigue teniendo que decir
+    cuál audita**: los permisos restringen el universo, no eligen dentro de él.
+  - **Las referencias mixtas se filtran en el informe**, no al lanzar. El filtro 1P/3P ya existe
+    y desde el 16 de octubre es de multiselección.
+
+  La maqueta del lote había quitado el selector y **se ha repuesto**: en el lote vive dentro de
+  la cajita de cada ítem, porque cada orden es independiente y la columna izquierda tiene que
+  seguir listando valores. Mientras un dual no tenga catálogo elegido, su cajita está incompleta
+  y el botón de lanzar sigue apagado.
 - **«La guía está mal»** — la vía para escalar una alerta cuyo problema es el documento y no la
   ficha. No es un falso positivo y no vive en el panel del motor. Enlaza con la C2.
 - ~~**Volver de la resolución a la regla**~~ — **hecho** el 1 de octubre: la modal termina en

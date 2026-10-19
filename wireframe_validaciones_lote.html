@@ -557,7 +557,7 @@
   /* ── Solo de esta maqueta ─────────────────────────────────────────────────
      Las cajitas de la derecha: una por item seleccionado, en lugar de la caja
      grande unica con el recuento de referencias. */
-  .lote-card { background:#fff; border:1px solid var(--green); border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:14px; }
+  .lote-card { background:#fff; border:1px solid var(--green); border-radius:10px; padding:14px 16px; display:flex; align-items:flex-start; gap:14px; }
   .lote-card + .lote-card { margin-top:10px; }
   .lote-num { font-size:19px; font-weight:700; color:var(--text-ink); font-variant-numeric:tabular-nums; line-height:1; }
   .lote-x { background:none; border:none; cursor:pointer; color:var(--text-muted); padding:4px; display:flex; flex-shrink:0; }
@@ -696,8 +696,12 @@
   //     Listado CSV se lanzan de una en una y no están en esta maqueta.
   //   · No se mezclan tipos en un mismo lote.
   //   · Tope de 3 items, por ahora.
-  //   · Fuera el selector 1P/3P del proveedor dual: el 1P/3P se resolverá por
-  //     permisos. Pendiente de definir con el cliente.
+  //   · El proveedor dual conserva su elección de catálogo, confirmado por Pedro
+  //     el 19 de octubre. Los permisos deciden qué universo ve cada usuario —y
+  //     por eso no hace falta un paso «1P o 3P» al principio—, pero no eligen
+  //     dentro de él: Roca vende en los dos y hay que decir cuál se audita. Aquí
+  //     la elección vive dentro de la cajita de ese item, porque cada orden es
+  //     independiente y la columna izquierda tiene que seguir listando valores.
   //   · El modal deja de ser un monitor de progreso y pasa a ser un acuse de
   //     recibo que lleva a la pestaña «En curso», que es donde el progreso vive
   //     de verdad porque se puede abandonar y volver.
@@ -789,16 +793,30 @@
     if(_sel.filter(function(x){return x.name===name;}).length) return;
     if(_sel.length>=MAX_LOTE){ _tope=true; renderRight(); return; }
     var o=(_vLists[_tipo]||[]).filter(function(x){return x.name===name;})[0]||{name:name};
-    var it={ name:o.name, code:o.code||'', desc:o.desc||'', tipo:_tipo, refs:null };
+    var it={ name:o.name, code:o.code||'', desc:o.desc||'', tipo:_tipo, refs:null,
+             dual:!!o.dual, tag:o.tag||'', cat:o.dual?null:(o.tag||'') };
     _sel.push(it); _tope=false;
     renderOpts(document.getElementById('w-opt-search').value); renderRight();
+    // Un proveedor dual no cuenta nada hasta saber qué catálogo se audita.
+    if(!it.dual) detectItem(it);
+  }
+  function detectItem(it){
+    it.refs=null; renderRight();
     // Cada cajita consulta por su cuenta, así que se ven resolverse una a una.
     setTimeout(function(){
       var base=_vSkuBase[it.tipo]||500;
       var h=0; for(var i=0;i<it.name.length;i++) h=(h*31+it.name.charCodeAt(i))>>>0;
-      it.refs=Math.max(40, Math.round(base*(0.55+(h%90)/100)));
+      var n=base*(0.55+(h%90)/100);
+      // Mismo reparto que el prototipo: el catálogo 1P pesa más que el 3P.
+      if(it.tipo==='Vendor' && it.cat==='1P') n*=0.7;
+      else if(it.tipo==='Vendor' && it.cat==='3P') n*=0.3;
+      it.refs=Math.max(40, Math.round(n));
       renderRight();
     }, 700+Math.random()*500);
+  }
+  function pickCat(i,c){
+    var it=_sel[i]; if(!it || it.cat===c) return;
+    it.cat=c; detectItem(it);
   }
   function removeItem(i){
     _sel.splice(i,1); _tope=false;
@@ -815,20 +833,27 @@
         +'<div class="lote-empty">Aún no has añadido nada<br><span style="font-size:12px;">Haz clic en los valores de la izquierda para añadirlos. Cada uno será una auditoría.</span></div>';
       updateLaunch(); return;
     }
-    var listos=_sel.filter(function(x){return x.refs!==null;});
+    var listos=_sel.filter(function(x){return x.refs!==null && !(x.dual && !x.cat);});
     var total=listos.reduce(function(a,x){return a+x.refs;},0);
     var head='<div class="lote-total"><strong style="font-size:15px;color:var(--text-ink);">'+_sel.length+(_sel.length===1?' auditoría':' auditorías')+'</strong>'
       +'<span>·</span><span>'+(listos.length===_sel.length?fmtNum(total)+' referencias en total':'contando referencias\u2026')+'</span></div>';
     var cards=_sel.map(function(it,i){
-      var right = it.refs===null
-        ? '<div class="sku-loading" style="justify-content:flex-start;background:none;border:none;box-shadow:none;padding:0;"><div class="sku-spinner"></div></div>'
-        : '<div style="text-align:right;"><div class="lote-num">'+fmtNum(it.refs)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">referencias</div></div>';
-      return '<div class="lote-card">'
+      var right = (it.dual && !it.cat) ? ''
+        : (it.refs===null
+          ? '<div class="sku-loading" style="justify-content:flex-start;background:none;border:none;box-shadow:none;padding:0;"><div class="sku-spinner"></div></div>'
+          : '<div style="text-align:right;"><div class="lote-num">'+fmtNum(it.refs)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">referencias</div></div>');
+      // Roca, Grohe y Bosch venden en los dos catálogos: hay que decir cuál.
+      var cat = it.dual ? '<div style="display:flex;gap:8px;margin-top:10px;align-items:center;">'+['1P','3P'].map(function(c){
+            var on=it.cat===c;
+            return '<button onclick="pickCat('+i+',&#39;'+c+'&#39;)" style="flex:0 0 auto;min-width:62px;height:30px;border:1px solid '+(on?'var(--green)':'var(--border-input)')+';background:'+(on?'var(--success-bg)':'#fff')+';color:'+(on?'var(--green)':'var(--text-body)')+';border-radius:7px;font-size:12px;font-weight:600;font-family:&#39;Inter&#39;,system-ui,sans-serif;cursor:pointer;">'+c+'</button>';
+          }).join('')+(it.cat?'':'<span style="font-size:12px;color:var(--text-muted);">Elige qué catálogo auditar</span>')+'</div>' : '';
+      return '<div class="lote-card"'+((it.dual&&!it.cat)?' style="border-color:var(--border-input);"':'')+'>'
         +'<div style="flex:1;min-width:0;">'
         +'<div style="font-size:14px;font-weight:700;color:var(--text-ink);">'+(it.code?it.code+' · ':'')+it.name+'</div>'
-        +'<div style="font-size:12px;color:var(--text-muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(it.desc||typeLabel(it.tipo))+'</div></div>'
+        +'<div style="font-size:12px;color:var(--text-muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(it.desc||typeLabel(it.tipo))+'</div>'
+        +cat+'</div>'
         +right
-        +'<button class="lote-x" title="Quitar" onclick="removeItem('+i+')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>';
+        +'<button class="lote-x" style="align-self:flex-start;" title="Quitar" onclick="removeItem('+i+')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>';
     }).join('');
     var tope=_tope?'<div class="lote-tope">De momento el tope es de '+MAX_LOTE+' por lote. Quita uno si quieres cambiarlo.</div>':'';
     host.innerHTML=(nota?'<div class="lote-tope" style="margin-top:0;margin-bottom:14px;">'+nota+'</div>':'')+head+cards+tope+_queBox;
@@ -836,7 +861,8 @@
   }
   function updateLaunch(){
     var b=document.getElementById('w-launch');
-    var ok=_sel.length>0 && _sel.filter(function(x){return x.refs===null;}).length===0;
+    var pend=_sel.filter(function(x){ return x.refs===null || (x.dual && !x.cat); });
+    var ok=_sel.length>0 && pend.length===0;
     b.disabled=!ok; b.style.opacity=ok?'1':'0.4'; b.style.cursor=ok?'pointer':'not-allowed';
     var n=_sel.length;
     b.childNodes[0].nodeValue = n>1 ? ('Empezar '+n+' auditorías de calidad') : 'Empezar auditoría de calidad';
@@ -847,7 +873,8 @@
     _tipoLanzado=_tipo;
     var hoy=new Date(), f=('0'+hoy.getDate()).slice(-2)+'/'+('0'+(hoy.getMonth()+1)).slice(-2)+'/'+hoy.getFullYear();
     var nuevas=_sel.map(function(it){
-      return { id:++_seq, perimetro:typeLabel(it.tipo)+' · '+(it.code?it.code+' · ':'')+it.name, refs:it.refs, fecha:f };
+      var val=(it.code?it.code+' · ':'')+it.name+(it.dual?' ('+it.cat+')':'');
+      return { id:++_seq, perimetro:typeLabel(it.tipo)+' · '+val, refs:it.refs, fecha:f };
     });
     _rows=nuevas.concat(_rows);
     // El titulo es el mismo de la modal de progreso; lo que se ha lanzado lo
