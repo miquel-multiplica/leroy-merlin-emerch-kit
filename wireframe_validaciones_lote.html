@@ -702,6 +702,8 @@
   //     dentro de él: Roca vende en los dos y hay que decir cuál se audita. Aquí
   //     la elección vive dentro de la cajita de ese item, porque cada orden es
   //     independiente y la columna izquierda tiene que seguir listando valores.
+  //     Viene marcado «Ambos», que es el caso habitual: así la cajita cuenta
+  //     desde el principio en vez de quedarse esperando una decisión.
   //   · El modal deja de ser un monitor de progreso y pasa a ser un acuse de
   //     recibo que lleva a la pestaña «En curso», que es donde el progreso vive
   //     de verdad porque se puede abandonar y volver.
@@ -794,11 +796,10 @@
     if(_sel.length>=MAX_LOTE){ _tope=true; renderRight(); return; }
     var o=(_vLists[_tipo]||[]).filter(function(x){return x.name===name;})[0]||{name:name};
     var it={ name:o.name, code:o.code||'', desc:o.desc||'', tipo:_tipo, refs:null,
-             dual:!!o.dual, tag:o.tag||'', cat:o.dual?null:(o.tag||'') };
+             dual:!!o.dual, tag:o.tag||'', cat:o.dual?'Ambos':(o.tag||'') };
     _sel.push(it); _tope=false;
     renderOpts(document.getElementById('w-opt-search').value); renderRight();
-    // Un proveedor dual no cuenta nada hasta saber qué catálogo se audita.
-    if(!it.dual) detectItem(it);
+    detectItem(it);
   }
   function detectItem(it){
     it.refs=null; renderRight();
@@ -835,21 +836,20 @@
         +'<div class="lote-empty">Aún no has añadido nada<br><span style="font-size:12px;">Haz clic en los valores de la izquierda para añadirlos. Cada uno será una auditoría.</span></div>';
       updateLaunch(); return;
     }
-    var listos=_sel.filter(function(x){return x.refs!==null && !(x.dual && !x.cat);});
+    var listos=_sel.filter(function(x){return x.refs!==null;});
     var total=listos.reduce(function(a,x){return a+x.refs;},0);
     var head='<div class="lote-total"><strong style="font-size:15px;color:var(--text-ink);">'+_sel.length+(_sel.length===1?' auditoría':' auditorías')+'</strong>'
       +'<span>·</span><span>'+(listos.length===_sel.length?fmtNum(total)+' referencias en total':'contando referencias\u2026')+'</span></div>';
     var cards=_sel.map(function(it,i){
-      var right = (it.dual && !it.cat) ? ''
-        : (it.refs===null
-          ? '<div class="sku-loading" style="justify-content:flex-start;background:none;border:none;box-shadow:none;padding:0;"><div class="sku-spinner"></div></div>'
-          : '<div style="text-align:right;"><div class="lote-num">'+fmtNum(it.refs)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">referencias</div></div>');
+      var right = it.refs===null
+        ? '<div class="sku-loading" style="justify-content:flex-start;background:none;border:none;box-shadow:none;padding:0;"><div class="sku-spinner"></div></div>'
+        : '<div style="text-align:right;"><div class="lote-num">'+fmtNum(it.refs)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">referencias</div></div>';
       // Roca, Grohe y Bosch venden en los dos catálogos: hay que decir cuál.
-      var cat = it.dual ? '<div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap;">'+['1P','3P','Ambos'].map(function(c){
+      var cat = it.dual ? '<div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap;">'+['Ambos','1P','3P'].map(function(c){
             var on=it.cat===c;
             return '<button onclick="pickCat('+i+',&#39;'+c+'&#39;)" style="flex:0 0 auto;min-width:62px;height:30px;border:1px solid '+(on?'var(--green)':'var(--border-input)')+';background:'+(on?'var(--success-bg)':'#fff')+';color:'+(on?'var(--green)':'var(--text-body)')+';border-radius:7px;font-size:12px;font-weight:600;font-family:&#39;Inter&#39;,system-ui,sans-serif;cursor:pointer;">'+c+'</button>';
-          }).join('')+(it.cat?'':'<span style="font-size:12px;color:var(--text-muted);">Elige qué catálogo auditar</span>')+'</div>' : '';
-      return '<div class="lote-card"'+((it.dual&&!it.cat)?' style="border-color:var(--border-input);"':'')+'>'
+          }).join('')+'</div>' : '';
+      return '<div class="lote-card">'
         +'<div style="flex:1;min-width:0;">'
         +'<div style="font-size:14px;font-weight:700;color:var(--text-ink);">'+(it.code?it.code+' · ':'')+it.name+'</div>'
         +'<div style="font-size:12px;color:var(--text-muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(it.desc||typeLabel(it.tipo))+'</div>'
@@ -863,8 +863,7 @@
   }
   function updateLaunch(){
     var b=document.getElementById('w-launch');
-    var pend=_sel.filter(function(x){ return x.refs===null || (x.dual && !x.cat); });
-    var ok=_sel.length>0 && pend.length===0;
+    var ok=_sel.length>0 && _sel.filter(function(x){return x.refs===null;}).length===0;
     b.disabled=!ok; b.style.opacity=ok?'1':'0.4'; b.style.cursor=ok?'pointer':'not-allowed';
     var n=_sel.length;
     b.childNodes[0].nodeValue = n>1 ? ('Empezar '+n+' auditorías de calidad') : 'Empezar auditoría de calidad';
